@@ -11,7 +11,7 @@
 #    ];
 
   # Neovim configuration
-  imports = [ ./config/nvim/nvim.nix ];
+  #imports = [ ./config/nvim/nvim.nix ];
  
 
 
