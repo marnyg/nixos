@@ -1,4 +1,7 @@
-import zsh config file
+{ config, pkgs, ... }:
+
+let 
+    # import zsh config file
     zshsettings = import ./zsh/zsh.nix;
     firefoxsettings = import ./firefox/firefox.nix;
 in 
