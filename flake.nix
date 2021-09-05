@@ -47,7 +47,7 @@
                         home-manager.useGlobalPkgs = true;
                         home-manager.useUserPackages = true;
                         home-manager.users.mar = import ./config/home.nix;
-                        #nixpkgs.overlays = [ 
+                        nixpkgs.overlays = [ 
                         #    (final: prev: {
                         #        st = prev.st.overrideAttrs (o: {
                         #            src = st;
@@ -58,8 +58,8 @@
                         #            src = dwm;
                         #        });
                         #    })
-                        #    nur.overlay neovim-nightly-overlay.overlay 
-                        #];
+                            nur.overlay # neovim-nightly-overlay.overlay 
+                        ];
                     }
                 ];
             };
@@ -73,7 +73,7 @@
                         home-manager.useGlobalPkgs = true;
                         home-manager.useUserPackages = true;
                         home-manager.users.mar = import ./config/home.nix;
-                        #nixpkgs.overlays = [ 
+                        nixpkgs.overlays = [ 
                         #    (final: prev: {
                         #        st = prev.st.overrideAttrs (o: {
                         #            src = st;
@@ -84,8 +84,8 @@
                         #            src = dwm;
                         #        });
                         #    })
-                        #    nur.overlay neovim-nightly-overlay.overlay 
-                        #];
+                            nur.overlay # neovim-nightly-overlay.overlay 
+                        ];
                     }
                 ];
             };
