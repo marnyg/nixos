@@ -5,10 +5,13 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+#  imports =
+#   [ # Include the results of the hardware scan.
+#      ./hardware-configuration.nix
+#    ];
+
+  # Neovim configuration
+  imports = [ ./config/nvim/nvim.nix ];
  
 
 
@@ -107,6 +110,11 @@
     isNormalUser = true;
     extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
   };
+  users.users.vm= {
+    isNormalUser = true;
+    extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
+    initialHashedPassword="test";
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -125,7 +133,6 @@
     kitty
     tmux
   ];
-
   
   fonts.fonts = with pkgs; [
     noto-fonts

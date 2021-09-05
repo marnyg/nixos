@@ -34,7 +34,8 @@
     };
 
     # All outputs for the system (configs)
-    outputs = { home-manager, nixpkgs, nur, neovim-nightly-overlay, st, dwm, ... }: {
+    #outputs = { home-manager, nixpkgs, nur, neovim-nightly-overlay, st, dwm, ... }: {
+    outputs = { home-manager, nixpkgs, nur,  ... }: {
         nixosConfigurations = {
 
             # Laptop config
@@ -71,7 +72,7 @@
                     home-manager.nixosModules.home-manager {
                         home-manager.useGlobalPkgs = true;
                         home-manager.useUserPackages = true;
-                        home-manager.users.notus = import ./config/home.nix;
+                        home-manager.users.mar = import ./config/home.nix;
                         #nixpkgs.overlays = [ 
                         #    (final: prev: {
                         #        st = prev.st.overrideAttrs (o: {
