@@ -5,7 +5,7 @@
     environment.systemPackages = with pkgs; [
 
         # Rice/desktop
-        dwm dmenu feh zsh dunst st
+        dwm rofi dmenu feh zsh dunst st
 
         # Command-line tools
         fzf ripgrep newsboat ffmpeg tealdeer exa duf 
@@ -13,7 +13,7 @@
         libnotify sct update-nix-fetchgit hyperfine 
        
         # GUI applications
-        firefox mpv 
+        firefox mpv nyxt
 
         # Development
         git gcc gnumake python3 
