@@ -123,10 +123,6 @@
     neovim
     wget
     firefox
-    st
-    dmenu 
-    rofi
-    qutebrowser
     lf
     htop
     git
