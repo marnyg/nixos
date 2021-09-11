@@ -89,6 +89,31 @@
                     }
                 ];
             };
+            # Desktop config
+            new = nixpkgs.lib.nixosSystem {
+                system = "x86_64-linux";
+                modules = [
+                    ./configuration.nix ./hardware-configuration.nix ./config/packages.nix 
+                    home-manager.nixosModules.home-manager {
+                        home-manager.useGlobalPkgs = true;
+                        home-manager.useUserPackages = true;
+                        home-manager.users.mar = import ./config/home.nix;
+                        nixpkgs.overlays = [ 
+                        #    (final: prev: {
+                        #        st = prev.st.overrideAttrs (o: {
+                        #            src = st;
+                        #        });
+                        #    })
+                        #    (final: prev: {
+                        #        dwm = prev.dwm.overrideAttrs (o: {
+                        #            src = dwm;
+                        #        });
+                        #    })
+                            nur.overlay # neovim-nightly-overlay.overlay 
+                        ];
+                    }
+                ];
+            };
 
             # Raspberry Pi config
             notuspi = nixpkgs.lib.nixosSystem {
