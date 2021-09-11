@@ -128,6 +128,7 @@
     git
     kitty
     tmux
+    virt-manager
   ];
   
   fonts.fonts = with pkgs; [
@@ -148,7 +149,7 @@
   };
  
 
-  nixpkgs.config.allowUnfree = true; 
+  #nixpkgs.config.allowUnfree = true; 
 
   virtualisation = {
     docker = {
@@ -159,11 +160,15 @@
       };
     };
 
-    virtualbox.host = {
-      enable = true;
-      enableExtensionPack = true;
-    };
+    #virtualbox.host = {
+    #  enable = true;
+    #  enableExtensionPack = true;
+    #};
   };
+
+ #VM??????????????????????????//
+  virtualisation.libvirtd.enable = true;
+  programs.dconf.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

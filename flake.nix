@@ -42,7 +42,7 @@
             marlaptop = nixpkgs.lib.nixosSystem {
                 system = "x86_64-linux";
                 modules = [
-                    ./configuration.nix ./config/laptop.nix ./config/packages.nix 
+                    ./configuration.nix ./config/machines/laptop.nix ./config/packages.nix 
                     home-manager.nixosModules.home-manager {
                         home-manager.useGlobalPkgs = true;
                         home-manager.useUserPackages = true;
@@ -68,7 +68,7 @@
             mardesk = nixpkgs.lib.nixosSystem {
                 system = "x86_64-linux";
                 modules = [
-                    ./configuration.nix ./config/desktop.nix ./config/packages.nix 
+                    ./configuration.nix ./config/machines/desktop.nix ./config/packages.nix 
                     home-manager.nixosModules.home-manager {
                         home-manager.useGlobalPkgs = true;
                         home-manager.useUserPackages = true;
