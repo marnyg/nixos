@@ -6,7 +6,7 @@ pkgs:
     PROMPT='%F{blue}~%b %(?.%F{green}%Bλ%b.%F{red}?) %f'
     # Variables
     export EDITOR="nvim"
-    export TERMINAL="urxvt"
+    export TERMINAL="kitty"
     export BROWSER="firefox"
     export PATH=$NIXOS_CONFIG_DIR/scripts/:$PATH
     # Clean up
@@ -37,6 +37,7 @@ pkgs:
     _comp_options+=(globdots)
     # Set vi-mode and bind ctrl + space to accept autosuggestions
     bindkey '^ ' autosuggest-accept
+    eval "$(starship init zsh)"
     '';
 
     # Tweak settings for history

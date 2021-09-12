@@ -36,8 +36,9 @@
 
   # Use the systemd-boot EFI boot loader.
   boot.cleanTmpDir = true;
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  #boot.loader.systemd-boot.enable = true;
+  boot.loader.grub.device = "/dev/sda";
+  #boot.loader.efi.canTouchEfiVariables = true;
 
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -87,7 +88,7 @@
   services.xserver.enable = true;
   services.xserver.displayManager.defaultSession = "none+xmonad";
   services.xserver.windowManager = {       # Open configuration for the window manager.
-    dwm.enable = true;                  # Enable xmonad.
+    #dwm.enable = true;                  # Enable xmonad.
     xmonad.enable = true;                  # Enable xmonad.
     xmonad.enableContribAndExtras = true;  # Enable xmonad contrib and extras.
     xmonad.extraPackages = hpkgs: [        # Open configuration for additional Haskell packages.
@@ -95,9 +96,14 @@
       hpkgs.xmonad-extras                  # Install xmonad-extras.
       hpkgs.xmonad                         # Install xmonad itself.
     ];
-  #  xmonad.config = ./.config/config.hs;                # Enable xmonad.
+    #xmonad.config = ./.config/config.hs;                # Enable xmonad.
+    xmonad.config = ./config.hs;                # Enable xmonad.
   };
 
+  # Enable the X11 windowing system.
+  services.compton.enable = true;
+  services.compton.shadow = true;
+  services.compton.inactiveOpacity = 0.8;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -117,6 +123,7 @@
   users.users.mar = {
     isNormalUser = true;
     extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
+    shell = pkgs.zsh;
   };
   users.users.vm= {
     isNormalUser = true;

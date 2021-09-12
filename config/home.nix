@@ -13,6 +13,10 @@ in
     programs.zsh = zshsettings pkgs;
     programs.firefox = firefoxsettings pkgs;
 
+#    imports = [
+#      ./xmonad/default.nix
+#    ];
+
     # Settings for spotifyd
     services.spotifyd = {
         enable = true;
