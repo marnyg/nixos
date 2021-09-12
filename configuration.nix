@@ -58,8 +58,16 @@
   networking.interfaces.wlp3s0.useDHCP = true;
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 443 80 ];
-  networking.firewall.allowedUDPPorts = [ 22 443 80 ];
+  networking.firewall.allowedTCPPorts = [ 22 443 80 
+    8989 #sonar
+    6789 #nztbget
+    32400 32469 #plex
+ ];
+  networking.firewall.allowedUDPPorts = [ 22 443 80
+     8989 
+     6789  
+     1900 5353 32469 32410 32412 32413 32414 #plex
+  ];
   # Or disable the firewall altogether.
   #networking.firewall.enable = false;
   networking.networkmanager.enable = true;
@@ -129,6 +137,7 @@
     kitty
     tmux
     virt-manager
+    docker-compose
   ];
   
   fonts.fonts = with pkgs; [
