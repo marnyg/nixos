@@ -5,7 +5,8 @@
 nixos-rebuild switch --flake ".#environmet"
 
 # like this for desktop
-nixos-rebuild switch --flake ".#mardesk" ```
+nixos-rebuild switch --flake ".#mardesk"	
+```
 
 
 # todo - [ ] write down instructions
