@@ -95,9 +95,12 @@
       hpkgs.xmonad-contrib                 # Install xmonad-contrib.
       hpkgs.xmonad-extras                  # Install xmonad-extras.
       hpkgs.xmonad                         # Install xmonad itself.
+      hpkgs.dbus
+      hpkgs.monad-logger
     ];
+    xmonad.config = ./config/xmonad/config.hs;                # Enable xmonad.
     #xmonad.config = ./.config/config.hs;                # Enable xmonad.
-    xmonad.config = ./config.hs;                # Enable xmonad.
+    #xmonad.config = ./config.hs;                # Enable xmonad.
   };
 
   # Enable the X11 windowing system.
@@ -115,7 +118,7 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
   services.xserver.layout = "us";
-  services.xserver.xkbOptions = "caps:swapescape";
+  #services.xserver.xkbOptions = "caps:swapescape";
   services.xserver.autoRepeatDelay = 200;
   services.xserver.autoRepeatInterval = 20;
 

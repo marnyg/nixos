@@ -1,5 +1,5 @@
 
 rebuild:
-	echo hello
+	sudo nixos-rebuild switch --flake ".#mardesk"
 buildVm:
 	echo "hello world"
