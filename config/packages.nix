@@ -1,6 +1,8 @@
-{ pkgs, config, ... }:
+{ lib, pkgs, config, ... }:
 
 {
+nixpkgs.config.allowUnfree = true;
+
     # Install all the packages
     environment.systemPackages = with pkgs; [
 
@@ -14,7 +16,7 @@
         hunspell hunspellDicts.en-us starship tree unar
 
         # GUI applications
-        firefox mpv nyxt arandr
+        firefox mpv nyxt arandr qutebrowser vscode
 
         # GUI applets
 	#nm-applet
@@ -32,10 +34,23 @@
 	scrot
 	nheko
 	pavucontrol
-	syncthing
+	spotify
 
+	#amazon cli
+	#ec2_api_tools
+	awscli
+
+        #Bar 
 	haskellPackages.xmobar
 	polybar
+
+	#haskell
+	haskell.compiler.ghc8107 #.ghc865
+	haskellPackages.cabal-install
+	haskellPackages.stack
+	haskellPackages.ghcid
+	#unstable.haskellPackages.cabal2nix
+	#haskellPackages.stack2nix
 
 
         # Language servers for neovim; change these to whatever languages you code in
