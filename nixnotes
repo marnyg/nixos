@@ -1,0 +1,22 @@
+install of nixos:
+
+1. boot liveusb
+1.1. format disk as in guide
+1.2. mount disk
+1.3. generate hardware-configuration.nix with "nixos-generate-config --root /mnt"
+
+2. using flakes to install os:
+2.1. start nix-shell with 
+	"nix-shell -p nixUnstable git"
+2.2. clone nixos into /tmp 
+	"cd /tmp && git clone https://github.com/marnyg/nixos"
+2.3. copy hardware-configuration.nix into cloned repo and add it to git repo
+	"cp /mnt/etc/nixos/hard* . && git add ."
+2.4. instal the flake with
+	"nixos-install --flake .#new"
+
+
+
+notes ove didn work, what did work was
+
+install version 21.11

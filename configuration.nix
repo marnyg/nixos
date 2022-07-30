@@ -55,8 +55,8 @@
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.enp2s0.useDHCP = true;
-  networking.interfaces.wlp3s0.useDHCP = true;
+  networking.interfaces.enp2s0.useDHCP = false;
+  networking.interfaces.wlp3s0.useDHCP = false;
 
 #tailscale
   services.tailscale.enable = true;
@@ -90,25 +90,57 @@
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
   # };
+  # services.polybar = {
+  #   enable = true;
+  #   configFile =  "/etc/nixos/config/polybar/config.ini";
+  # };
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.displayManager.defaultSession = "none+xmonad";
-  services.xserver.windowManager = {       # Open configuration for the window manager.
-    #dwm.enable = true;                  # Enable xmonad.
-    xmonad.enable = true;                  # Enable xmonad.
-    xmonad.enableContribAndExtras = true;  # Enable xmonad contrib and extras.
-    xmonad.extraPackages = hpkgs: [        # Open configuration for additional Haskell packages.
-      hpkgs.xmonad-contrib                 # Install xmonad-contrib.
-      hpkgs.xmonad-extras                  # Install xmonad-extras.
-      hpkgs.xmonad                         # Install xmonad itself.
-      hpkgs.dbus
-      hpkgs.monad-logger
-    ];
-    xmonad.config = ./config/xmonad/config.hs;                # Enable xmonad.
-    #xmonad.config = ./.config/config.hs;                # Enable xmonad.
-    #xmonad.config = ./config.hs;                # Enable xmonad.
+  services.xserver = {
+     enable = true;
+     #autorun = false;
+     layout = "us";
+     displayManager.defaultSession = "none+bspwm";
+    #  windowManager.default = "bspwm";
+
+     windowManager.bspwm = {
+       enable = true;
+       configFile =  "/etc/nixos/config/bspwm/bspwmrc";
+       sxhkd.configFile =  "/etc/nixos/config/sxhkd/sxhkdrc";
+      #  configFile =  "/home/vm/nixos/config/bspwm/bspwmrc";
+      #  sxhkd.configFile =  "/home/vm/nixos/config/sxhkd/sxhkdrc";
+     };
+
+    #  windowManager.dwm.enable = true;                  # Enable xmonad.
+
+    # windowManager.xmonad = {
+    #   enable = true;                  # Enable xmonad.
+    #   enableContribAndExtras = true;  # Enable xmonad contrib and extras.
+    #   extraPackages = hpkgs: [        # Open configuration for additional Haskell packages.
+        # hpkgs.xmonad-contrib                 # Install xmonad-contrib.
+    #     hpkgs.xmonad-extras                  # Install xmonad-extras.
+    #     hpkgs.xmonad                         # Install xmonad itself.
+    #     hpkgs.dbus
+    #     hpkgs.monad-logger
+    #   ];
+    #   config = ./config/xmonad/config.hs;                # Enable xmonad.
+    # };
   };
+  #services.xserver.windowManager = {       # Open configuration for the window manager.
+  #  #dwm.enable = true;                  # Enable xmonad.
+  #  xmonad.enable = true;                  # Enable xmonad.
+  #  xmonad.enableContribAndExtras = true;  # Enable xmonad contrib and extras.
+  #  xmonad.extraPackages = hpkgs: [        # Open configuration for additional Haskell packages.
+  #    hpkgs.xmonad-contrib                 # Install xmonad-contrib.
+  #    hpkgs.xmonad-extras                  # Install xmonad-extras.
+  #    hpkgs.xmonad                         # Install xmonad itself.
+  #    hpkgs.dbus
+  #    hpkgs.monad-logger
+  #  ];
+  #  xmonad.config = ./config/xmonad/config.hs;                # Enable xmonad.
+  #  #xmonad.config = ./.config/config.hs;                # Enable xmonad.
+  #  #xmonad.config = ./config.hs;                # Enable xmonad.
+  #};
 
   # Enable the X11 windowing system.
   services.compton.enable = true;
@@ -124,7 +156,6 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
-  services.xserver.layout = "us";
   #services.xserver.xkbOptions = "caps:swapescape";
   services.xserver.autoRepeatDelay = 200;
   services.xserver.autoRepeatInterval = 20;
@@ -159,13 +190,14 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.mar = {
     isNormalUser = true;
-    extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "docker" "networkmanager" "wheel" "qemu-libvirtd" "libvirtd" ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
   };
   users.users.vm= {
     isNormalUser = true;
     extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
-    initialHashedPassword="test";
+    initialHashedPassword="HNTH57eGshHyQ"; #test 8
+    # initialPassword="test";
   };
 
   # List packages installed in system profile. To search, run:
@@ -183,6 +215,12 @@
     virt-manager
     docker-compose
     tailscale
+    sxhkd
+    vagrant
+    packer
+     (writers.writeDashBin "vboxmanage" ''
+          ${pkgs.virtualbox}/bin/VBoxManage "$@"
+        '')
   ];
   
   fonts.fonts = with pkgs; [
@@ -191,6 +229,7 @@
     noto-fonts-emoji
     liberation_ttf
     fira-code
+
     fira-code-symbols
     mplus-outline-fonts
     dina-font
@@ -203,7 +242,7 @@
   };
  
 
-  #nixpkgs.config.allowUnfree = true; 
+  nixpkgs.config.allowUnfree = true; 
 
   virtualisation = {
     docker = {
@@ -222,6 +261,9 @@
 
  #VM??????????????????????????//
   virtualisation.libvirtd.enable = true;
+  # virtualisation.qemu.options = [
+  #         "-virtfs local,path=,security_model=none,mount_tag=${mount_tag}"
+  #     ];
   programs.dconf.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are

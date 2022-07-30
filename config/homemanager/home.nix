@@ -13,6 +13,10 @@ in
     programs.zsh = zshsettings pkgs;
     programs.firefox = firefoxsettings pkgs;
 
+  # Home Manager needs a bit of information about you and the
+  # paths it should manage.
+#   home.username = "hmTest";
+#   home.homeDirectory = "/home/hmTest";
 #    imports = [
 #      ./xmonad/default.nix
 #    ];
