@@ -9,7 +9,9 @@
     # configFile =  "./config.ini";
     extraConfig = (builtins.readFile ./config.ini);
     script = ''
-      for m in $(polybar --list-monitors | cut -d":" -f1); do
+      #for m in $(polybar --list-monitors | cut -d":" -f1); do
+      monitors=(DVI-D-1 DVI-I-1)
+      for m in $monitors ; do
           MONITOR=$m polybar --reload example &
       done
     '';
