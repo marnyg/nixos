@@ -31,11 +31,17 @@
         modules = [
           ./configuration.nix
           ./config/machines/laptop.nix
+          ./config/systemModules/syncthingService.nix
+          ./config/systemModules/tailscaleService.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.mar = import ./config/homemanager/users/mar.nix;
+            users.users.mar = {
+              isNormalUser = true;
+              extraGroups = [ "docker" "networkmanager" "wheel" "qemu-libvirtd" "libvirtd" ]; # Enable ‘sudo’ for the user.
+            };
             nixpkgs.overlays = [
               nur.overlay
               # neovim-nightly-overlay.overlay 
@@ -68,7 +74,7 @@
 
             nixpkgs.overlays = [
               nur.overlay
-              neovim-nightly-overlay.overlay
+              # neovim-nightly-overlay.overlay
             ];
           }
         ];

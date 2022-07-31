@@ -150,7 +150,7 @@
   users.users.vm = {
     isNormalUser = true;
     extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
-    initialHashedPassword = "HNTH57eGshHyQ"; #test 8
+    initialHashedPassword = "HNTH57eGshHyQ"; #test
     # initialPassword="test";
   };
 

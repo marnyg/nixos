@@ -17,6 +17,7 @@ in
     # ../programs/nvim.nix
     ../programs/polybar/polybar.nix
     ../programs/bspwm/bspwm.nix
+    ../programs/autorandr/desktop.nix
   ];
 
   # services.xserver.enable = true;
