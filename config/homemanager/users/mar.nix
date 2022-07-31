@@ -14,7 +14,12 @@ in
     ../programs/zsh.nix
     ../programs/newsboat.nix
     ../programs/git.nix
+    ../programs/nvim.nix
+    ../programs/polybar/polybar.nix
+    ../programs/bspwm/bspwm.nix
   ];
+
+  # services.xserver.enable = true;
 
   # Settings for spotifyd
   services.spotifyd = {

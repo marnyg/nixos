@@ -5,111 +5,95 @@
 { config, pkgs, ... }:
 
 {
-#  imports =
-#   [ # Include the results of the hardware scan.
-#      ./hardware-configuration.nix
-#    ];
-
-  # Neovim configuration
-  #imports = [ ./config/nvim/nvim.nix ];
- 
-
-
-  # Set environment variables
   environment.variables = {
-      NIXOS_CONFIG="$HOME/.config/nixos/configuration.nix";
-      NIXOS_CONFIG_DIR="$HOME/.config/nixos/";
-  }; 
+    NIXOS_CONFIG = "$HOME/.config/nixos/configuration.nix";
+    NIXOS_CONFIG_DIR = "$HOME/.config/nixos/";
+  };
 
   # Nix settings, auto cleanup and enable flakes
   nix = {
-      autoOptimiseStore = true;
-      gc = {
-          automatic = true;
-          dates = "daily";
-      };
-      package = pkgs.nixUnstable;
-      extraOptions = ''
-          experimental-features = nix-command flakes
-      '';
+    autoOptimiseStore = true;
+    gc = {
+      automatic = true;
+      dates = "daily";
+    };
+    package = pkgs.nixUnstable;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
   };
 
   # Use the systemd-boot EFI boot loader.
   boot.cleanTmpDir = true;
-  #boot.loader.systemd-boot.enable = true;
   boot.loader.grub.device = "/dev/sda";
-  #boot.loader.efi.canTouchEfiVariables = true;
 
-  # networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Set your time zone.
   time.timeZone = "Europe/Oslo";
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
-      font = "Lat2-Terminus16";
-      keyMap = "us";
+    font = "Lat2-Terminus16";
+    keyMap = "us";
   };
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
+  networking.hostName = "nixos"; # Define your hostname.
   networking.useDHCP = false;
   networking.interfaces.enp2s0.useDHCP = false;
   networking.interfaces.wlp3s0.useDHCP = false;
 
-#tailscale
-  services.tailscale.enable = true;
-  services.tailscale.port = 12345;
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 443 80 
+  networking.firewall.allowedTCPPorts = [
+    22
+    443
+    80
     8989 #sonar
     6789 #nztbget
-    32400 32469 #plex
-    8384 #syncthing
- ];
-  networking.firewall.allowedUDPPorts = [ 22 443 80
-     8989 
-     6789  
-     1900 5353 32469 32410 32412 32413 32414 #plex
-     12345
-     8384 #syncthing
+    32400
+    32469 #plex
   ];
-  # Or disable the firewall altogether.
-  #networking.firewall.enable = false;
+  networking.firewall.allowedUDPPorts = [
+    22
+    443
+    80
+    8989
+    6789
+    1900
+    5353
+    32469
+    32410
+    32412
+    32413
+    32414 #plex
+  ];
+
   networking.networkmanager.enable = true;
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  # };
-  # services.polybar = {
-  #   enable = true;
-  #   configFile =  "/etc/nixos/config/polybar/config.ini";
-  # };
-
+  #=====
   # Enable the X11 windowing system.
   services.xserver = {
-     enable = true;
-     #autorun = false;
-     layout = "us";
-     displayManager.defaultSession = "none+bspwm";
+    enable = true;
+    #autorun = false;
+    layout = "us";
+    displayManager.defaultSession = "none+bspwm";
     #  windowManager.default = "bspwm";
 
-     windowManager.bspwm = {
-       enable = true;
-       configFile =  "/etc/nixos/config/bspwm/bspwmrc";
-       sxhkd.configFile =  "/etc/nixos/config/sxhkd/sxhkdrc";
+    windowManager.bspwm = {
+      enable = true;
+
+
+
+      # configFile = "/etc/nixos/config/homemanager/programs/bspwm/bspwmrc";
+      # sxhkd.configFile = "/etc/nixos/config/homemanager/programs/bspwm/sxhkdrc";
+
+      #  configFile =  "~/.config/bspwm/bspwmrc";
+      #  configFile = "${pkgs.bspwm}/share/doc/bspwm/examples/bspwmrc" #example
+      #  sxhkd.configFile =  "~/.config/bspwm/sxhkdrc";
       #  configFile =  "/home/vm/nixos/config/bspwm/bspwmrc";
       #  sxhkd.configFile =  "/home/vm/nixos/config/sxhkd/sxhkdrc";
-     };
+    };
+
+    #=====
 
     #  windowManager.dwm.enable = true;                  # Enable xmonad.
 
@@ -117,7 +101,7 @@
     #   enable = true;                  # Enable xmonad.
     #   enableContribAndExtras = true;  # Enable xmonad contrib and extras.
     #   extraPackages = hpkgs: [        # Open configuration for additional Haskell packages.
-        # hpkgs.xmonad-contrib                 # Install xmonad-contrib.
+    # hpkgs.xmonad-contrib                 # Install xmonad-contrib.
     #     hpkgs.xmonad-extras                  # Install xmonad-extras.
     #     hpkgs.xmonad                         # Install xmonad itself.
     #     hpkgs.dbus
@@ -147,9 +131,6 @@
   services.compton.shadow = true;
   services.compton.inactiveOpacity = 0.8;
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
@@ -160,43 +141,16 @@
   services.xserver.autoRepeatDelay = 200;
   services.xserver.autoRepeatInterval = 20;
 
-
-  services.syncthing = {
-    enable = true;
-    overrideDevices = true;     # overrides any devices added or deleted through the WebUI
-    overrideFolders = true;     # overrides any folders added or deleted through the WebUI
-    user = "mar";
-    #group   = "wheel";
-    dataDir = "/home/mar/";
-    devices = {
-      "aws" = { id = "GQDUKFK-HQRZYTR-WUDIIAE-MVQOOSY-DALLCEE-DTJMVTZ-DGPKS7P-VVQVKAE";
- };
-      "workPc" = { id = "IKII2EG-O2YCQ64-6RI2ADV-VHXWB7P-XKNN4HH-5H3PJG5-B7AV44K-LTWGCQG";
- };
-    };
-    folders = {
-      "nextcloud" = {        # Name of folder in Syncthing, also the folder ID
-        path = "/home/mar/mnt/nextcloud";    # Which folder to add to Syncthing
-        devices = [ "aws" "workPc" ];      # Which devices to share the folder with
-      };
-    #  "Example" = {
-    #    path = "/home/myusername/Example";
-    #    devices = [ "device1" ];
-    #    ignorePerms = false;     # By default, Syncthing doesn't sync file permissions. This line enables it for this folder.
-    #  };
-    };
-  };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.mar = {
     isNormalUser = true;
     extraGroups = [ "docker" "networkmanager" "wheel" "qemu-libvirtd" "libvirtd" ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
   };
-  users.users.vm= {
+  users.users.vm = {
     isNormalUser = true;
     extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
-    initialHashedPassword="HNTH57eGshHyQ"; #test 8
+    initialHashedPassword = "HNTH57eGshHyQ"; #test 8
     # initialPassword="test";
   };
 
@@ -218,11 +172,13 @@
     sxhkd
     vagrant
     packer
-     (writers.writeDashBin "vboxmanage" ''
-          ${pkgs.virtualbox}/bin/VBoxManage "$@"
-        '')
+    (
+      writers.writeDashBin "vboxmanage" ''
+        ${pkgs.virtualbox}/bin/VBoxManage "$@"
+      ''
+    )
   ];
-  
+
   fonts.fonts = with pkgs; [
     noto-fonts
     noto-fonts-cjk
@@ -237,12 +193,12 @@
   ];
 
   programs.gnupg.agent = {
-    enable           = true;
+    enable = true;
     enableSSHSupport = true;
   };
- 
 
-  nixpkgs.config.allowUnfree = true; 
+
+  nixpkgs.config.allowUnfree = true;
 
   virtualisation = {
     docker = {
@@ -259,22 +215,12 @@
     #};
   };
 
- #VM??????????????????????????//
+  #VM??????????????????????????//
   virtualisation.libvirtd.enable = true;
   # virtualisation.qemu.options = [
   #         "-virtfs local,path=,security_model=none,mount_tag=${mount_tag}"
   #     ];
   programs.dconf.enable = true;
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
@@ -289,4 +235,3 @@
   system.stateVersion = "21.05"; # Did you read the comment?
 
 }
-
