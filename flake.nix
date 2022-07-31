@@ -37,11 +37,20 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+
+            home-manager.users.vm = import ./config/homemanager/users/mar.nix;
+            users.users.vm = {
+              isNormalUser = true;
+              extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
+              initialHashedPassword = "HNTH57eGshHyQ"; #test
+            };
+
             home-manager.users.mar = import ./config/homemanager/users/mar.nix;
             users.users.mar = {
               isNormalUser = true;
               extraGroups = [ "docker" "networkmanager" "wheel" "qemu-libvirtd" "libvirtd" ]; # Enable ‘sudo’ for the user.
             };
+
             nixpkgs.overlays = [
               nur.overlay
               # neovim-nightly-overlay.overlay 
@@ -69,7 +78,15 @@
               extraGroups = [ "docker" "networkmanager" "wheel" "qemu-libvirtd" "libvirtd" ]; # Enable ‘sudo’ for the user.
             };
 
+            home-manager.users.vm = import ./config/homemanager/users/mar.nix;
+            users.users.vm = {
+              isNormalUser = true;
+              extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
+              initialHashedPassword = "HNTH57eGshHyQ"; #test
+            };
+
             home-manager.users.hmTest = import ./config/homemanager/users/hmTest.nix;
+
             users.users.hmTest.isNormalUser = true;
 
             nixpkgs.overlays = [

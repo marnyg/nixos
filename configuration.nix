@@ -38,9 +38,6 @@
 
   networking.hostName = "nixos"; # Define your hostname.
   networking.useDHCP = false;
-  networking.interfaces.enp2s0.useDHCP = false;
-  networking.interfaces.wlp3s0.useDHCP = false;
-
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
@@ -73,63 +70,23 @@
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
-    #autorun = false;
     layout = "us";
-    displayManager.defaultSession = "none+bspwm";
-    #  windowManager.default = "bspwm";
 
-    windowManager.bspwm = {
-      enable = true;
-
-
-
-      # configFile = "/etc/nixos/config/homemanager/programs/bspwm/bspwmrc";
-      # sxhkd.configFile = "/etc/nixos/config/homemanager/programs/bspwm/sxhkdrc";
-
-      #  configFile =  "~/.config/bspwm/bspwmrc";
-      #  configFile = "${pkgs.bspwm}/share/doc/bspwm/examples/bspwmrc" #example
-      #  sxhkd.configFile =  "~/.config/bspwm/sxhkdrc";
-      #  configFile =  "/home/vm/nixos/config/bspwm/bspwmrc";
-      #  sxhkd.configFile =  "/home/vm/nixos/config/sxhkd/sxhkdrc";
-    };
-
-    #=====
-
-    #  windowManager.dwm.enable = true;                  # Enable xmonad.
-
-    # windowManager.xmonad = {
-    #   enable = true;                  # Enable xmonad.
-    #   enableContribAndExtras = true;  # Enable xmonad contrib and extras.
-    #   extraPackages = hpkgs: [        # Open configuration for additional Haskell packages.
-    # hpkgs.xmonad-contrib                 # Install xmonad-contrib.
-    #     hpkgs.xmonad-extras                  # Install xmonad-extras.
-    #     hpkgs.xmonad                         # Install xmonad itself.
-    #     hpkgs.dbus
-    #     hpkgs.monad-logger
-    #   ];
-    #   config = ./config/xmonad/config.hs;                # Enable xmonad.
-    # };
+    desktopManager.session = [
+      {
+        name = "xsession";
+        start = ''
+          ${pkgs.runtimeShell} $HOME/.xsession &
+          waitPID=$!
+        '';
+      }
+    ];
   };
-  #services.xserver.windowManager = {       # Open configuration for the window manager.
-  #  #dwm.enable = true;                  # Enable xmonad.
-  #  xmonad.enable = true;                  # Enable xmonad.
-  #  xmonad.enableContribAndExtras = true;  # Enable xmonad contrib and extras.
-  #  xmonad.extraPackages = hpkgs: [        # Open configuration for additional Haskell packages.
-  #    hpkgs.xmonad-contrib                 # Install xmonad-contrib.
-  #    hpkgs.xmonad-extras                  # Install xmonad-extras.
-  #    hpkgs.xmonad                         # Install xmonad itself.
-  #    hpkgs.dbus
-  #    hpkgs.monad-logger
-  #  ];
-  #  xmonad.config = ./config/xmonad/config.hs;                # Enable xmonad.
-  #  #xmonad.config = ./.config/config.hs;                # Enable xmonad.
-  #  #xmonad.config = ./config.hs;                # Enable xmonad.
-  #};
 
   # Enable the X11 windowing system.
   services.compton.enable = true;
   services.compton.shadow = true;
-  services.compton.inactiveOpacity = 0.8;
+  # services.compton.inactiveOpacity = 0.8;
 
   # Enable sound.
   sound.enable = true;
@@ -141,18 +98,6 @@
   services.xserver.autoRepeatDelay = 200;
   services.xserver.autoRepeatInterval = 20;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.mar = {
-  #   isNormalUser = true;
-  #   extraGroups = [ "docker" "networkmanager" "wheel" "qemu-libvirtd" "libvirtd" ]; # Enable ‘sudo’ for the user.
-  #   shell = pkgs.zsh;
-  # };
-  users.users.vm = {
-    isNormalUser = true;
-    extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
-    initialHashedPassword = "HNTH57eGshHyQ"; #test
-    # initialPassword="test";
-  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -160,7 +105,6 @@
     vim #  The Nano editor is also installed by default.
     neovim
     wget
-    firefox
     lf
     htop
     git
@@ -169,7 +113,6 @@
     virt-manager
     docker-compose
     tailscale
-    sxhkd
     vagrant
     packer
     (

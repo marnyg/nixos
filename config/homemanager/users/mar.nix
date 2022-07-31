@@ -14,6 +14,7 @@ in
     ../programs/zsh.nix
     ../programs/newsboat.nix
     ../programs/git.nix
+    ../programs/dunst.nix
     # ../programs/nvim.nix
     ../programs/polybar/polybar.nix
     ../programs/bspwm/bspwm.nix
@@ -97,7 +98,7 @@ in
     rofi
     dmenu
     feh
-    dunst
+    firefox
 
     # Command-line tools
     fzf
@@ -158,8 +159,8 @@ in
     awscli
 
     #Bar 
-    haskellPackages.xmobar
-    polybar
+    # haskellPackages.xmobar
+    # polybar
 
     #haskell
     haskell.compiler.ghc8107 #.ghc865
