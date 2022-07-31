@@ -16,13 +16,13 @@
     };
 
 
-    #neovim-nightly-overlay = {
-    #    url = "github:nix-community/neovim-nightly-overlay";
-    #    inputs.nixpkgs.follows = "nixpkgs";
-    #};
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { home-manager, nixpkgs, nur, ... }: {
+  outputs = { home-manager, nixpkgs, nur, neovim-nightly-overlay, ... }: {
     nixosConfigurations = {
 
       # Laptop config
@@ -67,7 +67,8 @@
             users.users.hmTest.isNormalUser = true;
 
             nixpkgs.overlays = [
-              nur.overlay # neovim-nightly-overlay.overlay 
+              nur.overlay
+              neovim-nightly-overlay.overlay
             ];
           }
         ];

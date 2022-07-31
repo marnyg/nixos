@@ -15,7 +15,7 @@
     autoOptimiseStore = true;
     gc = {
       automatic = true;
-      dates = "daily";
+      dates = "weekly";
     };
     package = pkgs.nixUnstable;
     extraOptions = ''
@@ -142,11 +142,11 @@
   services.xserver.autoRepeatInterval = 20;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.mar = {
-    isNormalUser = true;
-    extraGroups = [ "docker" "networkmanager" "wheel" "qemu-libvirtd" "libvirtd" ]; # Enable ‘sudo’ for the user.
-    shell = pkgs.zsh;
-  };
+  # users.users.mar = {
+  #   isNormalUser = true;
+  #   extraGroups = [ "docker" "networkmanager" "wheel" "qemu-libvirtd" "libvirtd" ]; # Enable ‘sudo’ for the user.
+  #   shell = pkgs.zsh;
+  # };
   users.users.vm = {
     isNormalUser = true;
     extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
