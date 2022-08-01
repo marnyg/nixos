@@ -76,6 +76,7 @@
             users.users.mar = {
               isNormalUser = true;
               extraGroups = [ "docker" "networkmanager" "wheel" "qemu-libvirtd" "libvirtd" ]; # Enable ‘sudo’ for the user.
+              # shell = nixpkgs.zsh;
             };
 
             home-manager.users.vm = import ./config/homemanager/users/mar.nix;

@@ -2,7 +2,7 @@
 
 let
   # import zsh config file
-  zshsettings = import ../zsh/zsh.nix;
+  # zshsettings = import ../zsh/zsh.nix;
   # firefoxsettings = import ../firefox/firefox.nix;
 in
 {
@@ -123,7 +123,7 @@ in
     hunspellDicts.en-us
     starship
     tree
-    unar
+      unrar
 
     # GUI applications
     mpv
