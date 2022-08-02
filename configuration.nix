@@ -41,18 +41,18 @@
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
-    22
-    443
-    80
+    # 22
+    # 443
+    # 80
     8989 #sonar
     6789 #nztbget
     32400
     32469 #plex
   ];
   networking.firewall.allowedUDPPorts = [
-    22
-    443
-    80
+    # 22
+    # 443
+    # 80
     8989
     6789
     1900
@@ -161,8 +161,8 @@
   #VM??????????????????????????//
   virtualisation.libvirtd.enable = true;
   # virtualisation.qemu.options = [
-  #         "-virtfs local,path=,security_model=none,mount_tag=${mount_tag}"
-  #     ];
+          # "-virtfs local,path=,security_model=none,mount_tag=${mount_tag}"
+      # ];
   programs.dconf.enable = true;
 
   # Enable the OpenSSH daemon.

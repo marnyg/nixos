@@ -27,6 +27,7 @@
 
       # otherwise authenticate with tailscale
       ${tailscale}/bin/tailscale up -authkey xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      # ${tailscale}/bin/tailscale up -authkey tskey-kNoFRv2CNTRL-6XQhDpk6odhiMUimcQYhf
     '';
   };
 
