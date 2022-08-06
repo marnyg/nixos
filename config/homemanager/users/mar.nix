@@ -109,11 +109,9 @@ in
     duf
     spotify-tui
     playerctl
-    pass
     gnupg
     slop
     bat
-    endlessh
     libnotify
     sct
     update-nix-fetchgit
