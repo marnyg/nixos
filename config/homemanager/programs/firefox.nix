@@ -10,7 +10,7 @@
       darkreader
       h264ify
       df-youtube
-      # tree-style-tab
+      tree-style-tab
     ];
     profiles.mar = {
       settings = {
@@ -33,12 +33,6 @@
         "network.http.referer.XOriginTrimmingPolicy" = 2;
         "beacon.enabled" = false;
         "browser.safebrowsing.downloads.remote.enabled" = false;
-        #  "network.dns.disablePrefetch" = true;
-        #  "network.dns.disablePrefetchFromHTTPS" = true;
-        #  "network.predictor.enabled" = false;
-        #  "network.predictor.enable-prefetch" = false;
-        #  "network.prefetch-next" = false;
-        #  "network.IDN_show_punycode" = true;
         "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
         "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
         "browser.newtabpage.activity-stream.feeds.topsites" = false;
@@ -62,9 +56,12 @@
         "toolkit.zoomManager.zoomValues" = ".8,.95,1,1.1,1.2";
       };
       userChrome = "
-            * { 
-                box-shadow: none !important;
-                border: 0px solid !important;
+            /* hides the native tabs */
+            #TabsToolbar {
+              visibility: collapse;
+            }
+            #titlebar {
+              visibility: collapse;
             }
         ";
     };

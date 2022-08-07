@@ -12,7 +12,7 @@
 
   # Nix settings, auto cleanup and enable flakes
   nix = {
-    autoOptimiseStore = true;
+    settings.auto-optimise-store = true;
     gc = {
       automatic = true;
       dates = "weekly";
@@ -40,6 +40,7 @@
   networking.useDHCP = false;
 
   # Open ports in the firewall.
+  networking.firewall.checkReversePath = "loose";
   networking.firewall.allowedTCPPorts = [
     # 22
     # 443
@@ -130,7 +131,7 @@
     fira-code
 
     fira-code-symbols
-    mplus-outline-fonts
+    # mplus-outline-fonts
     dina-font
     proggyfonts
   ];
@@ -161,8 +162,8 @@
   #VM??????????????????????????//
   virtualisation.libvirtd.enable = true;
   # virtualisation.qemu.options = [
-          # "-virtfs local,path=,security_model=none,mount_tag=${mount_tag}"
-      # ];
+  # "-virtfs local,path=,security_model=none,mount_tag=${mount_tag}"
+  # ];
   programs.dconf.enable = true;
 
   # Enable the OpenSSH daemon.

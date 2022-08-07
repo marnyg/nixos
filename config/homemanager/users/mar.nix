@@ -17,7 +17,7 @@
       ../programs/newsboat.nix
       ../programs/git.nix
       ../programs/dunst.nix
-      # ../programs/nvim.nix
+      ../programs/nvim.nix
       ../programs/polybar/polybar.nix
       ../programs/bspwm/bspwm.nix
       ../programs/autorandr/desktop.nix
@@ -60,6 +60,7 @@
     home.stateVersion = "21.03";
 
     home.packages = with pkgs; [
+      # legacyPackages.nyxt
       dwm
       rofi
       dmenu
@@ -88,10 +89,11 @@
       starship
       tree
       unrar
+      unzip
 
       # GUI applications
       mpv
-      nyxt
+      # nyxt-browser
       arandr
       qutebrowser
       vscode
