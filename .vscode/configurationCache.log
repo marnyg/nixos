@@ -1,1 +1,0 @@
-{"buildTargets":["buildAndRunVm","buildVm","rebuild","vagrant","vagrantInit","vmSsh"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}
