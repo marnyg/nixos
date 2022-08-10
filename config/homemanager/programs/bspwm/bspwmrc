@@ -1,5 +1,11 @@
 
-bspc monitor -d I II III IV V VI VII VIII IX X
+#bspc monitor DVI-D-1 -d I II III 
+#bspc monitor DVI-I-1 -d IV V VI 
+#bspc monitor HDMI-1 -d VII VIII IX X
+
+bspc monitor DVI-I-1 -s DVI-D-1
+bspc monitor HDMI-1 -s DVI-D-1
+bspc monitor HDMI-1 -s DVI-I-1
 
 bspc config border_width         2
 bspc config window_gap          12

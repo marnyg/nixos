@@ -14,6 +14,7 @@
     ];
     profiles.mar = {
       settings = {
+        "browser.startup.page" = 3;
         "media.peerconnection.enabled" = false;
         "media.peerconnection.turn.disable" = true;
         "media.peerconnection.use_document_iceservers" = false;
@@ -51,7 +52,7 @@
         "browser.urlbar.shortcuts.tabs" = false;
         "browser.urlbar.suggest.bookmark" = false;
         "browser.urlbar.suggest.engines" = false;
-        "browser.urlbar.suggest.history" = false;
+        "browser.urlbar.suggest.history" = true;
         "browser.urlbar.suggest.openpage" = false;
         "browser.urlbar.suggest.topsites" = false;
         "browser.uidensity" = 1;
