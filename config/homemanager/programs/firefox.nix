@@ -14,6 +14,7 @@
     ];
     profiles.mar = {
       settings = {
+        "browser.ctrlTab.sortByRecentlyUsed" = true;
         "browser.startup.page" = 3;
         "media.peerconnection.enabled" = false;
         "media.peerconnection.turn.disable" = true;
