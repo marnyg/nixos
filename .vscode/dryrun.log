@@ -1,4 +1,0 @@
-make: Entering directory 'c:/Users/marnygar/git/nixos'
-sudo nixos-rebuild switch --flake ".#mardesk"
-make: Leaving directory 'c:/Users/marnygar/git/nixos'
- 

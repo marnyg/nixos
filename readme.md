@@ -11,3 +11,7 @@ nixos-rebuild switch --flake ".#mardesk"
 
 # todo 
 - [ ] write down instructions
+- [ ] set bacground to 
+- [ ] trigger `autorandr default` at login 
+- [ ] set up lf https://rycee.gitlab.io/home-manager/options.html#opt-programs.lf.previewer.source
+- [ ] set up tmux [https://rycee.gitlab.io/home-manager/options.html#opt-programs.tmux.shell]
