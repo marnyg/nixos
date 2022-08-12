@@ -6,6 +6,10 @@ pkgs:
     userEmail = "marnyg@proton.me";
     extraConfig = {
       init = { defaultBranch = "main"; };
+      pull = {
+        rebase=true;
+        ff= "only";
+      };
     };
   };
 }
