@@ -15,14 +15,19 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-
-    neovim-nightly-overlay = {
-      url = "github:nix-community/neovim-nightly-overlay";
+    my-nvim = {
+      url = "git+file:///home/mar/git/nvim-conf";
       inputs.nixpkgs.follows = "nixpkgs";
+
+      #inputs.nixpkgs.follows = "nixpkgs";
+      #type = "github";
+      #owner = "marnyg";
+      #repo = "nvim-conf";
+      #ref = "flake";
     };
   };
 
-  outputs = { home-manager, nixpkgs, nur, neovim-nightly-overlay, ... }: {
+  outputs = { home-manager, nixpkgs, nur, my-nvim, ... }: {
     nixosConfigurations = {
 
       # Laptop config
@@ -33,6 +38,7 @@
           ./config/machines/laptop.nix
           ./config/systemModules/syncthingService.nix
           ./config/systemModules/tailscaleService.nix
+          #my-nvim
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -53,7 +59,7 @@
 
             nixpkgs.overlays = [
               nur.overlay
-              # neovim-nightly-overlay.overlay 
+              my-nvim.overlays.default
             ];
           }
         ];
@@ -74,7 +80,7 @@
             home-manager.useUserPackages = true;
             nixpkgs.overlays = [
               nur.overlay
-              # neovim-nightly-overlay.overlay
+              my-nvim.overlays.default
             ];
 
             imports = [

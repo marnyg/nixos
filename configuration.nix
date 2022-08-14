@@ -17,7 +17,8 @@
       automatic = true;
       dates = "weekly";
     };
-    package = pkgs.nixUnstable;
+    #package = pkgs.nixUnstable;
+    package = pkgs.nixFlakes;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
@@ -103,8 +104,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim #  The Nano editor is also installed by default.
-    neovim
     wget
     lf
     htop

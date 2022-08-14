@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs,  ... }:
 {
   users.users.mar = { system, ... }: {
     isNormalUser = true;
@@ -17,7 +17,7 @@
       ../programs/newsboat.nix
       ../programs/git.nix
       ../programs/dunst.nix
-      ../programs/nvim.nix
+      #../programs/nvim.nix
       ../programs/polybar/polybar.nix
       ../programs/bspwm/bspwm.nix
       ../programs/autorandr/desktop.nix
@@ -93,7 +93,7 @@
 
       # GUI applications
       mpv
-      # nyxt-browser
+      nyxt
       arandr
       qutebrowser
       vscode
@@ -138,7 +138,9 @@
       # Language servers for neovim; change these to whatever languages you code in
       # Please note: if you remove any of these, make sure to also remove them from nvim/config/nvim/lua/lsp.lua!!
       rnix-lsp
+      rustc cargo gcc
       sumneko-lua-language-server
+      #my-neovim
     ];
 
   };
