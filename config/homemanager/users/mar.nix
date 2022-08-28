@@ -1,9 +1,17 @@
-{ config, pkgs,  ... }:
+{ config, pkgs, ... }:
 {
   users.users.mar = { system, ... }: {
     isNormalUser = true;
     extraGroups = [ "docker" "networkmanager" "wheel" "qemu-libvirtd" "libvirtd" ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
+  };
+
+
+  services.udev.packages = [ pkgs.yubikey-personalization ];
+  security.pam.yubico = {
+    enable = true;
+    #debug = true;
+    mode = "challenge-response";
   };
 
   home-manager.users.mar = {
@@ -16,6 +24,8 @@
       ../programs/zsh.nix
       ../programs/newsboat.nix
       ../programs/git.nix
+      ../programs/zellij.nix
+      ../programs/kitty.nix
       ../programs/dunst.nix
       #../programs/nvim.nix
       ../programs/polybar/polybar.nix
@@ -23,8 +33,9 @@
       ../programs/autorandr/desktop.nix
     ];
 
-    services.network-manager-applet.enable = true;
-    services.blueman-applet.enable = true;
+
+    #services.network-manager-applet.enable = true;
+    #services.blueman-applet.enable = true;
     services.redshift.tray = true;
 
     # services.xserver.enable = true;
@@ -53,6 +64,7 @@
         };
       };
     };
+    #programs.zathura.enable=true;
 
 
 
@@ -83,10 +95,8 @@
       sct
       update-nix-fetchgit
       hyperfine
-      zellij
       hunspell
       hunspellDicts.en-us
-      starship
       tree
       unrar
       unzip
@@ -100,7 +110,6 @@
 
 
       # GUI File readers
-      zathura
       mupdf
       sxiv
 
@@ -138,7 +147,9 @@
       # Language servers for neovim; change these to whatever languages you code in
       # Please note: if you remove any of these, make sure to also remove them from nvim/config/nvim/lua/lsp.lua!!
       rnix-lsp
-      rustc cargo gcc
+      rustc
+      cargo
+      gcc
       sumneko-lua-language-server
       #my-neovim
     ];

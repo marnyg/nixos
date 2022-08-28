@@ -5,6 +5,7 @@ pkgs:
     userName = "marius";
     userEmail = "marnyg@proton.me";
     delta.enable = true;
+    #lsf.enabled =true;
     aliases= { 
       co = "checkout"; 
       b = "branch"; 

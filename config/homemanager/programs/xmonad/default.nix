@@ -14,9 +14,9 @@ let
   #  ${pkgs.blueman}/bin/blueman-applet &
   #  ${pkgs.gnome3.networkmanagerapplet}/bin/nm-applet --sm-disable --indicator &
   #'';
-  polybarOpts = ''
-    ${pkgs.nm-applet}/bin/nm-applet --sm-disable --indicator &
-  '';
+  #polybarOpts = ''
+  #  ${pkgs.nm-applet}/bin/nm-applet --sm-disable --indicator &
+  #'';
 in
 {
   xresources.properties = {

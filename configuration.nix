@@ -13,15 +13,10 @@
   # Nix settings, auto cleanup and enable flakes
   nix = {
     settings.auto-optimise-store = true;
-    gc = {
-      automatic = true;
-      dates = "weekly";
-    };
-    #package = pkgs.nixUnstable;
-    package = pkgs.nixFlakes;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
+    gc.automatic = true;
+    gc. dates = "weekly";
+    package = pkgs.nixUnstable;
+    extraOptions = "experimental-features = nix-command flakes " ;
   };
 
   # Use the systemd-boot EFI boot loader.
@@ -32,29 +27,22 @@
   # Set your time zone.
   time.timeZone = "Europe/Oslo";
   i18n.defaultLocale = "en_US.UTF-8";
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
-  };
+  #console.font = "Lat2-Terminus16";
+  console.keyMap = "us";
 
   networking.hostName = "nixos"; # Define your hostname.
-  networking.useDHCP = false;
+  #networking.useDHCP = true;
+  networking.networkmanager.enable = true;
 
   # Open ports in the firewall.
   networking.firewall.checkReversePath = "loose";
   networking.firewall.allowedTCPPorts = [
-    # 22
-    # 443
-    # 80
     8989 #sonar
     6789 #nztbget
     32400
     32469 #plex
   ];
   networking.firewall.allowedUDPPorts = [
-    # 22
-    # 443
-    # 80
     8989
     6789
     1900
@@ -66,13 +54,15 @@
     32414 #plex
   ];
 
-  networking.networkmanager.enable = true;
 
   #=====
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
     layout = "us";
+    autoRepeatDelay = 200;
+    autoRepeatInterval = 20;
+  #.xkbOptions = "caps:swapescape";
 
     desktopManager.session = [
       {
@@ -88,18 +78,13 @@
   # Enable the X11 windowing system.
   services.compton.enable = true;
   services.compton.shadow = true;
-  # services.compton.inactiveOpacity = 0.8;
+
+  # Enable touchpad support (enabled default in most desktopManager).
+  services.xserver.libinput.enable = true;
 
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
-  #services.xserver.xkbOptions = "caps:swapescape";
-  services.xserver.autoRepeatDelay = 200;
-  services.xserver.autoRepeatInterval = 20;
-
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -123,16 +108,17 @@
   ];
 
   fonts.fonts = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-    liberation_ttf
-    fira-code
+    #noto-fonts
+    #noto-fonts-cjk
+    #noto-fonts-emoji
+    #liberation_ttf
+#(nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+    #fira-code
 
-    fira-code-symbols
+    #fira-code-symbols
     # mplus-outline-fonts
-    dina-font
-    proggyfonts
+    #dina-font
+    #proggyfonts
   ];
 
   programs.gnupg.agent = {
@@ -151,11 +137,6 @@
         dates = "weekly";
       };
     };
-
-    #virtualbox.host = {
-    #  enable = true;
-    #  enableExtensionPack = true;
-    #};
   };
 
   #VM??????????????????????????//

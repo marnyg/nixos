@@ -123,3 +123,30 @@ super + alt + shift + {h,j,k,l}
 super + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
+
+# audio play/pause
+XF86AudioPlay
+    playerctl play-pause 
+    
+XF86AudioPause    
+    playerctl play-pause
+    
+XF86AudioNext
+    playerctl next
+    
+XF86AudioPrev
+    playerctl previous
+
+# volume
+XF86AudioRaiseVolume
+    pactl set-sink-volume @DEFAULT_SINK@ +10%
+    
+XF86AudioLowerVolume
+    pactl set-sink-volume @DEFAULT_SINK@ -10%
+    
+XF86AudioMute
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+    
+XF86AudioMicMute
+    pactl set-source-mute @DEFAULT_SOURCE@ toggle
+

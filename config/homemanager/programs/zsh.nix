@@ -1,5 +1,9 @@
 { pkgs, ... }:
 {
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+  };
   programs.zsh = {
     enable = true;
     dotDir = ".config/zsh";
@@ -38,7 +42,8 @@
       _comp_options+=(globdots)
       # Set vi-mode and bind ctrl + space to accept autosuggestions
       bindkey '^ ' autosuggest-accept
-      eval "$(starship init zsh)"
+      bindkey -v
+      #eval "$(starship init zsh)"
     '';
 
     # Tweak settings for history

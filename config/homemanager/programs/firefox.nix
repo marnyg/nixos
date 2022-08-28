@@ -11,7 +11,7 @@
       h264ify
       df-youtube
       tree-style-tab
-      vim-vixen 
+      vim-vixen
     ];
     profiles.mar = {
       settings = {

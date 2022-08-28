@@ -1,4 +1,4 @@
-{ ... }:
+{ self, pkgs, ... }:
 {
   # home.file.".config/bspwm/bspwmrc" = {
   #   text = (builtins.readFile ./bspwmrc);
@@ -26,12 +26,16 @@
   #############################################
 
   xsession.enable = true;
+  xsession.initExtra = ''
+    ${pkgs.autorandr}/bin/autorandr --change
+    ${pkgs.feh}/bin/feh --bg-fill ${./../../../..}/bg.jpg
+  '';
   # xsession.windowManager.command = "…";
   xsession.windowManager.bspwm.enable = true;
   xsession.windowManager.bspwm.monitors = {
     DVI-D-1 = [ "I" "II" "III" "IV" ];
-    DVI-I-1 = [ "V" "VI" "VII" ];
-    HDMI-1 = [ "VIII" "IX" "X" ];
+    HDMI-1 = [ "V" "VI" "VII" ];
+    DVI-I-1 = [ "VIII" "IX" "X" ];
   };
   xsession.windowManager.bspwm.extraConfig = (builtins.readFile ./bspwmrc);
   services.sxhkd.enable = true;
