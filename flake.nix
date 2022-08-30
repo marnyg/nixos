@@ -93,8 +93,8 @@
       };
       
       # wsl config
-      mar-wsl = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+      mar-wsl = {
+        #system = "x86_64-linux";
         # pkgs = nixpkgsFor.${system};
         modules = [
           ./configuration.nix
