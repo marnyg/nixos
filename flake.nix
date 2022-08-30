@@ -114,7 +114,7 @@
               ./config/homemanager/users/vm.nix
             ];
 
-          }t 
+          }
         ];
       };
 
