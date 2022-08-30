@@ -91,6 +91,34 @@
           }
         ];
       };
+      
+      # wsl config
+      mar-wsl = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        # pkgs = nixpkgsFor.${system};
+        modules = [
+          ./configuration.nix
+          #./config/machines/desktop.nix
+          #./config/systemModules/syncthingService.nix
+          ./config/systemModules/tailscaleService.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            nixpkgs.overlays = [
+              nur.overlay
+              my-nvim.overlays.default
+            ];
+
+            imports = [
+              ./config/homemanager/users/mar.nix
+              ./config/homemanager/users/vm.nix
+            ];
+
+          }
+        ];
+      };
+
       # Desktop config
       new = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
