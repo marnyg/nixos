@@ -16,14 +16,13 @@
     };
 
     my-nvim = {
-      url = "git+file:///home/mar/git/nvim-conf";
-      inputs.nixpkgs.follows = "nixpkgs";
+      #url = "git+file:///home/mar/git/nvim-conf";
 
-      #inputs.nixpkgs.follows = "nixpkgs";
-      #type = "github";
-      #owner = "marnyg";
-      #repo = "nvim-conf";
-      #ref = "flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+      type = "github";
+      owner = "marnyg";
+      repo = "nvim-conf";
+      ref = "flake";
     };
   };
 
@@ -115,7 +114,7 @@
               ./config/homemanager/users/vm.nix
             ];
 
-          }
+          }t 
         ];
       };
 
