@@ -14,15 +14,14 @@
   nix = {
     settings.auto-optimise-store = true;
     gc.automatic = true;
-    gc. dates = "weekly";
+    gc.dates = "weekly";
     package = pkgs.nixUnstable;
-    extraOptions = "experimental-features = nix-command flakes " ;
+    extraOptions = "experimental-features = nix-command flakes ";
   };
 
   # Use the systemd-boot EFI boot loader.
   boot.cleanTmpDir = true;
   boot.loader.grub.device = "/dev/sda";
-
 
   # Set your time zone.
   time.timeZone = "Europe/Oslo";
@@ -37,10 +36,10 @@
   # Open ports in the firewall.
   networking.firewall.checkReversePath = "loose";
   networking.firewall.allowedTCPPorts = [
-    8989 #sonar
-    6789 #nztbget
+    8989 # sonar
+    6789 # nztbget
     32400
-    32469 #plex
+    32469 # plex
   ];
   networking.firewall.allowedUDPPorts = [
     8989
@@ -51,9 +50,8 @@
     32410
     32412
     32413
-    32414 #plex
+    32414 # plex
   ];
-
 
   #=====
   # Enable the X11 windowing system.
@@ -62,17 +60,15 @@
     layout = "us";
     autoRepeatDelay = 200;
     autoRepeatInterval = 20;
-  #.xkbOptions = "caps:swapescape";
+    #.xkbOptions = "caps:swapescape";
 
-    desktopManager.session = [
-      {
-        name = "xsession";
-        start = ''
-          ${pkgs.runtimeShell} $HOME/.xsession &
-          waitPID=$!
-        '';
-      }
-    ];
+    desktopManager.session = [{
+      name = "xsession";
+      start = ''
+        ${pkgs.runtimeShell} $HOME/.xsession &
+        waitPID=$!
+      '';
+    }];
   };
 
   # Enable the X11 windowing system.
@@ -100,32 +96,30 @@
     tailscale
     vagrant
     packer
-    (
-      writers.writeDashBin "vboxmanage" ''
-        ${pkgs.virtualbox}/bin/VBoxManage "$@"
-      ''
-    )
+    (writers.writeDashBin "vboxmanage" ''
+      ${pkgs.virtualbox}/bin/VBoxManage "$@"
+    '')
   ];
 
-  fonts.fonts = with pkgs; [
-    #noto-fonts
-    #noto-fonts-cjk
-    #noto-fonts-emoji
-    #liberation_ttf
-#(nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
-    #fira-code
+  fonts.fonts = with pkgs;
+    [
+      #noto-fonts
+      #noto-fonts-cjk
+      #noto-fonts-emoji
+      #liberation_ttf
+      #(nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+      #fira-code
 
-    #fira-code-symbols
-    # mplus-outline-fonts
-    #dina-font
-    #proggyfonts
-  ];
+      #fira-code-symbols
+      # mplus-outline-fonts
+      #dina-font
+      #proggyfonts
+    ];
 
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
   };
-
 
   nixpkgs.config.allowUnfree = true;
 
@@ -148,7 +142,6 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

@@ -1,4 +1,3 @@
-
 {
   programs.newsboat = {
     enable = true;
@@ -46,7 +45,10 @@
       { url = "https://reddit.com/r/vimporn.rss"; }
       { url = "https://reddit.com/r/commandline.rss"; }
       { url = "https://www.rockyourcode.com/index.xml"; }
-      { url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCfp86n--4JvqKbunwSI2lYQ"; }
+      {
+        url =
+          "https://www.youtube.com/feeds/videos.xml?channel_id=UCfp86n--4JvqKbunwSI2lYQ";
+      }
     ];
   };
 }

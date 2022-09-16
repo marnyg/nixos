@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-{
+{ config, pkgs, ... }: {
 
   # Settings for XDG user directory, to declutter home directory
   xdg.userDirs = {
@@ -15,9 +14,7 @@
   };
 
   # Settings for gpg
-  programs.gpg = {
-    enable = true;
-  };
+  programs.gpg = { enable = true; };
 
   # Fix pass
   services.gpg-agent = {

@@ -1,5 +1,4 @@
-{ self, pkgs, ... }:
-{
+{ self, pkgs, ... }: {
   # home.file.".config/bspwm/bspwmrc" = {
   #   text = (builtins.readFile ./bspwmrc);
   # };

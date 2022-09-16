@@ -5,33 +5,31 @@
 { config, pkgs, ... }:
 
 {
-#  imports =
-#   [ # Include the results of the hardware scan.
-#      ./hardware-configuration.nix
-#    ];
+  #  imports =
+  #   [ # Include the results of the hardware scan.
+  #      ./hardware-configuration.nix
+  #    ];
 
   # Neovim configuration
   #imports = [ ./config/nvim/nvim.nix ];
- 
-
 
   # Set environment variables
   environment.variables = {
-      NIXOS_CONFIG="$HOME/.config/nixos/configuration.nix";
-      NIXOS_CONFIG_DIR="$HOME/.config/nixos/";
-  }; 
+    NIXOS_CONFIG = "$HOME/.config/nixos/configuration.nix";
+    NIXOS_CONFIG_DIR = "$HOME/.config/nixos/";
+  };
 
   # Nix settings, auto cleanup and enable flakes
   nix = {
-      autoOptimiseStore = true;
-      gc = {
-          automatic = true;
-          dates = "daily";
-      };
-      package = pkgs.nixUnstable;
-      extraOptions = ''
-          experimental-features = nix-command flakes
-      '';
+    autoOptimiseStore = true;
+    gc = {
+      automatic = true;
+      dates = "daily";
+    };
+    package = pkgs.nixUnstable;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
   };
 
   # Use the systemd-boot EFI boot loader.
@@ -46,8 +44,8 @@
   time.timeZone = "Europe/Oslo";
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
-      font = "Lat2-Terminus16";
-      keyMap = "us";
+    font = "Lat2-Terminus16";
+    keyMap = "us";
   };
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
@@ -78,18 +76,19 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.displayManager.defaultSession = "none+xmonad";
-  services.xserver.windowManager = {       # Open configuration for the window manager.
-    #dwm.enable = true;                  # Enable xmonad.
-    xmonad.enable = true;                  # Enable xmonad.
-    xmonad.enableContribAndExtras = true;  # Enable xmonad contrib and extras.
-    xmonad.extraPackages = hpkgs: [        # Open configuration for additional Haskell packages.
-      hpkgs.xmonad-contrib                 # Install xmonad-contrib.
-      hpkgs.xmonad-extras                  # Install xmonad-extras.
-      hpkgs.xmonad                         # Install xmonad itself.
-    ];
-  #  xmonad.config = ./.config/config.hs;                # Enable xmonad.
-  };
-
+  services.xserver.windowManager =
+    { # Open configuration for the window manager.
+      #dwm.enable = true;                  # Enable xmonad.
+      xmonad.enable = true; # Enable xmonad.
+      xmonad.enableContribAndExtras = true; # Enable xmonad contrib and extras.
+      xmonad.extraPackages =
+        hpkgs: [ # Open configuration for additional Haskell packages.
+          hpkgs.xmonad-contrib # Install xmonad-contrib.
+          hpkgs.xmonad-extras # Install xmonad-extras.
+          hpkgs.xmonad # Install xmonad itself.
+        ];
+      #  xmonad.config = ./.config/config.hs;                # Enable xmonad.
+    };
 
   # Enable CUPS to print documents.
   #services.printing.enable = true;
@@ -108,19 +107,21 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.mar = {
     isNormalUser = true;
-    extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups =
+      [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
   };
-  users.users.vm= {
+  users.users.vm = {
     isNormalUser = true;
-    extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
-    initialHashedPassword="test";
+    extraGroups =
+      [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
+    initialHashedPassword = "test";
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     #vim #  The Nano editor is also installed by default.
-    neovim
+    #neovim
     wget
     firefox
     lf
@@ -129,41 +130,41 @@
     kitty
     tmux
   ];
-  
-  fonts.fonts = with pkgs; [
-    #noto-fonts
-    #noto-fonts-cjk
-    #noto-fonts-emoji
-    #liberation_ttf
-    #fira-code
-    #fira-code-symbols
-    #mplus-outline-fonts
-    #dina-font
-    #proggyfonts
-  ];
+
+  fonts.fonts = with pkgs;
+    [
+      #noto-fonts
+      #noto-fonts-cjk
+      #noto-fonts-emoji
+      #liberation_ttf
+      #fira-code
+      #fira-code-symbols
+      #mplus-outline-fonts
+      #dina-font
+      #proggyfonts
+    ];
 
   programs.gnupg.agent = {
-    enable           = true;
+    enable = true;
     enableSSHSupport = true;
   };
- 
 
-  nixpkgs.config.allowUnfree = true; 
+  nixpkgs.config.allowUnfree = true;
 
- # virtualisation = {
- #   docker = {
- #     enable = true;
- #     autoPrune = {
- #       enable = true;
- #       dates = "weekly";
- #     };
- #   };
+  # virtualisation = {
+  #   docker = {
+  #     enable = true;
+  #     autoPrune = {
+  #       enable = true;
+  #       dates = "weekly";
+  #     };
+  #   };
 
- #   virtualbox.host = {
- #     enable = true;
- #     enableExtensionPack = true;
- #   };
- # };
+  #   virtualbox.host = {
+  #     enable = true;
+  #     enableExtensionPack = true;
+  #   };
+  # };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -177,7 +178,6 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

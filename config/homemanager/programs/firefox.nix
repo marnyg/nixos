@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{ pkgs, ... }: {
   programs.firefox = {
     enable = true;
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
@@ -57,15 +56,8 @@
         "identity.fxaccounts.enabled" = false;
         "toolkit.zoomManager.zoomValues" = ".8,.95,1,1.1,1.2";
       };
-      userChrome = "
-            /* hides the native tabs */
-            #TabsToolbar {
-              visibility: collapse;
-            }
-            #titlebar {
-              visibility: collapse;
-            }
-        ";
+      userChrome =
+        "\n            /* hides the native tabs */\n            #TabsToolbar {\n              visibility: collapse;\n            }\n            #titlebar {\n              visibility: collapse;\n            }\n        ";
     };
 
   };

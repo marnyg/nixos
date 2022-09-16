@@ -1,4 +1,4 @@
-{ pkgs, ...}:
+{ pkgs, ... }:
 
 let
   #extra = ''
@@ -17,8 +17,7 @@ let
   #polybarOpts = ''
   #  ${pkgs.nm-applet}/bin/nm-applet --sm-disable --indicator &
   #'';
-in
-{
+in {
   xresources.properties = {
     "Xft.dpi" = 180;
     "Xft.autohint" = 0;
@@ -38,10 +37,7 @@ in
     windowManager.xmonad = {
       enable = true;
       enableContribAndExtras = true;
-      extraPackages = hp: [
-        hp.dbus
-        hp.monad-logger
-      ];
+      extraPackages = hp: [ hp.dbus hp.monad-logger ];
       #config = ./config.hs;
     };
   };

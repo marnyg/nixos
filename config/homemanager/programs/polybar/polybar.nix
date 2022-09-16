@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{ pkgs, ... }: {
   # home.file = {
   #    ".config/polybar/conf.ini" = {
   #      text= (builtins.readFile ./config.ini);

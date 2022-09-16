@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
-{
+{ config, pkgs, ... }: {
   users.users.vm = {
     isNormalUser = true;
-    extraGroups = [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
-    initialHashedPassword = "HNTH57eGshHyQ"; #test
+    extraGroups =
+      [ "docker" "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
+    initialHashedPassword = "HNTH57eGshHyQ"; # test
     shell = pkgs.zsh;
   };
 
