@@ -71,7 +71,6 @@
     home.stateVersion = "21.03";
 
     home.packages = with pkgs; [
-      # legacyPackages.nyxt
       dwm
       rofi
       dmenu
@@ -92,10 +91,7 @@
       bat
       libnotify
       sct
-      #update-nix-fetchgit
       hyperfine
-      #hunspell
-      #hunspellDicts.en-us
       tree
       unrar
       unzip
@@ -124,19 +120,6 @@
       #nheko #matrix client
       pavucontrol
       spotify
-
-      #amazon cli
-      #ec2_api_tools
-      #awscli
-
-      #haskell
-      #haskell.compiler.ghc8107 #.ghc865
-      #haskellPackages.cabal-install
-      #haskellPackages.stack
-      #haskellPackages.ghcid
-      #unstable.haskellPackages.cabal2nix
-      #haskellPackages.stack2nix
-      #my-neovim
     ];
 
   };

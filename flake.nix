@@ -15,24 +15,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    #neovim-nightly-overlay = {
-    #  url = "github:nix-community/neovim-nightly-overlay";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
-
-    #vim-extra-plugins = {
-    #  url = "github:m15a/nixpkgs-vim-extra-plugins";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
-
     my-nvim = {
       #url = "git+file:///home/mar/git/nvim-conf";
-
       inputs.nixpkgs.follows = "nixpkgs";
       type = "github";
       owner = "marnyg";
       repo = "nvim-conf";
-      #ref = "flake";
     };
   };
 
@@ -47,36 +35,15 @@
           ./config/machines/laptop.nix
           ./config/systemModules/syncthingService.nix
           ./config/systemModules/tailscaleService.nix
-          #my-nvim
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-
-            home-manager.users.vm = import ./config/homemanager/users/mar.nix;
-            users.users.vm = {
-              isNormalUser = true;
-              extraGroups = [
-                "docker"
-                "networkmanager"
-                "wheel"
-              ]; # Enable ‘sudo’ for the user.
-              initialHashedPassword = "HNTH57eGshHyQ"; # test
-            };
-
-            home-manager.users.mar = import ./config/homemanager/users/mar.nix;
-            users.users.mar = {
-              isNormalUser = true;
-              extraGroups = [
-                "docker"
-                "networkmanager"
-                "wheel"
-                "qemu-libvirtd"
-                "libvirtd"
-              ]; # Enable ‘sudo’ for the user.
-            };
-
             nixpkgs.overlays = [ nur.overlay my-nvim.overlay.x86_64-linux ];
+
+            imports = [
+              ./config/homemanager/users/mar.nix
+            ];
           }
         ];
       };
@@ -98,7 +65,6 @@
 
             imports = [
               ./config/homemanager/users/mar.nix
-              #./config/homemanager/users/vm.nix
             ];
 
           }
@@ -122,9 +88,7 @@
 
             imports = [
               ./config/homemanager/users/mar.nix
-              ./config/homemanager/users/vm.nix
             ];
-
           }
         ];
       };
