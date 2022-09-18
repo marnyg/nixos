@@ -82,6 +82,10 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+
+
+
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -101,27 +105,21 @@
     '')
   ];
 
-  fonts.fonts = with pkgs;
-    [
-      #noto-fonts
-      #noto-fonts-cjk
-      #noto-fonts-emoji
-      #liberation_ttf
-      #(nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
-      #fira-code
-
-      #fira-code-symbols
-      # mplus-outline-fonts
-      #dina-font
-      #proggyfonts
-    ];
-
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
   };
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+  };
+
 
   nixpkgs.config.allowUnfree = true;
+
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.opengl.enable = true;
 
   virtualisation = {
     docker = {
