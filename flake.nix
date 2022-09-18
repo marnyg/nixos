@@ -24,8 +24,19 @@
     };
   };
 
-  outputs = { home-manager, nixpkgs, nur, my-nvim, ... }: {
+  outputs = { self, nixpkgs, ... }@inputs: {
+    # inspiration: https://github.com/pinpox/nixos/blob/main/flake.nix
+    nixosModules = [ ];
+    homeManagerModules = [ ];
+    homeConfigurations = [ ];
+
     nixosConfigurations = {
+      full = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { flake-self = self; } // inputs;
+        modules = [ .config/marchines/marDesk/configuration.nix ];
+      };
+
 
       # Laptop config
       marlaptop = nixpkgs.lib.nixosSystem {
@@ -35,11 +46,11 @@
           ./config/machines/laptop.nix
           ./config/systemModules/syncthingService.nix
           ./config/systemModules/tailscaleService.nix
-          home-manager.nixosModules.home-manager
+          inputs.home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            nixpkgs.overlays = [ nur.overlay my-nvim.overlay.x86_64-linux ];
+            nixpkgs.overlays = [ inputs.nur.overlay inputs.my-nvim.overlay.x86_64-linux ];
 
             imports = [
               ./config/homemanager/users/mar.nix
@@ -57,11 +68,11 @@
           ./config/machines/desktop.nix
           ./config/systemModules/syncthingService.nix
           ./config/systemModules/tailscaleService.nix
-          home-manager.nixosModules.home-manager
+          inputs.home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            nixpkgs.overlays = [ nur.overlay my-nvim.overlay.x86_64-linux ];
+            nixpkgs.overlays = [ inputs.nur.overlay inputs.my-nvim.overlay.x86_64-linux ];
 
             imports = [
               ./config/homemanager/users/mar.nix
@@ -80,11 +91,11 @@
           #./config/machines/desktop.nix
           #./config/systemModules/syncthingService.nix
           ./config/systemModules/tailscaleService.nix
-          home-manager.nixosModules.home-manager
+          inputs.home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            nixpkgs.overlays = [ nur.overlay my-nvim.overlays.default ];
+            nixpkgs.overlays = [ inputs.nur.overlay inputs.my-nvim.overlays.default ];
 
             imports = [
               ./config/homemanager/users/mar.nix
