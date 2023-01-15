@@ -26,9 +26,30 @@
 
   outputs = { self, nixpkgs, ... }@inputs: {
     # inspiration: https://github.com/pinpox/nixos/blob/main/flake.nix
-    nixosModules = [ ];
-    homeManagerModules = [ ];
+    nixosModules = {
+      imports = [
+        ./config/systemModules/syncthingService.nix
+        ./config/systemModules/tailscaleService.nix
+      ];
+    };
+    homeManagerModules = {
+      imports = [
+        ./config/homemanager/users/common.nix
+        ./config/homemanager/programs/firefox.nix
+        ./config/homemanager/programs/zsh.nix
+        ./config/homemanager/programs/newsboat.nix
+        ./config/homemanager/programs/git.nix
+        ./config/homemanager/programs/zellij.nix
+        ./config/homemanager/programs/kitty.nix
+        ./config/homemanager/programs/dunst.nix
+        ./config/homemanager/programs/nvim.nix
+        ./config/homemanager/programs/polybar/polybar.nix
+        ./config/homemanager/programs/bspwm/bspwm.nix
+        ./config/homemanager/programs/autorandr/desktop.nix
+      ];
+    };
     homeConfigurations = [ ];
+
 
     nixosConfigurations = {
       full = nixpkgs.lib.nixosSystem {

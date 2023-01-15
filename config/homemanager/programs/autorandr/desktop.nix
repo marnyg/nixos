@@ -7,16 +7,22 @@
 # [ horizontal vertical common clone-largest ]
 # manulay trigger by running `autorandr default`
 # get finger print with `autorandr --fingerprint`
+{ pkgs, lib, config, ... }:
+with lib;
+{
+  options.modules.autorand = {
+    enable = mkOption { type = types.bool; default = false; };
+  };
 
-{ config, pkgs, ... }: {
-  # systemd.services.my-autorandr = {
-  #   description = "...";
-  #   serviceConfig.PassEnvironment = "DISPLAY";
-  #   script = with pkgs; "${autorandr} default";
-  #   wantedBy = [ "multi-user.target" ]; # starts after login
-  # };
+  config = mkIf config.modules.autorand.enable {
 
-  config = {
+    # systemd.services.my-autorandr = {
+    #   description = "...";
+    #   serviceConfig.PassEnvironment = "DISPLAY";
+    #   script = with pkgs; "${autorandr} default";
+    #   wantedBy = [ "multi-user.target" ]; # starts after login
+    # };
+
     programs.autorandr = {
       enable = true;
       profiles = {

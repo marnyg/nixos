@@ -17,7 +17,8 @@ let
   #polybarOpts = ''
   #  ${pkgs.nm-applet}/bin/nm-applet --sm-disable --indicator &
   #'';
-in {
+in
+{
   xresources.properties = {
     "Xft.dpi" = 180;
     "Xft.autohint" = 0;

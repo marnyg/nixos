@@ -77,12 +77,14 @@
   services.xserver.enable = true;
   services.xserver.displayManager.defaultSession = "none+xmonad";
   services.xserver.windowManager =
-    { # Open configuration for the window manager.
+    {
+      # Open configuration for the window manager.
       #dwm.enable = true;                  # Enable xmonad.
       xmonad.enable = true; # Enable xmonad.
       xmonad.enableContribAndExtras = true; # Enable xmonad contrib and extras.
       xmonad.extraPackages =
-        hpkgs: [ # Open configuration for additional Haskell packages.
+        hpkgs: [
+          # Open configuration for additional Haskell packages.
           hpkgs.xmonad-contrib # Install xmonad-contrib.
           hpkgs.xmonad-extras # Install xmonad-extras.
           hpkgs.xmonad # Install xmonad itself.
