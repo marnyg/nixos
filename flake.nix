@@ -48,7 +48,19 @@
         ./config/homemanager/programs/autorandr/desktop.nix
       ];
     };
-    homeConfigurations = [ ];
+    homeConfigurations = { 
+          wsl = (inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            nixpkgs.overlays = [ inputs.nur.overlay inputs.my-nvim.overlay.x86_64-linux ];
+
+            imports = [
+              ./config/homemanager/users/mar.nix
+            ];
+
+          });
+    };
 
 
     nixosConfigurations = {
