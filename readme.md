@@ -1,6 +1,8 @@
 # instruction
 
 ``` bash
+# to build a iso image, run:
+nix build .#nixosConfigurations.tessystm3.config.system.build.isoImage
 # to build a flake, run:
 nixos-rebuild switch --flake ".#environmet"
 

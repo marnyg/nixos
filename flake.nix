@@ -4,153 +4,27 @@
   # All inputs for the system
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    my-nvim.url = "git+file:///home/nixos/git/nvim-conf";
-
-#    my-nvim = {
-#      #url = "git+file:///home/mar/git/nvim-conf";
-#      inputs.nixpkgs.follows = "nixpkgs";
-#      type = "github";
-#      owner = "marnyg";
-#      repo = "nvim-conf";
-#    };
+    flake-utils.url = "github:numtide/flake-utils";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    nur.url = "github:nix-community/NUR";
+    nur.inputs.nixpkgs.follows = "nixpkgs";
+    #my-nvim.url = "git+file:///home/nixos/git/nvim-conf";
+    my-nvim.url = "github:marnyg/nvim-conf";
+    #my-modules.url = "github:marnyg/nixos-modules";
+    my-modules.url = "git+file:///home/nixos/git/nixos-modules";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL";
   };
 
-  outputs = { self, nixpkgs,my-nvim, ... }@inputs: {
-    # inspiration: https://github.com/pinpox/nixos/blob/main/flake.nix
-    nixosModules = {
-      imports = [
-        ./config/systemModules/syncthingService.nix
-        ./config/systemModules/tailscaleService.nix
-        my-nvim.nixosModule2."x86_64-linux"
-        { modules.myNvim.enable=true; }
-      ];
-    };
-    homeManagerModules = {
-      imports = [
-        ./config/homemanager/users/common.nix
-        ./config/homemanager/programs/firefox.nix
-        ./config/homemanager/programs/zsh.nix
-        ./config/homemanager/programs/newsboat.nix
-        ./config/homemanager/programs/git.nix
-        ./config/homemanager/programs/zellij.nix
-        ./config/homemanager/programs/kitty.nix
-        ./config/homemanager/programs/dunst.nix
-        ./config/homemanager/programs/nvim.nix
-        ./config/homemanager/programs/polybar/polybar.nix
-        ./config/homemanager/programs/bspwm/bspwm.nix
-        ./config/homemanager/programs/autorandr/desktop.nix
-      ];
-    };
-    homeConfigurations = { 
-          wsl = (inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            nixpkgs.overlays = [ inputs.nur.overlay ];
-
-            imports = [
-              ./config/homemanager/users/mar.nix
-            ];
-
-          });
-    };
-
-
-    nixosConfigurations = {
-      full = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { flake-self = self; } // inputs;
-        modules = [ .config/marchines/marDesk/configuration.nix ];
-      };
-
-
-      # Laptop config
-      marlaptop = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./configuration.nix
-          ./config/machines/laptop.nix
-          ./config/systemModules/syncthingService.nix
-          ./config/systemModules/tailscaleService.nix
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            nixpkgs.overlays = [ inputs.nur.overlay ];
-
-            imports = [
-              ./config/homemanager/users/mar.nix
-            ];
-          }
-        ];
-      };
-
-      # Desktop config
-      mardesk = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        # pkgs = nixpkgsFor.${system};
-        modules = [
-          ./configuration.nix
-          ./config/machines/desktop.nix
-          ./config/systemModules/syncthingService.nix
-          ./config/systemModules/tailscaleService.nix
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            nixpkgs.overlays = [ inputs.nur.overlay ];
-
-            imports = [
-              ./config/homemanager/users/mar.nix
-            ];
-
-          }
-        ];
-      };
-
-      # wsl config
-      mar-wsl = {
-        #system = "x86_64-linux";
-        # pkgs = nixpkgsFor.${system};
-        modules = [
-          ./configuration.nix
-          #./config/machines/desktop.nix
-          #./config/systemModules/syncthingService.nix
-          ./config/systemModules/tailscaleService.nix
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            nixpkgs.overlays = [ inputs.nur.overlay ];
-
-            imports = [
-              ./config/homemanager/users/mar.nix
-            ];
-          }
-        ];
-      };
-
-      # Desktop config
-      new = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [ ./min-configuration.nix ./hardware-configuration.nix ];
-      };
-
-      # Raspberry Pi config
-      notuspi = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [ ./configuration.nix ./config/pi.nix ];
-      };
-    };
-  };
+  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+    {
+      nixosConfigurations = import ./systems inputs;
+    } //
+    flake-utils.lib.eachDefaultSystem (system:
+      let pkgs = (import nixpkgs { inherit system; }); in
+      {
+        devShells = import ./flakeUtils/shell.nix pkgs;
+        checks = import ./flakeUtils/checks.nix pkgs;
+        formatter = pkgs.nixpkgs-fmt;
+      });
 }

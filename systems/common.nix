@@ -16,7 +16,8 @@
     gc.automatic = true;
     gc.dates = "weekly";
     package = pkgs.nixUnstable;
-    extraOptions = "experimental-features = nix-command flakes ";
+    #extraOptions = "experimental-features = nix-command flakes ";
+    settings.experimental-features = [ "nix-command" "flakes" ];
   };
 
   # Use the systemd-boot EFI boot loader.
@@ -29,9 +30,9 @@
   #console.font = "Lat2-Terminus16";
   console.keyMap = "us";
 
-  networking.hostName = "nixos"; # Define your hostname.
+  #networking.hostName = "nixos"; # Define your hostname.
   #networking.useDHCP = true;
-  networking.networkmanager.enable = true;
+  #  networking.networkmanager.enable = true;
 
   #  # Open ports in the firewall.
   #  networking.firewall.checkReversePath = "loose";

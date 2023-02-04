@@ -8,7 +8,7 @@ with lib;
   config = mkIf config.modules.firefox.enable {
     programs.firefox = {
       enable = true;
-      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+      extensions = with config.nur.repos.rycee.firefox-addons; [
         decentraleyes
         ublock-origin
         clearurls
