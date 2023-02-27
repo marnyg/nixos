@@ -2,6 +2,7 @@
 {
   networking.hostName = "nixos-desktop"; # Define your hostname.
   nixpkgs.config.allowUnfree = true;
+  modules.myNvim.enable=true;
 
   #imports = my-homemanager-modules;
 

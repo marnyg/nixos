@@ -8,7 +8,7 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
-    nur.inputs.nixpkgs.follows = "nixpkgs";
+    #nur.inputs.nixpkgs.follows = "nixpkgs";
     #my-nvim.url = "git+file:///home/nixos/git/nvim-conf";
     my-nvim.url = "github:marnyg/nvim-conf";
     #my-modules.url = "github:marnyg/nixos-modules";

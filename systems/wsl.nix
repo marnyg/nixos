@@ -2,6 +2,7 @@
 {
   nixpkgs.overlays = [ inputs.nur.overlay ];
   nixpkgs.config.allowUnfree = true;
+  modules.myNvim.enable=true;
 
   wsl = {
     enable = true;
@@ -14,20 +15,22 @@
     # Enable integration with Docker Desktop (needs to be installed)
     # docker-desktop.enable = true;
   };
-  #users.users.nixos = { shell = pkgs.bash; };
+  users.users.nixos = { 
+    shell = pkgs.bash;
+  };
   users.users.mar = {
     isNormalUser = true;
-  #  shell = pkgs.zsh;
+    shell = pkgs.zsh;
   };
 
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
-  home-manager.sharedModules = my-homemanager-modules;
+  #home-manager.sharedModules = my-homemanager-modules;
   home-manager.users =
     let
       createUserConf = user:
         {
-          imports = [
+          imports = my-homemanager-modules ++ [
             {
               modules.zsh.enable = true;
               modules.zellij.enable = true;
@@ -45,10 +48,19 @@
               modules.cloneDefaultRepos.enable = true;
 
               programs.home-manager.enable = true;
+              programs.bash.enable = true;
+
               home = {
-                stateVersion = "22.05";
-                username = "${user}";
-                #homeDirectory = "/home/${user}";
+                stateVersion = "22.11";
+                username = user;
+                homeDirectory = "/home/${user}";
+
+                packages = [ pkgs.vim ];
+
+                sessionVariables = {
+                  EDITOR = "vim";
+                  TEST_VARIABLE = "THISISATESTSTRING";
+                };
 
                 #file.".config/nixpkgs/config.nix" = {
                 #  text = ''
@@ -74,19 +86,6 @@
       mar = createUserConf "mar";
       nixos = createUserConf "nixos";
     };
-  #systemd.services.foo = {
-  #  script = ''
-  #    mkdir -p /home/nixos/git;
-  #    ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos-modules /home/nixos/git/nixos-modules;
-  #    ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos-wsl /home/nixos/git/nixos-wsl;
-  #    ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos /home/nixos/git/nixos;
-  #    ${pkgs.git}/bin/git clone https://github.com/marnyg/nvim-conf /home/nixos/git/nvim;
-  #  '';
-  #  wantedBy = [ "multi-user.target" ];
-  #  serviceConfig = {
-  #    Type = "oneshot";
-  #  };
-  #};
 
   environment.systemPackages = with pkgs; [
     wget
