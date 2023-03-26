@@ -20,11 +20,12 @@
     {
       nixosConfigurations = import ./systems inputs;
     } //
-    flake-utils.lib.eachDefaultSystem (system:
+    #flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
+    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
       let pkgs = (import nixpkgs { inherit system; }); in
       {
         devShells = import ./flakeUtils/shell.nix pkgs;
-        checks = import ./flakeUtils/checks.nix pkgs;
+        checks = import ./flakeUtils/checks.nix { inherit inputs pkgs; };
         formatter = pkgs.nixpkgs-fmt;
       });
 }

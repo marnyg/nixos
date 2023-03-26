@@ -2,7 +2,7 @@
 {
   networking.hostName = "nixos-desktop"; # Define your hostname.
   nixpkgs.config.allowUnfree = true;
-  modules.myNvim.enable=true;
+  modules.myNvim.enable = true;
 
   #imports = my-homemanager-modules;
 
@@ -11,6 +11,7 @@
     ../common.nix
     ./hardware-configuration.nix
   ];
+  programs.zsh.enable = true;
 
   users.users.mar = { system, ... }: {
     isNormalUser = true;

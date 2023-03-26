@@ -19,7 +19,6 @@
   users.users.nixos = {
     shell = pkgs.bash;
   };
-  programs.zsh.enable = true;
   users.users.mar = {
     isNormalUser = true;
     shell = pkgs.zsh;
