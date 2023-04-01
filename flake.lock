@@ -142,14 +142,14 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1675544489,
+        "lastModified": 1,
         "narHash": "sha256-v/cEPGYZ/n/83voJD4JeG1l7MnEY3iAvTjxnWni5Iv4=",
-        "type": "git",
-        "url": "file:///home/nixos/git/nixos-modules"
+        "path": "./modules",
+        "type": "path"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/nixos/git/nixos-modules"
+        "path": "./modules",
+        "type": "path"
       }
     },
     "my-nvim": {

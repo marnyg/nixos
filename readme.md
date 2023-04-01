@@ -1,6 +1,10 @@
 # instruction
 
 ``` bash
+# to run all os tests:
+nix flake check
+# to run a spsific os tests:
+nix build .#checks.x86_64-linux.miniOsTest
 # to build a iso image, run:
 nix build .#nixosConfigurations.tessystm3.config.system.build.isoImage
 # to build a flake, run:

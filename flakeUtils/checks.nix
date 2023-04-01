@@ -12,11 +12,7 @@
 
   miniOsTest = pkgs.nixosTest (import ../tests/mini.nix pkgs);
   miniOsTest2 = pkgs.nixosTest (import ../tests/mini2.nix pkgs);
-  osWithHomemanager = pkgs.nixosTest (import ../tests/miniHomemanager.nix { inherit inputs pkgs; });
-  #compositionTest = {...}: {
-  #   inherit  miniOsTest miniOsTest2;
-  #  #miniOsTest = pkgs.nixosTest (import ../tests/mini.nix pkgs);
-  #  #miniOsTest2 = pkgs.nixosTest (import ../tests/mini2.nix pkgs);
-  #};
-  #run interactivly with
+  osWithMiniHomemanager = pkgs.nixosTest (import ../tests/miniHomemanager.nix { inherit inputs pkgs; });
+  osWithHomemanager = pkgs.nixosTest (import ../tests/withHomemanager.nix { inherit inputs pkgs; });
+  #osWithHomemanagerAndWsl = pkgs.nixosTest (import ../tests/withHmAndWsl.nix { inherit inputs pkgs; });
 }

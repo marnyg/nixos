@@ -6,26 +6,26 @@ inputs:
 
   #modules.myNvim.enable = true;
 
-  wsl = {
-    enable = true;
-    wslConf.automount.root = "/mnt";
-    defaultUser = "nixos";
-    startMenuLaunchers = true;
+  #wsl = {
+  #  enable = true;
+  #  wslConf.automount.root = "/mnt";
+  #  defaultUser = "nixos";
+  #  startMenuLaunchers = true;
 
-    # Enable native Docker support
-    # docker-native.enable = true;
-    # Enable integration with Docker Desktop (needs to be installed)
-    # docker-desktop.enable = true;
-  };
+  #  # Enable native Docker support
+  #  # docker-native.enable = true;
+  #  # Enable integration with Docker Desktop (needs to be installed)
+  #  # docker-desktop.enable = true;
+  #};
   programs.zsh.enable=true;
   users = {
-    #groups.nixos = { };
+    groups.nixos = { };
     groups.mar = { };
-    #users.nixos = {
-    #  shell = pkgs.bash;
-    #  #isSystemUser = true;
-    #  group = "nixos";
-    #};
+    users.nixos = {
+      shell = pkgs.bash;
+      isSystemUser = true;
+      group = "nixos";
+    };
     users.mar = {
       isNormalUser = true;
       shell = pkgs.zsh;
@@ -96,7 +96,7 @@ inputs:
     in
     {
       mar = createUserConf "mar";
-      #nixos = createUserConf "nixos";
+      nixos = createUserConf "nixos";
     };
 
   environment.systemPackages = with pkgs; [

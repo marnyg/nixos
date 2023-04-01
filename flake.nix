@@ -12,7 +12,8 @@
     #my-nvim.url = "git+file:///home/nixos/git/nvim-conf";
     my-nvim.url = "github:marnyg/nvim-conf";
     #my-modules.url = "github:marnyg/nixos-modules";
-    my-modules.url = "git+file:///home/nixos/git/nixos-modules";
+    #my-modules.url = "git+file:///home/nixos/git/nixos-modules";
+    my-modules.url = "path:./modules";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
   };
 
