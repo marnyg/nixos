@@ -1,5 +1,19 @@
 # instruction
+## wls
 
+``` bash
+# to build a wsl image run:
+nix build .#nixosConfigurations.wsl2.config.system.build.installer
+
+# then open a new windows termioal tab in the reuslt folder with:
+wt.exe -w 0 nt -d  $(wslpath -w $(realpath result/tarball))  
+
+# then remove old vm, import and start new version
+wsl --unregister MyNixOs2; wsl --import MyNixOS2 C:\Users\trash\wlsTarbals\Nixos2 .\nixos-wsl-installer.tar.gz --version 2; wsl -d mynixos2
+
+```
+
+## other
 ``` bash
 # to run all os tests:
 nix flake check
@@ -9,10 +23,9 @@ nix build .#checks.x86_64-linux.miniOsTest
 nix build .#nixosConfigurations.tessystm3.config.system.build.isoImage
 # to build a flake, run:
 nixos-rebuild switch --flake ".#environmet"
-
 # like this for desktop
 nixos-rebuild switch --flake ".#mardesk"	
-```a
+```
 
 
 # todo 

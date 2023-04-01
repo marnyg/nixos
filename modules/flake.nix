@@ -34,6 +34,8 @@
             import
             ./homemanager/zellij.nix
             import
+            ./homemanager/tmux.nix
+            import
             ./homemanager/zsh.nix
             import
             ./homemanager/spotifyd.nix
@@ -56,6 +58,7 @@
           polybar = import ./homemanager/polybar/polybar.nix;
           xmonad = import ./homemanager/xmonad;
           zellij = import ./homemanager/zellij.nix;
+          tmux = import ./homemanager/tmux.nix;
           zsh = import ./homemanager/zsh.nix;
           spotifyd = import ./homemanager/spotifyd.nix;
           other = import ./homemanager/other.nix;
