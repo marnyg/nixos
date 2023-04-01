@@ -17,7 +17,7 @@ inputs:
   #  # Enable integration with Docker Desktop (needs to be installed)
   #  # docker-desktop.enable = true;
   #};
-  programs.zsh.enable=true;
+  programs.zsh.enable = true;
   users = {
     groups.nixos = { };
     groups.mar = { };

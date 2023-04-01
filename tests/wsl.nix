@@ -5,9 +5,14 @@ inputs:
   nixpkgs.config.allowUnfree = true;
 
   #modules.myNvim.enable = true;
+  imports = [
+    inputs.home-manager.nixosModules.home-manager
+    inputs.nixos-wsl.nixosModules.wsl
+  ];
 
   wsl = {
-    enable = true;
+    #enable = true;
+    enable = false;
     wslConf.automount.root = "/mnt";
     defaultUser = "nixos";
     startMenuLaunchers = true;
@@ -17,7 +22,8 @@ inputs:
     # Enable integration with Docker Desktop (needs to be installed)
     # docker-desktop.enable = true;
   };
-  programs.zsh.enable=true;
+
+  programs.zsh.enable = true;
   users = {
     #groups.nixos = { };
     groups.mar = { };
@@ -111,9 +117,9 @@ inputs:
   # Enable nix flakes
   nix = {
     settings.auto-optimise-store = true;
-    package = pkgs.nixUnstable;
+    #    package = pkgs.nixUnstable;
     settings.experimental-features = [ "nix-command" "flakes" ];
   };
 
-  system.stateVersion = "22.11";
+  #system.stateVersion = "22.11";
 }

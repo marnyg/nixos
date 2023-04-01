@@ -11,23 +11,40 @@
   outputs = { self, nixpkgs, my-nvim, flake-utils, home-manager }:
     flake-utils.lib.eachDefaultSystem (system:
       {
-        hmModulesModule = {lib,...}:{ lib.MyHmModules = [
-           import ./homemanager/autorandr/desktop.nix
-           import ./homemanager/bspwm/bspwm.nix
-           import ./homemanager/dunst/dunst.nix
-           import ./homemanager/firefox.nix
-           import ./homemanager/git.nix
-           import ./homemanager/kitty.nix
-           import ./homemanager/newsboat.nix
-           import ./homemanager/polybar/polybar.nix
-           import ./homemanager/xmonad
-           import ./homemanager/zellij.nix
-           import ./homemanager/zsh.nix
-           import ./homemanager/spotifyd.nix
-           import ./homemanager/other.nix
-           import ./homemanager/myPackages.nix
-           import ./homemanager/cloneDefaultRepos.nix
-        ];};
+        hmModulesModule = { lib, ... }: {
+          lib.MyHmModules = [
+            import
+            ./homemanager/autorandr/desktop.nix
+            import
+            ./homemanager/bspwm/bspwm.nix
+            import
+            ./homemanager/dunst/dunst.nix
+            import
+            ./homemanager/firefox.nix
+            import
+            ./homemanager/git.nix
+            import
+            ./homemanager/kitty.nix
+            import
+            ./homemanager/newsboat.nix
+            import
+            ./homemanager/polybar/polybar.nix
+            import
+            ./homemanager/xmonad
+            import
+            ./homemanager/zellij.nix
+            import
+            ./homemanager/zsh.nix
+            import
+            ./homemanager/spotifyd.nix
+            import
+            ./homemanager/other.nix
+            import
+            ./homemanager/myPackages.nix
+            import
+            ./homemanager/cloneDefaultRepos.nix
+          ];
+        };
         hmModules = {
           autorandr = import ./homemanager/autorandr/desktop.nix;
           bspwm = import ./homemanager/bspwm/bspwm.nix;

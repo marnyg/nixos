@@ -14,5 +14,6 @@
   miniOsTest2 = pkgs.nixosTest (import ../tests/mini2.nix pkgs);
   osWithMiniHomemanager = pkgs.nixosTest (import ../tests/miniHomemanager.nix { inherit inputs pkgs; });
   osWithHomemanager = pkgs.nixosTest (import ../tests/withHomemanager.nix { inherit inputs pkgs; });
-  #osWithHomemanagerAndWsl = pkgs.nixosTest (import ../tests/withHmAndWsl.nix { inherit inputs pkgs; });
+  #osWithWsl = pkgs.nixosTest (import ../tests/withWsl.nix { inherit inputs pkgs; });
+  osWithHomemanagerAndWsl = pkgs.nixosTest (import ../tests/withHmAndWsl.nix { inherit inputs pkgs; });
 }

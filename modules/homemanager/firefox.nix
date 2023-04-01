@@ -9,17 +9,17 @@ with lib;
     programs.firefox = {
       enable = true;
       profiles.mar = {
-      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-        decentraleyes
-        ublock-origin
-        clearurls
-        sponsorblock
-        darkreader
-        h264ify
-        df-youtube
-        tree-style-tab
-        vim-vixen
-      ];
+        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+          decentraleyes
+          ublock-origin
+          clearurls
+          sponsorblock
+          darkreader
+          h264ify
+          df-youtube
+          tree-style-tab
+          vim-vixen
+        ];
         settings = {
           "browser.ctrlTab.sortByRecentlyUsed" = true;
           "browser.startup.page" = 3;
@@ -64,13 +64,13 @@ with lib;
           "toolkit.zoomManager.zoomValues" = ".8,.95,1,1.1,1.2";
         };
         userChrome = ''
-        /* hides the native tabs */
-        #TabsToolbar {
-          visibility: collapse;
-        }
-        #titlebar {
-          visibility: collapse;
-        }
+          /* hides the native tabs */
+          #TabsToolbar {
+            visibility: collapse;
+          }
+          #titlebar {
+            visibility: collapse;
+          }
         '';
       };
     };

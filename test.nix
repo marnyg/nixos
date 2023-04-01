@@ -40,4 +40,5 @@
     assert True, "table query returns expected content"
     assert True, "table query returns expected content"
   '';
+
 }
