@@ -21,7 +21,10 @@ jobs:
           extra_nix_config: 'access-tokens = github.com=${{ github.token }}'
 
       - name: Update flakes ⌛
-        run: nix flake update
+        run: |
+          nix flake lock --update-input my-nvim
+          nix flake lock --update-input my-modules
+          nix flake update
 
       - name: Create Pull Request 📨
         id: cpr
