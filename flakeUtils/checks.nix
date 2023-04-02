@@ -10,10 +10,9 @@
     touch $out
   '';
 
-  miniOsTest = pkgs.nixosTest (import ../tests/mini.nix pkgs);
-  miniOsTest2 = pkgs.nixosTest (import ../tests/mini2.nix pkgs);
-  osWithMiniHomemanager = pkgs.nixosTest (import ../tests/miniHomemanager.nix { inherit inputs pkgs; });
-  osWithHomemanager = pkgs.nixosTest (import ../tests/withHomemanager.nix { inherit inputs pkgs; });
+  miniOsTest = pkgs.nixosTest (import ../tests/mini.nix);
+  osWithMiniHomemanager = pkgs.nixosTest (import ../tests/miniHomemanager.nix inputs);
+  osWithMyHomemanager = pkgs.nixosTest (import ../tests/withHomemanager.nix inputs);
   #osWithWsl = pkgs.nixosTest (import ../tests/withWsl.nix { inherit inputs pkgs; });
-  osWithHomemanagerAndWsl = pkgs.nixosTest (import ../tests/withHmAndWsl.nix { inherit inputs pkgs; });
+  osWithHomemanagerAndWsl = pkgs.nixosTest (import ../tests/withHmAndWsl.nix inputs);
 }
