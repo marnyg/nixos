@@ -31,7 +31,7 @@ jobs:
   #      id: checks
   #      run: |
   #        nix-instantiate --json --eval --strict -E 'with builtins; attrNames (getFlake (toString ./.)).checks.${currentSystem}' | perl -pe 's|(.*)|checks=\1|' >>$GITHUB_OUTPUT
-    prepare:
+  prepare:
     name: Prepare 🚀
     runs-on: ubuntu-latest
     outputs:
@@ -65,7 +65,7 @@ jobs:
           NIXOS_VERSION=$(nix-instantiate --eval -E '(import ./.).inputs.nixpkgs.lib.version' | sed -E 's/"(.+\...).*"/\1/') # Get NixOS version from nixpkgs
           NIXOS_VERSION_MS=$(echo $NIXOS_VERSION | sed -E 's/\.0*(.+)/\.\1/')                                                # Remove the leading 0 from the minor version (if it exists)
           NIXOS_WSL_VERSION=${NIXOS_VERSION_MS}.${TAG_COUNT}.${COMMIT_COUNT}                                                 # Compose the NixOS-WSL version number
-    build:
+  build:
     name: Build 🛠️
     needs:
       - prepare
