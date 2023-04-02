@@ -10,7 +10,7 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
 
     my-nvim.url = "path:./nvim";
-    my-modules.url = "path:./modules";
+    my-modules.url = "path:./nixos/modules";
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
