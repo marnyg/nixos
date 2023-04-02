@@ -24,6 +24,8 @@
             import
             ./homemanager/git.nix
             import
+            ./homemanager/direnv.nix
+            import
             ./homemanager/kitty.nix
             import
             ./homemanager/newsboat.nix
@@ -53,6 +55,7 @@
           dunst = import ./homemanager/dunst/dunst.nix;
           firefox = import ./homemanager/firefox.nix;
           git = import ./homemanager/git.nix;
+          direnv = import ./homemanager/direnv.nix;
           kitty = import ./homemanager/kitty.nix;
           newsboat = import ./homemanager/newsboat.nix;
           polybar = import ./homemanager/polybar/polybar.nix;

@@ -69,11 +69,8 @@ with lib;
         rm = "rm -rifv";
         mv = "mv -iv";
         cp = "cp -riv";
-        cat = "bat --paging=never --style=plain";
-        fzf =
-          "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";
-        ls = "exa -a --icons";
-        tree = "exa --tree --icons";
+        cat = "bat --paging=never";
+        fzf = "${pkgs.fzf}/bin/fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";
         zshrc = "nvim $NIXOS_CONDIF_DIR/config/zsh/zsh.nix";
         home = "nvim $NIXOS_CONFIG_DIR/home.nix";
         config = "nvim $NIXOS_CONFIG_DIR/configuration.nix";

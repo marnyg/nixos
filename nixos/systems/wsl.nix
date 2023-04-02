@@ -7,10 +7,10 @@
     inputs.nixos-wsl.nixosModules.wsl
     inputs.home-manager.nixosModules.home-manager
 
-  ]#++(builtins.attrValues inputs.my-modules.nixosModules.x86_64-linux)
+  ]++(builtins.attrValues inputs.my-modules.nixosModules.x86_64-linux)
   ;
 
-  #modules.myNvim.enable = true;
+  modules.myNvim.enable = true;
 
   wsl = {
     enable = true;
@@ -43,6 +43,7 @@
           imports = (builtins.attrValues inputs.my-modules.hmModules.x86_64-linux) ++ [
             {
               modules.zsh.enable = true;
+              modules.direnv.enable = true;
               modules.zellij.enable = true;
               modules.tmux.enable = true;
               modules.firefox.enable = true;

@@ -13,10 +13,7 @@ with lib;
       systemd.user.services.cloneDefaultRepos =
         let
           cloneRepoScript = pkgs.writeShellScript "cloneRepos.sh" ''
-            ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos-modules ~/git/nixos-modules;
-            ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos-wsl ~/git/nixos-wsl;
             ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos ~/git/nixos;
-            ${pkgs.git}/bin/git clone https://github.com/marnyg/nvim-conf ~/git/nvim;
           '';
         in
         {
@@ -24,13 +21,11 @@ with lib;
           ServiceConfig = { Type = "oneshot"; };
           Unit.Description = "Example description";
           Service = { ExexStart = "${cloneRepoScript}"; };
-        };
 
       #script = ''
-      #  ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos-modules ~/git/nixos-modules;
-      #  ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos-wsl ~/git/nixos-wsl;
       #  ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos ~/git/nixos;
-      #  ${pkgs.git}/bin/git clone https://github.com/marnyg/nvim-conf ~/git/nvim;
       #'';
+        };
+
     };
 }

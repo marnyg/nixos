@@ -9,8 +9,7 @@ with lib;
     programs.tmux = {
       enable = true;
       keyMode = "vi";
-      #escapeTime = 0;
-      #sensibleOnTop = true;
+      escapeTime = 0;
     };
   };
 }
