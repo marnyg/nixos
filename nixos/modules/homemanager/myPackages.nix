@@ -36,18 +36,19 @@ with lib;
 
         # GUI applications
         mpv
-        nyxt
+#        nyxt
+        luakit
         arandr
-        vscode
+        #vscode
 
         # GUI File readers
         mupdf
         sxiv
 
         # Development
-        gcc
-        gnumake
-        python3
+        #gcc
+        #gnumake
+        #python3
 
         # Other
         bitwarden
@@ -56,7 +57,7 @@ with lib;
         scrot
         #nheko #matrix client
         pavucontrol
-        spotify
+        #spotify
       ];
     };
 }

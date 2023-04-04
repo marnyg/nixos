@@ -28,8 +28,8 @@
           drv = import ./nix/newnvim.nix { inherit pkgs; };
           name = "nvim";
         };
-        nixosModule = import ./nixosModule.nix;
-        nixosModule2 = ./nixosModule.nix;
+        #nixosModule = import ./nixosModule.nix;
+        nixosModule2 = (import ./nixosModule.nix pkgs);
       }
     );
 

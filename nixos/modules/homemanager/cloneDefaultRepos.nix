@@ -11,20 +11,16 @@ with lib;
 
 
       systemd.user.services.cloneDefaultRepos =
-        let
-          cloneRepoScript = pkgs.writeShellScript "cloneRepos.sh" ''
-            ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos ~/git/nixos;
-          '';
-        in
+        #let
+        #  cloneRepoScript = pkgs.writeShellScript "cloneRepos.sh" ''
+        #    ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos ~/git/nixos;
+        #  '';
+        #in
         {
-          #WantedBy = [ "multi-user.target" ];
-          ServiceConfig = { Type = "oneshot"; };
+          Install.WantedBy = [ "multi-user.target" ]; # starts after login
           Unit.Description = "Example description";
-          Service = { ExexStart = "${cloneRepoScript}"; };
-
-      #script = ''
-      #  ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos ~/git/nixos;
-      #'';
+          Service.ExecStart = "${pkgs.git}/bin/git clone https://github.com/marnyg/nixos ~/git/nixos";
+          Service.Type = "oneshot"; 
         };
 
     };

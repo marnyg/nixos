@@ -27,13 +27,6 @@ pkgs.neovim.override {
       start = [
         nvim-lspconfig
 
-        #nvim-treesitter.withAllGrammars
-        #(nvim-treesitter.withPlugins (
-        #    plugins: with plugins; [
-        #      #nix
-        #      python
-        #    ]
-        #  ))
         # Colorscheme {{{1k
         {
           plugin = plenary-nvim;
@@ -158,7 +151,8 @@ pkgs.neovim.override {
         # Syntax {{{1
         {
           #plugin = (nvim-treesitter.withPlugins (_: tree-sitter.allGrammars));
-          plugin = nvim-treesitter.withAllGrammars;
+          plugin = (nvim-treesitter.withPlugins ( plugins: with plugins; [ nix python rust ]));
+          #plugin = nvim-treesitter.withAllGrammars;
           config = "luafile ${config-nvim}/lua/my/plugins/treesitter.lua";
         }
         {

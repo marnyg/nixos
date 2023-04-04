@@ -1,11 +1,12 @@
 {
   description = "A very basic flake";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
+    #nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    my-nvim.url = "github:marnyg/nvim-conf";
+    #my-nvim.url = "github:marnyg/nvim-conf";
+    my-nvim.url = "path:../../nvim";
     home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    #home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, my-nvim, flake-utils, home-manager }:

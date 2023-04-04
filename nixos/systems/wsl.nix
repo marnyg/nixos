@@ -15,7 +15,7 @@
   wsl = {
     enable = true;
     wslConf.automount.root = "/mnt";
-    defaultUser = "nixos";
+    defaultUser = "mar";
     startMenuLaunchers = true;
 
     # Enable native Docker support
@@ -27,10 +27,10 @@
   #  shell = pkgs.bash;
   #};
   programs.zsh.enable = true;
-  users.users.mar = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-  };
+  #users.users.mar = {
+  #  isNormalUser = true;
+  #  shell = pkgs.zsh;
+  #};
 
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
@@ -65,7 +65,7 @@
               home = {
                 stateVersion = "22.11";
                 username = user;
-                homeDirectory = "/home/${user}";
+                #homeDirectory = "/home/${user}";
 
                 packages = [ pkgs.vim ];
 
