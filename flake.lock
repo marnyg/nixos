@@ -206,7 +206,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-r56YNJlY9NW866IpX3OKEJRFD7UutuGfOLnUHKpCkA4=",
+        "narHash": "sha256-GZ5XJu0GNrZ6m9Bdx44N7sTkuvoy4hmwyzttGoMB+dA=",
         "path": "./nixos/modules",
         "type": "path"
       },
@@ -256,11 +256,11 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1681383495,
-        "narHash": "sha256-O/gfcOZWWFpWay3qRYnacz+1r7OoIh1hToXeiJ5ByDE=",
+        "lastModified": 1681581389,
+        "narHash": "sha256-+ygySqlQy0ejwE1aOF6i6Tiu63V0jxXik0aLlvmqioo=",
         "owner": "nix-community",
         "repo": "NixOS-WSL",
-        "rev": "f097aa2d9ad136cb796b571366517f70707bdebb",
+        "rev": "f3b6f6b04728416c64fc5ef52199fd9b9843c47d",
         "type": "github"
       },
       "original": {

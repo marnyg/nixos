@@ -24,7 +24,7 @@ with lib;
       };
       systemd.user.services.copySshFromHost =
         {
-          Install.WantedBy = [ "multi-user.target" ]; # starts after login
+          Install.WantedBy = [ "default.target" ]; # starts after login
           Unit.After = [ "network-online.target" ]; # starts after login
           Unit.Description = "Example description";
           Service.ExecStart = "/bin/sh ${pkgs.writeScript "copySshKey.sh" ''
@@ -36,7 +36,8 @@ with lib;
         };
       systemd.user.services.cloneDefaultRepos =
         {
-          Install.WantedBy = [ "multi-user.target" ]; # starts after login
+          #Install.WantedBy = [ "multi-user.target" ]; # starts after login
+          Install.WantedBy = [ "default.target" ]; # starts after login
           Unit.After = [ "network-online.target" ]; # starts after login
           Unit.Description = "Example description";
           Service.ExecStart = "/bin/sh ${pkgs.writeScript "cloneMyStuff.sh" ''
@@ -47,7 +48,8 @@ with lib;
           Service.Type = "oneshot";
         };
       systemd.user.services.cloneWorkRepos = {
-        Install.WantedBy = [ "multi-user.target" ]; # starts after login
+        #Install.WantedBy = [ "multi-user.target" ]; # starts after login
+        Install.WantedBy = [ "default.target" ]; # starts after login
         Unit.After = [ "copySshFromHost" ];
         Unit.Description = "Example description";
         Service.ExecStart = "/bin/sh ${pkgs.writeScript "cloneWorkStuff.sh" ''
