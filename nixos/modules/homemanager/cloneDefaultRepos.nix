@@ -37,7 +37,7 @@ with lib;
           Unit.Description = "Example description";
           Service.ExecStart = "${pkgs.writeScript "cloneWorkStuff.sh" ''
             ssh-keygen -F gitlab.com || ssh-keyscan gitlab.com >>~/.ssh/known_hosts
-            ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos /home/mar/git/nixos";
+            ${pkgs.git}/bin/git clone git@github.com:marnyg/nixos.git /home/mar/git/nixos";
           ''
           }";
           Service.Type = "oneshot";
