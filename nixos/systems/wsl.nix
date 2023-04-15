@@ -23,6 +23,10 @@
     # Enable integration with Docker Desktop (needs to be installed)
     # docker-desktop.enable = true;
   };
+  #programs.gnupg.agent = {
+  #  enable = true;
+  #  enableSSHSupport = true;
+  #};
   #users.users.nixos = {
   #  shell = pkgs.bash;
   #};
@@ -61,6 +65,12 @@
 
               programs.home-manager.enable = true;
               programs.bash.enable = true;
+
+              services.gpg-agent = {
+                enable = true;
+                enableSshSupport = true;
+                enableZshIntegration = true;
+              };
 
               home = {
                 stateVersion = "22.11";
