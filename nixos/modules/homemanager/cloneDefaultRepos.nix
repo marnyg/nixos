@@ -35,7 +35,11 @@ with lib;
           #Install.WantedBy = [ "multi-user.target" ]; # starts after login
           Unit.After = [ "multi-user.target" ]; # starts after login
           Unit.Description = "Example description";
-          Service.ExecStart = "${pkgs.git}/bin/git clone https://github.com/marnyg/nixos /home/mar/git/nixos";
+          Service.ExecStart = "${pkgs.writeScript "cloneWorkStuff.sh" ''
+            ssh-keygen -F gitlab.com || ssh-keyscan gitlab.com >>~/.ssh/known_hosts
+            ${pkgs.git}/bin/git clone https://github.com/marnyg/nixos /home/mar/git/nixos";
+          ''
+          }";
           Service.Type = "oneshot";
         };
       systemd.user.services.cloneWorkRepos = {
@@ -43,6 +47,7 @@ with lib;
         Unit.After = [ "multi-user.target" "copySshFromHost" ];
         Unit.Description = "Example description";
         Service.ExecStart = "${pkgs.writeScript "cloneWorkStuff.sh" ''
+          ssh-keygen -F gitlab.com || ssh-keyscan gitlab.com >>~/.ssh/known_hosts
           #sendra
           mkdir /home/mar/git/sendra
           cd /home/mar/git/sendra
