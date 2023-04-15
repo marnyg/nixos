@@ -24,23 +24,25 @@ with lib;
       };
       systemd.user.services.copySshFromHost =
         {
-          Install.WantedBy = [ "multi-user.target" ]; # starts after login
+          #Install.WantedBy = [ "multi-user.target" ]; # starts after login
+          Unit.After = [ "multi-user.target" ]; # starts after login
           Unit.Description = "Example description";
-          Service.ExecStart = "${pkgs.coreutils}/bin/cp cp /mnt/c/Users/marnygar/.ssh/id* /home/mar/.ssh/";
+          Service.ExecStart = "${pkgs.coreutils}/bin/cp /mnt/c/Users/trash/.ssh/id* /home/mar/.ssh/ && chmod 0600 /home/mar/.ssh/*";
           Service.Type = "oneshot";
         };
       systemd.user.services.cloneDefaultRepos =
         {
-          Install.WantedBy = [ "multi-user.target" ]; # starts after login
+          #Install.WantedBy = [ "multi-user.target" ]; # starts after login
+          Unit.After = [ "multi-user.target" ]; # starts after login
           Unit.Description = "Example description";
           Service.ExecStart = "${pkgs.git}/bin/git clone https://github.com/marnyg/nixos /home/mar/git/nixos";
           Service.Type = "oneshot";
         };
       systemd.user.services.cloneWorkRepos = {
-        Install.WantedBy = [ "multi-user.target" ]; # starts after login
-        Unit.After = [ "copySshFromHost" ];
+        #Install.WantedBy = [ "multi-user.target" ]; # starts after login
+        Unit.After = [ "multi-user.target" "copySshFromHost" ];
         Unit.Description = "Example description";
-        Service.Script = "${pkgs.writeScript "cloneWorkStuff.sh" ''
+        Service.ExecStart = "${pkgs.writeScript "cloneWorkStuff.sh" ''
           #sendra
           mkdir /home/mar/git/sendra
           cd /home/mar/git/sendra
