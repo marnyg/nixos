@@ -24,30 +24,34 @@ with lib;
       };
       systemd.user.services.copySshFromHost =
         {
-          #Install.WantedBy = [ "multi-user.target" ]; # starts after login
-          Unit.After = [ "multi-user.target" ]; # starts after login
+          Install.WantedBy = [ "multi-user.target" ]; # starts after login
+          Unit.After = [ "network-online.target" ]; # starts after login
           Unit.Description = "Example description";
-          Service.ExecStart = "${pkgs.coreutils}/bin/cp /mnt/c/Users/trash/.ssh/id* /home/mar/.ssh/ && chmod 0600 /home/mar/.ssh/*";
+          Service.ExecStart = "/bin/sh ${pkgs.writeScript "copySshKey.sh" ''
+          ${pkgs.coreutils}/bin/cp -n /mnt/c/Users/trash/.ssh/* /home/mar/.ssh/
+          ${pkgs.findutils}/bin/find /home/mar/.ssh/* -type f -print0 | ${pkgs.findutils}/bin/xargs -0 ${pkgs.coreutils}/bin/chmod 0600 
+          ''
+          }";
           Service.Type = "oneshot";
         };
       systemd.user.services.cloneDefaultRepos =
         {
-          #Install.WantedBy = [ "multi-user.target" ]; # starts after login
-          Unit.After = [ "multi-user.target" ]; # starts after login
+          Install.WantedBy = [ "multi-user.target" ]; # starts after login
+          Unit.After = [ "network-online.target" ]; # starts after login
           Unit.Description = "Example description";
-          Service.ExecStart = "${pkgs.writeScript "cloneWorkStuff.sh" ''
-            ssh-keygen -F gitlab.com || ssh-keyscan gitlab.com >>~/.ssh/known_hosts
-            ${pkgs.git}/bin/git clone git@github.com:marnyg/nixos.git /home/mar/git/nixos";
+          Service.ExecStart = "/bin/sh ${pkgs.writeScript "cloneMyStuff.sh" ''
+            ${pkgs.openssh}/bin/ssh-keygen -F github.com || ${pkgs.openssh}/bin/ssh-keyscan github.com >> ~/.ssh/known_hosts
+            ${pkgs.git}/bin/git clone git@github.com:marnyg/nixos.git /home/mar/git/nixos
           ''
           }";
           Service.Type = "oneshot";
         };
       systemd.user.services.cloneWorkRepos = {
-        #Install.WantedBy = [ "multi-user.target" ]; # starts after login
-        Unit.After = [ "multi-user.target" "copySshFromHost" ];
+        Install.WantedBy = [ "multi-user.target" ]; # starts after login
+        Unit.After = [ "copySshFromHost" ];
         Unit.Description = "Example description";
-        Service.ExecStart = "${pkgs.writeScript "cloneWorkStuff.sh" ''
-          ssh-keygen -F gitlab.com || ssh-keyscan gitlab.com >>~/.ssh/known_hosts
+        Service.ExecStart = "/bin/sh ${pkgs.writeScript "cloneWorkStuff.sh" ''
+          ${pkgs.openssh}/bin/ssh-keygen -F gitlab.com || ${pkgs.openssh}/bin/ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
           #sendra
           mkdir /home/mar/git/sendra
           cd /home/mar/git/sendra
