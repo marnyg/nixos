@@ -36,7 +36,7 @@ with lib;
 
         # GUI applications
         mpv
-#        nyxt
+        #        nyxt
         luakit
         arandr
         #vscode

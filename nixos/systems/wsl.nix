@@ -7,7 +7,7 @@
     inputs.nixos-wsl.nixosModules.wsl
     inputs.home-manager.nixosModules.home-manager
 
-  ]++(builtins.attrValues inputs.my-modules.nixosModules.x86_64-linux)
+  ] ++ (builtins.attrValues inputs.my-modules.nixosModules.x86_64-linux)
   ;
 
   modules.myNvim.enable = true;

@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.direnv= {
+  options.modules.direnv = {
     enable = mkOption { type = types.bool; default = false; };
   };
 

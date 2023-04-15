@@ -1,4 +1,3 @@
-
 { pkgs, inputs, config, ... }:
 {
   nixpkgs.overlays = [ inputs.nur.overlay ];
@@ -8,7 +7,7 @@
     inputs.nixos-wsl.nixosModules.wsl
     inputs.home-manager.nixosModules.home-manager
 
-  ]++(builtins.attrValues inputs.my-modules.nixosModules.x86_64-linux)
+  ] ++ (builtins.attrValues inputs.my-modules.nixosModules.x86_64-linux)
   ;
 
   wsl = {
