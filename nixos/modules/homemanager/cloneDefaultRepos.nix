@@ -43,6 +43,7 @@ with lib;
           Service.ExecStart = "/bin/sh ${pkgs.writeScript "cloneMyStuff.sh" ''
             ${pkgs.openssh}/bin/ssh-keygen -F github.com || ${pkgs.openssh}/bin/ssh-keyscan github.com >> ~/.ssh/known_hosts
             ${pkgs.git}/bin/git clone git@github.com:marnyg/nixos.git /home/mar/git/nixos
+            exit 0
           ''
           }";
           Service.Type = "oneshot";
@@ -77,7 +78,7 @@ with lib;
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-contract.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-assets.git
           #wellstarter
-          ${pkgs.coreutils}/bin/mkdir /home/mar/git/sendra
+          ${pkgs.coreutils}/bin/mkdir /home/mar/git/hiplog
           cd /home/mar/git/hiplog
           export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /home/mar/.ssh/id_ed25519"
           ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/audit-trail.git
@@ -95,6 +96,7 @@ with lib;
           ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/units.git
           ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/user-service.git
           ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/wells-backend.git
+          exit 0
         ''
         }";
         Service.Type = "oneshot";

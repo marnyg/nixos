@@ -49,7 +49,8 @@ with lib;
         # Set vi-mode and bind ctrl + space to accept autosuggestions
         bindkey '^ ' autosuggest-accept
         bindkey -v
-        #eval "$(starship init zsh)"
+        bindkey '^R' history-incremental-search-backward
+        eval "$(starship init zsh)"
       '';
 
       # Tweak settings for history
@@ -75,8 +76,7 @@ with lib;
         home = "nvim $NIXOS_CONFIG_DIR/home.nix";
         config = "nvim $NIXOS_CONFIG_DIR/configuration.nix";
         nvimconf = "nvim $NIXOS_CONFIG_DIR/config/nvim/nvim.nix";
-        rebuild =
-          "sudo nixos-rebuild switch -I nixos-config=$HOME/.config/nixos/configuration.nix";
+        rebuild = "sudo nixos-rebuild switch -I nixos-config=$HOME/.config/nixos/configuration.nix";
         nd = "nix develop -c $SHELL";
       };
 
