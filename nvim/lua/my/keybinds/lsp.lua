@@ -38,6 +38,7 @@ local servers = {
     dockerls = "docker-langserver",
     lua_ls = "lua-ls",
     rnix = "rnix",
+    -- nomad_lsp = "nomad_lsp",
 }
 
 

@@ -21,6 +21,8 @@ pkgs.neovim.override {
       luafile ${config-nvim}/lua/my/options/init.lua
       luafile ${config-nvim}/lua/my/keybinds/init.lua
       luafile ${config-nvim}/lua/my/keybinds/UI.lua
+      source ${config-nvim}/lua/my/ft/hcl/ft.detect
+      source ${config-nvim}/lua/my/ft/hcl/syntax.vim
     '';
     packages.myVimPackage = with pkgs.vimPlugins;  {
       # see examples below how to use custom packages
@@ -39,6 +41,7 @@ pkgs.neovim.override {
         {
           plugin = nvcode-color-schemes-vim;
         }
+        
 
         # mystuff {{{1
         {
