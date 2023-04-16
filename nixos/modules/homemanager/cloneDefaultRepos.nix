@@ -42,6 +42,8 @@ with lib;
           Unit.Description = "Example description";
           Service.ExecStart = "/bin/sh ${pkgs.writeScript "cloneMyStuff.sh" ''
             ${pkgs.openssh}/bin/ssh-keygen -F github.com || ${pkgs.openssh}/bin/ssh-keyscan github.com >> ~/.ssh/known_hosts
+            export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /home/mar/.ssh/githubmarnyg"
+            ${pkgs.coreutils}/bin/mkdir /home/mar/git
             ${pkgs.git}/bin/git clone git@github.com:marnyg/nixos.git /home/mar/git/nixos
             exit 0
           ''
