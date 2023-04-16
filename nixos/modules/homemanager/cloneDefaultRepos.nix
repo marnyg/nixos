@@ -55,8 +55,9 @@ with lib;
         Service.ExecStart = "/bin/sh ${pkgs.writeScript "cloneWorkStuff.sh" ''
           ${pkgs.openssh}/bin/ssh-keygen -F gitlab.com || ${pkgs.openssh}/bin/ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
           #sendra
-          mkdir /home/mar/git/sendra
+          ${pkgs.coreutils}/bin/mkdir /home/mar/git/sendra
           cd /home/mar/git/sendra
+          export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /home/mar/.ssh/id_rsa"
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/devops.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/fieldview/field-view-api.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/keycloak-image.git
@@ -76,8 +77,9 @@ with lib;
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-contract.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-assets.git
           #wellstarter
-          mkdir /home/mar/git/hiplog
+          ${pkgs.coreutils}/bin/mkdir /home/mar/git/sendra
           cd /home/mar/git/hiplog
+          export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /home/mar/.ssh/id_ed25519"
           ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/audit-trail.git
           ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/compose.git
           ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/data-interpreter.git
