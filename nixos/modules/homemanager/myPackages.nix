@@ -52,6 +52,8 @@ with lib;
 
         # Other
         bitwarden
+        bitwarden-cli
+        jq
         xdotool
         xclip
         scrot
