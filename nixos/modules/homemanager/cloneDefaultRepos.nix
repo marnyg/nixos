@@ -65,6 +65,7 @@ with lib;
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/fieldview/field-view-api.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/keycloak-image.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-cli.git
+          ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-compose.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-engine.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-importer.git

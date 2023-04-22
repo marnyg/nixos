@@ -154,7 +154,7 @@ pkgs.neovim.override {
         # Syntax {{{1
         {
           #plugin = (nvim-treesitter.withPlugins (_: tree-sitter.allGrammars));
-          plugin = (nvim-treesitter.withPlugins (plugins: with plugins; [ nix python rust ]));
+          plugin = (nvim-treesitter.withPlugins (plugins: with plugins; [ norg hcl nix python rust ]));
           #plugin = nvim-treesitter.withAllGrammars;
           config = "luafile ${config-nvim}/lua/my/plugins/treesitter.lua";
         }
