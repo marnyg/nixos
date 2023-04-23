@@ -4,7 +4,7 @@ let
     name = "config-nvim";
     src = ../.;
   };
-  lsp-servers = with pkgs; [ lazygit sumneko-lua-language-server cargo rust-analyzer rnix-lsp rustc manix ripgrep python39Packages.python-lsp-server ];
+  lsp-servers = with pkgs; [ lazygit sumneko-lua-language-server cargo rust-analyzer rnix-lsp rustc manix ripgrep ];
 in
 pkgs.neovim.override {
 
@@ -87,6 +87,27 @@ pkgs.neovim.override {
         {
           plugin = tabby-nvim;
           config = "lua require('tabby').setup({ tabline = require('tabby.presets').active_wins_at_tail })";
+        }
+        {
+          plugin = harpoon;
+          config = ''
+            lua <<EOF
+            local mark = require("harpoon.mark")
+            local ui = require("harpoon.ui")
+            
+            vim.keymap.set("n", "<leader>a", mark.add_file)
+            vim.keymap.set("n", "<leader>h", ui.toggle_quick_menu)
+            
+            vim.keymap.set("n", "<C-1>", function() ui.nav_file(1) end)
+            vim.keymap.set("n", "<C-2>", function() ui.nav_file(2) end)
+            vim.keymap.set("n", "<C-3>", function() ui.nav_file(3) end)
+            vim.keymap.set("n", "<C-4>", function() ui.nav_file(4) end)
+            EOF
+            '';
+        }
+        {
+          plugin = gitsigns-nvim;
+          config = "lua require('gitsigns').setup({})";
         }
         #vimExtraPlugins.dirbuf-nvim
 
