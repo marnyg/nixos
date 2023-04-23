@@ -30,7 +30,6 @@ with lib;
         libnotify
         sct
         hyperfine
-        tree
         unrar
         unzip
 

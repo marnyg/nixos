@@ -1,6 +1,7 @@
 # instruction
 ## wls
 
+to rebuild: `pushd nixos/modules/ && nix flake update && popd && nix flake update && sudo nixos-rebuild switch --flake ".#wsl2"`
 ``` bash
 # to build a wsl image run:
 nix build .#nixosConfigurations.wsl2.config.system.build.installer

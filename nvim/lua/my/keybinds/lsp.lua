@@ -33,7 +33,7 @@ end
 
 local servers = {
     bashls = "bash-language-server",
-    pyright = "pyright",
+    pylsp = "pylsp",
     rust_analyzer = "rust_analyzer",
     dockerls = "docker-langserver",
     lua_ls = "lua-ls",

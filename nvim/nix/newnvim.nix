@@ -4,7 +4,7 @@ let
     name = "config-nvim";
     src = ../.;
   };
-  lsp-servers = with pkgs; [ lazygit sumneko-lua-language-server cargo rust-analyzer rnix-lsp rustc manix ripgrep ];
+  lsp-servers = with pkgs; [ lazygit sumneko-lua-language-server cargo rust-analyzer rnix-lsp rustc manix ripgrep python39Packages.python-lsp-server ];
 in
 pkgs.neovim.override {
 
@@ -41,7 +41,7 @@ pkgs.neovim.override {
         {
           plugin = nvcode-color-schemes-vim;
         }
-        
+
 
         # mystuff {{{1
         {

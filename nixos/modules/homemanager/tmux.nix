@@ -10,6 +10,11 @@ with lib;
       enable = true;
       keyMode = "vi";
       escapeTime = 0;
+      terminal = "screen-256color";
+      newSession = true;
+      extraConfig = ''
+        set-option -ga terminal-overrides ",xterm-256color:Tc"
+      '';
     };
   };
 }
