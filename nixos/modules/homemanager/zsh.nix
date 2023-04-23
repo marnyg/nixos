@@ -75,7 +75,7 @@ with lib;
         gs = "git status";
         gss = "git status -s";
         gl = "git pull";
-        gc = "git clone";
+        gc = "git commit";
         ga = "git add";
         grh = "git reset HEAD";
         gap = "git add -p";
