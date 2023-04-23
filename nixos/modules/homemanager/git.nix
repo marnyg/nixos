@@ -7,6 +7,7 @@ with lib;
 
   config = mkIf config.modules.git.enable {
     programs.git = {
+      package = pkgs.gitFull;
       enable = true;
       userName = "marius";
       userEmail = "marnyg@proton.me";
@@ -28,10 +29,6 @@ with lib;
       };
       extraConfig = {
         init = { defaultBranch = "main"; };
-        pull = {
-          rebase = true;
-          ff = "only";
-        };
       };
     };
   };
