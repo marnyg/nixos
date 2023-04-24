@@ -1,8 +1,15 @@
 local map = vim.keymap.set
 
-map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { noremap = true, silent = true })
+map("n", "<leader>ff", "<cmd>Telescope git_files<cr>", { noremap = true, silent = true })
 map("n", "<leader>fp", "<cmd>Telescope projects<cr>", { noremap = true, silent = true })
-map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { noremap = true, silent = true })
+map("n", "<leader>fsa", "<cmd>Telescope live_grep<cr>", { noremap = true, silent = true })
+map("n", "<leader>fsb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", { noremap = true, silent = true })
+map("n", "<leader>fj", "<cmd>Telescope jumplist<cr>", { noremap = true, silent = true })
+map("n", "<leader>ft", "<cmd>Telescope treesitter<cr>", { noremap = true, silent = true })
+map("n", "<leader>fgbb", "<cmd>Telescope git_branches<cr>", { noremap = true, silent = true })
+map("n", "<leader>fgc", "<cmd>Telescope git_commits<cr>", { noremap = true, silent = true })
+map("n", "<leader>fgbc", "<cmd>Telescope git_bcommits<cr>", { noremap = true, silent = true })
+map("n", "<leader>fgs", "<cmd>Telescope git_status<cr>", { noremap = true, silent = true })
 map("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { noremap = true, silent = true })
 map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { noremap = true, silent = true })
 

@@ -212,7 +212,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-Rv6qGh9ZlM61u4/XBmn/PskIHxfkfNoE0ieLk2veZUw=",
+        "narHash": "sha256-lgFMVyiUJAySBB3hHStawwUtx0dWsw7KUK/xKbsr8vo=",
         "path": "./nixos/modules",
         "type": "path"
       },
@@ -229,7 +229,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-LysK9CExuGuY87c8Wg097T9rDYyBznGV0KJKQf879UY=",
+        "narHash": "sha256-elDKMZ7tXpOh6C8WfjDDo3AJgjPm8PEOjmI7TwRU8mg=",
         "path": "../../nvim",
         "type": "path"
       },
@@ -246,7 +246,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-LysK9CExuGuY87c8Wg097T9rDYyBznGV0KJKQf879UY=",
+        "narHash": "sha256-elDKMZ7tXpOh6C8WfjDDo3AJgjPm8PEOjmI7TwRU8mg=",
         "path": "./nvim",
         "type": "path"
       },
@@ -399,11 +399,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1682278318,
-        "narHash": "sha256-miBdYX8y9fsCawn8OD/GSd2vPoVz8fy4qP6yAKBQLWY=",
+        "lastModified": 1682320606,
+        "narHash": "sha256-R9tB0d8huRFCPbwtlnc1RwUMU98Zs4TjqwiPHS+jCqw=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "e164e6490cd2308ef665b7511229c46dea2a01da",
+        "rev": "dde696e9d66234fe8e86b7806fb21b43598e0568",
         "type": "github"
       },
       "original": {

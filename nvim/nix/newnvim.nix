@@ -4,7 +4,7 @@ let
     name = "config-nvim";
     src = ../.;
   };
-  lsp-servers = with pkgs; [ lazygit sumneko-lua-language-server cargo rust-analyzer rnix-lsp rustc manix ripgrep ];
+  lsp-servers = with pkgs; [ sumneko-lua-language-server cargo rust-analyzer rnix-lsp rustc manix ripgrep ];
 in
 pkgs.neovim.override {
 
@@ -126,21 +126,21 @@ pkgs.neovim.override {
             vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
             vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
 
-            local Terminal  = require('toggleterm.terminal').Terminal
-            local lazygit = Terminal:new({ 
-            direction = "float",
-            float_opts = {
-              border = "double",
-            },
-            cmd = "lazygit", 
-            hidden = true 
-            })
+            --local Terminal  = require('toggleterm.terminal').Terminal
+            --local lazygit = Terminal:new({ 
+            --direction = "float",
+            --float_opts = {
+            --  border = "double",
+            --},
+            --cmd = "lazygit", 
+            --hidden = true 
+            --})
 
-            function _lazygit_toggle()
-              lazygit:toggle()
-            end
-            
-            vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})
+            --function _lazygit_toggle()
+            --  lazygit:toggle()
+            --end
+            --
+            --vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})
             EOF
           '';
         }

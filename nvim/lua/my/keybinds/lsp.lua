@@ -7,6 +7,16 @@ map("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
 map("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
 map("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
 
+map("n", "<leader>lds", "<cmd>Telescope lsp_document_symbols<cr>", { noremap = true, silent = true })
+map("n", "<leader>lws", "<cmd>Telescope lsp_workspace_symbols<cr>", { noremap = true, silent = true })
+map("n", "<leader>lwd", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", { noremap = true, silent = true })
+map("n", "<leader>ltd", "<cmd>Telescope lsp_type_definitions<cr>", { noremap = true, silent = true })
+map("n", "<leader>lim", "<cmd>Telescope lsp_implementations<cr>", { noremap = true, silent = true })
+map("n", "<leader>lic", "<cmd>Telescope lsp_incoming_calls<cr>", { noremap = true, silent = true })
+map("n", "<leader>loc", "<cmd>Telescope lsp_outgoing_calls<cr>", { noremap = true, silent = true })
+map("n", "<leader>ldf", "<cmd>Telescope lsp_definitions<cr>", { noremap = true, silent = true })
+map("n", "<leader>lr", "<cmd>Telescope lsp_references<cr>", { noremap = true, silent = true })
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -22,8 +32,7 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "gK>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>wl",
-    "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
