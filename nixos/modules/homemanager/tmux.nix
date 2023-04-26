@@ -10,6 +10,7 @@ with lib;
       enable = true;
       keyMode = "vi";
       escapeTime = 0;
+      mouse = true;
       terminal = "screen-256color";
       newSession = true;
       extraConfig = ''
