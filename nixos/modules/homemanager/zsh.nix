@@ -37,10 +37,15 @@ with lib;
         bindkey '^ ' autosuggest-accept
         edir() { tar -cz $1 | age -p > $1.tar.gz.age && rm -rf $1 &>/dev/null && echo "$1 encrypted" }
         ddir() { age -d $1 | tar -xz && rm -rf $1 &>/dev/null && echo "$1 decrypted" }
+
         bindkey -M vicmd '?' history-incremental-search-backward
         bindkey '^R' history-incremental-search-backward
         bindkey -M vicmd '\C-@' accept-line
+
         bindkey -M viins '\C-@' accept-line
+        bindkey -M viins '^A'   beginning-of-line  
+        bindkey -M viins '^E'   end-of-line        
+
         KEYTIMEOUT=1
        '';
       # basically aliases for directories: 
