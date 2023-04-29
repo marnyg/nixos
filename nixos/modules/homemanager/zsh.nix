@@ -39,6 +39,9 @@ with lib;
         ddir() { age -d $1 | tar -xz && rm -rf $1 &>/dev/null && echo "$1 decrypted" }
         bindkey -M vicmd '?' history-incremental-search-backward
         bindkey '^R' history-incremental-search-backward
+        bindkey -M vicmd '\C-@' accept-line
+        bindkey -M viins '\C-@' accept-line
+        KEYTIMEOUT=1
        '';
       # basically aliases for directories: 
       # `cd ~dots` will cd into ~/.config/nixos

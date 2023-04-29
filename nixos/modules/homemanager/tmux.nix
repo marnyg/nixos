@@ -12,10 +12,32 @@ with lib;
       escapeTime = 0;
       mouse = true;
       terminal = "screen-256color";
-      newSession = true;
+      #newSession = true;
       extraConfig = ''
         set-option -ga terminal-overrides ",xterm-256color:Tc"
+
+        # Start windows and panes at 1, not 0
+        set -g base-index 1
+        set -g pane-base-index 1
+        set-window-option -g pane-base-index 1
+        set-option -g renumber-windows on
+
+
+        # yank keybinds
+        bind-key -T copy-mode-vi v send-keys -X begin-selection
+        bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
+        bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
+
+        
+        bind '"' split-window -v -c "#{pane_current_path}"
+        bind % split-window -h -c "#{pane_current_path}"
+
       '';
+      plugins = [
+        pkgs.tmuxPlugins.vim-tmux-navigator
+        pkgs.tmuxPlugins.catppuccin
+        pkgs.tmuxPlugins.yank
+      ];
     };
   };
 }

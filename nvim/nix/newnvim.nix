@@ -51,6 +51,7 @@ pkgs.neovim.override {
         {
           plugin = nvim-tree-lua;
           config = "lua require('nvim-tree').setup({})";
+
         }
         {
           plugin = nvim-cmp;
@@ -107,7 +108,24 @@ pkgs.neovim.override {
         }
         {
           plugin = gitsigns-nvim;
-          config = "lua require('gitsigns').setup({})";
+          config = ''
+            lua <<EOF
+              require('gitsigns').setup({
+              current_line_blame = true,
+              })
+            EOF
+            '';
+        }
+        {
+          plugin = tmuxNavigator;
+          config = ''
+            lua <<EOF
+            vim.keymap.set("n", "<C-h>", ":<C-U>TmuxNavigateLeft<cr>")
+            vim.keymap.set("n", "<C-j>", ":<C-U>TmuxNavigateDown<cr>")
+            vim.keymap.set("n", "<C-k>", ":<C-U>TmuxNavigateUp<cr>")
+            vim.keymap.set("n", "<C-;>", ":<C-U>TmuxNavigateRight<cr>")
+            EOF
+            '';
         }
         #vimExtraPlugins.dirbuf-nvim
 

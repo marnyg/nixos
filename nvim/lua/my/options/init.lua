@@ -48,7 +48,7 @@ vim.cmd("filetype plugin on") -- filetype detection
 wo.relativenumber = true
 wo.number = true
 wo.wrap = false
-wo.signcolumn = "number" -- Display signs in the number column
+--wo.signcolumn = "number" -- Display signs in the number column
 
 -- buffer-local options
 bo.expandtab = true
