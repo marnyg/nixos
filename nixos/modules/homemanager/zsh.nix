@@ -34,20 +34,17 @@ with lib;
         export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store";
         export ZK_NOTEBOOK_DIR="~/stuff/notes";
         export DIRENV_LOG_FORMAT="";
-        bindkey '^ ' autosuggest-accept
         edir() { tar -cz $1 | age -p > $1.tar.gz.age && rm -rf $1 &>/dev/null && echo "$1 encrypted" }
         ddir() { age -d $1 | tar -xz && rm -rf $1 &>/dev/null && echo "$1 decrypted" }
 
-        bindkey -M vicmd '?' history-incremental-search-backward
-        bindkey '^R' history-incremental-search-backward
-        bindkey -M vicmd '\C-@' accept-line
 
         bindkey -M viins '\C-@' accept-line
         bindkey -M viins '^A'   beginning-of-line  
         bindkey -M viins '^E'   end-of-line        
+        bindkey -n C-o run-shell ""
 
         KEYTIMEOUT=1
-       '';
+      '';
       # basically aliases for directories: 
       # `cd ~dots` will cd into ~/.config/nixos
       dirHashes = {
@@ -102,6 +99,7 @@ with lib;
         gd = "git diff";
         gb = "git branch";
         gt = "git tag";
+        hist = "tmux capture-pane -pS - | ${pkgs.fzf}/bin/fzf";
       };
 
       # Source all plugins, nix-style

@@ -22,6 +22,13 @@ with lib;
         set-window-option -g pane-base-index 1
         set-option -g renumber-windows on
 
+        bind-key -r C-H resize-pane -L 10
+        bind-key -r C-L resize-pane -R 10
+        bind-key -r C-K resize-pane -U 10
+        bind-key -r C-J resize-pane -D 10
+        set -g repeat-time 1000
+
+
 
         # yank keybinds
         bind-key -T copy-mode-vi v send-keys -X begin-selection

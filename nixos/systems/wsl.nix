@@ -40,6 +40,7 @@
               modules.direnv.enable = true;
               modules.zellij.enable = true;
               modules.tmux.enable = true;
+              modules.fzf.enable = true;
               modules.firefox.enable = true;
               modules.autorandr.enable = false;
               modules.bspwm.enable = false;

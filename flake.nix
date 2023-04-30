@@ -21,8 +21,24 @@
       let pkgs = (import nixpkgs { inherit system; }); in
       {
         devShells = import ./flakeUtils/shell.nix pkgs;
-        checks = import ./flakeUtils/checks.nix { inherit inputs pkgs; };
+        checks = import ./flakeUtils/checks.nix { inherit inputs pkgs self; };
         formatter = pkgs.nixpkgs-fmt;
-        test = pkgs.nixosTest (import ./nixos/tests/mini2.nix pkgs);
+        apps.default = {
+          type = "app";
+          program = "${pkgs.coreutils}/bin/echo";
+        };
+        #        pkgs.stdenv.mkDerivation{
+        #        name ={ 
+        #        "basic-derivation";
+        #          installPhase = ''
+        #    mkdir $out
+        #    cp -rv $src/* $out
+        #  '';
+        #};
+        #pkgs.runCommand "foo test" { } ''
+        #    echo ok
+        #    touch $out
+        #'';
+
       });
 }

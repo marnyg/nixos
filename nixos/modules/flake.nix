@@ -39,6 +39,8 @@
             import
             ./homemanager/tmux.nix
             import
+            ./homemanager/fzf.nix
+            import
             ./homemanager/zsh.nix
             import
             ./homemanager/spotifyd.nix
@@ -63,6 +65,7 @@
           xmonad = import ./homemanager/xmonad;
           zellij = import ./homemanager/zellij.nix;
           tmux = import ./homemanager/tmux.nix;
+          fzf = import ./homemanager/fzf.nix;
           zsh = import ./homemanager/zsh.nix;
           spotifyd = import ./homemanager/spotifyd.nix;
           other = import ./homemanager/other.nix;

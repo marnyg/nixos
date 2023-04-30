@@ -104,7 +104,7 @@ pkgs.neovim.override {
             vim.keymap.set("n", "<C-3>", function() ui.nav_file(3) end)
             vim.keymap.set("n", "<C-4>", function() ui.nav_file(4) end)
             EOF
-            '';
+          '';
         }
         {
           plugin = gitsigns-nvim;
@@ -114,7 +114,7 @@ pkgs.neovim.override {
               current_line_blame = true,
               })
             EOF
-            '';
+          '';
         }
         {
           plugin = tmuxNavigator;
@@ -125,7 +125,7 @@ pkgs.neovim.override {
             vim.keymap.set("n", "<C-k>", ":<C-U>TmuxNavigateUp<cr>")
             vim.keymap.set("n", "<C-;>", ":<C-U>TmuxNavigateRight<cr>")
             EOF
-            '';
+          '';
         }
         #vimExtraPlugins.dirbuf-nvim
 
