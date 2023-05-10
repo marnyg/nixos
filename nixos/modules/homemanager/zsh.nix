@@ -41,7 +41,6 @@ with lib;
         bindkey -M viins '\C-@' accept-line
         bindkey -M viins '^A'   beginning-of-line  
         bindkey -M viins '^E'   end-of-line        
-        bindkey -n C-o run-shell ""
 
         KEYTIMEOUT=1
       '';
@@ -100,6 +99,7 @@ with lib;
         gb = "git branch";
         gt = "git tag";
         hist = "tmux capture-pane -pS - | ${pkgs.fzf}/bin/fzf";
+        fixSsh= "echo 'UPDATESTARTUPTTY' | gpg-connect-agent > /dev/null 2>&1";
       };
 
       # Source all plugins, nix-style
