@@ -99,7 +99,7 @@ with lib;
         gb = "git branch";
         gt = "git tag";
         hist = "tmux capture-pane -pS - | ${pkgs.fzf}/bin/fzf";
-        fixSsh= "echo 'UPDATESTARTUPTTY' | gpg-connect-agent > /dev/null 2>&1";
+        fixSsh = "echo 'UPDATESTARTUPTTY' | gpg-connect-agent > /dev/null 2>&1";
       };
 
       # Source all plugins, nix-style

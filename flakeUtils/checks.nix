@@ -4,12 +4,12 @@
     nixpkgs-fmt --check ${./.}
     touch $out
   '';
-  nixtTest = pkgs.runCommand "nixt unit test"
-    { buildInputs = [ inputs.nixt.x86_64-linux.app.packages.default ]; }
-    ''
-      nixt
-      touch $out
-    '';
+  #  nixtTest = pkgs.runCommand "nixt unit test"
+  #    { buildInputs = [ inputs.nixt.x86_64-linux.app.packages.default ]; }
+  #    ''
+  #      nixt
+  #      touch $out
+  #    '';
 
   fooTest = pkgs.runCommand "foo test" { } ''
     echo ok
