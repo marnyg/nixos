@@ -41,7 +41,8 @@
         #  program = "${inputs.nixt.x86_64-linux.app.packages.default}/bin/nixt";
         #};
 
-        devShells = import ./flakeUtils/shell.nix pkgs;
+        #use by running `nix develop`
+        devShells.default = import ./flakeUtils/shell.nix pkgs;
         checks = import ./flakeUtils/checks.nix { inherit inputs pkgs self; };
         formatter = pkgs.nixpkgs-fmt;
       });
