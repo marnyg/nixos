@@ -5,6 +5,7 @@
     touch $out
   '';
   nixtTestEval2 = import ../tests/test.nix { inherit pkgs; };
+  nixtTestEval3 = import ../tests/testIfAttrExist.nix { inherit pkgs; };
 
   #nixtTestEval = pkgs.runCommand "nixt unit test eval"
   #  { buildInputs = [ pkgs.nix ]; }
