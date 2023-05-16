@@ -4,6 +4,16 @@
     nixpkgs-fmt --check ${./.}
     touch $out
   '';
+  nixtTestEval2 = import ../tests/test.nix { inherit pkgs; };
+
+  #nixtTestEval = pkgs.runCommand "nixt unit test eval"
+  #  { buildInputs = [ pkgs.nix ]; }
+  #  ''
+  #    nix eval --experimental-features nix-command --impure --expr 'import ${../tests/test.nix} {}'
+  #  '';
+
+
+
   #  nixtTest = pkgs.runCommand "nixt unit test"
   #    { buildInputs = [ inputs.nixt.x86_64-linux.app.packages.default ]; }
   #    ''
