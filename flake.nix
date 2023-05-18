@@ -42,7 +42,7 @@
         #};
 
         #use by running `nix develop`
-        devShells.default = import ./flakeUtils/shell.nix pkgs;
+        devShells.default = import ./flakeUtils/shell.nix { inherit pkgs self; };
         checks = import ./flakeUtils/checks.nix { inherit inputs pkgs self; };
         formatter = pkgs.nixpkgs-fmt;
       });

@@ -1,16 +1,15 @@
 { pkgs ? import <nixpkgs> { } }:
 let
-  lib = pkgs.lib;
-  math = import ./isEven.nix { inherit lib; };
+  isEven = x: pkgs.lib.mod x 2 == 0;
 
-  testResults = lib.runTests {
+  testResults = pkgs.lib.runTests {
     testIsEven_1 = {
-      expr = math.isEven 2;
+      expr = isEven 2;
       expected = true;
     };
 
     testIsEven_2 = {
-      expr = math.isEven (-2);
+      expr = isEven (-2);
       expected = true;
     };
   };

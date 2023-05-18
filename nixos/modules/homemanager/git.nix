@@ -1,11 +1,11 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.git = {
-    enable = mkOption { type = types.bool; default = false; };
+  options.myModules.git = {
+    enable = mkEnableOption "enable personal git config";
   };
 
-  config = mkIf config.modules.git.enable {
+  config = mkIf config.myModules.git {
     programs.git = {
       package = pkgs.gitFull;
       enable = true;

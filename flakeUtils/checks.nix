@@ -4,30 +4,14 @@
     nixpkgs-fmt --check ${./.}
     touch $out
   '';
-  nixtTestEval2 = import ../tests/test.nix { inherit pkgs; };
-  nixtTestEval3 = import ../tests/testIfAttrExist.nix { inherit pkgs; };
-
-  #nixtTestEval = pkgs.runCommand "nixt unit test eval"
-  #  { buildInputs = [ pkgs.nix ]; }
-  #  ''
-  #    nix eval --experimental-features nix-command --impure --expr 'import ${../tests/test.nix} {}'
-  #  '';
-
-
-
-  #  nixtTest = pkgs.runCommand "nixt unit test"
-  #    { buildInputs = [ inputs.nixt.x86_64-linux.app.packages.default ]; }
-  #    ''
-  #      nixt
-  #      touch $out
-  #    '';
+  unitTestExample = import ../tests/test.nix { inherit pkgs; };
+  checkAttrsOnFakeOsfakeConfig = import ../tests/testIfAttrExist.nix { inherit pkgs; };
+  checkAttrsOnWslConf = import ../tests/testAttrsOnWsl.nix { inherit pkgs self; };
 
   fooTest = pkgs.runCommand "foo test" { } ''
     echo ok
-
     # uncomment below to make derivation fail its evaluation
     #exit 1
-
     touch $out
   '';
   #nixUnitTestFoo = (import ../test.nix);

@@ -1,5 +1,17 @@
-pkgs:
+{ pkgs, self }:
 let
+  #run all nix unit tests. this is quicker than running `nix flake check`
+  allChecks = builtins.attrNames self.checks.x86_64-linux;
+  nixtTestEval = pkgs.writeShellScriptBin "unit" ''
+    #!/bin/sh
+    ${builtins.concatStringsSep "\n" (
+      builtins.map (attr:
+       "nix build .#checks.x86_64-linux.${attr}"
+      ) allChecks
+    )}
+  '';
+
+
   #making adhock shell scripts
   myArbetraryCommand = pkgs.writeShellScriptBin "tst" ''
     echo lala
@@ -46,6 +58,8 @@ pkgs.mkShell {
     comoposeScripts
     myOtherCommand
     myThatModifyesRepo
+
+    nixtTestEval
 
     nixpkgs-fmt
     shfmt
