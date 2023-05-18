@@ -12,7 +12,7 @@ let
     let exists = hasAttr str obj; in
     { exists = exists; description = if exists then "${str} exists" else "${str} does not exist"; };
 
-  os= self.nixosConfigurations.wsl2;
+  os = self.nixosConfigurations.wsl2;
 
   attrs = [
     #system modules
