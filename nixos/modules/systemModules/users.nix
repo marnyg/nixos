@@ -20,28 +20,6 @@ let
     };
   };
 
-  myMkUser = user: { config, pkgs, ... }: {
-
-    modules.zsh.enable = true;
-    modules.direnv.enable = true;
-    modules.zellij.enable = true;
-    modules.tmux.enable = true;
-    modules.fzf.enable = true;
-    modules.firefox.enable = true;
-    modules.autorandr.enable = false;
-    modules.bspwm.enable = false;
-    modules.dunst.enable = true;
-    modules.kitty.enable = true;
-    myModules.git.enable = true;
-    modules.newsboat.enable = true;
-    modules.polybar.enable = false;
-    modules.xmonad.enable = false;
-    modules.spotifyd.enable = false;
-    modules.other.enable = true;
-    modules.myPackages.enable = true;
-    modules.cloneDefaultRepos.enable = true;
-  };
-
   anyHomeManagerUser = users: lib.any (user: user.homeManager) users;
 in
 {
@@ -77,7 +55,7 @@ in
 
       sharedModules = config.myModules.createUsers.personalHomeManagerModules;
 
-      users = lib.listToAttrs (map (user: { name = user.name; value = myMkUser user; })
+      users = lib.listToAttrs (map (user: { name = user.name; value = user.homeManagerConf; })
         (builtins.filter (user: user.homeManager) config.myModules.createUsers.users));
     };
   };

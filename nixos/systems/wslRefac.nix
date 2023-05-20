@@ -1,7 +1,7 @@
 { pkgs, inputs, config, ... }:
 let
+#move this out into own users file
   defaultHMConfig = {
-
     myHmModules.sharedDefaults.enable = true;
 
     modules.zsh.enable = true;
@@ -25,18 +25,21 @@ let
   };
 in
 {
+  ##
+  ## system modules config
+  ##
   modules.myNvim.enable = true; # TODO: should be managed by homemanger
   myModules.wsl.enable = true;
-
   myModules.defaults.enable = true;
 
   ## 
-  ## users and homemanager
+  ## users and homemanager modules config
   ## 
   myModules.createUsers = {
     enable = true;
     users = [
-      { name = "mar"; homeManager = true; }
+      #move this out into own users file
+      { name = "mar"; homeManager = true; homeManagerConf = defaultHMConfig; }
       { name = "test"; homeManager = true; }
       { name = "notHM"; homeManager = false; }
     ];
