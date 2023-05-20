@@ -1,6 +1,6 @@
 { pkgs, inputs, config, ... }:
 let
-#move this out into own users file
+# TODO:move this out into own users file
   defaultHMConfig = {
     myHmModules.sharedDefaults.enable = true;
 
@@ -38,7 +38,7 @@ in
   myModules.createUsers = {
     enable = true;
     users = [
-      #move this out into own users file
+      # TODO: move this out into own users file
       { name = "mar"; homeManager = true; homeManagerConf = defaultHMConfig; }
       { name = "test"; homeManager = true; }
       { name = "notHM"; homeManager = false; }

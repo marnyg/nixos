@@ -28,8 +28,8 @@ let
   buildWslImageAndOpenInExplorer = pkgs.writeShellScriptBin "buildWslImageAndOpenInExplorer.sh" '' 
       ${buildWslImage}/bin/buildWslImage.sh 
       wt.exe -w 0 nt -d  $(/bin/wslpath -w $(realpath result/tarball))
-      echo "wsl --unregister MyNixOsAuto; wsl --import MyNixOsAuto C:\Users\trash\wlsTarbals\NixosAuto .\nixos-wsl-installer.tar.gz --version 2; wsl -d mynixos2"
-      echo "wsl --unregister MyNixOsAuto; wsl --import MyNixOsAuto C:\Users\trash\wlsTarbals\NixosAuto .\nixos-wsl-installer.tar.gz --version 2; wsl -d mynixos2" |clip.exe
+      echo "wsl --unregister MyNixOsAuto; wsl --import MyNixOsAuto C:\Users\trash\wlsTarbals\NixosAuto .\nixos-wsl-installer.tar.gz --version 2; wsl -d MyNixOsAuto"
+      echo "wsl --unregister MyNixOsAuto; wsl --import MyNixOsAuto C:\Users\trash\wlsTarbals\NixosAuto .\nixos-wsl-installer.tar.gz --version 2; wsl -d MyNixOsAuto" |clip.exe
     '';
 
   #composit build steps
