@@ -92,7 +92,7 @@ jobs:
           popd 
           nix flake lock --update-input my-nvim
           nix flake lock --update-input my-modules
-          nix build '.#nixosConfigurations.wsl2.config.system.build.installer'
+          nix build '.#nixosConfigurations.wsl.config.system.build.installer'
       - name: Upload installer 📤
         uses: actions/upload-artifact@v3
         with:

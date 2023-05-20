@@ -1,6 +1,6 @@
 { pkgs, inputs, config, ... }:
 let
-# TODO:move this out into own users file
+  # TODO:move this out into own users file
   defaultHMConfig = {
     myHmModules.sharedDefaults.enable = true;
 

@@ -6,9 +6,9 @@
   config = lib.mkIf config.myModules.defaults.enable {
     nixpkgs.overlays = [ inputs.nur.overlay ]; #TODO how do i do this?
     nixpkgs.config.allowUnfree = true; #TODO remove?
-    
+
     nixpkgs.config.permittedInsecurePackages = [
-    "nodejs-16.20.0" #TODO remove?
+      "nodejs-16.20.0" #TODO remove?
     ];
     environment.systemPackages = with pkgs; [ wget curl lf ];
 

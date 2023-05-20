@@ -59,7 +59,7 @@
           tailscale = import ./systemModules/tailscaleService.nix;
           wsl = import ./systemModules/wsl.nix;
           users = import ./systemModules/users.nix;
-          defaults= import ./systemModules/defaults.nix;
+          defaults = import ./systemModules/defaults.nix;
           nvim = my-nvim.nixosModule2."${system}";
         };
         devShells = import ./flakeUtils/shell.nix (import nixpkgs { inherit system; });
