@@ -45,6 +45,8 @@ with lib;
             export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /home/mar/.ssh/githubmarnyg"
             ${pkgs.coreutils}/bin/mkdir /home/mar/git
             ${pkgs.git}/bin/git clone git@github.com:marnyg/nixos.git /home/mar/git/nixos
+            ${pkgs.git}/bin/git clone git@github.com:marnyg/kubernetesOnAzure.git /home/mar/git/nixos
+            ${pkgs.git}/bin/git clone git@github.com:marnyg/buildAzureNixImage.git /home/mar/git/nixos
             exit 0
           ''
           }";

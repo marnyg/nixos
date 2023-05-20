@@ -1,6 +1,6 @@
 { self, pkgs ? import <nixpkgs> { } }:
 let
-  os = self.nixosConfigurations.wsl2;
+  os = self.nixosConfigurations.wsl;
 
   getNestedAttr = attrList: obj:
     pkgs.lib.attrByPath attrList (throw "${builtins.concatStringsSep "." attrList} does not exist") obj;

@@ -1,11 +1,22 @@
 inputs:
 let
   system = "x86_64-linux";
+  myModules = (builtins.attrValues inputs.my-modules.nixosModules.x86_64-linux);
+  homeManagerModule = inputs.home-manager.nixosModules.home-manager;
+  wslModule = inputs.nixos-wsl.nixosModules.wsl;
+
+  additionalModules = myModules ++ [ homeManagerModule wslModule ];
 in
 {
   #desktop = mkSystem (import ./desktop/mar.nix);
   #laptop= mkSystem (import ./desktop/mar.nix);
   #wsl = mkSystem (import ./wsl.nix);
+  la = myModules;
+  wsl = inputs.nixpkgs.lib.nixosSystem {
+    inherit system;
+    specialArgs = { inherit inputs; };
+    modules = [ (import ./wslRefac.nix) ] ++ additionalModules;
+  };
   wsl2 = inputs.nixpkgs.lib.nixosSystem {
     inherit system;
     specialArgs = { inherit inputs; };

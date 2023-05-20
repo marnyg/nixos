@@ -6,8 +6,8 @@
   '';
   unitTestExample = import ../tests/test.nix { inherit pkgs; };
   checkAttrsOnFakeOsfakeConfig = import ../tests/testIfAttrExist.nix { inherit pkgs; };
-  checkAttrsOnWslConf = import ../tests/testAttrsOnWsl.nix { inherit pkgs self; };
   checkAttrsEqualsOnWslConf = import ../tests/testAttrsEqualsOnWsl.nix { inherit pkgs self; };
+  checkAttrsEqualsOnRefactoredWslConf = import ../tests/testAttrsEqualsOnRefactoredWsl.nix { inherit pkgs self; };
 
   fooTest = pkgs.runCommand "foo test" { } ''
     echo ok

@@ -12,46 +12,27 @@
   outputs = { self, nixpkgs, my-nvim, flake-utils, home-manager }:
     flake-utils.lib.eachDefaultSystem (system:
       {
-        hmModulesModule = { lib, ... }: {
-          lib.MyHmModules = [
-            import
-            ./homemanager/autorandr/desktop.nix
-            import
-            ./homemanager/bspwm/bspwm.nix
-            import
-            ./homemanager/dunst/dunst.nix
-            import
-            ./homemanager/firefox.nix
-            import
-            ./homemanager/git.nix
-            import
-            ./homemanager/direnv.nix
-            import
-            ./homemanager/kitty.nix
-            import
-            ./homemanager/newsboat.nix
-            import
-            ./homemanager/polybar/polybar.nix
-            import
-            ./homemanager/xmonad
-            import
-            ./homemanager/zellij.nix
-            import
-            ./homemanager/tmux.nix
-            import
-            ./homemanager/fzf.nix
-            import
-            ./homemanager/zsh.nix
-            import
-            ./homemanager/spotifyd.nix
-            import
-            ./homemanager/other.nix
-            import
-            ./homemanager/myPackages.nix
-            import
-            ./homemanager/cloneDefaultRepos.nix
-          ];
-        };
+        hmModulesModules = [
+          (import ./homemanager/autorandr/desktop.nix)
+          (import ./homemanager/bspwm/bspwm.nix)
+          (import ./homemanager/dunst/dunst.nix)
+          (import ./homemanager/firefox.nix)
+          (import ./homemanager/git.nix)
+          (import ./homemanager/direnv.nix)
+          (import ./homemanager/kitty.nix)
+          (import ./homemanager/newsboat.nix)
+          (import ./homemanager/polybar/polybar.nix)
+          (import ./homemanager/xmonad)
+          (import ./homemanager/zellij.nix)
+          (import ./homemanager/tmux.nix)
+          (import ./homemanager/fzf.nix)
+          (import ./homemanager/zsh.nix)
+          (import ./homemanager/spotifyd.nix)
+          (import ./homemanager/other.nix)
+          (import ./homemanager/myPackages.nix)
+          (import ./homemanager/cloneDefaultRepos.nix)
+          (import ./homemanager/sharedDefaults.nix)
+        ];
         hmModules = {
           autorandr = import ./homemanager/autorandr/desktop.nix;
           bspwm = import ./homemanager/bspwm/bspwm.nix;
@@ -71,10 +52,14 @@
           other = import ./homemanager/other.nix;
           myPackages = import ./homemanager/myPackages.nix;
           cloneDefaultRepos = import ./homemanager/cloneDefaultRepos.nix;
+          sharedDefaults = import ./homemanager/sharedDefaults.nix;
         };
         nixosModules = {
           syncthing = import ./systemModules/syncthingService.nix;
           tailscale = import ./systemModules/tailscaleService.nix;
+          wsl = import ./systemModules/wsl.nix;
+          users = import ./systemModules/users.nix;
+          defaults= import ./systemModules/defaults.nix;
           nvim = my-nvim.nixosModule2."${system}";
         };
         devShells = import ./flakeUtils/shell.nix (import nixpkgs { inherit system; });

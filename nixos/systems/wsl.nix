@@ -46,7 +46,7 @@
               modules.bspwm.enable = false;
               modules.dunst.enable = true;
               modules.kitty.enable = true;
-              modules.git.enable = true;
+              myModules.git.enable = true;
               modules.newsboat.enable = true;
               modules.polybar.enable = false;
               modules.xmonad.enable = false;
@@ -95,13 +95,8 @@
       #    nixos = createUserConf "nixos";
     };
 
-  environment.systemPackages = with pkgs; [
-    wget
-    curl
-    lf
-    htop
-    zellij
-  ];
+  # Must have programs
+  environment.systemPackages = with pkgs; [ wget curl git tmux ];
 
   # Enable nix flakes
   nix = {

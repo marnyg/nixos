@@ -5,7 +5,7 @@ with lib;
     enable = mkEnableOption "enable personal git config";
   };
 
-  config = mkIf config.myModules.git {
+  config = mkIf config.myModules.git.enable {
     programs.git = {
       package = pkgs.gitFull;
       enable = true;
