@@ -12,11 +12,11 @@ with lib;
     environment.systemPackages = with pkgs; [
       hunspell # TODO: set up spelling in nvim
       hunspellDicts.en-us
-      rnix-lsp
-      haskell-language-server
-      sumneko-lua-language-server
-      rust-analyzer
-      elmPackages.elm-language-server
+      #rnix-lsp
+      #haskell-language-server
+      #sumneko-lua-language-server
+      #rust-analyzer
+      #elmPackages.elm-language-server
       (import ./nix/newnvim.nix { inherit pkgs; })
     ];
   };

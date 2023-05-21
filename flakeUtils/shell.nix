@@ -15,6 +15,15 @@ let
   #making adhock shell scripts
   myArbetraryCommand = pkgs.writeShellScriptBin "tst.sh" "${pkgs.cowsay}/bin/cowsay lalal";
 
+  # update current system wsl
+  updateCurrentWsl= pkgs.writeShellScriptBin "updateCurrentWsl.sh" ''
+    pushd nixos/modules/
+    nix flake update 
+    popd 
+    nix flake update 
+    sudo nixos-rebuild switch --flake .#wsl
+  '';
+
   #making adhock shell with dependensies in path
   myOtherCommand = pkgs.writeShellApplication {
     name = "show-nixos-org.sh";
@@ -65,6 +74,7 @@ pkgs.mkShell {
     nixtTestEval
     buildWslImage
     buildWslImageAndOpenInExplorer
+    updateCurrentWsl
 
     #other cli tools
     nixpkgs-fmt

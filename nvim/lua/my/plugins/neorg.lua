@@ -2,12 +2,12 @@ require("neorg").setup({
     load = {
         ["core.defaults"] = {},
         --["core.norg.news"] = { check_news = false },
-        ["core.norg.concealer"] = {
+        ["core.concealer"] = {
             config = {
                 icon_preset = "diamond",
             },
         },
-        ["core.norg.dirman"] = {
+        ["core.dirman"] = {
             config = {
                 workspaces = {
                     work = "~/notes/work",
@@ -15,7 +15,7 @@ require("neorg").setup({
                 },
             },
         },
-        ["core.norg.completion"] = {
+        ["core.completion"] = {
             config = {
                 engine = "nvim-cmp",
             },
