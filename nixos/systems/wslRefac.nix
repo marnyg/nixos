@@ -6,20 +6,20 @@ let
 
     modules.zsh.enable = true;
     modules.direnv.enable = true;
-    modules.zellij.enable = true;
+    modules.zellij.enable = false;
     modules.tmux.enable = true;
     modules.fzf.enable = true;
     modules.firefox.enable = true;
     modules.autorandr.enable = false;
     modules.bspwm.enable = false;
-    modules.dunst.enable = true;
+    modules.dunst.enable = false;
     modules.kitty.enable = true;
     myModules.git.enable = true;
-    modules.newsboat.enable = true;
+    modules.newsboat.enable = false;
     modules.polybar.enable = false;
     modules.xmonad.enable = false;
     modules.spotifyd.enable = false;
-    modules.other.enable = true;
+    modules.other.enable = false;
     modules.myPackages.enable = true;
     modules.cloneDefaultRepos.enable = true;
   };

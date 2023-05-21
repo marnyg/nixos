@@ -10,7 +10,7 @@
     nixpkgs.config.permittedInsecurePackages = [
       "nodejs-16.20.0" #TODO remove?
     ];
-    environment.systemPackages = with pkgs; [ wget curl lf ];
+    environment.systemPackages = with pkgs; [ wget curl tmux ];
 
     # Enable nix flakes
     nix = {

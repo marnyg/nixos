@@ -9,7 +9,7 @@ with lib;
 
 
       home.packages = with pkgs; [
-        dwm
+        #dwm
         rofi
         dmenu
         feh
@@ -19,24 +19,24 @@ with lib;
         #fzf
         ripgrep
         ffmpeg
-        tealdeer
+        #tealdeer
         #exa
         #duf
         spotify-tui
         playerctl
         gnupg
-        slop
-        bat
+        #slop
+        #bat
         libnotify
-        sct
-        hyperfine
+        #sct
+        #hyperfine
         unrar
         unzip
 
         # GUI applications
         mpv
         #        nyxt
-        luakit
+        #luakit
         arandr
         #vscode
 
