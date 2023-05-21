@@ -6,6 +6,7 @@ let
     name = "config-nvim";
     src = ../.;
   };
+  vimExtraPlugins = vim-extra-plugins.packages.${prev.system};
 in
 
 {
@@ -17,7 +18,6 @@ in
     inherit config-nvim;
   };
 
-  vimExtraPlugins = vim-extra-plugins.packages.${prev.system};
   # vimExtraPlugins = vim-extra-plugins.overlays.default.extend (self: super: {
   #   iron-nvim = super.iron-nvim.overrideAttrs (old: {
   #     patches = (old.patches or [ ]) ++ [

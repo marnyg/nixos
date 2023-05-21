@@ -36,11 +36,6 @@
           program = "${pkgs.coreutils}/bin/echo";
         };
 
-        #apps.runUnitTests = {
-        #  type = "app";
-        #  program = "${inputs.nixt.x86_64-linux.app.packages.default}/bin/nixt";
-        #};
-
         #use by running `nix develop`
         devShells.default = import ./flakeUtils/shell.nix { inherit pkgs self; };
         checks = import ./flakeUtils/checks.nix { inherit inputs pkgs self; };

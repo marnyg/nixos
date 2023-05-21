@@ -16,7 +16,7 @@ let
   myArbetraryCommand = pkgs.writeShellScriptBin "tst.sh" "${pkgs.cowsay}/bin/cowsay lalal";
 
   # update current system wsl
-  updateCurrentWsl= pkgs.writeShellScriptBin "updateCurrentWsl.sh" ''
+  updateCurrentWsl = pkgs.writeShellScriptBin "updateCurrentWsl.sh" ''
     pushd nixos/modules/
     nix flake update 
     popd 
@@ -51,10 +51,9 @@ let
 
 in
 pkgs.mkShell {
-  RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
-      shellHook = ''
-        export LSP_SERVERS="pylsp lua_ls bashls nil_ls"
-      '';
+  shellHook = ''
+    export LSP_SERVERS="pylsp lua_ls bashls nil_ls"
+  '';
 
   nativeBuildInputs = with pkgs; [
 
@@ -79,9 +78,9 @@ pkgs.mkShell {
     #other cli tools
     nixpkgs-fmt
     shfmt
-    rustc
-    cargo
-    rustfmt
+    #rustc
+    #cargo
+    #rustfmt
     clippy
   ];
 }

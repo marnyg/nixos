@@ -1,46 +1,76 @@
 local cmp = require("cmp")
+local lspkind = require('lspkind')
 
+vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 cmp.setup({
-	preselect = cmp.PreselectMode.None,
+    preselect = cmp.PreselectMode.None,
 
-	completion = {
-		completeopt = "menu,menuone,noselect",
-	},
+    --completion = {
+    --	completeopt = "menu,menuone,noselect",
+    --},
+    formatting = {
+        format = lspkind.cmp_format({
+            mode = 'symbol_text',  -- show only symbol annotations
+            preset = 'codicons',
+            maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+            ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+            menu = ({
+                nvim_lsp = "[LSP]",
+                nvim_lsp_document_symbol= "[LSP_doc]",
+                nvim_lsp_signature_help = "[LSP_sign]",
+                buffer = "[Buffer]",
+                luasnip = "[LuaSnip]",
+                nvim_lua = "[Lua]",
+            })
 
-	snippet = {
-		expand = function(args)
-			require("luasnip").lsp_expand(args.body)
-		end,
-	},
+            -- The function below will be called before any actual modifications from lspkind
+            -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+            --before = function(entry, vim_item)
+            --    return vim_item
+            --end
+        })
+    },
 
-	mapping = {
-		["<C-p>"] = cmp.mapping.select_prev_item(),
-		["<C-n>"] = cmp.mapping.select_next_item(),
-		["<C-Space>"] = cmp.mapping.complete(),
-		["<C-c>"] = cmp.mapping.close(),
-		["<CR>"] = cmp.mapping.confirm(),
-	},
+    snippet = {
+        expand = function(args)
+            require("luasnip").lsp_expand(args.body)
+        end,
+    },
 
-	experimental = {
-		ghost_text = true,
-	},
+    mapping = {
+        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-e>'] = cmp.mapping.abort(),
+        ["<C-p>"] = cmp.mapping.select_prev_item(),
+        ["<C-n>"] = cmp.mapping.select_next_item(),
+        ["<C-Space>"] = cmp.mapping.complete(),
+        ["<C-c>"] = cmp.mapping.close(),
+        ["<CR>"] = cmp.mapping.confirm(),
+    },
 
-	sources = {
-		{ name = "neorg" },
-		{ name = "luasnip" },
-		{ name = "nvim_lua" },
-		{ name = "nvim_lsp" },
-		{ name = "calc" },
-		{ name = "path" },
-		{ name = "buffer" },
-	},
+    experimental = {
+        ghost_text = true,
+    },
+
+    sources = {
+        { name = "nvim_lsp",                 keyword_length = 2, priority = 1 },
+        { name = 'nvim_lsp_document_symbol', keyword_length = 3 },
+        { name = 'nvim_lsp_signature_help',  keyword_length = 3, },
+        { name = "nvim_lua", },
+        { name = "neorg",                    priority = 1 },
+        { name = "luasnip" },
+        { name = "calc" },
+        { name = "path" },
+        { name = "buffer" },
+        { name = 'omni' }
+    },
 })
 
 cmp.setup.cmdline(":", {
-	sources = {
-		{ name = "cmdline" },
-		{ name = "path" },
-	},
+    sources = {
+        { name = "cmdline" },
+        { name = "path" },
+    },
 })
 
 --cmp.event:on("confirm_done", require("nvim-autopairs.completion.cmp").on_confirm_done())
@@ -55,5 +85,5 @@ cmp.setup.cmdline(":", {
                 load_completion()
             else
                 neorg.callbacks.on_event("core.started", load_completion)
-            end 
+            end
             ]]

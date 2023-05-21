@@ -9,6 +9,7 @@ in
 pkgs.neovim.override {
 
   configure = {
+
     withNodeJs = false;
     withPython3 = false;
 
@@ -26,9 +27,6 @@ pkgs.neovim.override {
     packages.myVimPackage = with pkgs.vimPlugins;  {
       # see examples below how to use custom packages
       start = [
-        nvim-lspconfig
-
-        # Colorscheme {{{1k
         {
           plugin = plenary-nvim;
           #config = "lua vim.g.mapleader = ' '"; #hack need to set leader before binding keys
@@ -52,10 +50,29 @@ pkgs.neovim.override {
           config = "lua require('nvim-tree').setup({})";
 
         }
+
+
+        #
+        #cmp stuff
+        #
+        lspkind-nvim
         {
           plugin = nvim-cmp;
           config = "luafile ${config-nvim}/lua/my/plugins/cmp.lua";
         }
+        cmp-nvim-lsp
+        cmp-nvim-lsp-signature-help
+        cmp-nvim-lsp-document-symbol
+        cmp_luasnip
+        cmp-calc
+        cmp-buffer
+        cmp-omni
+        cmp-path
+
+        #
+        #
+        #
+
         {
           plugin = diffview-nvim;
           #config = "lua require('diffview.nvim')";
@@ -181,9 +198,6 @@ pkgs.neovim.override {
         }
 
         #vimExtraPlugins.lspactions
-        {
-          plugin = lspkind-nvim;
-        }
         #vimExtraPlugins.null-ls-nvim
 
 
@@ -191,7 +205,7 @@ pkgs.neovim.override {
 
         # Syntax {{{1
         {
-          plugin = (nvim-treesitter.withPlugins (plugins: with plugins; [ norg hcl nix python rust c_sharp go lua json markdown css javascript typescript zig dhall vue]));
+          plugin = (nvim-treesitter.withPlugins (plugins: with plugins; [ norg hcl nix python rust c_sharp go lua json markdown css javascript typescript zig dhall vue ]));
           config = "luafile ${config-nvim}/lua/my/plugins/treesitter.lua";
         }
         {
