@@ -40,17 +40,37 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 end
 
-local servers = {
-    bashls = "bash-language-server",
-    pylsp = "pylsp",
-    rust_analyzer = "rust_analyzer",
-    dockerls = "docker-langserver",
-    lua_ls = "lua-ls",
-    rnix = "rnix",
-    -- nomad_lsp = "nomad_lsp",
-}
+--local servers = {
+----    bashls = "bash-language-server",
+----    pylsp = "pylsp",
+----    rust_analyzer = "rust_analyzer",
+----    dockerls = "docker-langserver",
+----    lua_ls = "lua-ls",
+----    rnix = "rnix",
+--    -- nomad_lsp = "nomad_lsp",
+--}
+--
+--
+--for server, cmd in pairs(servers) do
+--    lspconfig[server].setup({ on_attach = on_attach })
+--end
 
+-- dynamically load lsps defined in the environment variable LSP_SERVERS
+-- this is used in conjunction with direnv, using nix flakes to create a 
+-- shell where the lsps managed by nix and available in the path
+local lspconfig = require 'lspconfig'
 
-for server, cmd in pairs(servers) do
-    lspconfig[server].setup({ on_attach = on_attach })
+-- Check if the LSP_SERVERS environment variable is set
+local lsp_servers = os.getenv('LSP_SERVERS')
+
+if lsp_servers then
+  -- Split the LSP_SERVERS variable into separate strings
+  for lsp_server in lsp_servers:gmatch("%S+") do
+    if lspconfig[lsp_server] then
+      lspconfig[lsp_server].setup { on_attach = on_attach }
+    else
+      print('LSP server ' .. lsp_server .. ' is not supported')
+    end
+  end
 end
+

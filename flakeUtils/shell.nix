@@ -43,8 +43,21 @@ let
 in
 pkgs.mkShell {
   RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
+      shellHook = ''
+        export LSP_SERVERS="pylsp lua_ls bashls nil_ls"
+      '';
 
   nativeBuildInputs = with pkgs; [
+
+    #lsp-servers
+    #[ sumneko-lua-language-server cargo rust-analyzer rnix-lsp rustc manix ripgrep ];
+    nil
+    lua-language-server
+    python310Packages.python-lsp-server # Python LSP server
+    nodePackages_latest.bash-language-server # Bash LSP server
+
+
+    # my scripts
     myArbetraryCommand
     comoposeScripts
     myOtherCommand
@@ -53,6 +66,7 @@ pkgs.mkShell {
     buildWslImage
     buildWslImageAndOpenInExplorer
 
+    #other cli tools
     nixpkgs-fmt
     shfmt
     rustc

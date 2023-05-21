@@ -4,7 +4,7 @@ let
     name = "config-nvim";
     src = ../.;
   };
-  lsp-servers = with pkgs; [ sumneko-lua-language-server cargo rust-analyzer rnix-lsp rustc manix ripgrep ];
+  #lsp-servers = with pkgs; [ sumneko-lua-language-server cargo rust-analyzer rnix-lsp rustc manix ripgrep ];
 in
 pkgs.neovim.override {
 
@@ -14,7 +14,6 @@ pkgs.neovim.override {
 
     customRC = ''
       " Update the PATH to include cargo, manix, and ripgrep
-      let $PATH = $PATH . ':' . '${pkgs.lib.makeBinPath lsp-servers }'
 
       let g:disable_paq = v:true
       luafile ${config-nvim}/init.lua
@@ -192,9 +191,7 @@ pkgs.neovim.override {
 
         # Syntax {{{1
         {
-          #plugin = (nvim-treesitter.withPlugins (_: tree-sitter.allGrammars));
-          plugin = (nvim-treesitter.withPlugins (plugins: with plugins; [ norg hcl nix python rust ]));
-          #plugin = nvim-treesitter.withAllGrammars;
+          plugin = (nvim-treesitter.withPlugins (plugins: with plugins; [ norg hcl nix python rust c_sharp go lua json markdown css javascript typescript zig dhall vue]));
           config = "luafile ${config-nvim}/lua/my/plugins/treesitter.lua";
         }
         {
