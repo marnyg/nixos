@@ -68,7 +68,7 @@ with lib;
         rm = "rm -rifv";
         mv = "mv -iv";
         cp = "cp -riv";
-        cat = "bat --paging=never --style=plain";
+        cat = "${pkgs.bat}/bin/bat --paging=never --style=plain";
         tree = "exa --tree --icons";
         nd = "nix develop -c $SHELL";
         rebuild = "doas nixos-rebuild switch --flake $NIXOS_CONFIG_DIR --fast; notify-send 'Rebuild complete\!'";
