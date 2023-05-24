@@ -18,6 +18,7 @@ with lib;
           h264ify
           df-youtube
           tree-style-tab
+          bitwarden
           vim-vixen
         ];
         settings = {
