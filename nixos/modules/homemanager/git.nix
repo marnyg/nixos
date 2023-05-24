@@ -12,7 +12,7 @@ with lib;
       userName = "marius";
       userEmail = "marnyg@proton.me";
       delta.enable = true;
-      ignores = [ ".envrc" ];
+      ignores = [ "**/.envrc" ];
       #lsf.enabled =true;
       aliases = {
         co = "checkout";
