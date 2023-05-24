@@ -12,7 +12,11 @@ with lib;
       userName = "marius";
       userEmail = "marnyg@proton.me";
       delta.enable = true;
-      ignores = [ "**/.envrc" ];
+      ignores = [ 
+        "**/.envrc" 
+        "${config.home.homeDirectory}/git/sendra/**/flake.*"
+        "${config.home.homeDirectory}/git/wellstarter/**/flake.*" 
+      ];
       #lsf.enabled =true;
       aliases = {
         co = "checkout";
