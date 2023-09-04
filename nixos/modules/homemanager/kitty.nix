@@ -3,6 +3,7 @@ with lib;
 {
   options.modules.kitty = {
     enable = mkOption { type = types.bool; default = false; };
+    fontsize = mkOption { type = types.number; default = 12; };
   };
 
   config = mkIf config.modules.kitty.enable {
@@ -16,6 +17,8 @@ with lib;
           fonts = [ "FiraCode" "DroidSansMono" "FiraMono" "JetBrainsMono" ];
         });
         name = "Fira Code Nerd Font";
+        size = config.modules.kitty.fontsize;
+        #size = "6";
         #name= "Fira Mono Nerd Font";
         #name ="JetBrains Mono";
         #name= "Droid Sans Mono Nerd Font";

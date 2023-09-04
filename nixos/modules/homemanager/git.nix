@@ -6,16 +6,17 @@ with lib;
   };
 
   config = mkIf config.myModules.git.enable {
+    programs.git-credential-oauth.enable= true;
     programs.git = {
       package = pkgs.gitFull;
       enable = true;
       userName = "marius";
       userEmail = "marnyg@proton.me";
       delta.enable = true;
-      ignores = [ 
-        "**/.envrc" 
+      ignores = [
+        "**/.envrc"
         "${config.home.homeDirectory}/git/sendra/**/flake.*"
-        "${config.home.homeDirectory}/git/wellstarter/**/flake.*" 
+        "${config.home.homeDirectory}/git/wellstarter/**/flake.*"
       ];
       #lsf.enabled =true;
       aliases = {

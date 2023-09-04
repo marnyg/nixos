@@ -32,28 +32,31 @@
           (import ./homemanager/myPackages.nix)
           (import ./homemanager/cloneDefaultRepos.nix)
           (import ./homemanager/sharedDefaults.nix)
+          (import ./homemanager/hyperland.nix)
+          (import ./homemanager/wofi.nix)
+          (import ./homemanager/waybar.nix)
         ];
-        hmModules = {
-          autorandr = import ./homemanager/autorandr/desktop.nix;
-          bspwm = import ./homemanager/bspwm/bspwm.nix;
-          dunst = import ./homemanager/dunst/dunst.nix;
-          firefox = import ./homemanager/firefox.nix;
-          git = import ./homemanager/git.nix;
-          direnv = import ./homemanager/direnv.nix;
-          kitty = import ./homemanager/kitty.nix;
-          newsboat = import ./homemanager/newsboat.nix;
-          polybar = import ./homemanager/polybar/polybar.nix;
-          xmonad = import ./homemanager/xmonad;
-          zellij = import ./homemanager/zellij.nix;
-          tmux = import ./homemanager/tmux.nix;
-          fzf = import ./homemanager/fzf.nix;
-          zsh = import ./homemanager/zsh.nix;
-          spotifyd = import ./homemanager/spotifyd.nix;
-          other = import ./homemanager/other.nix;
-          myPackages = import ./homemanager/myPackages.nix;
-          cloneDefaultRepos = import ./homemanager/cloneDefaultRepos.nix;
-          sharedDefaults = import ./homemanager/sharedDefaults.nix;
-        };
+        #hmModules = {
+        #  autorandr = import ./homemanager/autorandr/desktop.nix;
+        #  bspwm = import ./homemanager/bspwm/bspwm.nix;
+        #  dunst = import ./homemanager/dunst/dunst.nix;
+        #  firefox = import ./homemanager/firefox.nix;
+        #  git = import ./homemanager/git.nix;
+        #  direnv = import ./homemanager/direnv.nix;
+        #  kitty = import ./homemanager/kitty.nix;
+        #  newsboat = import ./homemanager/newsboat.nix;
+        #  polybar = import ./homemanager/polybar/polybar.nix;
+        #  xmonad = import ./homemanager/xmonad;
+        #  zellij = import ./homemanager/zellij.nix;
+        #  tmux = import ./homemanager/tmux.nix;
+        #  fzf = import ./homemanager/fzf.nix;
+        #  zsh = import ./homemanager/zsh.nix;
+        #  spotifyd = import ./homemanager/spotifyd.nix;
+        #  other = import ./homemanager/other.nix;
+        #  myPackages = import ./homemanager/myPackages.nix;
+        #  cloneDefaultRepos = import ./homemanager/cloneDefaultRepos.nix;
+        #  sharedDefaults = import ./homemanager/sharedDefaults.nix;
+        #};
         nixosModules = {
           syncthing = import ./systemModules/syncthingService.nix;
           tailscale = import ./systemModules/tailscaleService.nix;

@@ -21,7 +21,7 @@ let
     nix flake update 
     popd 
     nix flake update 
-    sudo nixos-rebuild switch --flake .#wsl
+    sudo nixos-rebuild switch --flake .#''${1:-laptop}
   '';
 
   #making adhock shell with dependensies in path

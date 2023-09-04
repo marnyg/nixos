@@ -45,6 +45,7 @@ in
         value = {
           isNormalUser = lib.mkDefault true;
           shell = lib.mkForce pkgs.zsh; #todo why: because when wsl it will create user with bash as shell. but i dont know why mkDefault is not working
+          extraGroups = [ "wheel" ];
         };
       })
       config.myModules.createUsers.users);

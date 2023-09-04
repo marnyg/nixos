@@ -26,7 +26,8 @@ with lib;
 
       enableCompletion = true;
       enableAutosuggestions = true;
-      enableSyntaxHighlighting = true;
+      #enableSyntaxHighlighting = true;
+      syntaxHighlighting.enable = true;
 
       # .zshrc
       initExtra = ''

@@ -15,11 +15,14 @@ with lib;
           clearurls
           sponsorblock
           darkreader
-          h264ify
-          df-youtube
-          tree-style-tab
+          #h264ify
+          #df-youtube
+          #tree-style-tab
           bitwarden
           vim-vixen
+          sidebery
+          #pkgs.saka
+          #pkgs.saka-key
         ];
         settings = {
           "browser.ctrlTab.sortByRecentlyUsed" = true;
@@ -38,7 +41,7 @@ with lib;
           "browser.urlbar.speculativeConnect.enabled" = false;
           "dom.event.clipboardevents.enabled" = false;
           "media.navigator.enabled" = false;
-          "network.cookie.cookieBehavior" = 1;
+          #"network.cookie.cookieBehavior" = 1;
           "network.http.referer.XOriginTrimmingPolicy" = 2;
           "beacon.enabled" = false;
           "browser.safebrowsing.downloads.remote.enabled" = false;
