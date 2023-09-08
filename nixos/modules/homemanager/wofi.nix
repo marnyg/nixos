@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.wofi= {
+  options.modules.wofi = {
     enable = mkOption { type = types.bool; default = false; };
   };
 

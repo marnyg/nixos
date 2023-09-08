@@ -20,6 +20,7 @@
     let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
     {
       nixosConfigurations = import ./nixos/systems inputs;
+      test = builtins.fromJSON ''{"asd":"sd"}'';
       #mytest = (import ./nixos/tests/unit/firstUnitTest.nix { self = (self); pkgs = pkgs; }); 
     } //
     flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:

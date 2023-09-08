@@ -24,6 +24,7 @@ let
     modules.other.enable = false;
     modules.myPackages.enable = true;
     modules.cloneDefaultRepos.enable = false;
+    modules.lf.enable = true;
   };
 in
 {
@@ -43,11 +44,15 @@ in
     users = [
       # TODO: move this out into own users file
       { name = "mar"; homeManager = true; homeManagerConf = defaultHMConfig; }
-      { name = "test"; homeManager = true; }
+      { name = "test"; homeManager = true; homeManagerConf = defaultHMConfig;}
       { name = "notHM"; homeManager = false; }
     ];
     personalHomeManagerModules = [{ imports = inputs.my-modules.hmModulesModules.x86_64-linux; }];
   };
+
+
+
+  
 
   ## 
   ## OTHER STUFF
@@ -79,35 +84,9 @@ in
     sway
   '';
 
-  ##Enable the X11 windowing system.
-  #services.xserver.enable = true;
-  #services.xserver.displayManager.defaultSession = "none+bsp";
-  #services.xserver.windowManager = {
-  #  # Open configuration for the window manager.
-  #  #dwm.enable = true;                  # Enable xmonad.
-  #  xmonad.enable = true; # Enable xmonad.
-  #  xmonad.enableContribAndExtras = true; # Enable xmonad contrib and extras.
-  #  xmonad.extraPackages = hpkgs: [
-  #    # Open configuration for additional Haskell packages.
-  #    hpkgs.xmonad-contrib # Install xmonad-contrib.
-  #    hpkgs.xmonad-extras # Install xmonad-extras.
-  #    hpkgs.xmonad # Install xmonad itself.
-  #    hpkgs.dbus
-  #    hpkgs.monad-logger
-  #  ];
-  #  #xmonad.config = ./config/xmonad/config.hs;                # Enable xmonad.
-  #  #xmonad.config = ./.config/config.hs;                # Enable xmonad.
-  #  #xmonad.config = ./config.hs;                # Enable xmonad.
-  #};
-
-  # Enable the X11 windowing system.
-  #services.compton.enable = true;
-  #services.compton.shadow = true;
-  #services.compton.inactiveOpacity = 0.8;
 
   # Enable sound.
   sound.enable = true;
-  #hardware.pulseaudio.enable = true;
 
   security.rtkit.enable = true;
   services.pipewire = {
@@ -128,7 +107,7 @@ in
   # Enable touchpad support (enabled default in most desktopManager).
   #services.xserver.libinput.enable = true;
   services.xserver.layout = "us";
-  services.xserver.xkbOptions = "caps:escape";
+  services.xserver.xkbOptions = "caps:escare";
   console.useXkbConfig = true;
   services.xserver.autoRepeatDelay = 200;
   services.xserver.autoRepeatInterval = 20;
@@ -137,7 +116,9 @@ in
     hyprland
     git
     tmux
+    bottom
   ];
+  programs.steam.enable = true;
 
   fonts.packages = with pkgs; [
     noto-fonts
@@ -172,6 +153,27 @@ in
   programs.dconf.enable = true;
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+
+systemd = {
+  user.services.polkit-gnome-authentication-agent-1 = {
+    description = "polkit-gnome-authentication-agent-1";
+    wantedBy = [ "graphical-session.target" ];
+    wants = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
+    serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        Restart = "on-failure";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
+  };
+};
+
+system.autoUpgrade.enable =true;
+system.autoUpgrade.flake = "https://github.com/marnyg/nixos#nixosConfiguration.laptop"
+#system.autoUpgrade.allowReboot =true;
+
 
 
 }

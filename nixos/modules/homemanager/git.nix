@@ -6,7 +6,7 @@ with lib;
   };
 
   config = mkIf config.myModules.git.enable {
-    programs.git-credential-oauth.enable= true;
+    programs.git-credential-oauth.enable = true;
     programs.git = {
       package = pkgs.gitFull;
       enable = true;

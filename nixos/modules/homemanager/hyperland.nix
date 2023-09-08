@@ -10,7 +10,7 @@ with lib;
 
     modules.wofi.enable = true;
     modules.waybar.enable = true;
-    programs.waybar.systemd.enable= true;
+    programs.waybar.systemd.enable = true;
     services.mako.enable = true;
 
     wayland.windowManager.hyprland.enable = true;
@@ -71,7 +71,7 @@ general {
 decoration {
     # See https://wiki.hyprland.org/Configuring/Variables/ for more
 
-    rounding = 5 
+    rounding = 3 
 
     drop_shadow = yes
     shadow_range = 4
@@ -127,10 +127,10 @@ bind = $mainMod, W, exec, firefox
 bind = $mainMod, return, exec, foot 
 bindr = $mainMod, Q, killactive, 
 bind = $mainMod, M, exit, 
-bind = $mainMod, E, exec, dolphin
+bind = $mainMod, E, exec, ${pkgs.dolphin}/bin/dolphin
 bind = $mainMod, V, togglefloating, 
-bind = $mainMod, P, pseudo, # dwindle
-bind = $mainMod, J, togglesplit, # dwindle
+bind = $mainMod, D, pseudo, # dwindle
+bind = $mainMod, S, togglesplit, # dwindle
 
 ## FOCUS WINDOW
 bind = $mainMod, left, movefocus, l

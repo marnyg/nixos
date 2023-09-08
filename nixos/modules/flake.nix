@@ -35,6 +35,7 @@
           (import ./homemanager/hyperland.nix)
           (import ./homemanager/wofi.nix)
           (import ./homemanager/waybar.nix)
+          (import ./homemanager/lf.nix)
         ];
         #hmModules = {
         #  autorandr = import ./homemanager/autorandr/desktop.nix;

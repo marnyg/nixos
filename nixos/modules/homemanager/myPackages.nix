@@ -27,7 +27,7 @@ with lib;
         gnupg
         #slop
         #bat
-        lf
+        #lf
         libnotify
         #sct
         #hyperfine
