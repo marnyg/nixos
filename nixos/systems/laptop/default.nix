@@ -171,7 +171,7 @@ systemd = {
 };
 
 system.autoUpgrade.enable =true;
-system.autoUpgrade.flake = "https://github.com/marnyg/nixos#nixosConfiguration.laptop";
+system.autoUpgrade.flake = "github:marnyg/nixos#laptop";
 #system.autoUpgrade.allowReboot =true;
 
 
