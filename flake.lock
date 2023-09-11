@@ -174,11 +174,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1681202837,
-        "narHash": "sha256-H+Rh19JDwRtpVPAWp64F+rlEtxUWBAQW28eAi3SRSzg=",
+        "lastModified": 1692799911,
+        "narHash": "sha256-3eihraek4qL744EvQXsK1Ha6C3CR7nnT8X2qWap4RNk=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "cfacdce06f30d2b68473a46042957675eebb3401",
+        "rev": "f9e7cf818399d17d347f847525c5a5a8032e4e44",
         "type": "github"
       },
       "original": {
@@ -307,7 +307,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-3zh70QKEEBTyS1bPE81mJ5GDs33IWNDIMqnTLCZZcgw=",
+        "narHash": "sha256-Kz0APswWS6VpKnrl+4vZ5wHyEMTDtljfKjTeE5pvNws=",
         "path": "./nvim",
         "type": "path"
       },
@@ -418,11 +418,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1694434211,
-        "narHash": "sha256-b7lrPk2A77r3xfTVBK1lnzdcssrwWYev01E5gD2xUGw=",
+        "lastModified": 1694435637,
+        "narHash": "sha256-THp+1ijHASSWurcwSCU6w+2tEbIdVrieRoXQS6ZfTD8=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "d55b14604310f9d10a8f73f3145db5d27b6f0fcf",
+        "rev": "394c8807d7b7d5dac3db92cbb6f522668f848b01",
         "type": "github"
       },
       "original": {

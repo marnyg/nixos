@@ -17,12 +17,17 @@ pkgs.neovim.override {
       " Update the PATH to include cargo, manix, and ripgrep
 
       let g:disable_paq = v:true
-      luafile ${config-nvim}/init.lua
       luafile ${config-nvim}/lua/my/options/init.lua
       luafile ${config-nvim}/lua/my/keybinds/init.lua
       luafile ${config-nvim}/lua/my/keybinds/UI.lua
       source ${config-nvim}/lua/my/ft/hcl/ft.detect
       source ${config-nvim}/lua/my/ft/hcl/syntax.vim
+      lua <<EOF
+        local map = vim.keymap.set
+        map("", "Q", "", {}) -- Begone, foul beast. I can invoke your wrath with gQ anyway.
+        map("", "<C-z>", "", {}) 
+        map("", "<leader>w", ":w<CR>", {})
+      EOF
     '';
     packages.myVimPackage = with pkgs.vimPlugins;  {
       # see examples below how to use custom packages
@@ -45,10 +50,72 @@ pkgs.neovim.override {
           plugin = neorg;
           config = "luafile ${config-nvim}/lua/my/plugins/neorg.lua";
         }
+        #{
+        #  plugin = nvim-tree-lua;
+        #  config = "lua require('nvim-tree').setup({})";
+        #}
         {
-          plugin = nvim-tree-lua;
-          config = "lua require('nvim-tree').setup({})";
+          plugin = pkgs.vimExtraPlugins.nui-nvim;
+          #config = "lua require('nui').setup({})";
+        }
+        {
+          plugin = pkgs.vimExtraPlugins.neo-tree-nvim;
+          config = ''
+            lua <<EOF
+            vim.keymap.set("n", "<C-n>", ":Neotree float toggle reveal<CR>")
+            vim.keymap.set("n", "<C-g>", ":Neotree git_status float toggle <CR>")
+            EOF
+          '';
 
+
+        }
+
+
+        #
+        #cmp stuff
+        #
+        lspkind-nvim
+        {
+          plugin = nvim-cmp;
+          config = "luafile ${config-nvim}/lua/my/plugins/cmp.lua";
+        }
+        cmp-nvim-lsp
+        cmp-nvim-lsp-signature-help
+        cmp-nvim-lsp-document-symbol
+        cmp_luasnip
+        cmp-calc
+        cmp-buffer
+        cmp-omni
+        cmp-path
+
+        #
+        #
+        #
+
+        {
+          plugin = diffview-nvim;
+          #config = "lua require('diffview.nvim')";
+        }
+        #vimExtraPlugins.lsp-rooter
+        {
+          plugin = project-nvim;
+          config = "lua require('project_nvim').setup({})";
+        }
+        {
+          plugin = neodev-nvim;
+          config = "lua require('neodev').setup({})";
+        }
+        {
+          plugin = which-key-nvim;
+          config = "lua require('which-key').setup({})";
+        }
+        {
+          plugin = fidget-nvim;
+          config = "lua require('fidget').setup({})";
+        }
+        {
+          plugin = luasnip;
+          #config = "lua require('nvim-tree').setup({})";
         }
 
 
