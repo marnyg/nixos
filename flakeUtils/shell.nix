@@ -16,11 +16,8 @@ let
   myArbetraryCommand = pkgs.writeShellScriptBin "tst.sh" "${pkgs.cowsay}/bin/cowsay lalal";
 
   # update current system wsl
-  updateCurrentWsl = pkgs.writeShellScriptBin "updateCurrentWsl.sh" ''
-    pushd nixos/modules/
-    nix flake update 
-    popd 
-    nix flake update 
+  updateCurrentWsl = pkgs.writeShellScriptBin "updateCurrentOs.sh" ''
+    nix flake update .
     sudo nixos-rebuild switch --flake .#''${1:-laptop}
   '';
 
@@ -34,6 +31,7 @@ let
   buildWslImage = pkgs.writeShellScriptBin "buildWslImage.sh" '' 
       nix build .#nixosConfigurations.wsl.config.system.build.installer
     '';
+
   buildWslImageAndOpenInExplorer = pkgs.writeShellScriptBin "buildWslImageAndOpenInExplorer.sh" '' 
       ${buildWslImage}/bin/buildWslImage.sh 
       wt.exe -w 0 nt -d  $(/bin/wslpath -w $(realpath result/tarball))

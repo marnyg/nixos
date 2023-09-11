@@ -8,11 +8,14 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
-    #nixt.url = "github:nix-community/nixt";
-    #nixt.flake = true;
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
 
     my-nvim.url = "path:./nvim";
+    my-nvim.inputs.nixpkgs.follows = "nixpkgs";
     my-modules.url = "path:./nixos/modules";
+    my-modules.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
