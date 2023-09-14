@@ -10,7 +10,7 @@ with lib;
 
     programs.wofi.enable = true;
     programs.waybar.enable = true;
-    programs.waybar.systemd.enable= true;
+    programs.waybar.systemd.enable = true;
     services.mako.enable = true;
 
 

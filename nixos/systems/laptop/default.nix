@@ -44,7 +44,7 @@ in
     users = [
       # TODO: move this out into own users file
       { name = "mar"; homeManager = true; homeManagerConf = defaultHMConfig; }
-      { name = "test"; homeManager = true; homeManagerConf = defaultHMConfig;}
+      { name = "test"; homeManager = true; homeManagerConf = defaultHMConfig; }
       { name = "notHM"; homeManager = false; }
     ];
     personalHomeManagerModules = [{ imports = inputs.my-modules.hmModulesModules.x86_64-linux; }];
@@ -52,7 +52,7 @@ in
 
 
 
-  
+
 
   ## 
   ## OTHER STUFF
@@ -97,7 +97,7 @@ in
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
   };
-  services.pipewire.wireplumber.enable= true;
+  services.pipewire.wireplumber.enable = true;
 
   #for hyperland
   xdg.portal = { enable = true; extraPortals = [ pkgs.xdg-desktop-portal-gtk ]; };
@@ -154,25 +154,25 @@ in
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-systemd = {
-  user.services.polkit-gnome-authentication-agent-1 = {
-    description = "polkit-gnome-authentication-agent-1";
-    wantedBy = [ "graphical-session.target" ];
-    wants = [ "graphical-session.target" ];
-    after = [ "graphical-session.target" ];
-    serviceConfig = {
+  systemd = {
+    user.services.polkit-gnome-authentication-agent-1 = {
+      description = "polkit-gnome-authentication-agent-1";
+      wantedBy = [ "graphical-session.target" ];
+      wants = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      serviceConfig = {
         Type = "simple";
         ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
         Restart = "on-failure";
         RestartSec = 1;
         TimeoutStopSec = 10;
       };
+    };
   };
-};
 
-system.autoUpgrade.enable =true;
-system.autoUpgrade.flake = "github:marnyg/nixos#laptop";
-#system.autoUpgrade.allowReboot =true;
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.flake = "github:marnyg/nixos#laptop";
+  #system.autoUpgrade.allowReboot =true;
 
 
 

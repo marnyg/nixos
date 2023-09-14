@@ -8,15 +8,15 @@ with lib;
     {
       programs.lf.enable = true;
       programs.lf.settings = {
-         sixel = true;
+        sixel = true;
       };
       programs.lf.keybindings = {
-          #D = "trash";
-          U = "!du -sh";
-          #gg = null;
-          gh = "cd ~";
-          i = "$less $f";
-        };
+        #D = "trash";
+        U = "!du -sh";
+        #gg = null;
+        gh = "cd ~";
+        i = "$less $f";
+      };
 
       programs.lf.previewer.source = pkgs.writeShellScript "pv.sh" ''
         #!/bin/sh

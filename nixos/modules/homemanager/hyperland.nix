@@ -11,7 +11,14 @@ with lib;
     modules.wofi.enable = true;
     modules.waybar.enable = true;
     programs.waybar.systemd.enable = true;
-    services.mako.enable = true;
+    services.mako.enable = true; # notification deamon
+
+    # dimmin screen at night
+    services.wlsunset = {
+      enable = true;
+      latitude = "59.9";
+      longitude = "10.7";
+    };
 
     wayland.windowManager.hyprland.enable = true;
     wayland.windowManager.hyprland.enableNvidiaPatches = true;

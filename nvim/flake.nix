@@ -5,7 +5,7 @@
     flake-utils.url = "github:numtide/flake-utils";
     vim-extra-plugins.url = "github:dearrrfish/nixpkgs-vim-extra-plugins";
     boole-nvim.url = "github:nat-418/boole.nvim";
-    boole-nvim.flake= false;
+    boole-nvim.flake = false;
   };
 
   outputs = { boole-nvim, nixpkgs, vim-extra-plugins, flake-utils, ... }:
@@ -13,13 +13,13 @@
       let
         pkgs = import nixpkgs {
           inherit system;
-          overlays = [ 
+          overlays = [
             (final: prev: {
-               vimExtraPlugins2.boole = prev.vimUtils.buildVimPluginFrom2Nix{
-                 name = "boole";
-                 src =  boole-nvim;
-               };
-              }
+              vimExtraPlugins2.boole = prev.vimUtils.buildVimPluginFrom2Nix {
+                name = "boole";
+                src = boole-nvim;
+              };
+            }
             )
             vim-extra-plugins.overlays.default
           ];
