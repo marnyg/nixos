@@ -98,6 +98,10 @@
   # Must have programs
   environment.systemPackages = with pkgs; [ wget curl git tmux ];
 
+  # for vscode server
+  programs.nix-ld.enable = true;
+
+
   # Enable nix flakes
   nix = {
     settings.auto-optimise-store = true;

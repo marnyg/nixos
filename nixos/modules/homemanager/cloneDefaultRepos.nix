@@ -82,6 +82,7 @@ with lib;
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-database.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-contract.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-assets.git
+          ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-release-tools.git
           #wellstarter
           ${pkgs.coreutils}/bin/mkdir /home/mar/git/hiplog
           cd /home/mar/git/hiplog

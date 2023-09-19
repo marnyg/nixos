@@ -12,9 +12,9 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
 
-    my-nvim.url = "path:./nvim";
+    my-nvim.url = "path:/home/mar/git/nixos/nvim";
     my-nvim.inputs.nixpkgs.follows = "nixpkgs";
-    my-modules.url = "path:./nixos/modules";
+    my-modules.url = "path:/home/mar/git/nixos/nixos/modules";
     my-modules.inputs.nixpkgs.follows = "nixpkgs";
   };
 

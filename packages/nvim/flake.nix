@@ -26,8 +26,8 @@
         };
       in
       {
-        devShells = import ./flakeUtils/shell.nix { inherit pkgs; };
-        checks = import ./flakeUtils/checks.nix { inherit pkgs; };
+        #devShells = import ./flakeUtils/shell.nix { inherit pkgs; };
+        #checks = import ./flakeUtils/checks.nix { inherit pkgs; };
         formatter = pkgs.nixpkgs-fmt;
 
         # nix build .
@@ -39,7 +39,7 @@
           name = "nvim";
         };
         #nixosModule = import ./nixosModule.nix;
-        nixosModule2 = (import ./nixosModule.nix pkgs);
+        #nixosModule2 = (import ./nixosModule.nix pkgs);
       }
     );
 

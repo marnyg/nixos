@@ -22,6 +22,8 @@ let
     modules.other.enable = false;
     modules.myPackages.enable = true;
     modules.cloneDefaultRepos.enable = true;
+    modules.lf.enable = true;
+    programs.yazi.enable = true;
   };
 in
 {
@@ -31,6 +33,9 @@ in
   modules.myNvim.enable = true; # TODO: should be managed by homemanger
   myModules.wsl.enable = true;
   myModules.defaults.enable = true;
+
+  # for vscode server
+  programs.nix-ld.enable = true;
 
   ## 
   ## users and homemanager modules config

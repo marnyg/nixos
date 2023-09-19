@@ -50,6 +50,11 @@ pkgs.neovim.override {
           plugin = neorg;
           config = "luafile ${config-nvim}/lua/my/plugins/neorg.lua";
         }
+        
+        {
+          plugin =comment-nvim;
+          config = "lua require('Comment').setup() ";
+        }
         #{
         #  plugin = nvim-tree-lua;
         #  config = "lua require('nvim-tree').setup({})";
@@ -64,6 +69,16 @@ pkgs.neovim.override {
             lua <<EOF
             vim.keymap.set("n", "<C-n>", ":Neotree float toggle reveal<CR>")
             vim.keymap.set("n", "<C-g>", ":Neotree git_status float toggle <CR>")
+            require("neo-tree").setup({
+              window = {
+                mappings = {
+                  ["U"] = function(state)
+                    local node = state.tree:get_node()
+                    require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
+                  end
+                }
+              }
+            })
             EOF
           '';
 
@@ -182,10 +197,10 @@ pkgs.neovim.override {
             vim.keymap.set("n", "<leader>a", mark.add_file)
             vim.keymap.set("n", "<leader>h", ui.toggle_quick_menu)
             
-            vim.keymap.set("n", "<C-1>", function() ui.nav_file(1) end)
-            vim.keymap.set("n", "<C-2>", function() ui.nav_file(2) end)
-            vim.keymap.set("n", "<C-3>", function() ui.nav_file(3) end)
-            vim.keymap.set("n", "<C-4>", function() ui.nav_file(4) end)
+            vim.keymap.set("n", "<leader>1", function() ui.nav_file(1) end)
+            vim.keymap.set("n", "<leader>2", function() ui.nav_file(2) end)
+            vim.keymap.set("n", "<leader>3", function() ui.nav_file(3) end)
+            vim.keymap.set("n", "<leader>4", function() ui.nav_file(4) end)
             EOF
           '';
         }
@@ -253,6 +268,10 @@ pkgs.neovim.override {
         #  plugin = lazygit-nvim;
         #  #config = "require('telescope').load_extension('lazygit')";
         #}
+        {
+          plugin = pkgs.vimExtraPlugins.git-conflict-nvim;
+          config = "lua require('git-conflict').setup({})";
+        }
 
 
         # LSP {{{1
