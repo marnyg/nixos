@@ -52,6 +52,139 @@ with lib;
           }";
           Service.Type = "oneshot";
         };
+      home.file."git/hiplog/.envrc".text=''
+use flake
+
+export BW_SESSION="$(get_bw_token)"
+
+export GITLAB_AUTH_TOKEN="$(get_secret gitlab-token password)"
+GITLAB_NUGET_WELLSTARTER_USER="$(get_secret gitlab-nuget-wellstarter username)"
+GITLAB_NUGET_WELLSTARTER_PASSWORD="$(get_secret gitlab-nuget-wellstarter password)"
+GITLAB_NUGET_PRORES_USER="$(get_secret gitlab-nuget-prores username)"
+GITLAB_NUGET_PRORES_PASSWORD="$(get_secret gitlab-nuget-prores password)"
+
+export NUGET_CONFIG_DIR=$(mktemp -d)
+export NUGET_CONFIG_FILE="$NUGET_CONFIG_DIR/nuget.config"
+dotnet new nugetconfig  --output $NUGET_CONFIG_DIR
+
+add_nuget_source "https://gitlab.com/api/v4/groups/5555215/-/packages/nuget/index.json" "Wellstarter" $GITLAB_NUGET_WELLSTARTER_USER $GITLAB_NUGET_WELLSTARTER_PASSWORD
+add_nuget_source "https://gitlab.com/api/v4/projects/42002329/packages/nuget/index.json" "Prores" $GITLAB_NUGET_PRORES_USER $GITLAB_NUGET_PRORES_PASSWORD
+      '';
+      home.file."git/sendra/.envrc".text=''
+use flake
+
+#TODO: move this logic into a nix expression/flake
+export BW_SESSION="$(get_bw_token)"
+
+export GITLAB_AUTH_TOKEN="$(get_secret gitlab-token password)"
+GITLAB_NUGET_WELLSTARTER_USER="$(get_secret gitlab-nuget-wellstarter username)"
+GITLAB_NUGET_WELLSTARTER_PASSWORD="$(get_secret gitlab-nuget-wellstarter password)"
+GITLAB_NUGET_PRORES_USER="$(get_secret gitlab-nuget-prores username)"
+GITLAB_NUGET_PRORES_PASSWORD="$(get_secret gitlab-nuget-prores password)"
+
+export NUGET_CONFIG_DIR=$(mktemp -d)
+export NUGET_CONFIG_FILE="$NUGET_CONFIG_DIR/nuget.config"
+dotnet new nugetconfig  --output $NUGET_CONFIG_DIR
+
+add_nuget_source "https://gitlab.com/api/v4/groups/5555215/-/packages/nuget/index.json" "Wellstarter" $GITLAB_NUGET_WELLSTARTER_USER $GITLAB_NUGET_WELLSTARTER_PASSWORD
+add_nuget_source "https://gitlab.com/api/v4/projects/42002329/packages/nuget/index.json" "Prores" $GITLAB_NUGET_PRORES_USER $GITLAB_NUGET_PRORES_PASSWORD
+
+
+      '';
+      home.file."git/hiplog/flake.nix".text=''
+      {
+  description = "NixOS configuration";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
+  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+    let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
+    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
+      let pkgs = (import nixpkgs { inherit system; }); in
+      {
+        devShells.default =
+          let
+            #making adhock shell scripts
+            myArbetraryCommand = pkgs.writeShellScriptBin "tst" ''' ''${pkgs.cowsay}/bin/cowsay lalal ''';
+            drest = pkgs.writeShellScriptBin "drest.sh" "dotnet restore --configfile $NUGET_CONFIG_FILE";
+
+          in
+          pkgs.mkShell {
+
+            nativeBuildInputs = with pkgs; [
+
+              #lsp-servers
+              # TODO: add dotnet nuget node 
+              nodePackages_latest.bash-language-server # Bash LSP server
+              omnisharp-roslyn
+
+              myArbetraryCommand
+              drest
+
+              dotnet-sdk_6
+              #dotnet-runtime_6
+              shfmt
+              clippy
+            ];
+            shellHook = '''
+              export LSP_SERVERS="omnisharp,OmniSharp bashls "
+            ''';
+          };
+        formatter = pkgs.nixpkgs-fmt;
+      });
+   }
+
+      '';
+      home.file."git/sendra/flake.nix".text=''
+      {
+  description = "NixOS configuration";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
+  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+    let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
+    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
+      let pkgs = (import nixpkgs { inherit system; }); in
+      {
+        devShells.default =
+          let
+            #making adhock shell scripts
+            myArbetraryCommand = pkgs.writeShellScriptBin "tst" ''' ''${pkgs.cowsay}/bin/cowsay lalal ''';
+            drest = pkgs.writeShellScriptBin "drest.sh" "dotnet restore --configfile $NUGET_CONFIG_FILE";
+
+          in
+          pkgs.mkShell {
+
+            nativeBuildInputs = with pkgs; [
+
+              #lsp-servers
+              # TODO: add dotnet nuget node 
+              nodePackages_latest.bash-language-server # Bash LSP server
+              omnisharp-roslyn
+
+              myArbetraryCommand
+              drest
+
+              dotnet-sdk_6
+              #dotnet-runtime_6
+              shfmt
+              clippy
+            ];
+            shellHook = '''
+              export LSP_SERVERS="omnisharp,OmniSharp bashls "
+            ''';
+          };
+        formatter = pkgs.nixpkgs-fmt;
+      });
+   }
+
+      '';
       systemd.user.services.cloneWorkRepos = {
         #Install.WantedBy = [ "multi-user.target" ]; # starts after login
         Install.WantedBy = [ "default.target" ]; # starts after login
@@ -60,6 +193,14 @@ with lib;
         Service.ExecStart = "/bin/sh ${pkgs.writeScript "cloneWorkStuff.sh" ''
           ${pkgs.openssh}/bin/ssh-keygen -F gitlab.com || ${pkgs.openssh}/bin/ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
           #sendra
+          #TODO: can i remove this, since home-manager is creating a flake in this folder?
+          #TODO: use parralell:    
+          #    clone_hiplog() {
+          #      ''${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/$1.git
+          #    }
+          #    export -f clone_hiplog
+          #          echo -e "''${builtins.concatStringsSep "\\n" hiplogRepos}" | ''${pkgs.parallel}/bin/parallel clone_hiplog
+
           ${pkgs.coreutils}/bin/mkdir /home/mar/git/sendra
           cd /home/mar/git/sendra
           export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /home/mar/.ssh/id_rsa"
@@ -84,6 +225,7 @@ with lib;
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-assets.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/sendra-release-tools.git
           #wellstarter
+          #TODO, can i remove this, since home-manager is creating a flake in this folder?
           ${pkgs.coreutils}/bin/mkdir /home/mar/git/hiplog
           cd /home/mar/git/hiplog
           export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /home/mar/.ssh/id_ed25519"
