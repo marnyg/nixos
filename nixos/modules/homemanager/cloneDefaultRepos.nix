@@ -91,6 +91,28 @@ add_nuget_source "https://gitlab.com/api/v4/projects/42002329/packages/nuget/ind
 
 
       '';
+
+
+      home.file."git/sendra/nix/devops/flake.nix".text=''
+{
+  description = "NixOS configuration";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
+  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+    let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
+    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
+      let pkgs = (import nixpkgs { inherit system; }); in
+      {
+        devShells.default = pkgs.mkShell { nativeBuildInputs = with pkgs; [ terraform ]; };
+        formatter = pkgs.nixpkgs-fmt;
+      });
+}
+      '';
+
       home.file."git/hiplog/flake.nix".text=''
       {
   description = "NixOS configuration";

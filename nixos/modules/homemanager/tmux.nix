@@ -26,6 +26,7 @@ with lib;
         bind-key -r C-L resize-pane -R 10
         bind-key -r C-K resize-pane -U 10
         bind-key -r C-J resize-pane -D 10
+        bind -n M-u attach-session -t . -c '#{pane_current_path}'
         set -g repeat-time 1000
 
 
