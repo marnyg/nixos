@@ -40,6 +40,7 @@ with lib;
           Install.WantedBy = [ "default.target" ]; # starts after login
           Unit.After = [ "network-online.target" ]; # starts after login
           Unit.Description = "Example description";
+          Unit.ConditionFileNotEmpty = ["/home/mar/.ssh/githubmarnyg"];
           Service.ExecStart = "/bin/sh ${pkgs.writeScript "cloneMyStuff.sh" ''
             ${pkgs.openssh}/bin/ssh-keygen -F github.com || ${pkgs.openssh}/bin/ssh-keyscan github.com >> ~/.ssh/known_hosts
             export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /home/mar/.ssh/githubmarnyg"
@@ -212,6 +213,7 @@ add_nuget_source "https://gitlab.com/api/v4/projects/42002329/packages/nuget/ind
         Install.WantedBy = [ "default.target" ]; # starts after login
         Unit.After = [ "copySshFromHost" ];
         Unit.Description = "Example description";
+        Unit.ConditionFileNotEmpty = ["/home/mar/.ssh/id_rsa" "/home/mar/.ssh/id_ed25519"];
         Service.ExecStart = "/bin/sh ${pkgs.writeScript "cloneWorkStuff.sh" ''
           ${pkgs.openssh}/bin/ssh-keygen -F gitlab.com || ${pkgs.openssh}/bin/ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
           #sendra
