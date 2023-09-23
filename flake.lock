@@ -268,8 +268,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1695483535,
-        "narHash": "sha256-nTzOBIYZQIbSARAx/zwcPMygWD/gLa/m7VCpf3DyByY=",
+        "lastModified": 1695488118,
+        "narHash": "sha256-mZgC7sjShOnB+V/S8inhiatutldLxkbPWFs5WtylEys=",
         "path": "/home/mar/git/nixos/nixos/modules",
         "type": "path"
       },
@@ -306,8 +306,8 @@
         "vim-extra-plugins": "vim-extra-plugins_2"
       },
       "locked": {
-        "lastModified": 1695483443,
-        "narHash": "sha256-gpp5pOlYqhV59louvYexFXEjKPeY2hInjTmtjvAf0Qo=",
+        "lastModified": 1695486773,
+        "narHash": "sha256-0B0qy5UbdneGV69FOxhPIsDARX/WGOgNxUTWDaSfIGc=",
         "path": "/home/mar/git/nixos/nvim",
         "type": "path"
       },
@@ -418,11 +418,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1695480017,
-        "narHash": "sha256-6JjZBLT3XE1P+5NUCbn55SPTwsprftF61POrRC6h56k=",
+        "lastModified": 1695487985,
+        "narHash": "sha256-uPTf6xqQnUqe+/rAQiMNqK5BCBIZA04UH0s6NxuW1nI=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "183c9ada52496c852db9a100becd3da9d179ff9a",
+        "rev": "09bebab6b490f3bc28139d73c8b72b87aeade356",
         "type": "github"
       },
       "original": {

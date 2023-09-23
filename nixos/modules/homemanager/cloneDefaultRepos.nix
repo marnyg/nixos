@@ -22,25 +22,40 @@ with lib;
             IdentitiesOnly yes
         '';
       };
-      systemd.user.services.copySshFromHost =
-        {
-          Install.WantedBy = [ "default.target" ]; # starts after login
-          Unit.After = [ "network-online.target" ]; # starts after login
-          Unit.Description = "Example description";
-          Service.ExecStart = "/bin/sh ${pkgs.writeScript "copySshKey.sh" ''
-          ${pkgs.coreutils}/bin/cp -n /mnt/c/Users/trash/.ssh/* /home/mar/.ssh/
-          ${pkgs.findutils}/bin/find /home/mar/.ssh/* -type f -print0 | ${pkgs.findutils}/bin/xargs -0 ${pkgs.coreutils}/bin/chmod 0600 
-          ''
-          }";
-          Service.Type = "oneshot";
-        };
+      #systemd.user.services.copySshFromHost =
+      #  {
+      #    Install.WantedBy = [ "default.target" ]; # starts after login
+      #    Unit.After = [ "network-online.target" ]; # starts after login
+      #    Unit.Description = "Example description";
+      #    Service.ExecStart = "/bin/sh ${pkgs.writeScript "copySshKey.sh" ''
+
+
+      #    ${pkgs.coreutils}/bin/cp -n /mnt/c/Users/trash/.ssh/* /home/mar/.ssh/
+      #    ${pkgs.findutils}/bin/find /home/mar/.ssh/* -type f -print0 | ${pkgs.findutils}/bin/xargs -0 ${pkgs.coreutils}/bin/chmod 0600 
+      #    ''
+      #    }";
+      #    Service.Type = "oneshot";
+      #  };
+      home.file.".ssh/.envrc".text = ''
+        #TODO: move this logic into a nix expression/flake
+        get_secret prores-gitlab-ssh.priv notes > /home/mar/.ssh/id_rsa
+        get_secret wellstarter-gitlab-ssh.priv notes > /home/mar/.ssh/id_ed25519
+        get_secret personal-github-ssh.priv notes > /home/mar/.ssh/githubmarnyg
+
+        ${pkgs.findutils}/bin/find /home/mar/.ssh/* -type f -print0 | ${pkgs.findutils}/bin/xargs -0 ${pkgs.coreutils}/bin/chmod 0600 
+
+        ${pkgs.openssh}/bin/ssh-keygen -y -f /home/mar/.ssh/id_ed25519 > id_ed25519.pub
+        ${pkgs.openssh}/bin/ssh-keygen -y -f /home/mar/.ssh/id_rsa > id_rsa.pub
+        ${pkgs.openssh}/bin/ssh-keygen -y -f /home/mar/.ssh/githubmarnyg> githubmarnyg.pub
+      '';
+
       systemd.user.services.cloneDefaultRepos =
         {
           #Install.WantedBy = [ "multi-user.target" ]; # starts after login
           Install.WantedBy = [ "default.target" ]; # starts after login
           Unit.After = [ "network-online.target" ]; # starts after login
           Unit.Description = "Example description";
-          Unit.ConditionFileNotEmpty = ["/home/mar/.ssh/githubmarnyg"];
+          Unit.ConditionFileNotEmpty = [ "/home/mar/.ssh/githubmarnyg" ];
           Service.ExecStart = "/bin/sh ${pkgs.writeScript "cloneMyStuff.sh" ''
             ${pkgs.openssh}/bin/ssh-keygen -F github.com || ${pkgs.openssh}/bin/ssh-keyscan github.com >> ~/.ssh/known_hosts
             export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /home/mar/.ssh/githubmarnyg"
@@ -53,167 +68,166 @@ with lib;
           }";
           Service.Type = "oneshot";
         };
-      home.file."git/hiplog/.envrc".text=''
-use flake
+      home.file."git/hiplog/.envrc".text = ''
+        use flake
 
-export BW_SESSION="$(get_bw_token)"
+        export BW_SESSION="$(get_bw_token)"
 
-export GITLAB_AUTH_TOKEN="$(get_secret gitlab-token password)"
-GITLAB_NUGET_WELLSTARTER_USER="$(get_secret gitlab-nuget-wellstarter username)"
-GITLAB_NUGET_WELLSTARTER_PASSWORD="$(get_secret gitlab-nuget-wellstarter password)"
-GITLAB_NUGET_PRORES_USER="$(get_secret gitlab-nuget-prores username)"
-GITLAB_NUGET_PRORES_PASSWORD="$(get_secret gitlab-nuget-prores password)"
+        export GITLAB_AUTH_TOKEN="$(get_secret gitlab-token password)"
+        GITLAB_NUGET_WELLSTARTER_USER="$(get_secret gitlab-nuget-wellstarter username)"
+        GITLAB_NUGET_WELLSTARTER_PASSWORD="$(get_secret gitlab-nuget-wellstarter password)"
+        GITLAB_NUGET_PRORES_USER="$(get_secret gitlab-nuget-prores username)"
+        GITLAB_NUGET_PRORES_PASSWORD="$(get_secret gitlab-nuget-prores password)"
 
-export NUGET_CONFIG_DIR=$(mktemp -d)
-export NUGET_CONFIG_FILE="$NUGET_CONFIG_DIR/nuget.config"
-dotnet new nugetconfig  --output $NUGET_CONFIG_DIR
+        export NUGET_CONFIG_DIR=$(mktemp -d)
+        export NUGET_CONFIG_FILE="$NUGET_CONFIG_DIR/nuget.config"
+        dotnet new nugetconfig  --output $NUGET_CONFIG_DIR
 
-add_nuget_source "https://gitlab.com/api/v4/groups/5555215/-/packages/nuget/index.json" "Wellstarter" $GITLAB_NUGET_WELLSTARTER_USER $GITLAB_NUGET_WELLSTARTER_PASSWORD
-add_nuget_source "https://gitlab.com/api/v4/projects/42002329/packages/nuget/index.json" "Prores" $GITLAB_NUGET_PRORES_USER $GITLAB_NUGET_PRORES_PASSWORD
+        add_nuget_source "https://gitlab.com/api/v4/groups/5555215/-/packages/nuget/index.json" "Wellstarter" $GITLAB_NUGET_WELLSTARTER_USER $GITLAB_NUGET_WELLSTARTER_PASSWORD
+        add_nuget_source "https://gitlab.com/api/v4/projects/42002329/packages/nuget/index.json" "Prores" $GITLAB_NUGET_PRORES_USER $GITLAB_NUGET_PRORES_PASSWORD
       '';
-      home.file."git/sendra/.envrc".text=''
-use flake
+      home.file."git/sendra/.envrc".text = ''
+        use flake
 
-#TODO: move this logic into a nix expression/flake
-export BW_SESSION="$(get_bw_token)"
+        #TODO: move this logic into a nix expression/flake
+        export BW_SESSION="$(get_bw_token)"
 
-export GITLAB_AUTH_TOKEN="$(get_secret gitlab-token password)"
-GITLAB_NUGET_WELLSTARTER_USER="$(get_secret gitlab-nuget-wellstarter username)"
-GITLAB_NUGET_WELLSTARTER_PASSWORD="$(get_secret gitlab-nuget-wellstarter password)"
-GITLAB_NUGET_PRORES_USER="$(get_secret gitlab-nuget-prores username)"
-GITLAB_NUGET_PRORES_PASSWORD="$(get_secret gitlab-nuget-prores password)"
+        export GITLAB_AUTH_TOKEN="$(get_secret gitlab-token password)"
+        GITLAB_NUGET_WELLSTARTER_USER="$(get_secret gitlab-nuget-wellstarter username)"
+        GITLAB_NUGET_WELLSTARTER_PASSWORD="$(get_secret gitlab-nuget-wellstarter password)"
+        GITLAB_NUGET_PRORES_USER="$(get_secret gitlab-nuget-prores username)"
+        GITLAB_NUGET_PRORES_PASSWORD="$(get_secret gitlab-nuget-prores password)"
 
-export NUGET_CONFIG_DIR=$(mktemp -d)
-export NUGET_CONFIG_FILE="$NUGET_CONFIG_DIR/nuget.config"
-dotnet new nugetconfig  --output $NUGET_CONFIG_DIR
+        export NUGET_CONFIG_DIR=$(mktemp -d)
+        export NUGET_CONFIG_FILE="$NUGET_CONFIG_DIR/nuget.config"
+        dotnet new nugetconfig  --output $NUGET_CONFIG_DIR
 
-add_nuget_source "https://gitlab.com/api/v4/groups/5555215/-/packages/nuget/index.json" "Wellstarter" $GITLAB_NUGET_WELLSTARTER_USER $GITLAB_NUGET_WELLSTARTER_PASSWORD
-add_nuget_source "https://gitlab.com/api/v4/projects/42002329/packages/nuget/index.json" "Prores" $GITLAB_NUGET_PRORES_USER $GITLAB_NUGET_PRORES_PASSWORD
-
-
-      '';
+        add_nuget_source "https://gitlab.com/api/v4/groups/5555215/-/packages/nuget/index.json" "Wellstarter" $GITLAB_NUGET_WELLSTARTER_USER $GITLAB_NUGET_WELLSTARTER_PASSWORD
+        add_nuget_source "https://gitlab.com/api/v4/projects/42002329/packages/nuget/index.json" "Prores" $GITLAB_NUGET_PRORES_USER $GITLAB_NUGET_PRORES_PASSWORD
 
 
-      home.file."git/sendra/nix/devops/flake.nix".text=''
-{
-  description = "NixOS configuration";
-
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
-  };
-
-  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
-    let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
-    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
-      let pkgs = (import nixpkgs { inherit system; }); in
-      {
-        devShells.default = pkgs.mkShell { nativeBuildInputs = with pkgs; [ terraform ]; };
-        formatter = pkgs.nixpkgs-fmt;
-      });
-}
       '';
 
-      home.file."git/hiplog/flake.nix".text=''
-      {
-  description = "NixOS configuration";
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
-  };
+      home.file."git/sendra/nix/devops/flake.nix".text = ''
+        {
+          description = "NixOS configuration";
 
-  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
-    let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
-    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
-      let pkgs = (import nixpkgs { inherit system; }); in
-      {
-        devShells.default =
-          let
-            #making adhock shell scripts
-            myArbetraryCommand = pkgs.writeShellScriptBin "tst" ''' ''${pkgs.cowsay}/bin/cowsay lalal ''';
-            drest = pkgs.writeShellScriptBin "drest.sh" "dotnet restore --configfile $NUGET_CONFIG_FILE";
-
-          in
-          pkgs.mkShell {
-
-            nativeBuildInputs = with pkgs; [
-
-              #lsp-servers
-              # TODO: add dotnet nuget node 
-              nodePackages_latest.bash-language-server # Bash LSP server
-              omnisharp-roslyn
-
-              myArbetraryCommand
-              drest
-
-              dotnet-sdk_6
-              #dotnet-runtime_6
-              shfmt
-              clippy
-            ];
-            shellHook = '''
-              export LSP_SERVERS="omnisharp,OmniSharp bashls "
-            ''';
+          inputs = {
+            nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+            flake-utils.url = "github:numtide/flake-utils";
           };
-        formatter = pkgs.nixpkgs-fmt;
-      });
-   }
+
+          outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+            let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
+            flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
+              let pkgs = (import nixpkgs { inherit system; }); in
+              {
+                devShells.default = pkgs.mkShell { nativeBuildInputs = with pkgs; [ terraform ]; };
+                formatter = pkgs.nixpkgs-fmt;
+              });
+        }
+      '';
+
+      home.file."git/hiplog/flake.nix".text = ''
+            {
+        description = "NixOS configuration";
+
+        inputs = {
+          nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+          flake-utils.url = "github:numtide/flake-utils";
+        };
+
+        outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+          let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
+          flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
+            let pkgs = (import nixpkgs { inherit system; }); in
+            {
+              devShells.default =
+                let
+                  #making adhock shell scripts
+                  myArbetraryCommand = pkgs.writeShellScriptBin "tst" ''' ''${pkgs.cowsay}/bin/cowsay lalal ''';
+                  drest = pkgs.writeShellScriptBin "drest.sh" "dotnet restore --configfile $NUGET_CONFIG_FILE";
+
+                in
+                pkgs.mkShell {
+
+                  nativeBuildInputs = with pkgs; [
+
+                    #lsp-servers
+                    # TODO: add dotnet nuget node 
+                    nodePackages_latest.bash-language-server # Bash LSP server
+                    omnisharp-roslyn
+
+                    myArbetraryCommand
+                    drest
+
+                    dotnet-sdk_6
+                    #dotnet-runtime_6
+                    shfmt
+                    clippy
+                  ];
+                  shellHook = '''
+                    export LSP_SERVERS="omnisharp,OmniSharp bashls "
+                  ''';
+                };
+              formatter = pkgs.nixpkgs-fmt;
+            });
+         }
 
       '';
-      home.file."git/sendra/flake.nix".text=''
-      {
-  description = "NixOS configuration";
+      home.file."git/sendra/flake.nix".text = ''
+            {
+        description = "NixOS configuration";
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
-  };
+        inputs = {
+          nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+          flake-utils.url = "github:numtide/flake-utils";
+        };
 
-  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
-    let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
-    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
-      let pkgs = (import nixpkgs { inherit system; }); in
-      {
-        devShells.default =
-          let
-            #making adhock shell scripts
-            myArbetraryCommand = pkgs.writeShellScriptBin "tst" ''' ''${pkgs.cowsay}/bin/cowsay lalal ''';
-            drest = pkgs.writeShellScriptBin "drest.sh" "dotnet restore --configfile $NUGET_CONFIG_FILE";
+        outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+          let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
+          flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
+            let pkgs = (import nixpkgs { inherit system; }); in
+            {
+              devShells.default =
+                let
+                  #making adhock shell scripts
+                  myArbetraryCommand = pkgs.writeShellScriptBin "tst" ''' ''${pkgs.cowsay}/bin/cowsay lalal ''';
+                  drest = pkgs.writeShellScriptBin "drest.sh" "dotnet restore --configfile $NUGET_CONFIG_FILE";
 
-          in
-          pkgs.mkShell {
+                in
+                pkgs.mkShell {
 
-            nativeBuildInputs = with pkgs; [
+                  nativeBuildInputs = with pkgs; [
 
-              #lsp-servers
-              # TODO: add dotnet nuget node 
-              nodePackages_latest.bash-language-server # Bash LSP server
-              omnisharp-roslyn
+                    #lsp-servers
+                    # TODO: add dotnet nuget node 
+                    nodePackages_latest.bash-language-server # Bash LSP server
+                    omnisharp-roslyn
 
-              myArbetraryCommand
-              drest
+                    myArbetraryCommand
+                    drest
 
-              dotnet-sdk_6
-              #dotnet-runtime_6
-              shfmt
-              clippy
-            ];
-            shellHook = '''
-              export LSP_SERVERS="omnisharp,OmniSharp bashls "
-            ''';
-          };
-        formatter = pkgs.nixpkgs-fmt;
-      });
-   }
+                    dotnet-sdk_6
+                    #dotnet-runtime_6
+                    shfmt
+                    clippy
+                  ];
+                  shellHook = '''
+                    export LSP_SERVERS="omnisharp,OmniSharp bashls "
+                  ''';
+                };
+              formatter = pkgs.nixpkgs-fmt;
+            });
+         }
 
       '';
       systemd.user.services.cloneWorkRepos = {
         #Install.WantedBy = [ "multi-user.target" ]; # starts after login
         Install.WantedBy = [ "default.target" ]; # starts after login
-        Unit.After = [ "copySshFromHost" ];
         Unit.Description = "Example description";
-        Unit.ConditionFileNotEmpty = ["/home/mar/.ssh/id_rsa" "/home/mar/.ssh/id_ed25519"];
+        Unit.ConditionFileNotEmpty = [ "/home/mar/.ssh/id_rsa" "/home/mar/.ssh/id_ed25519" ];
         Service.ExecStart = "/bin/sh ${pkgs.writeScript "cloneWorkStuff.sh" ''
           ${pkgs.openssh}/bin/ssh-keygen -F gitlab.com || ${pkgs.openssh}/bin/ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
           #sendra

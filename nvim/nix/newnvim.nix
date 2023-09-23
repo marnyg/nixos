@@ -50,9 +50,9 @@ pkgs.neovim.override {
           plugin = neorg;
           config = "luafile ${config-nvim}/lua/my/plugins/neorg.lua";
         }
-        
+
         {
-          plugin =comment-nvim;
+          plugin = comment-nvim;
           config = "lua require('Comment').setup() ";
         }
         #{
