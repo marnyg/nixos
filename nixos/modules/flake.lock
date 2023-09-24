@@ -88,11 +88,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1695224363,
-        "narHash": "sha256-+hfjJLUMck5G92RVFDZA7LWkR3kOxs5zQ7RPW9t3eM8=",
+        "lastModified": 1695544722,
+        "narHash": "sha256-cEnhsF44oNXvX3caEWCrbz5se9tlIsT2UGz4WT/vE0U=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "408ba13188ff9ce309fa2bdd2f81287d79773b00",
+        "rev": "4a6333265ed8f3abf4769db60735522bbaa7819d",
         "type": "github"
       },
       "original": {
@@ -109,23 +109,28 @@
         "vim-extra-plugins": "vim-extra-plugins"
       },
       "locked": {
-        "lastModified": 1695483443,
-        "narHash": "sha256-gpp5pOlYqhV59louvYexFXEjKPeY2hInjTmtjvAf0Qo=",
-        "path": "/home/mar/git/nixos/nvim",
-        "type": "path"
+        "dir": "nvim",
+        "lastModified": 1695488537,
+        "narHash": "sha256-ofOWmU3MD/0NFL6dfGh347c4xDgG1oMVzXD85MX0AVM=",
+        "owner": "marnyg",
+        "repo": "nixos",
+        "rev": "399aa7a255d072a2621f218aa9994681d47a843c",
+        "type": "github"
       },
       "original": {
-        "path": "/home/mar/git/nixos/nvim",
-        "type": "path"
+        "dir": "nvim",
+        "owner": "marnyg",
+        "repo": "nixos",
+        "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1694959747,
-        "narHash": "sha256-CXQ2MuledDVlVM5dLC4pB41cFlBWxRw4tCBsFrq3cRk=",
+        "lastModified": 1695360818,
+        "narHash": "sha256-JlkN3R/SSoMTa+CasbxS1gq+GpGxXQlNZRUh9+LIy/0=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "970a59bd19eff3752ce552935687100c46e820a5",
+        "rev": "e35dcc04a3853da485a396bdd332217d0ac9054f",
         "type": "github"
       },
       "original": {

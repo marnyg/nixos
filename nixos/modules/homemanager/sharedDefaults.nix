@@ -17,7 +17,7 @@
       #username = user;
 
       sessionVariables = {
-        EDITOR = "vim";
+        EDITOR = "nvim";
       };
 
       file.".config/nixpkgs/config.nix" = {

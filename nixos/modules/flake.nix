@@ -3,8 +3,9 @@
   inputs = {
     #nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    #my-nvim.url = "github:marnyg/nvim-conf";
-    my-nvim.url = "path:/home/mar/git/nixos/nvim";
+    my-nvim.url = "github:marnyg/nixos?dir=nvim";
+    #my-nvim.url = "path:/home/mar/git/nixos/nvim";
+    #my-nvim.url = "git+file://../../?dir=nvim";
     home-manager.url = "github:nix-community/home-manager";
     #home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
