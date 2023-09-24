@@ -83,6 +83,8 @@ with lib;
         gl = "git pull";
         gc = "git commit";
         ga = "git add";
+        gai = "git add -i";
+        gi = "${pkgs.lazygit}/bin/lazygit";
         grh = "git reset HEAD";
         gap = "git add -p";
         gaa = "git add -A";

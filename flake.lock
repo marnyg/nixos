@@ -269,7 +269,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-HFuE52eIpb+J22R1GjaQgMQ9ew+m+ObctnpeDH4gxQg=",
+        "narHash": "sha256-AEWTOmGw1WRcxrnT2aPkbP09PtVeyL8PYmwsnHGCKTc=",
         "path": "./nixos/modules",
         "type": "path"
       },
