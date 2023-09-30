@@ -37,6 +37,15 @@ in
   # for vscode server
   programs.nix-ld.enable = true;
 
+  # yubikey
+  services.udev.packages = [ pkgs.yubikey-personalization ];
+  security.pam.yubico = {
+    enable = true;
+    #debug = true;
+    mode = "challenge-response";
+  };
+  virtualisation.docker.enable =true;
+
   ## 
   ## users and homemanager modules config
   ## 

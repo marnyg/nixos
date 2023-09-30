@@ -22,31 +22,26 @@ with lib;
             IdentitiesOnly yes
         '';
       };
-      #systemd.user.services.copySshFromHost =
-      #  {
-      #    Install.WantedBy = [ "default.target" ]; # starts after login
-      #    Unit.After = [ "network-online.target" ]; # starts after login
-      #    Unit.Description = "Example description";
-      #    Service.ExecStart = "/bin/sh ${pkgs.writeScript "copySshKey.sh" ''
-
-
-      #    ${pkgs.coreutils}/bin/cp -n /mnt/c/Users/trash/.ssh/* /home/mar/.ssh/
-      #    ${pkgs.findutils}/bin/find /home/mar/.ssh/* -type f -print0 | ${pkgs.findutils}/bin/xargs -0 ${pkgs.coreutils}/bin/chmod 0600 
-      #    ''
-      #    }";
-      #    Service.Type = "oneshot";
-      #  };
       home.file.".ssh/.envrc".text = ''
         #TODO: move this logic into a nix expression/flake
-        get_secret prores-gitlab-ssh.priv notes > /home/mar/.ssh/id_rsa
-        get_secret wellstarter-gitlab-ssh.priv notes > /home/mar/.ssh/id_ed25519
-        get_secret personal-github-ssh.priv notes > /home/mar/.ssh/githubmarnyg
+        export BW_SESSION=$(${pkgs.bitwarden-cli}/bin/bw login --raw)
+        ${pkgs.bitwarden-cli}/bin/bw get notes prores-gitlab-ssh.priv > /home/mar/.ssh/id_rsa
+        ${pkgs.bitwarden-cli}/bin/bw get notes wellstarter-gitlab-ssh.priv > /home/mar/.ssh/id_ed25519
+        ${pkgs.bitwarden-cli}/bin/bw get notes personal-github-ssh.priv > /home/mar/.ssh/githubmarnyg
 
         ${pkgs.findutils}/bin/find /home/mar/.ssh/* -type f -print0 | ${pkgs.findutils}/bin/xargs -0 ${pkgs.coreutils}/bin/chmod 0600 
 
         ${pkgs.openssh}/bin/ssh-keygen -y -f /home/mar/.ssh/id_ed25519 > id_ed25519.pub
         ${pkgs.openssh}/bin/ssh-keygen -y -f /home/mar/.ssh/id_rsa > id_rsa.pub
-        ${pkgs.openssh}/bin/ssh-keygen -y -f /home/mar/.ssh/githubmarnyg> githubmarnyg.pub
+        ${pkgs.openssh}/bin/ssh-keygen -y -f /home/mar/.ssh/githubmarnyg > githubmarnyg.pub
+
+
+
+        #TODO: add checks to see if it worked
+        #TODO: if it worked run:
+        #      systemctl start --user cloneWorkRepos.service
+        #      systemctl start --user cloneDefaultRepos.service
+
       '';
 
       systemd.user.services.cloneDefaultRepos =
@@ -69,7 +64,7 @@ with lib;
           Service.Type = "oneshot";
         };
       home.file."git/hiplog/.envrc".text = ''
-        use flake
+        #use flake
 
         export BW_SESSION="$(get_bw_token)"
 
@@ -87,7 +82,7 @@ with lib;
         add_nuget_source "https://gitlab.com/api/v4/projects/42002329/packages/nuget/index.json" "Prores" $GITLAB_NUGET_PRORES_USER $GITLAB_NUGET_PRORES_PASSWORD
       '';
       home.file."git/sendra/.envrc".text = ''
-        use flake
+        #use flake
 
         #TODO: move this logic into a nix expression/flake
         export BW_SESSION="$(get_bw_token)"
@@ -109,25 +104,88 @@ with lib;
       '';
 
 
-      home.file."git/sendra/nix/devops/flake.nix".text = ''
-        {
-          description = "NixOS configuration";
-
-          inputs = {
-            nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-            flake-utils.url = "github:numtide/flake-utils";
-          };
-
-          outputs = { self, nixpkgs, flake-utils, ... }@inputs:
-            let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
-            flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
-              let pkgs = (import nixpkgs { inherit system; }); in
-              {
-                devShells.default = pkgs.mkShell { nativeBuildInputs = with pkgs; [ terraform ]; };
-                formatter = pkgs.nixpkgs-fmt;
-              });
-        }
+#      home.file."git/sendra/nix/devops/flake.nix".text = ''
+#        {
+#          description = "NixOS configuration";
+#
+#          inputs = {
+#            nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+#            flake-utils.url = "github:numtide/flake-utils";
+#          };
+#
+#          outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+#            let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
+#            flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
+#              let pkgs = (import nixpkgs { inherit system; }); in
+#              {
+#                devShells.default = pkgs.mkShell { nativeBuildInputs = with pkgs; [ terraform ]; };
+#                formatter = pkgs.nixpkgs-fmt;
+#              });
+#        }
+#      '';
+      home.file."git/sendra/sendra-release-tools/.envrc".text = ''
+      source_up_if_exists
+      use flake ../nix/$(basename $PWD)
       '';
+      home.file."git/sendra/devops/.envrc".text = ''
+      source_up_if_exists
+      use flake ../nix/$(basename $PWD)
+      '';
+#      home.file."git/sendra/nix/sendra-release-tools/flake.nix".text = ''
+#      {
+#  description = "NixOS configuration";
+#
+#  inputs = {
+#    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+#    flake-utils.url = "github:numtide/flake-utils";
+#  };
+#
+#  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+#    let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
+#    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
+#      let pkgs = (import nixpkgs { inherit system; }); in
+#      {
+#        devShells.default =
+#          let
+#            #making adhock shell scripts
+#            myArbetraryCommand = pkgs.writeShellScriptBin "tst" ''' ''${pkgs.cowsay}/bin/cowsay lalal ''';
+#            drest = pkgs.writeShellScriptBin "drest.sh" "dotnet restore --configfile $NUGET_CONFIG_FILE";
+#
+#          in
+#          pkgs.mkShell rec{
+#
+#            dotnetPkg =
+#              (with pkgs.dotnetCorePackages; combinePackages [
+#                sdk_7_0
+#              ]);
+#
+#            deps = with pkgs; [
+#              zlib
+#              zlib.dev
+#              openssl
+#              openssl.dev
+#              dotnetPkg
+#              libgit2
+#            ];
+#
+#            NIX_LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath ([ pkgs.stdenv.cc.cc ] ++ deps);
+#            NIX_LD = "''${pkgs.stdenv.cc.libc_bin}/bin/ld.so";
+#            nativeBuildInputs = with pkgs;[
+#              omnisharp-roslyn
+#              myArbetraryCommand
+#              drest
+#            ] ++ deps;
+#
+#            shellHook = '''
+#              export LD_LIBRARY_PATH="''${pkgs.openssl.out}/lib:$LD_LIBRARY_PATH"
+#              export LSP_SERVERS="omnisharp,OmniSharp bashls "
+#              export DOTNET_ROOT = "''${dotnetPkg}";
+#            ''';
+#          };
+#        formatter = pkgs.nixpkgs-fmt;
+#      });
+#}
+#      '';
 
       home.file."git/hiplog/flake.nix".text = ''
             {
@@ -176,53 +234,29 @@ with lib;
          }
 
       '';
-      home.file."git/sendra/flake.nix".text = ''
-            {
-        description = "NixOS configuration";
-
-        inputs = {
-          nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-          flake-utils.url = "github:numtide/flake-utils";
-        };
-
-        outputs = { self, nixpkgs, flake-utils, ... }@inputs:
-          let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
-          flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
-            let pkgs = (import nixpkgs { inherit system; }); in
-            {
-              devShells.default =
-                let
-                  #making adhock shell scripts
-                  myArbetraryCommand = pkgs.writeShellScriptBin "tst" ''' ''${pkgs.cowsay}/bin/cowsay lalal ''';
-                  drest = pkgs.writeShellScriptBin "drest.sh" "dotnet restore --configfile $NUGET_CONFIG_FILE";
-
-                in
-                pkgs.mkShell {
-
-                  nativeBuildInputs = with pkgs; [
-
-                    #lsp-servers
-                    # TODO: add dotnet nuget node 
-                    nodePackages_latest.bash-language-server # Bash LSP server
-                    omnisharp-roslyn
-
-                    myArbetraryCommand
-                    drest
-
-                    dotnet-sdk_6
-                    #dotnet-runtime_6
-                    shfmt
-                    clippy
-                  ];
-                  shellHook = '''
-                    export LSP_SERVERS="omnisharp,OmniSharp bashls "
-                  ''';
-                };
-              formatter = pkgs.nixpkgs-fmt;
-            });
-         }
-
-      '';
+#      home.file."git/sendra/flake.nix".text = ''
+#            {
+#        description = "NixOS configuration";
+#
+#        inputs = {
+#          nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+#          flake-utils.url = "github:numtide/flake-utils";
+#        };
+#
+#        outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+#          let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
+#          flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
+#            let pkgs = (import nixpkgs { inherit system; }); in
+#            {
+#              devShells.default = pkgs.mkShell {
+#                  nativeBuildInputs = with pkgs; [ ];
+#                  shellHook = ''' ''';
+#                };
+#              formatter = pkgs.nixpkgs-fmt;
+#            });
+#         }
+#
+#      '';
       systemd.user.services.cloneWorkRepos = {
         #Install.WantedBy = [ "multi-user.target" ]; # starts after login
         Install.WantedBy = [ "default.target" ]; # starts after login
@@ -242,6 +276,7 @@ with lib;
           ${pkgs.coreutils}/bin/mkdir /home/mar/git/sendra
           cd /home/mar/git/sendra
           export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /home/mar/.ssh/id_rsa"
+          ${pkgs.git}/bin/git clone git@github.com:marnyg/nixFlakes.git /home/mar/git/sendra/nix
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/devops.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/fieldview/field-view-api.git
           ${pkgs.git}/bin/git clone git@gitlab.com:prores/sendra/keycloak-image.git
