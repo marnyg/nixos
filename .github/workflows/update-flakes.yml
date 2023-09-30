@@ -22,8 +22,6 @@ jobs:
 
       - name: Update flakes ⌛
         run: |
-          nix flake lock --update-input my-nvim
-          nix flake lock --update-input my-modules
           nix flake update
 
       - name: Create Pull Request 📨
