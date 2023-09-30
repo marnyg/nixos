@@ -32,6 +32,7 @@
           (import ./homemanager/other.nix)
           (import ./homemanager/myPackages.nix)
           (import ./homemanager/cloneDefaultRepos.nix)
+          (import ./homemanager/cloneWorkRepos.nix)
           (import ./homemanager/sharedDefaults.nix)
           (import ./homemanager/hyperland.nix)
           (import ./homemanager/wofi.nix)

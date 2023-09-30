@@ -12,7 +12,7 @@ let
         description = "Whether to manage the user with Home Manager";
       };
       homeManagerConf = lib.mkOption {
-        type = lib.types.attrs;
+        # type = lib.types.attrs;
         default = { myHmModules.sharedDefaults.enable = true; };
 
         description = "Home Manager module configuration";

@@ -75,6 +75,7 @@ with lib;
         du = "${pkgs.du-dust}/bin/dust";
         dua = "${pkgs.dua}/bin/dua";
         df = "${pkgs.duf}/bin/duf";
+        lf = "${pkgs.yazi}/bin/yazi";
         nd = "nix develop -c $SHELL";
         rebuild = "doas nixos-rebuild switch --flake $NIXOS_CONFIG_DIR --fast; notify-send 'Rebuild complete\!'";
         g = "git";
