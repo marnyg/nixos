@@ -22,10 +22,14 @@ with lib;
         set-window-option -g pane-base-index 1
         set-option -g renumber-windows on
 
-        bind-key -r C-H resize-pane -L 10
-        bind-key -r C-L resize-pane -R 10
-        bind-key -r C-K resize-pane -U 10
-        bind-key -r C-J resize-pane -D 10
+        bind-key -r C-h prev
+        bind-key -r C-l next
+        bind-key -r C-j switch-client -p
+        bind-key -r C-k switch-client -n
+        bind-key -r C-Left resize-pane -L 10
+        bind-key -r C-Right resize-pane -R 10
+        bind-key -r C-Up resize-pane -U 10
+        bind-key -r C-Down resize-pane -D 10
         bind -n M-u attach-session -t . -c '#{pane_current_path}'
         set -g repeat-time 1000
 
