@@ -35,12 +35,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Install nix ❄️
-        uses: cachix/install-nix-action@v18
+        uses: cachix/install-nix-action@6a9a9e84a173d90b3ffb42c5ddaf9ea033fad011 # v23
         with:
           extra_nix_config: 'access-tokens = github.com=${{ github.token }}'
 
@@ -51,7 +51,8 @@ jobs:
       - name: Build installer 🛠️
         run: |
           nix flake update
-          nix run '.#nixosConfigurations.wsl.config.system.build.tarballBuilder'
+          nix build '.#nixosConfigurations.wsl.config.system.build.tarballBuilder'
+          sudo ./result/bin/nixos-wsl-tarball-builder nixos-wsl.tar.gz
       - name: Upload installer 📤
         uses: actions/upload-artifact@v3
         with:
