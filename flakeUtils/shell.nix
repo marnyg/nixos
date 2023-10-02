@@ -29,7 +29,7 @@ let
   };
 
   buildWslImage = pkgs.writeShellScriptBin "buildWslImage.sh" '' 
-      nix build .#nixosConfigurations.wsl.config.system.build.tarballBuilder
+      sudo nix run '.#nixosConfigurations.wsl.config.system.build.tarballBuilder'
     '';
 
   buildWslImageAndOpenInExplorer = pkgs.writeShellScriptBin "buildWslImageAndOpenInExplorer.sh" '' 
