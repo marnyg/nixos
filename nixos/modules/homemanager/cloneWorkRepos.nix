@@ -38,9 +38,9 @@ in
           clone() {
             local name=$1
             local repo_name=$(echo $2 | awk -F '/' '{ print $NF }')
-            ${pkgs.coreutils}/bin/mkdir -p ${cfg.gitDir}/$name/$repo_name/$repo_name
-            printf "source_up_if_exists\\nuse flake \"github:marnyg/nixFlakes?dir=$(echo $repo_name | cut -d '.' -f 1)\"" > $repo_name/.envrc
-            echo "git clone $2 ./$repo_name/$repo_name"
+            ${pkgs.coreutils}/bin/mkdir -p ${cfg.gitDir}/$name/env/$repo_name
+            printf "source_up_if_exists\\nuse flake \"github:marnyg/nixFlakes?dir=$(echo $repo_name | cut -d '.' -f 1)\"" > $name/env/.envrc
+            echo "git clone $2 ${cfg.gitDir}/$name/env/$repo_name"
             git clone $2 ./$repo_name/$repo_name
           }
         '';

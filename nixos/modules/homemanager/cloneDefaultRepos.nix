@@ -42,10 +42,10 @@ in
         ${pkgs.openssh}/bin/ssh-keygen -y -f /home/mar/.ssh/githubmarnyg > githubmarnyg.pub
 
         if [[ -s ${config.home.homeDirectory}/.ssh/id_rsa ]] &&  [[  -s ${config.home.homeDirectory}/.ssh/id_ed25519 ]]; then
-            systemctl start --user cloneWorkRepos.service
+            systemctl start --user --no-block cloneWorkRepos.service
         fi
         if [[ -s ${config.home.homeDirectory}/.ssh/githubmarnyg ]]; then
-            systemctl start --user cloneDefaultRepos.service
+            systemctl start --user --no-block cloneDefaultRepos.service
         fi
       '';
 
