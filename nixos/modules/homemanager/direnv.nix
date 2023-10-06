@@ -10,6 +10,9 @@ with lib;
       enable = true;
       nix-direnv.enable = true;
       enableZshIntegration = true;
+      config = {
+        whitelist.prefix = ["~/git/sendra" "~/git/nixos" "~/git/wellstarter"];
+      };
       stdlib = ''
         # hash
         : "''${XDG_CACHE_HOME:="''${HOME}/.cache"}"
