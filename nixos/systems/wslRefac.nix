@@ -1,7 +1,7 @@
 { pkgs, inputs, config, ... }:
 let
   # TODO:move this out into own users file
-  defaultHMConfig ={config,...}: {
+  defaultHMConfig = { config, ... }: {
     myHmModules.sharedDefaults.enable = true;
 
     modules.zsh.enable = true;
@@ -30,7 +30,6 @@ let
           key = "${config.home.homeDirectory}/.ssh/id_rsa";
           repos = [
             "git@gitlab.com:prores/sendra/devops.git"
-            "git@gitlab.com:prores/fieldview/field-view-api.git"
             "git@gitlab.com:prores/sendra/keycloak-image.git"
             "git@gitlab.com:prores/sendra/sendra-cli.git"
             "git@gitlab.com:prores/sendra/sendra.git"
@@ -54,21 +53,21 @@ let
         hiplog = {
           key = "${config.home.homeDirectory}/.ssh/id_ed25519";
           repos = [
-            "git@gitlab-well:wellstarter/audit-trail.git"
-            "git@gitlab-well:wellstarter/hiplog/compose.git"
-            "git@gitlab-well:wellstarter/hiplog/data-interpreter.git"
-            "git@gitlab-well:wellstarter/hiplog/devops.git"
-            "git@gitlab-well:wellstarter/hiplog/filestore.git"
-            "git@gitlab-well:wellstarter/hiplog/filestore-client.git"
-            "git@gitlab-well:wellstarter/hiplog/forward-modeling.git"
-            "git@gitlab-well:wellstarter/hiplog-fe-nuxt3.git"
-            "git@gitlab-well:wellstarter/hiplog-matlab.git"
-            "git@gitlab-well:wellstarter/matlab-runner.git"
-            "git@gitlab-well:wellstarter/matlab-runtime.git"
-            "git@gitlab-well:wellstarter/hiplog/pdf-converter.git"
-            "git@gitlab-well:wellstarter/hiplog/units.git"
-            "git@gitlab-well:wellstarter/hiplog/user-service.git"
-            "git@gitlab-well:wellstarter/hiplog/wells-backend.git"
+            "git@gitlab.com:wellstarter/audit-trail.git"
+            "git@gitlab.com:wellstarter/hiplog/compose.git"
+            "git@gitlab.com:wellstarter/hiplog/data-interpreter.git"
+            "git@gitlab.com:wellstarter/hiplog/devops.git"
+            "git@gitlab.com:wellstarter/hiplog/filestore.git"
+            "git@gitlab.com:wellstarter/hiplog/filestore-client.git"
+            "git@gitlab.com:wellstarter/hiplog/forward-modeling.git"
+            "git@gitlab.com:wellstarter/hiplog-fe-nuxt3.git"
+            "git@gitlab.com:wellstarter/hiplog-matlab.git"
+            "git@gitlab.com:wellstarter/matlab-runner.git"
+            "git@gitlab.com:wellstarter/matlab-runtime.git"
+            "git@gitlab.com:wellstarter/hiplog/pdf-converter.git"
+            "git@gitlab.com:wellstarter/hiplog/units.git"
+            "git@gitlab.com:wellstarter/hiplog/user-service.git"
+            "git@gitlab.com:wellstarter/hiplog/wells-backend.git"
           ];
         };
       };

@@ -1,14 +1,14 @@
 { pkgs, lib, config, ... }:
 with lib;
-let 
-tmux-sessionizer = pkgs.writeScript "tmux-sessionizer" ''
+let
+  tmux-sessionizer = pkgs.writeScript "tmux-sessionizer" ''
 
 #!/usr/bin/env bash
 
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/git ~/git/sendra ~/git/hiplog -mindepth 1 -maxdepth 2 -type d -name '.git' -exec dirname {} \; | fzf)
+    selected=$(find ~/git ~/git/sendra ~/git/hiplog -mindepth 1 -maxdepth 3 -type d -name '.git' -exec dirname {} \; | fzf)
 fi
 
 if [[ -z $selected ]]; then

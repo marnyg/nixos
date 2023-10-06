@@ -2,27 +2,9 @@
 
 let
   cfg = config.modules.services.cloneWorkRepos;
-
-  cloneRepos = name: info: ''
-    mkdir -p ${cfg.gitDir}/${name}
-    cd ${cfg.gitDir}/${name}
-
-    export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i ${info.key}"
-
-    clone_${name}() {
-      local repo_name=$(echo $1 | awk -F '/' '{ print $NF }')
-      mkdir -p ${cfg.gitDir}/${name}/$repo_name/$repo_name
-      printf "source_up_if_exists\\nuse flake \"github:marnyg/nixFlakes?dir=$(echo $repo_name | cut -d '.' -f 1)\"" > $repo_name/.envrc
-      echo "git clone $1 ./$repo_name/$repo_name"
-      git clone $1 ./$repo_name/$repo_name
-    }
-    export -f clone_${name}
-
-    echo -e "${builtins.concatStringsSep "\\n" info.repos}" | ${pkgs.parallel}/bin/parallel clone_${name}
-  '';
 in
 {
-  options.modules.services.cloneWorkRepos= {
+  options.modules.services.cloneWorkRepos = {
     enable = lib.mkEnableOption "Enable Git Repos cloning service";
 
     gitDir = lib.mkOption {
@@ -50,16 +32,57 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.user.services.cloneGitRepos = {
-      Install.WantedBy = [ "default.target" ];
-      Unit.After = [ "copySshFromHost" ];
-      Unit.Description = "Clone configured Git repositories";
-      Service.ExecStart = pkgs.writeScript "cloneRepos.sh" ''
-        ${pkgs.openssh}/bin/ssh-keygen -F gitlab.com || ${pkgs.openssh}/bin/ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
-        ${builtins.concatStringsSep "\n" (lib.attrsets.mapAttrsToList cloneRepos cfg.repoInfo)}
-        exit 0
-      '';
-      Service.Type = "oneshot";
-    };
+    systemd.user.services.cloneGitRepos =
+      let
+        #  cloneRepos = name: info: ''
+        #    export XDG_CONFIG_DIRS="/etc/xdg"  # Set it explicitly to avoid issues.
+        #    ${pkgs.coreutils}/bin/mkdir -p ${cfg.gitDir}/${name}
+        #    cd ${cfg.gitDir}/${name}
+
+        #    export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i ${info.key}"
+
+        #    clone_${name}() {
+        #      local repo_name=$(echo $1 | awk -F '/' '{ print $NF }')
+        #      ${pkgs.coreutils}/bin/mkdir -p ${cfg.gitDir}/${name}/$repo_name/$repo_name
+        #      printf "source_up_if_exists\\nuse flake \"github:marnyg/nixFlakes?dir=$(echo $repo_name | cut -d '.' -f 1)\"" > $repo_name/.envrc
+        #      echo "git clone $1 ./$repo_name/$repo_name"
+        #      git clone $1 ./$repo_name/$repo_name
+        #    }
+        #    export -f clone_${name}
+
+        #    echo -e "${builtins.concatStringsSep "\\n" info.repos}" | ${pkgs.parallel}/bin/parallel --env clone_${name} 'clone_${name} { }'
+        #  '';
+        cloneFunctionScript = pkgs.writeScript "clone_functions.sh" ''
+          clone() {
+            local name=$1
+            local repo_name=$(echo $2 | awk -F '/' '{ print $NF }')
+            ${pkgs.coreutils}/bin/mkdir -p ${cfg.gitDir}/$name/$repo_name/$repo_name
+            printf "source_up_if_exists\\nuse flake \"github:marnyg/nixFlakes?dir=$(echo $repo_name | cut -d '.' -f 1)\"" > $repo_name/.envrc
+            echo "git clone $2 ./$repo_name/$repo_name"
+            git clone $2 ./$repo_name/$repo_name
+          }
+        '';
+        cloneRepos = name: info: ''
+          export XDG_CONFIG_DIRS="/etc/xdg"  # Set it explicitly to avoid issues.
+          ${pkgs.coreutils}/bin/mkdir -p ${cfg.gitDir}/${name}
+          cd ${cfg.gitDir}/${name}
+
+          export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i ${info.key}"
+
+          echo -e "${builtins.concatStringsSep "\\n" info.repos}" | ${pkgs.parallel}/bin/parallel "source ${cloneFunctionScript}; clone ${name} {}"
+        '';
+      in
+      {
+        Install.WantedBy = [ "default.target" ];
+        Unit.After = [ "copySshFromHost" ];
+        Unit.Description = "Clone configured Git repositories";
+        Service.ExecStart = pkgs.writeScript "cloneRepos.sh" ''
+          #! ${pkgs.bash}/bin/bash
+          ${pkgs.openssh}/bin/ssh-keygen -F gitlab.com || ${pkgs.openssh}/bin/ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+          ${builtins.concatStringsSep "\n" (lib.attrsets.mapAttrsToList cloneRepos cfg.repoInfo)}
+          exit 0
+        '';
+        Service.Type = "oneshot";
+      };
   };
 }

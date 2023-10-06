@@ -1,49 +1,6 @@
 { pkgs, lib, config, ... }:
 with lib;
 let
-  ## Extract common strings from Home Manager's config
-  #homeDir = config.home.homeDirectory;
-  #sshDir = "${homeDir}/.ssh";
-  #gitDir = "${homeDir}/git";
-
-  ## Define repositories information
-  #repoInfo = {
-  #  sendra = {
-  #    key = "${sshDir}/id_rsa";
-  #    gitlabRoot = "prores";
-  #    repos = [ 
-  #    "devops" 
-  #    "field-view-api" 
-  #    "keycloak-image" 
-  #    ];
-  #  };
-  #  hiplog = {
-  #    key = "${sshDir}/id_ed25519";
-  #    gitlabRoot = "wellstarter";
-  #    repos = [ 
-  #    "audit-trail" 
-  #    "compose"
-  #    "data-interpreter" ];
-  #  };
-  #};
-
-  ## Function to clone repositories
-  #cloneRepos = name: info: ''
-  #  mkdir -p ${cfg.gitDir}/${name}
-  #  cd ${cfg.gitDir}/${name}
-
-  #  export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i ${info.key}"
-
-  #  clone_${name}() {
-  #    local repo_name=$(echo $1 | awk -F '/' '{ print $NF }')
-  #    printf "source_up_if_exists\\nuse flake ../../nix/$(basename $PWD)" > $repo_name/.envrc
-  #    mkdir -p ${cfg.gitDir}/${name}/$repo_name/$repo_name
-  #    git clone git@gitlab.com:${info.gitlabRoot}/$1.git ./$repo_name/$repo_name
-  #  }
-  #  export -f clone_${name}
-
-  #  echo -e "${builtins.concatStringsSep "\\n" info.repos}" | ${pkgs.parallel}/bin/parallel clone_${name}
-  #'';
 
   envrcString = ''
     #use flake
@@ -84,13 +41,12 @@ in
         ${pkgs.openssh}/bin/ssh-keygen -y -f /home/mar/.ssh/id_rsa > id_rsa.pub
         ${pkgs.openssh}/bin/ssh-keygen -y -f /home/mar/.ssh/githubmarnyg > githubmarnyg.pub
 
-
-
-        #TODO: add checks to see if it worked
-        #TODO: if it worked run:
-        #      systemctl start --user cloneWorkRepos.service
-        #      systemctl start --user cloneDefaultRepos.service
-
+        if [[ -s ${config.home.homeDirectory}/.ssh/id_rsa ]] &&  [[  -s ${config.home.homeDirectory}/.ssh/id_ed25519 ]]; then
+            systemctl start --user cloneWorkRepos.service
+        fi
+        if [[ -s ${config.home.homeDirectory}/.ssh/githubmarnyg ]]; then
+            systemctl start --user cloneDefaultRepos.service
+        fi
       '';
 
       systemd.user.services.cloneDefaultRepos =
@@ -114,109 +70,6 @@ in
         };
       home.file."git/hiplog/.envrc".text = envrcString;
       home.file."git/sendra/.envrc".text = envrcString;
-
-      #systemd.user.services.cloneWorkRepos = {
-      #  Install.WantedBy = [ "default.target" ];
-      #  Unit.After = [ "copySshFromHost" ];
-      #  Unit.Description = "Example description";
-      #  Service.ExecStart = pkgs.writeScript "cloneWorkStuff.sh" ''
-      #    ${pkgs.openssh}/bin/ssh-keygen -F gitlab.com || ${pkgs.openssh}/bin/ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
-      #    ${builtins.concatStringsSep "\n" (lib.attrsets.mapAttrsToList cloneRepos repoInfo)}
-      #    exit 0
-      #  '';
-      #  Service.Type = "oneshot";
-      #};
-
-
-      #git@github.com:marnyg/nixFlakes.git /home/mar/git/sendra/nix
-      #git@gitlab.com:prores/sendra/devops.git
-      #git@gitlab.com:prores/fieldview/field-view-api.git
-      #git@gitlab.com:prores/sendra/keycloak-image.git
-      #git@gitlab.com:prores/sendra/sendra-cli.git
-      #git@gitlab.com:prores/sendra/sendra.git
-      #git@gitlab.com:prores/sendra/sendra-compose.git
-      #git@gitlab.com:prores/sendra/sendra-engine.git
-      #git@gitlab.com:prores/sendra/sendra-importer.git
-      #git@gitlab.com:prores/sendra/sendra-integrationtests.git
-      #git@gitlab.com:prores/sendra/sendra-keycloak-theme.git
-      #git@gitlab.com:prores/sendra/sendra-settings.git
-      #git@gitlab.com:prores/sendra/sendra-sona.git
-      #git@gitlab.com:prores/sendra/sendra-userservice.git
-      #git@gitlab.com:prores/sendra/sendra-web.git
-      #git@gitlab.com:prores/sendra/sendra-units.git
-      #git@gitlab.com:prores/sendra/sendra-exporter.git
-      #git@gitlab.com:prores/sendra/sendra-database.git
-      #git@gitlab.com:prores/sendra/sendra-contract.git
-      #git@gitlab.com:prores/sendra/sendra-assets.git
-      #git@gitlab.com:prores/sendra/sendra-release-tools.git
-      # #wellstarter
-      # #TODO, can i remove this, since home-manager is creating a flake in this folder?
-      # ${pkgs.coreutils}/bin/mkdir /home/mar/git/hiplog
-      # cd /home/mar/git/hiplog
-      # export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /home/mar/.ssh/id_ed25519"
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/audit-trail.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/compose.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/data-interpreter.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/devops.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/filestore.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/filestore-client.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/forward-modeling.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog-fe-nuxt3.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog-matlab.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/matlab-runner.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/matlab-runtime.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/pdf-converter.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/units.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/user-service.git
-      # ${pkgs.git}/bin/git clone git@gitlab-well:wellstarter/hiplog/wells-backend.git
-
-      # home.file."git/hiplog/flake.nix".text = ''
-      #       {
-      #   description = "NixOS configuration";
-      #
-      #   inputs = {
-      #     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-      #     flake-utils.url = "github:numtide/flake-utils";
-      #   };
-      #
-      #   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
-      #     let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
-      #     flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
-      #       let pkgs = (import nixpkgs { inherit system; }); in
-      #       {
-      #         devShells.default =
-      #           let
-      #             #making adhock shell scripts
-      #             myArbetraryCommand = pkgs.writeShellScriptBin "tst" ''' ''${pkgs.cowsay}/bin/cowsay lalal ''';
-      #             drest = pkgs.writeShellScriptBin "drest.sh" "dotnet restore --configfile $NUGET_CONFIG_FILE";
-      #
-      #           in
-      #           pkgs.mkShell {
-      #
-      #             nativeBuildInputs = with pkgs; [
-      #
-      #               #lsp-servers
-      #               # TODO: add dotnet nuget node 
-      #               nodePackages_latest.bash-language-server # Bash LSP server
-      #               omnisharp-roslyn
-      #
-      #               myArbetraryCommand
-      #               drest
-      #
-      #               dotnet-sdk_6
-      #               #dotnet-runtime_6
-      #               shfmt
-      #               clippy
-      #             ];
-      #             shellHook = '''
-      #               export LSP_SERVERS="omnisharp,OmniSharp bashls "
-      #             ''';
-      #           };
-      #         formatter = pkgs.nixpkgs-fmt;
-      #       });
-      #    }
-      #
-      # '';
 
 
     };
