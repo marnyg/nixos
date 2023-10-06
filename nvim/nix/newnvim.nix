@@ -43,6 +43,10 @@ pkgs.neovim.override {
         {
           plugin = nvcode-color-schemes-vim;
         }
+        {
+          plugin = copilot-lua;
+          config = "lua require('copilot').setup({ copilot_node_command = '${pkgs.nodejs_20}/bin/node', })";
+        }
 
 
         # mystuff {{{1
