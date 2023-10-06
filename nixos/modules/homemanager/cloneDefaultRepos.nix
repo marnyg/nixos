@@ -60,9 +60,9 @@ in
             ${pkgs.openssh}/bin/ssh-keygen -F github.com || ${pkgs.openssh}/bin/ssh-keyscan github.com >> ~/.ssh/known_hosts
             export GIT_SSH_COMMAND="${pkgs.openssh}/bin/ssh -i /home/mar/.ssh/githubmarnyg"
             ${pkgs.coreutils}/bin/mkdir /home/mar/git
-            git clone git@github.com:marnyg/nixos.git /home/mar/git/nixos
-            git clone git@github.com:marnyg/kubernetesOnAzure.git /home/mar/git/personal/kubernetesOnAzure
-            git clone git@github.com:marnyg/buildAzureNixImage.git /home/mar/git/personal/buildAzureNixImage
+            ${pkgs.git}/bin/git clone git@github.com:marnyg/nixos.git /home/mar/git/nixos
+            ${pkgs.git}/bin/git clone git@github.com:marnyg/kubernetesOnAzure.git /home/mar/git/personal/kubernetesOnAzure
+            ${pkgs.git}/bin/git clone git@github.com:marnyg/buildAzureNixImage.git /home/mar/git/personal/buildAzureNixImage
             exit 0
           ''
           }";
