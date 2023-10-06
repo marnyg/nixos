@@ -1,5 +1,36 @@
 { pkgs, lib, config, ... }:
 with lib;
+let 
+tmux-sessionizer = pkgs.writeScript "tmux-sessionizer" ''
+
+#!/usr/bin/env bash
+
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    selected=$(find ~/git ~/git/sendra ~/git/hiplog -mindepth 1 -maxdepth 2 -type d -name '.git' -exec dirname {} \; | fzf)
+fi
+
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+selected_name=$(basename "$selected" | tr . _)
+tmux_running=$(pgrep tmux)
+
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+    tmux new-session -s $selected_name -c $selected
+    exit 0
+fi
+
+if ! tmux has-session -t=$selected_name 2> /dev/null; then
+    tmux new-session -ds $selected_name -c $selected
+fi
+
+tmux switch-client -t $selected_name
+'';
+in
+
 {
   options.modules.tmux = {
     enable = mkOption { type = types.bool; default = false; };
@@ -33,6 +64,7 @@ with lib;
         bind -n M-u attach-session -t . -c '#{pane_current_path}'
         set -g repeat-time 1000
 
+        bind-key -r f run-shell "tmux neww ${tmux-sessionizer}"
 
 
         # yank keybinds
