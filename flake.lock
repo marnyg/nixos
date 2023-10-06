@@ -269,7 +269,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-VrKJQNa2KUQdnaEIjGaGjRZ8IiAu4NJpVVokgZLTqOE=",
+        "narHash": "sha256-R4iL7W+9ME04nCtPgpQBjsAMmWbI5sJZAW4eKInJmio=",
         "path": "./nixos/modules",
         "type": "path"
       },
@@ -287,7 +287,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-ARQYdhjollrajK1FHTSVVd40zYnB5Q5BQLGqC1hZ1B0=",
+        "narHash": "sha256-DiYj8R9S5dNV2pZoA0hdR7BWb9sZE4nZHxGX5wvofao=",
         "path": "./nvim",
         "type": "path"
       },
@@ -309,7 +309,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-ARQYdhjollrajK1FHTSVVd40zYnB5Q5BQLGqC1hZ1B0=",
+        "narHash": "sha256-DiYj8R9S5dNV2pZoA0hdR7BWb9sZE4nZHxGX5wvofao=",
         "path": "./nvim",
         "type": "path"
       },

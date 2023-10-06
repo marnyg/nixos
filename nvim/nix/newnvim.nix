@@ -45,7 +45,10 @@ pkgs.neovim.override {
         }
         {
           plugin = copilot-lua;
-          config = "lua require('copilot').setup({ copilot_node_command = '${pkgs.nodejs_20}/bin/node', })";
+          config = ''
+          lua vim.g.copilot_proxy_strict_ssl = false
+          lua require('copilot').setup({ copilot_node_command = '${pkgs.nodejs_20}/bin/node', })
+          '';
         }
 
 
