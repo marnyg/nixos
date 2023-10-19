@@ -20,9 +20,6 @@
         EDITOR = "nvim";
       };
 
-      file.".config/nixpkgs/config.nix" = {
-        text = "{ allowUnfree = true; }";
-      };
 
       sessionPath = [
         "$HOME/go/bin"

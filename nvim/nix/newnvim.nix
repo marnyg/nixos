@@ -5,6 +5,13 @@ let
     src = ../.;
   };
   #lsp-servers = with pkgs; [ sumneko-lua-language-server cargo rust-analyzer rnix-lsp rustc manix ripgrep ];
+  cs-snippets = pkgs.fetchFromGitHub
+    {
+      owner = "honza";
+      repo = "vim-snippets";
+      rev = "master";
+      sha256 = "9YLkTpEhTLFpAnikEaYasu1/dMqOn/uc3L78wgVdYqY=";
+    } + "/snippets/cs.snippets";
 in
 pkgs.neovim.override {
 
@@ -46,8 +53,18 @@ pkgs.neovim.override {
         {
           plugin = copilot-lua;
           config = ''
-          lua vim.g.copilot_proxy_strict_ssl = false
-          lua require('copilot').setup({ copilot_node_command = '${pkgs.nodejs_20}/bin/node', })
+            lua <<EOF
+            vim.g.copilot_proxy_strict_ssl = false
+
+            require('copilot').setup({ 
+              copilot_node_command = '${pkgs.nodejs_20}/bin/node',
+              suggestion = {
+                keymap= {
+                  accept = "<M-p>"
+                }
+              }
+            })
+            EOF
           '';
         }
 
@@ -62,13 +79,12 @@ pkgs.neovim.override {
           plugin = comment-nvim;
           config = "lua require('Comment').setup() ";
         }
-        #{
-        #  plugin = nvim-tree-lua;
-        #  config = "lua require('nvim-tree').setup({})";
-        #}
         {
           plugin = pkgs.vimExtraPlugins.nui-nvim;
+          config = "lua require('nui').setup({})";
           #config = "lua require('nui').setup({})";
+
+
         }
         {
           plugin = pkgs.vimExtraPlugins.neo-tree-nvim;
@@ -77,19 +93,54 @@ pkgs.neovim.override {
             vim.keymap.set("n", "<C-n>", ":Neotree float toggle reveal<CR>")
             vim.keymap.set("n", "<C-g>", ":Neotree git_status float toggle <CR>")
             require("neo-tree").setup({
-              window = {
+              default_component_configs  = {
+                popup_border_style = "rounded",
+                enable_git_status = true,
+                enable_diagnostics = true,
+                container = {
+                  enable_character_fade = true
+                },
                 mappings = {
                   ["U"] = function(state)
                     local node = state.tree:get_node()
                     require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
-                  end
+                  end,
+                  ["esc"] = "close_window",
+                  ['D'] = "diff_files"
                 }
               }
             })
-            EOF
+            diff_files = function(state)
+            local node = state.tree:get_node()
+            local log = require("neo-tree.log")
+            state.clipboard = state.clipboard or {}
+            if diff_Node and diff_Node ~= tostring(node.id) then
+              local current_Diff = node.id
+              require("neo-tree.utils").open_file(state, diff_Node, open)
+              vim.cmd("vert diffs " .. current_Diff)
+              log.info("Diffing " .. diff_Name .. " against " .. node.name)
+              diff_Node = nil
+              current_Diff = nil
+              state.clipboard = {}
+              require("neo-tree.ui.renderer").redraw(state)
+            else
+              local existing = state.clipboard[node.id]
+              if existing and existing.action == "diff" then
+                state.clipboard[node.id] = nil
+                diff_Node = nil
+                require("neo-tree.ui.renderer").redraw(state)
+              else
+                state.clipboard[node.id] = { action = "diff", node = node }
+                diff_Name = state.clipboard[node.id].node.name
+                diff_Node = tostring(state.clipboard[node.id].node.id)
+                log.info("Diff source file " .. diff_Name)
+                require("neo-tree.ui.renderer").redraw(state)
+              end
+            end
+          end
+
+          EOF
           '';
-
-
         }
 
 
@@ -104,7 +155,22 @@ pkgs.neovim.override {
         cmp-nvim-lsp
         cmp-nvim-lsp-signature-help
         cmp-nvim-lsp-document-symbol
-        cmp_luasnip
+        {
+          plugin = cmp_luasnip;
+          # config = ''
+          #   lua <<EOF
+          #   require("luasnip.loaders.from_snipmate").lazy_load({paths = "${}"});
+          #   EOF
+          # '';
+          config = ''
+            lua <<EOF
+            local ls = require("luasnip")
+            local path_to_cs_snippets = [[${cs-snippets}]]  -- use double square brackets for multi-line string in Lua
+            -- print("Path to CS snippets: " .. path_to_cs_snippets)
+            require("luasnip.loaders.from_snipmate").load({ paths = {"~/../../${cs-snippets}"} });
+            EOF
+          '';
+        }
         cmp-calc
         cmp-buffer
         cmp-omni
@@ -137,7 +203,6 @@ pkgs.neovim.override {
         }
         {
           plugin = luasnip;
-          #config = "lua require('nvim-tree').setup({})";
         }
 
 

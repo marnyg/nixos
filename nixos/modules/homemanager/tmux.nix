@@ -2,18 +2,18 @@
 with lib;
 let
   swich-on-kill = pkgs.writeScript "" ''
-  #!/bin/bash
+    #!/bin/bash
 
-  # Get current session name
-  current_session=$(tmux display-message -p '#{session_name}')
+    # Get current session name
+    current_session=$(tmux display-message -p '#{session_name}')
   
-  # Check if there are any panes left in the current session
-  pane_count=$(tmux list-panes -t $current_session -F "#{pane_active}" | wc -l)
+    # Check if there are any panes left in the current session
+    pane_count=$(tmux list-panes -t $current_session -F "#{pane_active}" | wc -l)
   
-  if [ "$pane_count" -eq 0 ]; then
-    # Switch to the next session
-    tmux switch-client -n
-  fi
+    if [ "$pane_count" -eq 0 ]; then
+      # Switch to the next session
+      tmux switch-client -n
+    fi
   '';
   tmux-sessionizer = pkgs.writeScript "tmux-sessionizer" ''
 

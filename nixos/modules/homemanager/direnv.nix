@@ -11,7 +11,7 @@ with lib;
       nix-direnv.enable = true;
       enableZshIntegration = true;
       config = {
-        whitelist.prefix = ["~/git/sendra" "~/git/nixos" "~/git/wellstarter"];
+        whitelist.prefix = [ "~/git/sendra" "~/git/nixos" "~/git/wellstarter" ];
       };
       stdlib = ''
         # hash
