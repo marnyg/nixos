@@ -22,7 +22,7 @@ let
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/git ~/git/sendra ~/git/hiplog -mindepth 1 -maxdepth 3 -type d -name '.git' -exec dirname {} \; | fzf)
+    selected=$(find ~/git ~/git/sendra ~/git/hiplog -mindepth 1 -maxdepth 4 -type d -name '.git' -exec dirname {} \; | fzf)
 fi
 
 if [[ -z $selected ]]; then
