@@ -42,6 +42,7 @@ with lib;
         bindkey -M viins '\C-@' accept-line
         bindkey -M viins '^A'   beginning-of-line  
         bindkey -M viins '^E'   end-of-line        
+        bindkey -M viins '^F' 'fzf-cd-widget'
 
         KEYTIMEOUT=1
       '';
