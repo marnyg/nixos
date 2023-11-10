@@ -37,12 +37,30 @@ with lib;
         export DIRENV_LOG_FORMAT="";
         edir() { tar -cz $1 | age -p > $1.tar.gz.age && rm -rf $1 &>/dev/null && echo "$1 encrypted" }
         ddir() { age -d $1 | tar -xz && rm -rf $1 &>/dev/null && echo "$1 decrypted" }
-
+        fzf-cd-widget() {
+          local cmd="''${FZF_ALT_C_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
+            -o -type d -print 2> /dev/null | cut -b3-"}"
+          setopt localoptions pipefail no_aliases 2> /dev/null
+          local dir="$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ''${FZF_TMUX_HEIGHT:-40%} --reverse --scheme=path --bind=ctrl-z:ignore ''${FZF_DEFAULT_OPTS-} ''${FZF_ALT_C_OPTS-}" $(__fzfcmd) +m)"
+          if [[ -z "$dir" ]]; then
+            zle redisplay
+            return 0
+          fi
+          zle push-line # Clear buffer. Auto-restored on next prompt.
+          BUFFER="builtin pushd -- ''${(q)dir}"
+          zle accept-line
+          local ret=$?
+          unset dir # ensure this doesn't end up appearing in prompt expansion
+          zle reset-prompt
+          return $ret
+        }
+        zle     -N             fzf-cd-widget
 
         bindkey -M viins '\C-@' accept-line
         bindkey -M viins '^A'   beginning-of-line  
         bindkey -M viins '^E'   end-of-line        
-        bindkey -M viins '^F' 'fzf-cd-widget'
+        bindkey -M viins '^F'   fzf-cd-widget
+        bindkey -s "^P" 'popd^M'
 
         KEYTIMEOUT=1
       '';
