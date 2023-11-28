@@ -95,6 +95,7 @@ in
     mode = "challenge-response";
   };
   virtualisation.docker.enable = true;
+  users.groups.docker.members= ["mar"];
 
   nixpkgs.config.allowUnfree=true;
   nixpkgs.config.permittedInsecurePackages = [
