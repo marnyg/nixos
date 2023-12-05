@@ -269,7 +269,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-hhNWClKjgePciz0bFjSm2lJCx5MY8f4z58iSbGTppIU=",
+        "narHash": "sha256-4BN7Uyqwp+RsrW05XDdWX8fGALX/70arMlsRejF7bWo=",
         "path": "./nixos/modules",
         "type": "path"
       },
@@ -420,11 +420,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1701778565,
-        "narHash": "sha256-8cNhfSv+g5Fhjmlz+t8RidvU/hd4eAIPSePLQNYYjns=",
+        "lastModified": 1701798379,
+        "narHash": "sha256-o+uFCoZalr5csUdWD84I2ELd78VGxt9+8PZbJXwaHA8=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "bb2b91189d8f75ab0f44f3f36daaf6ad78a513b3",
+        "rev": "e3ef2421e85a36a8b5650cfb3cc9096f53059609",
         "type": "github"
       },
       "original": {
