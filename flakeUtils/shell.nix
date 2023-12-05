@@ -17,7 +17,7 @@ let
 
   # update current system wsl
   updateCurrentWsl = pkgs.writeShellScriptBin "updateCurrentOs.sh" ''
-    nix flake update .
+    nix flake update --flake .
     sudo nixos-rebuild switch --flake .#''${1:-laptop}
   '';
 
