@@ -11,12 +11,14 @@ with lib;
       wslConf.automount.root = "/mnt";
       defaultUser = "mar";
       startMenuLaunchers = true;
+      wslConf.network.generateResolvConf = false;
 
       # Enable native Docker support
       # docker-native.enable = true;
       # Enable integration with Docker Desktop (needs to be installed)
       #docker-desktop.enable = true;
     };
+    networking.nameservers = ["1.1.1.1"];
     users.users.mar = { shell = pkgs.zsh; };
   };
 }

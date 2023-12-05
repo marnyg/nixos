@@ -82,6 +82,7 @@ with lib;
 
       # Set some aliases
       shellAliases = {
+        mkcd="'f() { mkdir \"$1\" && cd \"$1\"; }; f";
         c = "clear";
         v = "nvim";
         mkdir = "mkdir -vp";
