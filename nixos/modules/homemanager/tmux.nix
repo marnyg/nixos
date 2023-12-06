@@ -77,11 +77,6 @@ in
         bind '"' split-window -v -c "#{pane_current_path}"
         bind % split-window -h -c "#{pane_current_path}"
 
-        # scroll tmux buffer if not in (n)vim
-        #bind -n C-u if-shell "ps -o comm= -p #{pane_tty}| tail -1 | grep -iqE '(vim|nvim)'" "send-keys C-u" "if-shell -F -t = '#{pane_in_mode}' 'send-keys -X halfpage-up' 'copy-mode -u; send-keys -X halfpage-up'"
-        #bind -n C-d if-shell "ps -o comm= -p #{pane_tty}| tail -1 | grep -iqE '(vim|nvim)'" "send-keys C-d" "if-shell -F -t = '#{pane_in_mode}' 'send-keys -X halfpage-down' 'copy-mode -u; send-keys -X halfpage-down'"
-        #bind -n C-e if-shell "ps -o comm= -p #{pane_tty}| tail -1 | grep -iqE '(vim|nvim)'" "send-keys C-e" "if-shell -F -t = '#{pane_in_mode}' 'send-keys -X scroll-down' 'copy-mode -u; send-keys -X scroll-down'"
-        #bind -n C-y if-shell "ps -o comm= -p #{pane_tty}| tail -1 | grep -iqE '(vim|nvim)'" "send-keys C-y" "if-shell -F -t = '#{pane_in_mode}' 'send-keys -X scroll-up' 'copy-mode -u; send-keys -X scroll-up'"
 
         bind-key x confirm-before -p "Kill #S (y/n)?" "run-shell 'tmux switch-client -n \\\; kill-session -t \"#S\"'"
       '';
