@@ -63,6 +63,16 @@ with lib;
         bindkey -s "^P" 'popd^M'
 
         KEYTIMEOUT=1
+
+
+        function col() { eval "awk '{ print \$$1 }'"; }
+        function skip() { tail -n +$(($1 + 1)); }
+        function take() { head -n $1; }
+        function up() { cd $(eval printf '../'%.0s {1..$1}); }
+        function mkcd() { mkdir -p "$1" && cd "$1" && pwd; }
+        function ::() { sed "$ s/\n$//" | xargs -I_ --; }
+
+
       '';
       # basically aliases for directories: 
       # `cd ~dots` will cd into ~/.config/nixos
@@ -82,8 +92,9 @@ with lib;
 
       # Set some aliases
       shellAliases = {
-        mkcd="f() { mkdir \"$1\" && cd \"$1\"; }; f";
+        "::"=''sed "$ s/\n$//" | xargs -I_ --'';
         c = "clear";
+        chx="chmod +x";
         v = "nvim";
         mkdir = "mkdir -vp";
         rm = "rm -rifv";
@@ -96,8 +107,7 @@ with lib;
         dua = "${pkgs.dua}/bin/dua";
         df = "${pkgs.duf}/bin/duf";
         lf = "${pkgs.yazi}/bin/yazi";
-        nd = "nix develop -c $SHELL";
-        rebuild = "doas nixos-rebuild switch --flake $NIXOS_CONFIG_DIR --fast; notify-send 'Rebuild complete\!'";
+
         g = "git";
         gm = "git merge";
         gmv = "git mv";
@@ -109,7 +119,6 @@ with lib;
         ga = "git add";
         gai = "git add -i";
         gi = "${pkgs.lazygit}/bin/lazygit";
-        grh = "git reset HEAD";
         gap = "git add -p";
         gaa = "git add -A";
         gpr = "git pull --rebase";
@@ -117,15 +126,17 @@ with lib;
         gp = "git push";
         gcount = "git shortlog -sn";
         gco = "git checkout";
-        gcm = "git checkout main";
         gsl = "git shortlog -sn";
         gwc = "git whatchanged";
-        gnew = "git log HEAD@{1}..HEAD@{0}";
         gcaa = "git commit -a --amend -C HEAD";
         gpm = "git push origin main";
         gd = "git diff";
         gb = "git branch";
         gt = "git tag";
+        gcm="git commit -m";
+        gaugcm = "git add -u && gcm";
+        gfp="git commit --amend --no-edit && git push --force-with-lease";
+   
         hist = "tmux capture-pane -pS - | ${pkgs.fzf}/bin/fzf";
         fixSsh = "echo 'UPDATESTARTUPTTY' | gpg-connect-agent > /dev/null 2>&1";
       };
