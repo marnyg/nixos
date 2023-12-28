@@ -26,7 +26,6 @@ with lib;
 
       enableCompletion = true;
       enableAutosuggestions = true;
-      #enableSyntaxHighlighting = true;
       syntaxHighlighting.enable = true;
 
       # .zshrc
@@ -71,17 +70,8 @@ with lib;
         function up() { cd $(eval printf '../'%.0s {1..$1}); }
         function mkcd() { mkdir -p "$1" && cd "$1" && pwd; }
         function ::() { sed "$ s/\n$//" | xargs -I_ --; }
-
-
+        function gcm() { git commit -m "$*" }
       '';
-      # basically aliases for directories: 
-      # `cd ~dots` will cd into ~/.config/nixos
-      dirHashes = {
-        dots = "$HOME/.config/nixos";
-        stuff = "$HOME/stuff";
-        media = "/run/media/$USER";
-        junk = "$HOME/stuff/other";
-      };
 
       # Tweak settings for history
       history = {
@@ -133,7 +123,6 @@ with lib;
         gd = "git diff";
         gb = "git branch";
         gt = "git tag";
-        gcm="git commit -m";
         gaugcm = "git add -u && gcm";
         gfp="git commit --amend --no-edit && git push --force-with-lease";
    
@@ -143,15 +132,6 @@ with lib;
 
       # Source all plugins, nix-style
       plugins = [
-        #{
-        #  name = "auto-ls";
-        #  src = pkgs.fetchFromGitHub {
-        #    owner = "notusknot";
-        #    repo = "auto-ls";
-        #    rev = "62a176120b9deb81a8efec992d8d6ed99c2bd1a1";
-        #    sha256 = "08wgs3sj7hy30x03m8j6lxns8r2kpjahb9wr0s0zyzrmr4xwccj0";
-        #  };
-        #}
         {
           name = "zsh-abbr";
           src = pkgs.fetchFromGitHub {
