@@ -82,9 +82,9 @@ with lib;
 
       # Set some aliases
       shellAliases = {
-        "::"=''sed "$ s/\n$//" | xargs -I_ --'';
+        "::" = ''sed "$ s/\n$//" | xargs -I_ --'';
         c = "clear";
-        chx="chmod +x";
+        chx = "chmod +x";
         v = "nvim";
         mkdir = "mkdir -vp";
         rm = "rm -rifv";
@@ -124,8 +124,8 @@ with lib;
         gb = "git branch";
         gt = "git tag";
         gaugcm = "git add -u && gcm";
-        gfp="git commit --amend --no-edit && git push --force-with-lease";
-   
+        gfp = "git commit --amend --no-edit && git push --force-with-lease";
+
         hist = "tmux capture-pane -pS - | ${pkgs.fzf}/bin/fzf";
         fixSsh = "echo 'UPDATESTARTUPTTY' | gpg-connect-agent > /dev/null 2>&1";
       };

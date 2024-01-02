@@ -4,7 +4,7 @@ inputs:
   nixpkgs.overlays = [ inputs.nur.overlay ];
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [
-      "python-2.7.18.7"
+    "python-2.7.18.7"
   ];
 
   #modules.myNvim.enable = true;

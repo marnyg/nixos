@@ -20,6 +20,7 @@ o.mouse = "a" -- Enable your mouse
 o.termguicolors = true -- set term gui colors most terminals support this
 o.splitbelow = true -- Horizontal splits will automatically be below
 o.splitright = true -- Vertical splits will automatically be to the right
+o.jumpoptions="stack"
 
 o.t_Co = "256" -- Support 256 colors
 --vim.o.conceallevel = 0 -- So that I can see `` in markdown files

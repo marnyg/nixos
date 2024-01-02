@@ -18,7 +18,7 @@ with lib;
       # Enable integration with Docker Desktop (needs to be installed)
       #docker-desktop.enable = true;
     };
-    networking.nameservers = ["1.1.1.1"];
+    networking.nameservers = [ "1.1.1.1" ];
     users.users.mar = { shell = pkgs.zsh; };
   };
 }

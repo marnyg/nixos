@@ -95,14 +95,14 @@ in
     mode = "challenge-response";
   };
   virtualisation.docker.enable = true;
-  users.groups.docker.members= ["mar"];
+  users.groups.docker.members = [ "mar" ];
 
-  nixpkgs.config.allowUnfree=true;
+  nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [
-      "python-2.7.18.7"
+    "python-2.7.18.7"
   ];
   nix.settings.trusted-users = [ "root" "mar" ];
-  
+
   ## 
   ## users and homemanager modules config
   ## 

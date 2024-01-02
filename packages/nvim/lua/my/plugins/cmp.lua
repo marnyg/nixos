@@ -16,11 +16,15 @@ cmp.setup({
             ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
             menu = ({
                 nvim_lsp = "[LSP]",
-                nvim_lsp_document_symbol= "[LSP_doc]",
+                nvim_lsp_document_symbol = "[LSP_doc]",
                 nvim_lsp_signature_help = "[LSP_sign]",
                 buffer = "[Buffer]",
                 luasnip = "[LuaSnip]",
                 nvim_lua = "[Lua]",
+                omni = "[Omni]",
+                calc = "[Calc]",
+                neorg = "[Neorg]",
+                path = "[Path]",
             })
 
             -- The function below will be called before any actual modifications from lspkind
@@ -53,16 +57,16 @@ cmp.setup({
     },
 
     sources = {
-        { name = "nvim_lsp",                 keyword_length = 2, priority = 1 },
-        { name = 'nvim_lsp_document_symbol', keyword_length = 3 },
-        { name = 'nvim_lsp_signature_help',  keyword_length = 3, },
-        { name = "nvim_lua", },
         { name = "neorg",                    priority = 1 },
-        { name = "luasnip" },
-        { name = "calc" },
-        { name = "path" },
-        { name = "buffer" },
-        { name = 'omni' }
+        { name = "nvim_lsp",                 priority = 1 },
+        { name = 'nvim_lsp_document_symbol', priority = 2 },
+        { name = 'nvim_lsp_signature_help',  priority = 2 },
+        { name = "luasnip",                  priority = 3 },
+        { name = "nvim_lua",                 priority = 4 },
+        { name = "calc",                     priority = 4 },
+        { name = "path",                     priority = 4 },
+        { name = "buffer",                   priority = 4 },
+        { name = 'omni',                     priority = 4 }
     },
 })
 

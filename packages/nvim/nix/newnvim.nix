@@ -5,6 +5,13 @@ let
     src = ../.;
   };
   #lsp-servers = with pkgs; [ sumneko-lua-language-server cargo rust-analyzer rnix-lsp rustc manix ripgrep ];
+  cs-snippets = pkgs.fetchFromGitHub
+    {
+      owner = "honza";
+      repo = "vim-snippets";
+      rev = "master";
+      sha256 = "9YLkTpEhTLFpAnikEaYasu1/dMqOn/uc3L78wgVdYqY=";
+    } + "/snippets/cs.snippets";
 in
 pkgs.neovim.override {
 
@@ -17,12 +24,17 @@ pkgs.neovim.override {
       " Update the PATH to include cargo, manix, and ripgrep
 
       let g:disable_paq = v:true
-      luafile ${config-nvim}/init.lua
       luafile ${config-nvim}/lua/my/options/init.lua
       luafile ${config-nvim}/lua/my/keybinds/init.lua
       luafile ${config-nvim}/lua/my/keybinds/UI.lua
       source ${config-nvim}/lua/my/ft/hcl/ft.detect
       source ${config-nvim}/lua/my/ft/hcl/syntax.vim
+      lua <<EOF
+        local map = vim.keymap.set
+        map("", "Q", "", {}) -- Begone, foul beast. I can invoke your wrath with gQ anyway.
+        map("", "<C-z>", "", {}) 
+        map("", "<leader>w", ":w<CR>", {})
+      EOF
     '';
     packages.myVimPackage = with pkgs.vimPlugins;  {
       # see examples below how to use custom packages
@@ -38,6 +50,23 @@ pkgs.neovim.override {
         {
           plugin = nvcode-color-schemes-vim;
         }
+        {
+          plugin = copilot-lua;
+          config = ''
+            lua <<EOF
+            vim.g.copilot_proxy_strict_ssl = false
+
+            require('copilot').setup({ 
+              copilot_node_command = '${pkgs.nodejs_20}/bin/node',
+              suggestion = {
+                keymap= {
+                  accept = "<M-p>"
+                }
+              }
+            })
+            EOF
+          '';
+        }
 
 
         # mystuff {{{1
@@ -45,10 +74,132 @@ pkgs.neovim.override {
           plugin = neorg;
           config = "luafile ${config-nvim}/lua/my/plugins/neorg.lua";
         }
-        {
-          plugin = nvim-tree-lua;
-          config = "lua require('nvim-tree').setup({})";
 
+        {
+          plugin = comment-nvim;
+          config = "lua require('Comment').setup() ";
+        }
+        {
+          plugin = pkgs.vimExtraPlugins.nui-nvim;
+          # config = "lua require('nui').setup({})";
+        }
+        {
+          plugin = pkgs.vimExtraPlugins.neo-tree-nvim;
+          config = ''
+              lua <<EOF
+              vim.keymap.set("n", "<C-n>", ":Neotree float toggle reveal<CR>")
+              vim.keymap.set("n", "<C-g>", ":Neotree git_status float toggle <CR>")
+              require("neo-tree").setup({
+                default_component_configs  = {
+                  popup_border_style = "rounded",
+                  enable_git_status = true,
+                  enable_diagnostics = true,
+                  container = {
+                    enable_character_fade = true
+                  },
+                  mappings = {
+                    ["U"] = function(state)
+                      local node = state.tree:get_node()
+                      require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
+                    end,
+                    ["esc"] = "close_window",
+                    ['D'] = "diff_files"
+                  }
+                }
+              })
+              diff_files = function(state)
+              local node = state.tree:get_node()
+              local log = require("neo-tree.log")
+              state.clipboard = state.clipboard or {}
+              if diff_Node and diff_Node ~= tostring(node.id) then
+                local current_Diff = node.id
+                require("neo-tree.utils").open_file(state, diff_Node, open)
+                vim.cmd("vert diffs " .. current_Diff)
+                log.info("Diffing " .. diff_Name .. " against " .. node.name)
+                diff_Node = nil
+                current_Diff = nil
+                state.clipboard = {}
+                require("neo-tree.ui.renderer").redraw(state)
+              else
+                local existing = state.clipboard[node.id]
+                if existing and existing.action == "diff" then
+                  state.clipboard[node.id] = nil
+                  diff_Node = nil
+                  require("neo-tree.ui.renderer").redraw(state)
+                else
+                  state.clipboard[node.id] = { action = "diff", node = node }
+                  diff_Name = state.clipboard[node.id].node.name
+                  diff_Node = tostring(state.clipboard[node.id].node.id)
+                  log.info("Diff source file " .. diff_Name)
+                  require("neo-tree.ui.renderer").redraw(state)
+                end
+              end
+            end
+
+            EOF
+          '';
+        }
+
+
+        #
+        #cmp stuff
+        #
+        lspkind-nvim
+        {
+          plugin = nvim-cmp;
+          config = "luafile ${config-nvim}/lua/my/plugins/cmp.lua";
+        }
+        cmp-nvim-lsp
+        cmp-nvim-lsp-signature-help
+        cmp-nvim-lsp-document-symbol
+        {
+          plugin = cmp_luasnip;
+          # config = ''
+          #   lua <<EOF
+          #   require("luasnip.loaders.from_snipmate").lazy_load({paths = "${}"});
+          #   EOF
+          # '';
+          config = ''
+            lua <<EOF
+            local ls = require("luasnip")
+            local path_to_cs_snippets = [[${cs-snippets}]]  -- use double square brackets for multi-line string in Lua
+            -- print("Path to CS snippets: " .. path_to_cs_snippets)
+            require("luasnip.loaders.from_snipmate").load({ paths = {"~/../../${cs-snippets}"} });
+            EOF
+          '';
+        }
+        cmp-calc
+        cmp-buffer
+        cmp-omni
+        cmp-path
+
+        #
+        #
+        #
+
+        {
+          plugin = diffview-nvim;
+          #config = "lua require('diffview.nvim')";
+        }
+        #vimExtraPlugins.lsp-rooter
+        {
+          plugin = project-nvim;
+          config = "lua require('project_nvim').setup({})";
+        }
+        {
+          plugin = neodev-nvim;
+          config = "lua require('neodev').setup({})";
+        }
+        {
+          plugin = which-key-nvim;
+          config = "lua require('which-key').setup({})";
+        }
+        {
+          plugin = fidget-nvim;
+          config = "lua require('fidget').setup({})";
+        }
+        {
+          plugin = luasnip;
         }
 
 
@@ -115,10 +266,10 @@ pkgs.neovim.override {
             vim.keymap.set("n", "<leader>a", mark.add_file)
             vim.keymap.set("n", "<leader>h", ui.toggle_quick_menu)
             
-            vim.keymap.set("n", "<C-1>", function() ui.nav_file(1) end)
-            vim.keymap.set("n", "<C-2>", function() ui.nav_file(2) end)
-            vim.keymap.set("n", "<C-3>", function() ui.nav_file(3) end)
-            vim.keymap.set("n", "<C-4>", function() ui.nav_file(4) end)
+            vim.keymap.set("n", "<leader>1", function() ui.nav_file(1) end)
+            vim.keymap.set("n", "<leader>2", function() ui.nav_file(2) end)
+            vim.keymap.set("n", "<leader>3", function() ui.nav_file(3) end)
+            vim.keymap.set("n", "<leader>4", function() ui.nav_file(4) end)
             EOF
           '';
         }
@@ -186,6 +337,10 @@ pkgs.neovim.override {
         #  plugin = lazygit-nvim;
         #  #config = "require('telescope').load_extension('lazygit')";
         #}
+        {
+          plugin = pkgs.vimExtraPlugins.git-conflict-nvim;
+          config = "lua require('git-conflict').setup({})";
+        }
 
 
         # LSP {{{1
