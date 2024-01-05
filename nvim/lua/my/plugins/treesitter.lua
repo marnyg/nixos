@@ -26,9 +26,9 @@ require("nvim-treesitter.configs").setup({
 
 		keymaps = {
 			init_selection = "gnn",
-			node_incremental = "gnn",
-			scope_incremental = "gns",
-			node_decremental = "gnp",
+			node_incremental = "n",
+			node_decremental = "N",
+			scope_incremental = "s",
 		},
 	},
 
