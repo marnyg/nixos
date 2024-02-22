@@ -18,6 +18,8 @@
       package = pkgs.nixUnstable;
       settings.experimental-features = [ "nix-command" "flakes" ];
     };
+    virtualisation.libvirtd.enable = true;
+    programs.virt-manager.enable = true;
 
     system.stateVersion = "22.11";
   };

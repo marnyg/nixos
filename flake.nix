@@ -25,9 +25,11 @@
           inputs.flake-root.flakeModule
           inputs.mission-control.flakeModule
           inputs.pre-commit-hooks-nix.flakeModule
+          ./nixos-modules
+          ./nixos-configurations
         ];
-        # flake.nixosConfiguration=import ./nixosConfiguration; #TODO
-        # flake.nixosModules=import ./nixosModules; #TODO
+        #flake.nixosConfiguration=import ./nixosConfiguration; #TODO
+        #flake.nixosModules = import ./nixos-modules; #TODO
         # flake.homemanagerModules =import homemanagerModules; #TODO
         perSystem = {
           imports = [ (import ./dev.nix) ];
