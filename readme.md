@@ -6,7 +6,7 @@ to rebuild: `pushd nixos/modules/ && nix flake update && popd && nix flake updat
 # to build a wsl image run:
 nix build .#nixosConfigurations.wsl2.config.system.build.installer
 
-# then open a new windows termioal tab in the reuslt folder with:
+# then open a new windows termioal tab in the result folder with:
 wt.exe -w 0 nt -d  $(wslpath -w $(realpath result/tarball))  
 
 # then remove old vm, import and start new version
@@ -23,7 +23,7 @@ nix build .#checks.x86_64-linux.miniOsTest
 # to build a iso image, run:
 nix build .#nixosConfigurations.tessystm3.config.system.build.isoImage
 # to build a flake, run:
-nixos-rebuild switch --flake ".#environmet"
+nixos-rebuild switch --flake ".#environment"
 # like this for desktop
 nixos-rebuild switch --flake ".#mardesk"	
 ```
@@ -32,8 +32,8 @@ nixos-rebuild switch --flake ".#mardesk"
 # todo 
 - [ ] set up lf https://rycee.gitlab.io/home-manager/options.html#opt-programs.lf.previewer.source
 - [ ] set up tmux [https://rycee.gitlab.io/home-manager/options.html#opt-programs.tmux.shell]
-- [ ] fix nvim flake to be installed on nixos sytem
-- [ ] try using xmonad istead of bspwm
+- [ ] fix nvim flake to be installed on nixos system
+- [ ] try using xmonad instead of bspwm
 - [ ] fix 1TB nvme disk
 - [ ] set up prinscrean program
 - [ ] add programs to sxhkd 

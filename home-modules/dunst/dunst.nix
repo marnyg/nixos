@@ -80,7 +80,7 @@ with lib;
           # Alignment of message text.
           # Possible values are "left", "center" and "right".
           alignment = "center";
-          # The frequency with wich text that is longer than the notification
+          # The frequency with which text that is longer than the notification
           # window allows bounces back and forth.
           # This option conflicts with "word_wrap".
           # Set to 0 to disable.

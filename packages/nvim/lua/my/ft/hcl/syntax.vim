@@ -1,5 +1,5 @@
 " Vim syntax file
-" Language:   HashiCorp Configuration Language (HCL)
+" Language:   HashCorp Configuration Language (HCL)
 " Maintainer: Jussi Virtanen
 " Repository: https://github.com/jvirtanen/vim-hcl
 " License:    Vim

@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ lib, config, ... }:
 with lib;
 {
   options.modules.waybar = {
@@ -156,7 +156,7 @@ with lib;
         color: #d8dee9;
       }
 
-      #backlight, #pulseaudio, #cpu, #memory, #temprature, #bluetooth, #network, #battery, #clock, #window {
+      #backlight, #pulseaudio, #cpu, #memory, #temperature, #bluetooth, #network, #battery, #clock, #window {
         border-radius: 10px;
         background-color: #2e3440;
         color: #d8dee9;

@@ -11,7 +11,7 @@ with lib;
     modules.wofi.enable = true;
     modules.waybar.enable = true;
     programs.waybar.systemd.enable = true;
-    services.mako.enable = true; # notification deamon
+    services.mako.enable = true; # notification daemon
 
     # dimmin screen at night
     services.wlsunset = {

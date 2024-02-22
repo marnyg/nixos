@@ -339,7 +339,7 @@ myLayout =
      -- Percent of screen to increment by when resizing panes
      delta   = 3/100
 
-     -- Gaps bewteen windows
+     -- Gaps between windows
      myGaps gap  = gaps [(U, gap),(D, gap),(L, gap),(R, gap)]
      gapSpaced g = spacing g . myGaps g
 

@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  nixpkgs-fmt = pkgs.runCommand "Chech formating" { nativeBuildInputs = [ pkgs.nixpkgs-fmt ]; } ''
+  nixpkgs-fmt = pkgs.runCommand "Check formatting" { nativeBuildInputs = [ pkgs.nixpkgs-fmt ]; } ''
     nixpkgs-fmt --check ${./.}
     touch $out
   '';

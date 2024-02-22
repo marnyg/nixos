@@ -1,4 +1,4 @@
-{ neovim-flake, vim-extra-plugins }:
+{ neovim-flake }:
 final: prev:
 
 let
@@ -6,13 +6,13 @@ let
     name = "config-nvim";
     src = ../.;
   };
-  vimExtraPlugins = vim-extra-plugins.packages.${prev.system};
+  #  vimExtraPlugins = vim-extra-plugins.packages.${prev.system};
 in
 
 {
   my-neovim = final.callPackage ./pkgs/my-neovim.nix {
     neovim = neovim-flake.packages.${prev.system}.neovim;
-    #neovim = neovim-flake.packages.${prev.system}.neovim-unwraped;
+    #neovim = neovim-flake.packages.${prev.system}.neovim-unwrapped;
     #neovim = pkgs.legacyPackages.x86_64-linux.neovim-unwrapped;
 
     inherit config-nvim;

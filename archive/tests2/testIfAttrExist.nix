@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> { } }:
 let
-  lib = pkgs.lib;
-  math = import ./isEven.nix { inherit lib; };
+  #  lib = pkgs.lib;
+  #  math = import ./isEven.nix { inherit lib; };
 
 
   ## Define the configuration
@@ -24,10 +24,10 @@ let
   };
 
   testResults = [
-    { exists = builtins.hasAttr "mar" config.users.users; descripton = "user mar exixts"; }
-    { exists = builtins.hasAttr "mar2" config.users.users; descripton = "user mar2 exixts"; }
-    { exists = builtins.hasAttr "docker" config.systemd.services; descripton = "docker service exists"; }
-    { exists = builtins.hasAttr "git" config.programs; descripton = "git program exits"; }
+    { exists = builtins.hasAttr "mar" config.users.users; description = "user mar exixts"; }
+    { exists = builtins.hasAttr "mar2" config.users.users; description = "user mar2 exixts"; }
+    { exists = builtins.hasAttr "docker" config.systemd.services; description = "docker service exists"; }
+    { exists = builtins.hasAttr "git" config.programs; description = "git program exits"; }
   ];
 
 
@@ -37,7 +37,7 @@ let
     #!/bin/sh
     ${builtins.concatStringsSep "\n" (
       builtins.map (result:
-        "if [ '${builtins.toString result.exists}' != '1' ]; then echo 'Test ${result.descripton} failed'; fi"
+        "if [ '${builtins.toString result.exists}' != '1' ]; then echo 'Test ${result.description} failed'; fi"
       ) testResults
     )}
     if [ '${builtins.toString (builtins.all (result: result.exists) testResults)}' != '1' ]; then exit 1; fi
