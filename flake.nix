@@ -16,6 +16,7 @@
     flake-root.url = "github:srid/flake-root";
     mission-control.url = "github:Platonic-Systems/mission-control";
     pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
+    process-compose-flake.url = "github:Platonic-Systems/process-compose-flake";
 
   };
 
@@ -28,15 +29,11 @@
           inputs.flake-root.flakeModule
           inputs.mission-control.flakeModule
           inputs.pre-commit-hooks-nix.flakeModule
+          inputs.process-compose-flake.flakeModule
           ./nixos-modules
           ./nixos-configurations
+          ./dev.nix
+          ./pkgs
         ];
-        # flake.homemanagerModules =import homemanagerModules; #TODO
-        perSystem = {
-          imports = [
-            ./dev.nix
-          ];
-        };
-
       };
 }

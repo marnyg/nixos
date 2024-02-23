@@ -1,6 +1,6 @@
-{ config, pkgs, ... }: {
-  config =
-    {
+{ ... }: {
+  perSystem = { config, pkgs, ... }: {
+    config = {
       mission-control.scripts = {
         r = {
           description = "reload direnv";
@@ -45,4 +45,5 @@
         programs.yamlfmt.enable = true;
       };
     };
+  };
 }
