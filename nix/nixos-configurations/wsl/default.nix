@@ -1,4 +1,4 @@
-{ pkgs, inputs, config, ... }:
+{ inputs, config, ... }:
 {
   nixpkgs.overlays = [ inputs.nur.overlay ];
   nixpkgs.config.allowUnfree = true;

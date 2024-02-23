@@ -7,7 +7,7 @@
 # [ horizontal vertical common clone-largest ]
 # manulay trigger by running `autorandr default`
 # get finger print with `autorandr --fingerprint`
-{ pkgs, lib, config, ... }:
+{ lib, config, ... }:
 with lib;
 {
   options.modules.autorandr = {

@@ -71,7 +71,7 @@
   services.openssh.enable = true;
 
 
-  users.users.mar = { system, ... }: {
+  users.users.mar = { ... }: {
     isNormalUser = true;
     extraGroups = [
       "docker"

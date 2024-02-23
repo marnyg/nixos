@@ -1,4 +1,4 @@
-pkgs: {
+_pkgs: {
   # NixOS tests are run inside a virtual machine, and here we specify system of the machine.
 
   #system = "x86_64-linux";
@@ -6,7 +6,7 @@ pkgs: {
 
 
   nodes.mini =
-    { pkgs, lib, ... }:
+    { pkgs, ... }:
     {
       boot.kernelPackages = pkgs.linuxPackages_latest;
       sound.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then

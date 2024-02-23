@@ -14,7 +14,7 @@
         pkgs = import nixpkgs {
           inherit system;
           overlays = [
-            (final: prev: {
+            (_final: prev: {
               vimExtraPlugins2.boole = prev.vimUtils.buildVimPluginFrom2Nix {
                 name = "boole";
                 src = boole-nvim;

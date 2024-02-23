@@ -30,10 +30,8 @@
           inputs.mission-control.flakeModule
           inputs.pre-commit-hooks-nix.flakeModule
           inputs.process-compose-flake.flakeModule
-          ./nixos-modules
-          ./nixos-configurations
-          ./dev.nix
           ./pkgs
+          ./nix
         ];
       };
 }
