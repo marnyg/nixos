@@ -21,7 +21,7 @@
         {
           buildInputs = [ pkgs.nixd pkgs.nil ];
           LSP_SERVERS = "nixd, nil_ls";
-          shellHook = "${config.pre-commit.installationScript}";
+          shellHook = config.pre-commit.installationScript;
           inputsFrom = [ config.mission-control.devShell ];
         };
 

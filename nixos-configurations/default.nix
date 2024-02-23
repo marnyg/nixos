@@ -48,13 +48,8 @@ let
       inherit system;
       specialArgs = { inherit lib; };
       modules = [
-        {
-          _module.args = {
-            pkgs = lib.mkForce pkgs;
-          };
-        }
+        { _module.args = { pkgs = lib.mkForce pkgs; }; }
         #self.nixosModules.default
-        self.nixosModules.default
         module
       ];
     };
@@ -74,8 +69,8 @@ in
      ```
   */
   flake.nixosConfigurations = {
-    vm = nixosSystemFor "x86_64-linux" ./vm.nix;
-    vm-rootless = nixosSystemFor "x86_64-linux" ./vm-rootless.nix;
+    wsl = nixosSystemFor "x86_64-linux" ./wslRefac.nix;
+    laptop = nixosSystemFor "x86_64-linux" ./laptop;
   };
 
   perSystem = { ... }: {
@@ -87,8 +82,8 @@ in
       ```
     */
     apps = {
-      vm = vmApp "vm";
-      vm-rootless = vmApp "vm-rootless";
+      wsl = vmApp "wsl";
+      laptop = vmApp "laptop";
     };
 
     # NixOS tests for nix-snapshotter.

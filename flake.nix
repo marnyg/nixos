@@ -3,12 +3,15 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
+
 
     home-manager.url = "github:nix-community/home-manager";
     nur.url = "github:nix-community/NUR";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
 
-    flake-parts.url = "github:hercules-ci/flake-parts";
+
     treefmt-nix.url = "github:numtide/treefmt-nix";
     flake-root.url = "github:srid/flake-root";
     mission-control.url = "github:Platonic-Systems/mission-control";
@@ -28,11 +31,11 @@
           ./nixos-modules
           ./nixos-configurations
         ];
-        #flake.nixosConfiguration=import ./nixosConfiguration; #TODO
-        #flake.nixosModules = import ./nixos-modules; #TODO
         # flake.homemanagerModules =import homemanagerModules; #TODO
         perSystem = {
-          imports = [ (import ./dev.nix) ];
+          imports = [
+            ./dev.nix
+          ];
         };
 
       };
