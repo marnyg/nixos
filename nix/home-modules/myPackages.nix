@@ -31,7 +31,7 @@ with lib;
         libnotify
         #sct
         #hyperfine
-        unrar
+        #unrar
         unzip
 
         # GUI applications

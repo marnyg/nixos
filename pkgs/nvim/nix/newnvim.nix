@@ -80,11 +80,11 @@ pkgs.neovim.override {
           config = "lua require('Comment').setup() ";
         }
         {
-          plugin = pkgs.vimExtraPlugins.nui-nvim;
-          # config = "lua require('nui').setup({})";
+          plugin = nui-nvim;
+          config = "lua require('nui').setup({})";
         }
         {
-          plugin = pkgs.vimExtraPlugins.neo-tree-nvim;
+          plugin = neo-tree-nvim;
           config = ''
               lua <<EOF
               vim.keymap.set("n", "<C-n>", ":Neotree float toggle reveal<CR>")
@@ -338,7 +338,7 @@ pkgs.neovim.override {
         #  #config = "require('telescope').load_extension('lazygit')";
         #}
         {
-          plugin = pkgs.vimExtraPlugins.git-conflict-nvim;
+          plugin = git-conflict-nvim;
           config = "lua require('git-conflict').setup({})";
         }
 
@@ -371,7 +371,7 @@ pkgs.neovim.override {
           config = "lua require('nvim-surround').setup({})";
         }
         {
-          plugin = pkgs.vimExtraPlugins2.boole;
+          plugin = boole-nvim;
           config = '' 
             lua <<EOF
             require('boole').setup({
@@ -388,7 +388,7 @@ pkgs.neovim.override {
           '';
         }
         {
-          plugin = pkgs.vimExtraPlugins.iron-nvim;
+          plugin = iron-nvim;
           config = '' 
             lua <<EOF
             local iron = require("iron.core")
