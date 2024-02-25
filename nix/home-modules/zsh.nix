@@ -6,10 +6,10 @@ with lib;
   };
 
   config = mkIf config.modules.zsh.enable {
-    programs.starship = {
-      enable = true;
-      enableZshIntegration = true;
-    };
+    #programs.starship = {
+    #  enable = true;
+    #  enableZshIntegration = true;
+    #};
     programs.eza = {
       enable = true;
       enableAliases = true;
@@ -71,12 +71,12 @@ with lib;
         function mkcd() { mkdir -p "$1" && cd "$1" && pwd; }
         function ::() { sed "$ s/\n$//" | xargs -I_ --; }
         function gcm() { git commit -m "$*" }
+
+        eval "$(${pkgs.starship}/bin/starship init zsh)"
       '';
 
       # Tweak settings for history
       history = {
-        save = 1000;
-        size = 1000;
         path = "$HOME/.cache/zsh_history";
       };
 

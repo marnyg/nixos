@@ -81,7 +81,6 @@ pkgs.neovim.override {
         }
         {
           plugin = nui-nvim;
-          config = "lua require('nui').setup({})";
         }
         {
           plugin = neo-tree-nvim;

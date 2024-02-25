@@ -40,15 +40,23 @@ jobs:
         uses: cachix/install-nix-action@6a9a9e84a173d90b3ffb42c5ddaf9ea033fad011  # v23
         with:
           extra_nix_config: access-tokens = github.com=${{ github.token }}
+
       - name: Set version 🏷️
         run: |
           echo ${{ needs.prepare.outputs.version }} > ./VERSION
           echo $(git rev-parse HEAD) >> ./VERSION
-      - name: Build installer 🛠️
-        run: |
-          sudo nix run --impure .#nixosConfigurations.wsl.config.system.build.tarballBuilder
-      - name: Upload installer 📤
-        uses: actions/upload-artifact@v3
+
+      - name: Summary Headline 📝
+        run: echo '## NixOS-WSL ${{ steps.version.outputs.version }}' >> $GITHUB_STEP_SUMMARY
+
+      - name: Build Tarball 🛠️
+        uses: ./.github/actions/build-wsl-tarball
         with:
-          name: installer
+          config: ${{ matrix.config }}
+          filename: nixos-wsl.tar.gz
+
+      - name: Upload Tarball 📤
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarball-${{ matrix.config }}
           path: nixos-wsl.tar.gz
