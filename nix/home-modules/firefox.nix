@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ config, lib, ... }:
 with lib;
 {
   options.modules.firefox = {
@@ -9,21 +9,24 @@ with lib;
     programs.firefox = {
       enable = true;
       profiles.mar = {
-        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-          decentraleyes
-          ublock-origin
-          clearurls
-          sponsorblock
-          darkreader
-          #h264ify
-          #df-youtube
-          #tree-style-tab
-          bitwarden
-          vim-vixen
-          sidebery
-          #pkgs.saka
-          #pkgs.saka-key
-        ];
+        extensions =
+          mkIf
+            (builtins.hasAttr "nur" config)
+            (with config.nur.repos.rycee.firefox-addons; [
+              decentraleyes
+              ublock-origin
+              clearurls
+              sponsorblock
+              darkreader
+              #h264ify
+              #df-youtube
+              #tree-style-tab
+              bitwarden
+              vim-vixen
+              sidebery
+              #pkgs.saka
+              #pkgs.saka-key
+            ]);
         settings = {
           "browser.ctrlTab.sortByRecentlyUsed" = true;
           "browser.startup.page" = 3;

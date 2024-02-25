@@ -16,7 +16,7 @@
             # Print a pony every 2 seconds, because why not.
             ponysay.command = ''
               while true; do
-                ${lib.getExe pkgs.ponysay} "Enjoy our sqlite-web demo!"
+                ${lib.getExe pkgs.cowsay} "Enjoy our sqlite-web demo!"
                 sleep 2
               done
             '';

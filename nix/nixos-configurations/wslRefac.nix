@@ -1,7 +1,8 @@
-{ pkgs, inputs, config, ... }:
+{ pkgs, config, ... }:
 let
   # TODO:move this out into own users file
   defaultHMConfig = { config, ... }: {
+    #imports = builtins.attrValues config.myHomemanagerModules.modules;
     myHmModules.sharedDefaults.enable = true;
 
     modules.zsh.enable = true;
@@ -80,7 +81,7 @@ in
   ##
   ## system modules config
   ##
-  modules.myNvim.enable = true; # TODO: should be managed by homemanger
+  #myModules.myNvim.enable = true; # TODO: should be managed by homemanger
   myModules.wsl.enable = true;
   myModules.defaults.enable = true;
 
@@ -114,6 +115,5 @@ in
       { name = "test"; homeManager = true; }
       { name = "notHM"; homeManager = false; }
     ];
-    personalHomeManagerModules = [{ imports = inputs.my-modules.hmModulesModules.x86_64-linux; }];
   };
 }

@@ -46,10 +46,10 @@ let
     in
     lib.nixosSystem {
       inherit system;
-      specialArgs = { inherit lib; };
+      specialArgs = { inherit lib; inputs = self.inputs; };
       modules = [
         { _module.args = { pkgs = lib.mkForce pkgs; }; }
-        #self.nixosModules.default
+        self.nixosModules.default
         module
       ];
     };

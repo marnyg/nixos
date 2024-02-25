@@ -31,11 +31,6 @@ in
       type = lib.types.listOf userType;
       default = [{ name = "mar"; homeManager = true; }];
     };
-    personalHomeManagerModules = lib.mkOption {
-      description = "List of personal Home Manager modules";
-      type = lib.types.listOf lib.types.attrs;
-      default = [ ];
-    };
   };
 
   config = lib.mkIf config.myModules.createUsers.enable {
@@ -55,7 +50,7 @@ in
       useGlobalPkgs = true;
       useUserPackages = true;
 
-      sharedModules = config.myModules.createUsers.personalHomeManagerModules;
+      #sharedModules = lib.attrValues config.myHomemanagerModules.modules;
 
       users = lib.listToAttrs (map (user: { name = user.name; value = user.homeManagerConf; })
         (builtins.filter (user: user.homeManager) config.myModules.createUsers.users));

@@ -1,12 +1,11 @@
-pkgs:
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 with lib;
 {
-  options.modules.myNvim = {
+  options.myModules.myNvim = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.myNvim.enable {
+  config = mkIf config.myModules.myNvim.enable {
 
     programs.neovim.enable = true;
     environment.systemPackages = with pkgs; [

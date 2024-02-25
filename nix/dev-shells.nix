@@ -15,6 +15,11 @@
           exec = config.treefmt.build.wrapper;
           category = "Dev Tools";
         };
+        #  buildWslImage = {
+        #    description = "Build image for usage in wls";
+        #    exec = self.nixosConfigurations.wsl.config.system.build.tarballBuilder;
+        #    category = "Dev Tools";
+        #  };
       };
 
       devShells.default = pkgs.mkShell
@@ -33,6 +38,7 @@
         settings.hooks.typos.enable = true;
         settings.hooks.commitizen.enable = true;
         settings.hooks.yamllint.enable = true;
+        settings.settings.yamllint.relaxed = true;
         settings.settings.statix.format = "stderr";
       };
 

@@ -1,7 +1,7 @@
-{ pkgs, inputs, config, ... }:
+{ pkgs, ... }:
 let
 
-  # TODO:move this out into own users file
+  #TODO:move this out into own users file
   defaultHMConfig = {
     myHmModules.sharedDefaults.enable = true;
 
@@ -32,7 +32,7 @@ in
   ##
   ## system modules config
   ##
-  modules.myNvim.enable = true; # TODO: should be managed by homemanger
+  #modules.myNvim.enable = true; # TODO: should be managed by homemanger
   myModules.wsl.enable = false;
   myModules.defaults.enable = true;
 
@@ -47,7 +47,6 @@ in
       { name = "test"; homeManager = true; homeManagerConf = defaultHMConfig; }
       { name = "notHM"; homeManager = false; }
     ];
-    personalHomeManagerModules = [{ imports = inputs.my-modules.hmModulesModules.x86_64-linux; }];
   };
 
 

@@ -1,7 +1,9 @@
 {
   imports = [
     ./nixos-modules
+    ./home-modules
     ./nixos-configurations
-    ./dev.nix
+    ./dev-shells.nix
+    ./overlay.nix
   ];
 }
