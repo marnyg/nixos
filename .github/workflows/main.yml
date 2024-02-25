@@ -52,7 +52,7 @@ jobs:
       - name: Build Tarball 🛠️
         uses: ./.github/actions/build-wsl-tarball
         with:
-          config: ${{ matrix.config }}
+          config: wsl
           filename: nixos-wsl.tar.gz
 
       - name: Upload Tarball 📤
