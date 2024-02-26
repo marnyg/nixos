@@ -2,50 +2,39 @@
   description = "NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    #nixpkgs.url = "github:NixOS/nixpkgs/release-23.05";
-    flake-utils.url = "github:numtide/flake-utils";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    nur.url = "github:nix-community/NUR";
-    nixos-wsl.url = "github:nix-community/NixOS-WSL";
-    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+    #nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
 
-    my-nvim.url = "path:./nvim";
-    my-nvim.inputs.nixpkgs.follows = "nixpkgs";
 
-    my-modules.url = "path:./nixos/modules";
-    my-modules.inputs.my-nvim.url = "path:./nvim";
-    my-modules.inputs.nixpkgs.follows = "nixpkgs";
+    #home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "github:nix-community/home-manager/release-23.11";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    nur.url = "github:nix-community/NUR";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL";
+
+
+    treefmt-nix.url = "github:numtide/treefmt-nix";
+    flake-root.url = "github:srid/flake-root";
+    mission-control.url = "github:Platonic-Systems/mission-control";
+    pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
+    process-compose-flake.url = "github:Platonic-Systems/process-compose-flake";
+
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
-
-    let pkgs = (import nixpkgs { system = "x86_64-linux"; }); in
-    {
-      nixosConfigurations = import ./nixos/systems inputs;
-      test = builtins.fromJSON ''{"asd":"sd"}'';
-      #mytest = (import ./nixos/tests/unit/firstUnitTest.nix { self = (self); pkgs = pkgs; }); 
-    } //
-    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
-      let pkgs = (import nixpkgs { inherit system; }); in
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; }
       {
-        apps.default = {
-          type = "app";
-          program = "${pkgs.coreutils}/bin/echo";
-        };
-
-        #use with `nix run .#testrun my echo command`
-        apps.testrun = {
-          type = "app";
-          program = "${pkgs.coreutils}/bin/echo";
-        };
-
-        #use by running `nix develop`
-        devShells.default = import ./flakeUtils/shell.nix { inherit pkgs self; };
-        checks = import ./flakeUtils/checks.nix { inherit inputs pkgs self; };
-        formatter = pkgs.nixpkgs-fmt;
-      });
+        systems = [ "x86_64-linux" ];
+        imports = [
+          inputs.treefmt-nix.flakeModule
+          inputs.flake-root.flakeModule
+          inputs.mission-control.flakeModule
+          inputs.pre-commit-hooks-nix.flakeModule
+          inputs.process-compose-flake.flakeModule
+          ./pkgs
+          ./nix
+        ];
+      };
 }
