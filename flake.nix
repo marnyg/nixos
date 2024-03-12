@@ -21,6 +21,10 @@
     pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
     process-compose-flake.url = "github:Platonic-Systems/process-compose-flake";
 
+    # nixvim.url = "github:nix-community/nixvim";
+    nixvim.url = "github:nix-community/nixvim/nixos-23.11";
+
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs:
