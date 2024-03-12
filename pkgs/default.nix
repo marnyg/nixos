@@ -1,3 +1,6 @@
 {
-  imports = [ ./proc-compose-example ];
+  imports = [
+    ./proc-compose-example
+    ./nixvim
+  ];
 }
