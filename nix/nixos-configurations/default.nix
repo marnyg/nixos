@@ -1,4 +1,4 @@
-{ self, lib, withSystem, ... }:
+{ self, lib, withSystem, inputs, ... }:
 let
   nixosSystemFor = system: module:
     let
@@ -13,6 +13,7 @@ let
       modules = [
         { _module.args = { pkgs = lib.mkForce pkgs; }; }
         self.nixosModules.default
+        self.nixosModules.nixvim
         module
       ];
     };
@@ -34,6 +35,25 @@ in
   flake.nixosConfigurations = {
     wsl = nixosSystemFor "x86_64-linux" ./wslRefac.nix;
     laptop = nixosSystemFor "x86_64-linux" ./laptop;
+    miniVm = nixosSystemFor "x86_64-linux"
+      ({ pkgs, ... }: {
+
+
+        programs.zsh.enable = true; #TODO: needed if i set default user shell to zsh
+        users.users.mar = {
+          isNormalUser = true;
+          shell = pkgs.bash;
+          extraGroups = [ "wheel" ];
+          password = "123";
+        };
+
+        imports = [ self.nixosModules.nixvim ];
+        myModules.myNixvim.enable = true;
+
+        # programs.git.enable = true; #TODO: needed if i set default user shell to zsh
+        system.stateVersion = "23.11";
+
+      });
   };
 
   perSystem = { ... }: {
@@ -43,10 +63,11 @@ in
       ```sh
       nix run .#vm
       ```
-    */
+      */
     apps = {
       wsl = vmApp "wsl";
       laptop = vmApp "laptop";
+      miniVm = vmApp "miniVm";
     };
 
     # NixOS tests for nix-snapshotter.

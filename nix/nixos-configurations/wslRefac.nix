@@ -82,6 +82,8 @@ in
   ## system modules config
   ##
   myModules.myNvim.enable = true; # TODO: should be managed by homemanger
+  # myModules.myNixvim.enable = true;
+
   myModules.wsl.enable = true;
   myModules.defaults.enable = true;
 
@@ -101,6 +103,7 @@ in
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [
     "python-2.7.18.7"
+    "nix-2.16.2"
   ];
   nix.settings.trusted-users = [ "root" "mar" ];
 

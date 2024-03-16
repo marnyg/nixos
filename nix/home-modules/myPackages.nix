@@ -22,7 +22,7 @@ with lib;
         #tealdeer
         #exa
         #duf
-        spotify-tui
+        # spotify-tui
         playerctl
         gnupg
         #slop

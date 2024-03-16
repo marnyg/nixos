@@ -1,23 +1,20 @@
-{ inputs, ... }:
+{ inputs, self, ... }:
+let
+  nixvimModule = { imports = [ ./nixvim.nix ]; };
+in
 {
-  flake.nixosModules =
+  flake.HomemanagerModules =
     let
-      nixosModule = {
-        imports = [ inputs.nixvim.nixosModules.nixvim ];
-        # programs.nixvim.enable = true;
-        programs.nixvim = import ./nixvim.nix;
-      };
-
-
-
-      homemanagerModule = { inputs, outputs, nixpkgs, config, lib, pkgs, ... }: {
-        home-manager.users.juuso.programs.nixvim = let neovim = (import ./nixvim.nix) { inherit config pkgs; }; in with neovim.config; {
-          inherit colorschemes extraConfigVim extraConfigLua extraPackages plugins extraPlugins;
-          enable = true;
-          viAlias = true;
-          vimAlias = true;
-          defaultEditor = true;
-        };
+      homemanagerModule = { config, pkgs, ... }: {
+        home-manager.users.juuso.programs.nixvim =
+          let neovim = (import ./nixvim.nix) { inherit config pkgs; };
+          in with neovim.config; {
+            inherit colorschemes extraConfigVim extraConfigLua extraPackages plugins extraPlugins;
+            enable = true;
+            viAlias = true;
+            vimAlias = true;
+            defaultEditor = true;
+          };
         home-manager.users.juuso.editorconfig = {
           enable = true;
           settings = {
@@ -35,24 +32,39 @@
       };
     in
     {
+      # default = { imports = [ nixosModule ]; };
+      nixvim = homemanagerModule;
+    };
+  flake.nixosModules =
+    let
+      nixosModule =
+        { lib, config, pkgs, ... }: with lib; {
+
+          imports = [ inputs.nixvim.nixosModules.nixvim ];
+
+          options.myModules.myNixvim = {
+            enable = mkOption { type = types.bool; default = false; };
+          };
+
+          config = mkIf config.myModules.myNixvim.enable {
+            environment.systemPackages = [ self.packages.${pkgs.system}.nixvim ];
+
+          };
+        };
+    in
+    {
       default = { imports = [ nixosModule ]; };
       nixvim = nixosModule;
     };
 
   perSystem = { pkgs, system, ... }: {
+    checks.nixvim = inputs.nixvim.lib."${system}".check.mkTestDerivationFromNixvimModule {
+      inherit pkgs;
+      module = nixvimModule;
+    };
+
     packages.nixvim =
-      inputs.nixvim.legacyPackages."${system}".makeNixvimWithModule {
-        inherit pkgs;
-        module = {
-          imports = [
-            # inputs.juuso.outputs.nixosModules.neovim
-            ./nixvim.nix
-          ];
-          plugins.lightline.enable = true;
-        };
-      };
-    # (
-    # inputs.nixvim.legacyPackages."${system}".makeNixvim (import ./nixvim.nix)
-    # );
+      inputs.nixvim.legacyPackages."${system}".makeNixvimWithModule
+        { inherit pkgs; module = nixvimModule; };
   };
 }
