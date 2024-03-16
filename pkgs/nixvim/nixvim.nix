@@ -1,11 +1,16 @@
-# {
-#
-#   # enable = true;
-#   colorschemes.gruvbox.enable = true;
-# }
 { config, pkgs, ... }: {
+  # enable =true;
   options = { };
+
+  imports = [ ./langs.nix ];
+
   config = {
+    options = {
+      number = true; # Show line numbers
+      relativenumber = true; # Show relative line numbers
+
+      shiftwidth = 2; # Tab width should be 2
+    };
     colorschemes.base16 = {
       enable = true;
       colorscheme = "ia-dark";
@@ -38,7 +43,7 @@
         enable = true;
         servers = {
           bashls.enable = true;
-          nixd.enable = true;
+          # nixd.enable = true;
         };
       };
       lsp-format.enable = true;
