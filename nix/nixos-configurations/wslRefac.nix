@@ -81,8 +81,8 @@ in
   ##
   ## system modules config
   ##
-  myModules.myNvim.enable = true; # TODO: should be managed by homemanger
-  # myModules.myNixvim.enable = true;
+  # myModules.myNvim.enable = true; # TODO: should be managed by homemanger
+  myModules.myNixvim.enable = true;
 
   myModules.wsl.enable = true;
   myModules.defaults.enable = true;

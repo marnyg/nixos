@@ -9,17 +9,12 @@ map("n", "<C-l>", "<C-w>l", { silent = true })
 
 map("n", "<leader>ta", ":$tabnew<CR>", { noremap = true })
 map("n", "<leader>tc", ":tabclose<CR>", { noremap = true })
+map("n", "<leader>tmp", ":-tabmove<CR>", { noremap = true })
+map("n", "<leader>tmn", ":+tabmove<CR>", { noremap = true })
+
 map("n", "<leader>to", ":tabonly<CR>", { noremap = true })
 map("n", "<leader>tn", ":tabn<CR>", { noremap = true })
 map("n", "<leader>tp", ":tabp<CR>", { noremap = true })
--- move current tab to previous position
-map("n", "<leader>tmp", ":-tabmove<CR>", { noremap = true })
--- move current tab to next position
-map("n", "<leader>tmn", ":+tabmove<CR>", { noremap = true })
-
--- Tab switch buffer
-map("n", "<TAB>", ":bnext<CR>", { noremap = true, silent = true })
-map("n", "<S-TAB>", ":bprevious<CR>", { noremap = true, silent = true })
 
 -- TODO fix this
 -- Terminal window navigation
