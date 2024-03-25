@@ -12,7 +12,7 @@ with lib;
       enable = true;
       userName = "marius";
       userEmail = "marnyg@proton.me";
-      delta.enable = true;
+      difftastic.enable = true;
       ignores = [
         "**/.envrc"
         "${config.home.homeDirectory}/git/sendra/**/flake.*"
