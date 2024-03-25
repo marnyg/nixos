@@ -60,6 +60,8 @@ with lib;
         #nheko #matrix client
         pavucontrol
         #spotify
+        awscli2
+        aws-azure-login
       ];
     };
 }
