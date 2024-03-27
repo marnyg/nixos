@@ -52,7 +52,7 @@
         enable = true;
         servers = {
           bashls.enable = true;
-          # nixd.enable = true;
+          nixd.enable = true;
         };
       };
       # lsp-format.enable = true;
@@ -157,7 +157,7 @@
       treesitter = {
         enable = true;
         indent = true;
-        folding = true;
+        #folding = true;
         nixvimInjections = true;
         incrementalSelection.enable = true;
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
