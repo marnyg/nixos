@@ -1,5 +1,4 @@
 { config, pkgs, ... }: {
-  # enable =true;
   options = { };
 
   imports = [ ./langs.nix ];
@@ -7,22 +6,14 @@
   config = {
     options = {
       relativenumber = true; # Show relative line numbers
-      # cursorline = true;
-      # laststatus = 2;
-      # shiftwidth = 2; # Tab width should be 2
       updatetime = 250;
       timeoutlen = 300;
+      foldlevel = 20;
     };
-    globals = {
-      # mapleader = "\\";
-      # nobackup = true;
-      # noswapfile = true;
-    };
-    colorschemes.catppuccin = {
-      enable = true;
-    };
-    extraConfigVim = ''
-    '';
+
+    globals = { };
+    colorschemes.catppuccin = { enable = true; };
+
     extraConfigLua = ''
       local map = vim.keymap.set
       -- better indenting
@@ -33,13 +24,16 @@
       map("x", "K", ":move '<-2<CR>gv-gv", { noremap = true, silent = true })
       map("x", "J", ":move '>+1<CR>gv-gv", { noremap = true, silent = true })
 
-      vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
-      vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
-      vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
-      vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+      map('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
+      map('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
+      map('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
+      map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+      map('n', '<leader>.', ":e %:p:h<CR>", { desc = 'Open folder of current file' })
+      map('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
-      vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+      vim.notify = require('mini.notify').make_notify()
     '';
+
     extraPackages = with pkgs; [
       fd
       gcc
@@ -47,6 +41,7 @@
       ripgrep
       shellcheck
     ];
+
     plugins = {
       lsp = {
         enable = true;
@@ -59,13 +54,12 @@
       conform-nvim.enable = true;
       copilot-lua = {
         enable = true;
-
       };
-      # conform-nvim.formatOnSave='' 
-      # '';
-      luasnip.enable = true;
+
       friendly-snippets.enable = true;
+
       # gitsigns.enable = true;
+
       indent-blankline = {
         enable = true;
         scope = {
@@ -73,29 +67,23 @@
           showStart = true;
         };
       };
+
       telescope = {
         enable = true;
         extensions.fzf-native.enable = true;
         extensions.ui-select.enable = true;
         keymaps = {
-          "<leader>ff" = "find_files";
-          "<C-p>" = {
-            action = "git_files";
-            desc = "Telescope Git Files";
-          };
-          "<leader>fg" = "live_grep";
-          # map("n", "<leader>ff", "<cmd>Telescope git_files<cr>", { noremap = true, silent = true })
-          # map("n", "<leader>fp", "<cmd>Telescope projects<cr>", { noremap = true, silent = true })
-          # map("n", "<leader>fsa", "<cmd>Telescope live_grep<cr>", { noremap = true, silent = true })
-          # map("n", "<leader>fsb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", { noremap = true, silent = true })
-          # map("n", "<leader>fj", "<cmd>Telescope jumplist<cr>", { noremap = true, silent = true })
-          # map("n", "<leader>ft", "<cmd>Telescope treesitter<cr>", { noremap = true, silent = true })
-          # map("n", "<leader>fgbb", "<cmd>Telescope git_branches<cr>", { noremap = true, silent = true })
-          # map("n", "<leader>fgc", "<cmd>Telescope git_commits<cr>", { noremap = true, silent = true })
-          # map("n", "<leader>fgbc", "<cmd>Telescope git_bcommits<cr>", { noremap = true, silent = true })
-          # map("n", "<leader>fgs", "<cmd>Telescope git_status<cr>", { noremap = true, silent = true })
-          # map("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { noremap = true, silent = true })
-          # map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { noremap = true, silent = true })
+          #"<C-p>" = { action = "git_files"; desc = "Telescope Git Files"; };
+          "<leader>sh" = { action = "help_tags"; desc = "[S]earch [H]elp"; };
+          "<leader>sk" = { action = "keymaps"; desc = "[S]earch [K]eymaps"; };
+          "<leader>sf" = { action = "find_files"; desc = "[S]earch [F]iles"; };
+          "<leader>ss" = { action = "builtin"; desc = "[S]earch [S]elect Telescope"; };
+          "<leader>sw" = { action = "grep_string"; desc = "[S]earch current [W]ord"; };
+          "<leader>sg" = { action = "live_grep"; desc = "[S]earch by [G]rep"; };
+          "<leader>sd" = { action = "diagnostics"; desc = "[S]earch [D]iagnostics"; };
+          "<leader>sr" = { action = "resume"; desc = "[S]earch [R]esume"; };
+          "<leader>s." = { action = "oldfiles"; desc = "[S]earch Recent Files (\".\" for repeat)"; };
+          "<leader><leader>" = { action = "buffers"; desc = "[ ] Find existing buffers"; };
         };
         # extraOptionst='' '';
       };
@@ -157,7 +145,7 @@
       treesitter = {
         enable = true;
         indent = true;
-        #folding = true;
+        folding = true;
         nixvimInjections = true;
         incrementalSelection.enable = true;
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
@@ -184,10 +172,22 @@
           vimdoc
           xml
           yaml
+          norg
         ];
       };
       treesitter-context.enable = true;
-      notify.enable = true;
+      fidget.enable = true;
+      oil = {
+        enable = true;
+        keymaps = {
+          "<C-l>" = false;
+          "<C-h>" = false;
+          "<C-s>" = false;
+          "<C-r>" = "actions.refresh";
+          "y." = "actions.copy_entry_path";
+        };
+      };
+      todo-comments.enable = true;
       tmux-navigator.enable = true;
       mini = {
         enable = true;
@@ -195,7 +195,7 @@
           ai = { n_lines = 500; };
           surround = { };
           trailspace = { };
-          # notify= { };
+          notify = { };
           comment = { };
           statusline = { };
           basics = {
@@ -206,51 +206,125 @@
         };
       };
 
-      # fugitive.enable = true;
-      # noice.enable = true;
-      # notify.enable = true;
-      # cmp = {
-      #   enable = true;
-      #   settings = {
-      #     mapping = {
-      #       "<CR>" = "cmp.mapping.confirm({ select = true })";
-      #       "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
-      #     };
-      #     snippet.expand = "luasnip";
-      #     sources = [
-      #       { name = "buffer"; }
-      #       { name = "luasnip"; }
-      #       { name = "nvim_lsp"; }
-      #       { name = "path"; }
-      #       { name = "tmux"; }
-      #     ];
-      #   };
-      # };
-      # lualine = {
-      #   enable = true;
-      #   theme = "base16";
-      #   iconsEnabled = false;
-      #   sections = {
-      #     lualine_a = [ "" ];
-      #     lualine_b = [ "" ];
-      #     lualine_c = [ "location" { name = "filename"; extraConfig.path = 1; } "filetype" ];
-      #     lualine_x = [ "diagonostics" ];
-      #     lualine_y = [ "" ];
-      #     lualine_z = [ "mode" ];
-      #   };
-      #   componentSeparators = {
-      #     left = "";
-      #     right = "";
-      #   };
-      #   sectionSeparators = {
-      #     left = "";
-      #     right = "";
-      #   };
-      # };
+      neorg = {
+        enable = true;
+        modules = {
+          "core.defaults" = { };
+          "core.concealer".config.icon_preset = "diamond";
+          "core.dirman".config.workspaces.notes = "~/git/notes";
+          "core.keybinds".config.default_keybinds = true;
+          "core.completion".config = { engine = "nvim-cmp"; };
+        };
+
+      };
+
+
+      luasnip = {
+        enable = true;
+        extraConfig.enable_autosnippets = true;
+      };
+      cmp-nvim-lua.enable = true;
+      cmp-nvim-lsp.enable = true;
+      cmp_luasnip.enable = true;
+      cmp-buffer.enable = true;
+      cmp-calc.enable = true;
+      cmp-cmdline.enable = true;
+      cmp-conventionalcommits.enable = true;
+      cmp-nvim-lsp-signature-help.enable = true;
+      cmp-nvim-lsp-document-symbol.enable = true;
+      cmp-treesitter.enable = true;
+      cmp-emoji.enable = true;
+      cmp-spell.enable = true;
+      cmp = {
+        enable = true;
+        autoEnableSources = true;
+        settings = {
+          mapping = {
+            __raw = ''  
+
+                cmp.mapping.preset.insert {
+                -- Select the [n]ext item
+                ['<C-n>'] = cmp.mapping.select_next_item(),
+                -- Select the [p]revious item
+                ['<C-p>'] = cmp.mapping.select_prev_item(),
+
+                -- Scroll the documentation window [b]ack / [f]orward
+                ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+                ['<C-f>'] = cmp.mapping.scroll_docs(4),
+
+                -- Accept ([y]es) the completion.
+                --  This will auto-import if your LSP supports it.
+                --  This will expand snippets if the LSP sent a snippet.
+                ['<C-y>'] = cmp.mapping.confirm { select = true },
+
+                -- Manually trigger a completion from nvim-cmp.
+                --  Generally you don't need this, because nvim-cmp will display
+                --  completions whenever it has completion options available.
+                ['<C-Space>'] = cmp.mapping.complete {},
+
+                -- Think of <c-l> as moving to the right of your snippet expansion.
+                --  So if you have a snippet that's like:
+                --  function $name($args)
+                --    $body
+                --  end
+                --
+                -- <c-l> will move you to the right of each of the expansion locations.
+                -- <c-h> is similar, except moving you backwards.
+                ['<C-l>'] = cmp.mapping(function()
+		  local luasnip = require 'luasnip'
+                  if luasnip.expand_or_locally_jumpable() then
+                    luasnip.expand_or_jump()
+                  end
+                end, { 'i', 's' }),
+                ['<C-h>'] = cmp.mapping(function()
+		  local luasnip = require 'luasnip'
+                  if luasnip.locally_jumpable(-1) then
+                    luasnip.jump(-1)
+                  end
+                end, { 'i', 's' })
+	      }
+            '';
+          };
+          snippet.expand = ''function(args) require('luasnip').lsp_expand(args.body) end'';
+          sources = [
+            { name = "buffer"; }
+            { name = "calc"; }
+            { name = "luasnip"; }
+            { name = "nvim_lsp"; }
+            { name = "path"; }
+            { name = "cmdline"; }
+            { name = "neorg"; }
+            { name = "emoji"; }
+            { name = "nvim_lua"; }
+            { name = "spell"; }
+            { name = "treesitter"; }
+            { name = "nvim_lsp_document_symbol"; }
+            { name = "nvim_lsp_signature_help"; }
+          ];
+        };
+      };
     };
+    # TODO:
     # extraPlugins = with pkgs.vimPlugins; [
-    #   editorconfig-vim
-    #   # himalaya-vim
+    #   dadbod?
+    #   dbee?
+    #    {
+    #      plugin = boole-nvim;
+    #      config = '' 
+    #        lua <<EOF
+    #        require('boole').setup({
+    #          mappings = {
+    #            increment = '<C-a>',
+    #            decrement = '<C-x>'
+    #          },
+    #          -- User defined loops
+    #          additions = { },
+    #          allow_caps_additions = { }
+    #        })
+    #          
+    #        EOF
+    #      '';
+    #    }
     # ];
   };
 }

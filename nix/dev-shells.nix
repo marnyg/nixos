@@ -24,8 +24,6 @@
 
       devShells.default = pkgs.mkShell
         {
-          buildInputs = [ pkgs.nixd pkgs.nil ];
-          LSP_SERVERS = "nil_ls";
           shellHook = config.pre-commit.installationScript;
           inputsFrom = [ config.mission-control.devShell ];
         };
@@ -40,7 +38,7 @@
         settings.hooks.yamllint.enable = true;
         settings.hooks.yamllint.settings.relaxed = true;
         settings.hooks.statix.settings.format = "stderr";
-        settings.hooks.typos.settings.ignored-words = [ "noice" ];
+        settings.hooks.typos.settings.ignored-words = [ "noice" "earch" ];
       };
 
 

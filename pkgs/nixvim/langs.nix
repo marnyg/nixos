@@ -1,8 +1,3 @@
-# {
-#
-#   # enable = true;
-#   colorschemes.gruvbox.enable = true;
-# }
 { config, ... }:
 {
   options = { };

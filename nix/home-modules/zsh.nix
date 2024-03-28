@@ -17,6 +17,10 @@ with lib;
       icons = true;
       extraOptions = [ "-a" ];
     };
+    programs.atuin = {
+      enable = true;
+      enableZshIntegration = true;
+    };
 
     programs.zsh = {
       enable = true;
@@ -25,7 +29,7 @@ with lib;
       dotDir = ".config/zsh";
 
       enableCompletion = true;
-      enableAutosuggestions = true;
+      autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
 
       # .zshrc
