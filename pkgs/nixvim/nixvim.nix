@@ -58,7 +58,7 @@
 
       friendly-snippets.enable = true;
 
-      # gitsigns.enable = true;
+      gitsigns.enable = true;
 
       indent-blankline = {
         enable = true;
@@ -340,10 +340,10 @@
         };
       };
     };
-    # TODO:
     extraPlugins = with pkgs.vimPlugins; [
+      lazygit-nvim # TODO: add keybindings for opening lazygit
       vim-dadbod
-      vim-dadbod-ui
+      vim-dadbod-ui # TODO: add keybindings for opening dbui
       {
         plugin = boole-nvim;
         config = '' 

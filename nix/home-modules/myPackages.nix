@@ -34,6 +34,7 @@ with lib;
         #unrar
         unzip
         sqlite
+        lazygit
 
         # GUI applications
         mpv
