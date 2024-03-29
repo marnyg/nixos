@@ -62,9 +62,9 @@
 
       indent-blankline = {
         enable = true;
-        scope = {
+        settings.scope = {
           enabled = true;
-          showStart = true;
+          show_start = true;
         };
       };
 
@@ -72,11 +72,16 @@
         enable = true;
         extensions.fzf-native.enable = true;
         extensions.ui-select.enable = true;
+        extensions.frecency.enable = true;
+        extensions.media_files.enable = true;
+        extensions.undo.enable = true;
         keymaps = {
           #"<C-p>" = { action = "git_files"; desc = "Telescope Git Files"; };
           "<leader>sh" = { action = "help_tags"; desc = "[S]earch [H]elp"; };
           "<leader>sk" = { action = "keymaps"; desc = "[S]earch [K]eymaps"; };
           "<leader>sf" = { action = "find_files"; desc = "[S]earch [F]iles"; };
+          # "<leader>ff" = { action = "frecency"; desc = "[F]recuant [F]iles"; };
+          # "<leader>su" = { action = "undo"; desc = "[S]earch [U]ndo"; };
           "<leader>ss" = { action = "builtin"; desc = "[S]earch [S]elect Telescope"; };
           "<leader>sw" = { action = "grep_string"; desc = "[S]earch current [W]ord"; };
           "<leader>sg" = { action = "live_grep"; desc = "[S]earch by [G]rep"; };
@@ -87,6 +92,8 @@
         };
         # extraOptionst='' '';
       };
+
+      ts-context-commentstring.enable = true;
       treesitter-textobjects = {
         enable = true;
         select = {
@@ -177,9 +184,38 @@
       };
       treesitter-context.enable = true;
       fidget.enable = true;
+      harpoon = {
+        enable = true;
+        enableTelescope = true;
+        keymaps = {
+          toggleQuickMenu = "<leader>h";
+          addFile = "<leader>a";
+          navFile = {
+            "1" = "<leader>1";
+            "2" = "<leader>2";
+            "3" = "<leader>3";
+            "4" = "<leader>4";
+          };
+          gotoTerminal = {
+            "1" = "<leader>!";
+            "2" = "<leader>@";
+            "3" = "<leader>#";
+            "4" = "<leader>$";
+          };
+        };
+
+        # vim.keymap.set("n", "<leader>a", mark.add_file)
+        # vim.keymap.set("n", "<leader>h", ui.toggle_quick_menu)
+        #
+        # vim.keymap.set("n", "<leader>1", function() ui.nav_file(1) end)
+        # vim.keymap.set("n", "<leader>2", function() ui.nav_file(2) end)
+        # vim.keymap.set("n", "<leader>3", function() ui.nav_file(3) end)
+        # vim.keymap.set("n", "<leader>4", function() ui.nav_file(4) end)
+
+      };
       oil = {
         enable = true;
-        keymaps = {
+        settings.keymaps = {
           "<C-l>" = false;
           "<C-h>" = false;
           "<C-s>" = false;
@@ -292,7 +328,7 @@
             { name = "luasnip"; }
             { name = "nvim_lsp"; }
             { name = "path"; }
-            { name = "cmdline"; }
+            #{ name = "cmdline"; } #breaks neorg autocommand
             { name = "neorg"; }
             { name = "emoji"; }
             { name = "nvim_lua"; }
@@ -305,26 +341,26 @@
       };
     };
     # TODO:
-    # extraPlugins = with pkgs.vimPlugins; [
-    #   dadbod?
-    #   dbee?
-    #    {
-    #      plugin = boole-nvim;
-    #      config = '' 
-    #        lua <<EOF
-    #        require('boole').setup({
-    #          mappings = {
-    #            increment = '<C-a>',
-    #            decrement = '<C-x>'
-    #          },
-    #          -- User defined loops
-    #          additions = { },
-    #          allow_caps_additions = { }
-    #        })
-    #          
-    #        EOF
-    #      '';
-    #    }
-    # ];
+    extraPlugins = with pkgs.vimPlugins; [
+      vim-dadbod
+      vim-dadbod-ui
+      {
+        plugin = boole-nvim;
+        config = '' 
+           lua <<EOF
+           require('boole').setup({
+             mappings = {
+               increment = '<C-a>',
+               decrement = '<C-x>'
+             },
+             -- User defined loops
+             additions = { },
+             allow_caps_additions = { }
+           })
+             
+           EOF
+         '';
+      }
+    ];
   };
 }

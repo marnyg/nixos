@@ -33,6 +33,7 @@ with lib;
         #hyperfine
         #unrar
         unzip
+        sqlite
 
         # GUI applications
         mpv
