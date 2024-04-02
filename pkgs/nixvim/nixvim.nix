@@ -4,7 +4,7 @@
   imports = [ ./langs.nix ];
 
   config = {
-    options = {
+    opts = {
       relativenumber = true; # Show relative line numbers
       updatetime = 250;
       timeoutlen = 300;

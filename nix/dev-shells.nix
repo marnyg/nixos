@@ -36,7 +36,7 @@
         settings.hooks.typos.enable = true;
         settings.hooks.commitizen.enable = true;
         settings.hooks.yamllint.enable = true;
-        settings.hooks.yamllint.settings.relaxed = true;
+        settings.hooks.yamllint.settings.preset = "relaxed";
         settings.hooks.statix.settings.format = "stderr";
         settings.hooks.typos.settings.ignored-words = [ "noice" "earch" ];
       };
