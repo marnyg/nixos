@@ -9,7 +9,15 @@
       updatetime = 250;
       timeoutlen = 300;
       foldlevel = 20;
+      conceallevel = 2;
     };
+    autoCmd = [
+      {
+        event = [ "BufEnter" "BufWinEnter" ];
+        pattern = [ "*.norg" ];
+        command = "set spell";
+      }
+    ];
 
     globals = { };
     colorschemes.catppuccin = { enable = true; };
@@ -250,8 +258,8 @@
           "core.dirman".config.workspaces.notes = "~/git/notes";
           "core.keybinds".config.default_keybinds = true;
           "core.completion".config = { engine = "nvim-cmp"; };
+          "core.integrations.telescope".config = { };
         };
-
       };
 
 
@@ -343,6 +351,7 @@
     extraPlugins = with pkgs.vimPlugins; [
       lazygit-nvim # TODO: add keybindings for opening lazygit
       vim-dadbod
+      neorg-telescope
       vim-dadbod-ui # TODO: add keybindings for opening dbui
       {
         plugin = boole-nvim;
