@@ -24,51 +24,51 @@ let
     modules.myPackages.enable = true;
     modules.cloneDefaultRepos.enable = true;
     modules.services.cloneWorkRepos = {
-      enable = true;
+      enable = false;
       gitDir = "${config.home.homeDirectory}/git";
       repoInfo = {
         sendra = {
           key = "${config.home.homeDirectory}/.ssh/id_rsa";
           repos = [
-            "git@gitlab.com:prores/sendra/devops.git"
-            "git@gitlab.com:prores/sendra/keycloak-image.git"
-            "git@gitlab.com:prores/sendra/sendra-cli.git"
-            "git@gitlab.com:prores/sendra/sendra.git"
-            "git@gitlab.com:prores/sendra/sendra-compose.git"
-            "git@gitlab.com:prores/sendra/sendra-engine.git"
-            "git@gitlab.com:prores/sendra/sendra-importer.git"
-            "git@gitlab.com:prores/sendra/sendra-integrationtests.git"
-            "git@gitlab.com:prores/sendra/sendra-keycloak-theme.git"
-            "git@gitlab.com:prores/sendra/sendra-settings.git"
-            "git@gitlab.com:prores/sendra/sendra-sona.git"
-            "git@gitlab.com:prores/sendra/sendra-userservice.git"
-            "git@gitlab.com:prores/sendra/sendra-web.git"
-            "git@gitlab.com:prores/sendra/sendra-units.git"
-            "git@gitlab.com:prores/sendra/sendra-exporter.git"
-            "git@gitlab.com:prores/sendra/sendra-database.git"
-            "git@gitlab.com:prores/sendra/sendra-contract.git"
-            "git@gitlab.com:prores/sendra/sendra-assets.git"
-            "git@gitlab.com:prores/sendra/sendra-release-tools.git"
+            #  "git@gitlab.com:prores/sendra/devops.git"
+            #  "git@gitlab.com:prores/sendra/keycloak-image.git"
+            #  "git@gitlab.com:prores/sendra/sendra-cli.git"
+            #  "git@gitlab.com:prores/sendra/sendra.git"
+            #  "git@gitlab.com:prores/sendra/sendra-compose.git"
+            #  "git@gitlab.com:prores/sendra/sendra-engine.git"
+            #  "git@gitlab.com:prores/sendra/sendra-importer.git"
+            #  "git@gitlab.com:prores/sendra/sendra-integrationtests.git"
+            #  "git@gitlab.com:prores/sendra/sendra-keycloak-theme.git"
+            #  "git@gitlab.com:prores/sendra/sendra-settings.git"
+            #  "git@gitlab.com:prores/sendra/sendra-sona.git"
+            #  "git@gitlab.com:prores/sendra/sendra-userservice.git"
+            #  "git@gitlab.com:prores/sendra/sendra-web.git"
+            #  "git@gitlab.com:prores/sendra/sendra-units.git"
+            #  "git@gitlab.com:prores/sendra/sendra-exporter.git"
+            #  "git@gitlab.com:prores/sendra/sendra-database.git"
+            #  "git@gitlab.com:prores/sendra/sendra-contract.git"
+            #  "git@gitlab.com:prores/sendra/sendra-assets.git"
+            #  "git@gitlab.com:prores/sendra/sendra-release-tools.git"
           ];
         };
         hiplog = {
           key = "${config.home.homeDirectory}/.ssh/id_ed25519";
           repos = [
-            "git@gitlab.com:wellstarter/audit-trail.git"
-            "git@gitlab.com:wellstarter/hiplog/compose.git"
-            "git@gitlab.com:wellstarter/hiplog/data-interpreter.git"
-            "git@gitlab.com:wellstarter/hiplog/devops.git"
-            "git@gitlab.com:wellstarter/hiplog/filestore.git"
-            "git@gitlab.com:wellstarter/hiplog/filestore-client.git"
-            "git@gitlab.com:wellstarter/hiplog/forward-modeling.git"
-            "git@gitlab.com:wellstarter/hiplog-fe-nuxt3.git"
-            "git@gitlab.com:wellstarter/hiplog-matlab.git"
-            "git@gitlab.com:wellstarter/matlab-runner.git"
-            "git@gitlab.com:wellstarter/matlab-runtime.git"
-            "git@gitlab.com:wellstarter/hiplog/pdf-converter.git"
-            "git@gitlab.com:wellstarter/hiplog/units.git"
-            "git@gitlab.com:wellstarter/hiplog/user-service.git"
-            "git@gitlab.com:wellstarter/hiplog/wells-backend.git"
+            #  "git@gitlab.com:wellstarter/audit-trail.git"
+            #  "git@gitlab.com:wellstarter/hiplog/compose.git"
+            #  "git@gitlab.com:wellstarter/hiplog/data-interpreter.git"
+            #  "git@gitlab.com:wellstarter/hiplog/devops.git"
+            #  "git@gitlab.com:wellstarter/hiplog/filestore.git"
+            #  "git@gitlab.com:wellstarter/hiplog/filestore-client.git"
+            #  "git@gitlab.com:wellstarter/hiplog/forward-modeling.git"
+            #  "git@gitlab.com:wellstarter/hiplog-fe-nuxt3.git"
+            #  "git@gitlab.com:wellstarter/hiplog-matlab.git"
+            #  "git@gitlab.com:wellstarter/matlab-runner.git"
+            #  "git@gitlab.com:wellstarter/matlab-runtime.git"
+            #  "git@gitlab.com:wellstarter/hiplog/pdf-converter.git"
+            #  "git@gitlab.com:wellstarter/hiplog/units.git"
+            #  "git@gitlab.com:wellstarter/hiplog/user-service.git"
+            #  "git@gitlab.com:wellstarter/hiplog/wells-backend.git"
           ];
         };
       };
