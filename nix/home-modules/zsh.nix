@@ -20,6 +20,7 @@ with lib;
     programs.atuin = {
       enable = true;
       enableZshIntegration = true;
+      flags = [ "--disable-up-arrow" ];
     };
 
     programs.zsh = {
