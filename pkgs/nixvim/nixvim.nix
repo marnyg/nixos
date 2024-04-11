@@ -15,7 +15,18 @@
       {
         event = [ "BufEnter" "BufWinEnter" ];
         pattern = [ "*.norg" ];
-        command = "set spell";
+        command = ''
+          	set spell
+          	set tw=101
+          	'';
+      }
+      {
+        event = [ "BufLeave" "BufWinLeave" ];
+        pattern = [ "*.norg" ];
+        command = ''
+          	set nospell
+          	set tw=0
+          	'';
       }
     ];
 
