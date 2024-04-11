@@ -29,7 +29,6 @@ jobs:
   #         NIXOS_WSL_VERSION=${NIXOS_VERSION_MS}.${TAG_COUNT}.${COMMIT_COUNT}  # Compose the NixOS-WSL version number
   build:
     name: Build 🛠️
-    needs: [prepare]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
