@@ -25,6 +25,9 @@
     nixvim.url = "github:nix-community/nixvim";
     # nixvim.url = "github:nix-community/nixvim/nixos-23.11";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
+
+    microvm.url = "github:astro/microvm.nix";
+    microvm.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs:

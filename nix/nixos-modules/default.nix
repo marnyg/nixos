@@ -13,6 +13,7 @@
         self.inputs.home-manager.nixosModules.home-manager
         self.inputs.nixos-wsl.nixosModules.wsl
         inputs.nur.nixosModules.nur
+        inputs.microvm.nixosModules.host
       ];
     };
     tailscale = ./tailscaleService.nix;
