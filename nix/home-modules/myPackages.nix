@@ -53,7 +53,7 @@ with lib;
         #python3
 
         # Other
-        bitwarden
+        # bitwarden
         bitwarden-cli
         jq
         xdotool

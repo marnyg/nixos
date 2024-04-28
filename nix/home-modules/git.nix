@@ -39,6 +39,7 @@ with lib;
         init = {
           defaultBranch = "main";
         };
+        credential.helper = [ "cache --timeout 7200" ];
         push.autoSetupRemote = true;
         core.editor = "nvim";
         pull.rebase = true;
