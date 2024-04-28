@@ -6,7 +6,7 @@ with lib;
   };
 
   config = mkIf config.myModules.git.enable {
-    programs.git-credential-oauth.enable = true;
+    # programs.git-credential-oauth.enable = true;
     programs.git = {
       package = pkgs.gitFull;
       enable = true;
@@ -39,7 +39,11 @@ with lib;
         init = {
           defaultBranch = "main";
         };
-        credential.helper = [ "cache --timeout 7200" ];
+        credential.helper = [
+          "${pkgs.git-credential-manager}/bin/git-credential-manager"
+          "cache --timeout 72000"
+        ];
+        credential.credentialStore = "cache";
         push.autoSetupRemote = true;
         core.editor = "nvim";
         pull.rebase = true;
