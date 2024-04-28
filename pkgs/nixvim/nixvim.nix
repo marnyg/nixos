@@ -1,7 +1,7 @@
 { config, pkgs, ... }: {
   options = { };
 
-  imports = [ ./langs.nix ];
+  imports = [ ./langs.nix ./ocaml.nix ];
 
   config = {
     opts = {
@@ -69,7 +69,7 @@
           nixd.enable = true;
         };
       };
-      # lsp-format.enable = true;
+      lsp-format.enable = true;
       conform-nvim.enable = true;
       copilot-lua = {
         enable = true;
