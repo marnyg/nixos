@@ -2,6 +2,7 @@
   description = "NixOS configuration";
 
   inputs = {
+
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
@@ -28,6 +29,13 @@
 
     microvm.url = "github:astro/microvm.nix";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
+
+
+
+    # tmp fix for broken neorg, see: 
+    #  https://github.com/NixOS/nixpkgs/pull/302442
+    #  https://github.com/nix-community/nixvim/issues/1395
+    nixpkgs-stabil.url = "github:NixOS/nixpkgs/nixos-23.11";
   };
 
   outputs = inputs:
