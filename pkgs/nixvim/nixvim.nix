@@ -70,9 +70,21 @@
         };
       };
       lsp-format.enable = true;
+      lspkind = {
+        enable = true;
+        symbolMap = {
+          Copilot = "";
+        };
+      };
+
       conform-nvim.enable = true;
+      copilot-cmp = {
+        enable = true;
+      };
       copilot-lua = {
         enable = true;
+        suggestion.enabled = false;
+        panel.enabled = false;
       };
 
       friendly-snippets.enable = true;
@@ -342,20 +354,32 @@
             '';
           };
           snippet.expand = ''function(args) require('luasnip').lsp_expand(args.body) end'';
+          sorting.comparators = [
+            "require('copilot_cmp.comparators').prioritize"
+            "require('cmp.config.compare').offset"
+            "require('cmp.config.compare').exact"
+            "require('cmp.config.compare').score"
+            "require('cmp.config.compare').recently_used"
+            "require('cmp.config.compare').locality"
+            "require('cmp.config.compare').kind"
+            "require('cmp.config.compare').length"
+            "require('cmp.config.compare').order"
+          ];
           sources = [
-            { name = "buffer"; }
-            { name = "calc"; }
-            { name = "luasnip"; }
-            { name = "nvim_lsp"; }
-            { name = "path"; }
-            #{ name = "cmdline"; } #breaks neorg autocommand
             { name = "neorg"; }
-            { name = "emoji"; }
-            { name = "nvim_lua"; }
-            { name = "spell"; }
-            { name = "treesitter"; }
-            { name = "nvim_lsp_document_symbol"; }
+            { name = "copilot"; }
+            { name = "nvim_lsp"; }
             { name = "nvim_lsp_signature_help"; }
+            { name = "nvim_lsp_document_symbol"; }
+            { name = "luasnip"; }
+            { name = "treesitter"; }
+            { name = "nvim_lua"; }
+            { name = "path"; }
+            { name = "buffer"; }
+            { name = "spell"; }
+            { name = "calc"; }
+            { name = "emoji"; }
+            # { name = "cmdline"; } #breacs neorg
           ];
         };
       };
