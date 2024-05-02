@@ -14,6 +14,7 @@
     autoCmd = [
       {
         event = [ "BufEnter" "BufWinEnter" ];
+        desc = "Enable spell checking and set textwidth to 101 when entering a neorg file";
         pattern = [ "*.norg" ];
         command = ''
           	set spell
@@ -22,11 +23,27 @@
       }
       {
         event = [ "BufLeave" "BufWinLeave" ];
+        desc = "Disable spell checking and set textwidth to 0 when leaving a neorg file";
         pattern = [ "*.norg" ];
         command = ''
           	set nospell
           	set tw=0
           	'';
+      }
+      {
+        event = [ "BufReadPost" ];
+        pattern = [ "*" ];
+        desc = "Set the cursor to previous position when opening a file";
+        callback = {
+          __raw = ''
+            function()
+              local last_pos = vim.fn.line("'\"")
+              if last_pos > 0 and last_pos <= vim.fn.line("$") then
+                vim.api.nvim_win_set_cursor(0, {last_pos, 0})
+              end
+            end
+          '';
+        };
       }
     ];
 
@@ -68,8 +85,53 @@
           bashls.enable = true;
           nixd.enable = true;
         };
+        onAttach = '' 
+          local map = function(keys, func, desc)
+            vim.keymap.set('n', keys, func, { buffer = bufnr, desc = 'LSP: ' .. desc })
+          end
+          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+          map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+          map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+          map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+          map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+          map('K', vim.lsp.buf.hover, 'Hover Documentation')
+          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+
+          if client.server_capabilities.documentHighlightProvider then
+            local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+              buffer = bufnr,
+              group = highlight_augroup,
+              callback = vim.lsp.buf.document_highlight,
+            })
+
+            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+              buffer = bufnr,
+              group = highlight_augroup,
+              callback = vim.lsp.buf.clear_references,
+            })
+          end
+
+          -- The following autocommand is used to enable inlay hints in your
+          -- code, if the language server you are using supports them
+          --
+          -- This may be unwanted, since they displace some of your code
+          if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+            map('<leader>th', function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+            end, '[T]oggle Inlay [H]ints')
+          end
+
+          if client.server_capabilities.codeLensProvider then
+            require("virtualtypes").on_attach(client)
+          end
+	'';
       };
       lsp-format.enable = true;
+      lsp-lines .enable = true;
       lspkind = {
         enable = true;
         symbolMap = {
@@ -118,7 +180,7 @@
           "<leader>sg" = { action = "live_grep"; options.desc = "[S]earch by [G]rep"; };
           "<leader>sd" = { action = "diagnostics"; options.desc = "[S]earch [D]iagnostics"; };
           "<leader>sr" = { action = "resume"; options.desc = "[S]earch [R]esume"; };
-          "<leader>s." = { action = "oldfiles"; options.desc = "[S]earch Recent Files (\".\" for repeat)"; };
+          "<leader>s," = { action = "oldfiles"; options.desc = "[S]earch Recent Files (\",\" for repeat)"; };
           "<leader><leader>" = { action = "buffers"; options.desc = "[ ] Find existing buffers"; };
         };
         # extraOptionst='' '';
@@ -308,50 +370,50 @@
         autoEnableSources = true;
         settings = {
           mapping = {
-            __raw = ''  
+            __raw = ''
 
-                cmp.mapping.preset.insert {
-                -- Select the [n]ext item
-                ['<C-n>'] = cmp.mapping.select_next_item(),
-                -- Select the [p]revious item
-                ['<C-p>'] = cmp.mapping.select_prev_item(),
+        cmp.mapping.preset.insert {
+        -- Select the [n]ext item
+        ['<C-n>'] = cmp.mapping.select_next_item(),
+        -- Select the [p]revious item
+        ['<C-p>'] = cmp.mapping.select_prev_item(),
 
-                -- Scroll the documentation window [b]ack / [f]orward
-                ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-                ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        -- Scroll the documentation window [b]ack / [f]orward
+        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
 
-                -- Accept ([y]es) the completion.
-                --  This will auto-import if your LSP supports it.
-                --  This will expand snippets if the LSP sent a snippet.
-                ['<C-y>'] = cmp.mapping.confirm { select = true },
+        -- Accept ([y]es) the completion.
+        --  This will auto-import if your LSP supports it.
+        --  This will expand snippets if the LSP sent a snippet.
+        ['<C-y>'] = cmp.mapping.confirm { select = true },
 
-                -- Manually trigger a completion from nvim-cmp.
-                --  Generally you don't need this, because nvim-cmp will display
-                --  completions whenever it has completion options available.
-                ['<C-Space>'] = cmp.mapping.complete {},
+        -- Manually trigger a completion from nvim-cmp.
+        --  Generally you don't need this, because nvim-cmp will display
+        --  completions whenever it has completion options available.
+        ['<C-Space>'] = cmp.mapping.complete {},
 
-                -- Think of <c-l> as moving to the right of your snippet expansion.
-                --  So if you have a snippet that's like:
-                --  function $name($args)
-                --    $body
-                --  end
-                --
-                -- <c-l> will move you to the right of each of the expansion locations.
-                -- <c-h> is similar, except moving you backwards.
-                ['<C-l>'] = cmp.mapping(function()
-		  local luasnip = require 'luasnip'
-                  if luasnip.expand_or_locally_jumpable() then
-                    luasnip.expand_or_jump()
-                  end
-                end, { 'i', 's' }),
-                ['<C-h>'] = cmp.mapping(function()
-		  local luasnip = require 'luasnip'
-                  if luasnip.locally_jumpable(-1) then
-                    luasnip.jump(-1)
-                  end
-                end, { 'i', 's' })
-	      }
-            '';
+        -- Think of <c-l> as moving to the right of your snippet expansion.
+        --  So if you have a snippet that's like:
+        --  function $name($args)
+        --    $body
+        --  end
+        --
+        -- <c-l> will move you to the right of each of the expansion locations.
+        -- <c-h> is similar, except moving you backwards.
+        ['<C-l>'] = cmp.mapping(function()
+        local luasnip = require 'luasnip'
+        if luasnip.expand_or_locally_jumpable() then
+        luasnip.expand_or_jump()
+        end
+        end, { 'i', 's' }),
+        ['<C-h>'] = cmp.mapping(function()
+        local luasnip = require 'luasnip'
+        if luasnip.locally_jumpable(-1) then
+        luasnip.jump(-1)
+        end
+        end, { 'i', 's' })
+        }
+        '';
           };
           snippet.expand = ''function(args) require('luasnip').lsp_expand(args.body) end'';
           sorting.comparators = [
@@ -388,6 +450,7 @@
       lazygit-nvim # TODO: add keybindings for opening lazygit
       vim-dadbod
       neorg-telescope
+      virtual-types-nvim
       vim-dadbod-ui # TODO: add keybindings for opening dbui
       {
         plugin = boole-nvim;
