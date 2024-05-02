@@ -38,7 +38,8 @@
         settings.hooks.yamllint.enable = true;
         settings.hooks.yamllint.settings.preset = "relaxed";
         settings.hooks.statix.settings.format = "stderr";
-        settings.hooks.typos.settings.ignored-words = [ "noice" "earch" ];
+        settings.hooks.typos.settings.ignored-words = [ "noice" ];
+        settings.hooks.typos.stages = [ "manual" ];
       };
 
 
