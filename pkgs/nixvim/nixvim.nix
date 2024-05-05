@@ -1,7 +1,7 @@
 { config, pkgs, ... }: {
   options = { };
 
-  imports = [ ./langs.nix ./ocaml.nix ];
+  imports = [ ./golang.nix ./ocaml.nix ./lsp.nix ./treesitter.nix ./cmp.nix ];
 
   config = {
     opts = {
@@ -78,66 +78,11 @@
       shellcheck
     ];
 
+    langs.ocaml.enable = true;
+    # langs.golang.enable = true;
+
     plugins = {
-      lsp = {
-        enable = true;
-        servers = {
-          bashls.enable = true;
-          nixd.enable = true;
-        };
-        onAttach = '' 
-          local map = function(keys, func, desc)
-            vim.keymap.set('n', keys, func, { buffer = bufnr, desc = 'LSP: ' .. desc })
-          end
-          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-          map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-          map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-          map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-          map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-          map('K', vim.lsp.buf.hover, 'Hover Documentation')
-          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-
-          if client.server_capabilities.documentHighlightProvider then
-            local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
-            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-              buffer = bufnr,
-              group = highlight_augroup,
-              callback = vim.lsp.buf.document_highlight,
-            })
-
-            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-              buffer = bufnr,
-              group = highlight_augroup,
-              callback = vim.lsp.buf.clear_references,
-            })
-          end
-
-          -- The following autocommand is used to enable inlay hints in your
-          -- code, if the language server you are using supports them
-          --
-          -- This may be unwanted, since they displace some of your code
-          if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-            map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-            end, '[T]oggle Inlay [H]ints')
-          end
-
-          if client.server_capabilities.codeLensProvider then
-            require("virtualtypes").on_attach(client)
-          end
-	'';
-      };
-      lsp-format.enable = true;
-      lsp-lines .enable = true;
-      lspkind = {
-        enable = true;
-        symbolMap = {
-          Copilot = "";
-        };
-      };
+      lsp.enable = true;
 
       conform-nvim.enable = true;
       copilot-cmp = {
@@ -186,97 +131,6 @@
         # extraOptionst='' '';
       };
 
-      ts-context-commentstring.enable = true;
-      treesitter-textobjects = {
-        enable = true;
-        select = {
-          enable = true;
-          lookahead = true;
-          keymaps = {
-            "af" = "@function.outer";
-            "if" = "@function.inner";
-            "il" = "@loop.outer";
-            "al" = "@loop.outer";
-            "icd" = "@conditional.inner";
-            "acd" = "@conditional.outer";
-            "acm" = "@comment.outer";
-            "ast" = "@statement.outer";
-            "isc" = "@scopename.inner";
-            "iB" = "@block.inner";
-            "aB" = "@block.outer";
-            "p" = "@parameter.inner";
-          };
-        };
-
-        move = {
-          enable = true;
-          setJumps = true;
-          gotoNextStart = {
-            "gnf" = "@function.outer";
-            "gnif" = "@function.inner";
-            "gnp" = "@parameter.inner";
-            "gnc" = "@call.outer";
-            "gnic" = "@call.inner";
-          };
-          gotoNextEnd = {
-            "gnF" = "@function.outer";
-            "gniF" = "@function.inner";
-            "gnP" = "@parameter.inner";
-            "gnC" = "@call.outer";
-            "gniC" = "@call.inner";
-          };
-          gotoPreviousStart = {
-            "gpf" = "@function.outer";
-            "gpif" = "@function.inner";
-            "gpp" = "@parameter.inner";
-            "gpc" = "@call.outer";
-            "gpic" = "@call.inner";
-          };
-          gotoPreviousEnd = {
-            "gpF" = "@function.outer";
-            "gpiF" = "@function.inner";
-            "gpP" = "@parameter.inner";
-            "gpC" = "@call.outer";
-            "gpiC" = "@call.inner";
-          };
-        };
-        lspInterop.enable = true;
-      };
-      treesitter = {
-        enable = true;
-        indent = true;
-        folding = true;
-        nixvimInjections = true;
-        incrementalSelection.enable = true;
-        grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
-          bash
-          c # c is implicit dependency, not specifying it will lead to healtcheck errors
-          c_sharp
-          diff
-          git_config
-          git_rebase
-          gitattributes
-          gitcommit
-          gitignore
-          json
-          lua
-          luadoc
-          make
-          markdown # dep of noice
-          markdown_inline # dep of noice
-          nix
-          query # implicit
-          regex
-          toml
-          vim
-          vimdoc
-          xml
-          yaml
-          norg
-          terraform
-        ];
-      };
-      treesitter-context.enable = true;
       fidget.enable = true;
       harpoon = {
         enable = true;
@@ -352,98 +206,6 @@
       luasnip = {
         enable = true;
         extraConfig.enable_autosnippets = true;
-      };
-      cmp-nvim-lua.enable = true;
-      cmp-nvim-lsp.enable = true;
-      cmp_luasnip.enable = true;
-      cmp-buffer.enable = true;
-      cmp-calc.enable = true;
-      cmp-cmdline.enable = true;
-      cmp-conventionalcommits.enable = true;
-      cmp-nvim-lsp-signature-help.enable = true;
-      cmp-nvim-lsp-document-symbol.enable = true;
-      cmp-treesitter.enable = true;
-      cmp-emoji.enable = true;
-      cmp-spell.enable = true;
-      cmp = {
-        enable = true;
-        autoEnableSources = true;
-        settings = {
-          mapping = {
-            __raw = ''
-              cmp.mapping.preset.insert {
-                -- Select the [n]ext item
-                ['<C-n>'] = cmp.mapping.select_next_item(),
-                -- Select the [p]revious item
-                ['<C-p>'] = cmp.mapping.select_prev_item(),
-            
-                -- Scroll the documentation window [b]ack / [f]orward
-                ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-                ['<C-f>'] = cmp.mapping.scroll_docs(4),
-            
-                -- Accept ([y]es) the completion.
-                --  This will auto-import if your LSP supports it.
-                --  This will expand snippets if the LSP sent a snippet.
-                ['<C-y>'] = cmp.mapping.confirm { select = true },
-            
-                -- Manually trigger a completion from nvim-cmp.
-                --  Generally you don't need this, because nvim-cmp will display
-                --  completions whenever it has completion options available.
-                ['<C-Space>'] = cmp.mapping.complete {},
-            
-                -- Think of <c-l> as moving to the right of your snippet expansion.
-                --  So if you have a snippet that's like:
-                --  function $name($args)
-                --    $body
-                --  end
-                --
-                -- <c-l> will move you to the right of each of the expansion locations.
-                -- <c-h> is similar, except moving you backwards.
-                ['<C-l>'] = cmp.mapping(function()
-                  local luasnip = require 'luasnip'
-                  if luasnip.expand_or_locally_jumpable() then
-                    luasnip.expand_or_jump()
-                  end
-                end, { 'i', 's' }),
-            
-                ['<C-h>'] = cmp.mapping(function()
-                  local luasnip = require 'luasnip'
-                  if luasnip.locally_jumpable(-1) then
-                    luasnip.jump(-1)
-                  end
-              end, { 'i', 's' })
-              }
-            '';
-          };
-          snippet.expand = ''function(args) require('luasnip').lsp_expand(args.body) end'';
-          sorting.comparators = [
-            "require('copilot_cmp.comparators').prioritize"
-            "require('cmp.config.compare').offset"
-            "require('cmp.config.compare').exact"
-            "require('cmp.config.compare').score"
-            "require('cmp.config.compare').recently_used"
-            "require('cmp.config.compare').locality"
-            "require('cmp.config.compare').kind"
-            "require('cmp.config.compare').length"
-            "require('cmp.config.compare').order"
-          ];
-          sources = [
-            { name = "neorg"; }
-            { name = "copilot"; }
-            { name = "nvim_lsp"; }
-            { name = "nvim_lsp_signature_help"; }
-            { name = "nvim_lsp_document_symbol"; }
-            { name = "luasnip"; }
-            { name = "treesitter"; }
-            { name = "nvim_lua"; }
-            { name = "path"; }
-            { name = "buffer"; }
-            { name = "spell"; }
-            { name = "calc"; }
-            { name = "emoji"; }
-            # { name = "cmdline"; } #breacs neorg # TODO:
-          ];
-        };
       };
     };
     extraPlugins = with pkgs.vimPlugins; [

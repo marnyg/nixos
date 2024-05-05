@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 {
-  options.langs.ocaml = {
+  options.langs.golang = {
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -19,34 +19,33 @@ with lib;
     };
   };
 
-  config = mkIf config.langs.ocaml.enable {
+  config = mkIf config.langs.golang.enable {
     plugins = {
 
-      lsp = mkIf config.langs.ocaml.lsp.enable {
+      lsp = mkIf config.langs.golang.lsp.enable {
         enable = true;
         servers = {
-          ocamllsp.enable = true;
+          gopls.enable = true;
         };
       };
 
       treesitter = {
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
-          ocaml
-          ocaml_interface
+          go
+          gomod
+          gosum
+          gotmpl
+          gowork
         ];
       };
 
-      dap = mkIf config.langs.ocaml.dap.enable {
-        enable = true;
-        adapters.executables.ocamlearlybird = {
-          command = "${pkgs.ocamlPackages.earlybird}/bin/ocamlearlybird";
-          args = [ "debug" ];
-        };
-        extensions = {
-          dap-ui.enable = true;
-          dap-virtual-text.enable = true;
-        };
-      };
+      # dap = mkIf config.langs.ocaml.dap.enable {
+      #   enable = true;
+      #   adapters.executables.ocamlearlybird = {
+      #     command = "${pkgs.ocamlPackages.earlybird}/bin/ocamlearlybird";
+      #     args = [ "debug" ];
+      #   };
+      # };
     };
   };
 }
