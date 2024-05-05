@@ -78,7 +78,7 @@
       shellcheck
     ];
 
-    langs.ocaml.enable = true;
+    # langs.ocaml.enable = true;
     # langs.golang.enable = true;
 
     plugins = {
