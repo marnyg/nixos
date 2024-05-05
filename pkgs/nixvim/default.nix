@@ -3,6 +3,9 @@ let
   nixvimModule = { imports = [ ./nixvim.nix ]; };
 in
 {
+  flake.nixvimModules = {
+    nixVim = nixvimModule;
+  };
   flake.HomemanagerModules =
     let
       homemanagerModule = { config, pkgs, ... }: {
