@@ -68,6 +68,7 @@
       map('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
       vim.notify = require('mini.notify').make_notify()
+      vim.lsp.inlay_hint.enable(false)
     '';
 
     extraPackages = with pkgs; [
@@ -80,6 +81,7 @@
 
     # langs.ocaml.enable = true;
     # langs.golang.enable = true;
+    package = pkgs.neovim-unwrapped;
 
     plugins = {
       lsp.enable = true;
@@ -192,6 +194,7 @@
 
       neorg = {
         enable = true;
+        package = pkgs.vimPlugins.neorg;
         modules = {
           "core.defaults" = { __empty = null; };
           "core.ui".__empty = null;
