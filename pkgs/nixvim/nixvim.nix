@@ -1,7 +1,7 @@
 { config, pkgs, ... }: {
   options = { };
 
-  imports = [ ./golang.nix ./ocaml.nix ./lsp.nix ./treesitter.nix ./cmp.nix ];
+  imports = [ ./golang.nix ./ocaml.nix ./lsp.nix ./treesitter.nix ./cmp.nix ./terraform.nix ];
 
   config = {
     opts = {
@@ -81,6 +81,7 @@
 
     # langs.ocaml.enable = true;
     # langs.golang.enable = true;
+    langs.terraform.enable = true;
 
     plugins = {
       lsp.enable = true;
