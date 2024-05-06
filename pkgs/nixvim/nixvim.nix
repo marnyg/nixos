@@ -81,7 +81,6 @@
 
     # langs.ocaml.enable = true;
     # langs.golang.enable = true;
-    package = pkgs.neovim-unwrapped;
 
     plugins = {
       lsp.enable = true;
@@ -194,7 +193,6 @@
 
       neorg = {
         enable = true;
-        package = pkgs.vimPlugins.neorg;
         modules = {
           "core.defaults" = { __empty = null; };
           "core.ui".__empty = null;

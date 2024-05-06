@@ -1,6 +1,20 @@
 { inputs, self, ... }:
 let
-  nixvimModule = { imports = [ ./nixvim.nix ]; };
+  nixvimModule = {
+    imports = [ ./nixvim.nix ];
+
+    # tmp fix for broken neorg, see: 
+    #  https://github.com/NixOS/nixpkgs/pull/302442
+    #  https://github.com/nix-community/nixvim/issues/1395
+    _module.args.pkgs = import inputs.nixpkgs {
+      system = "x86_64-linux";
+      overlays = [
+        inputs.neorg-overlay.overlays.default
+        inputs.neovim-nightly-overlay.overlays.default
+      ];
+    };
+    # end tmp
+  };
 in
 {
   flake.nixvimModules = {
