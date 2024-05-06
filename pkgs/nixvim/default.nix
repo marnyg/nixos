@@ -42,6 +42,17 @@ in
     let
       nixosModule =
         { lib, config, pkgs, ... }: with lib; {
+          # tmp fix for broken neorg, see: 
+          #  https://github.com/NixOS/nixpkgs/pull/302442
+          #  https://github.com/nix-community/nixvim/issues/1395
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [
+              inputs.neorg-overlay.overlays.default
+              inputs.neovim-nightly-overlay.overlays.default
+            ];
+          };
+          # end tmp
 
           imports = [ inputs.nixvim.nixosModules.nixvim ];
 
@@ -61,22 +72,27 @@ in
     };
 
   perSystem = { pkgs, system, ... }: {
+
+    # tmp fix for broken neorg, see: 
+    #  https://github.com/NixOS/nixpkgs/pull/302442
+    #  https://github.com/nix-community/nixvim/issues/1395
+    _module.args.pkgs = import inputs.nixpkgs {
+      inherit system;
+      overlays = [
+        inputs.neorg-overlay.overlays.default
+        inputs.neovim-nightly-overlay.overlays.default
+      ];
+    };
+    # end tmp
+
     checks.nixvim = inputs.nixvim.lib."${system}".check.mkTestDerivationFromNixvimModule {
       inherit pkgs;
       module = nixvimModule;
     };
 
     packages.nixvim =
-      inputs.nixvim.legacyPackages."${system}".makeNixvimWithModule
-        {
-          #     inherit pkgs; module = nixvimModule
-          #   tmp fix for broken neorg, see: 
-          #     https://github.com/NixOS/nixpkgs/pull/302442
-          #     https://github.com/nix-community/nixvim/issues/1395
-          inherit pkgs; module = {
-          config.plugins.neorg.package = inputs.nixpkgs-stabil.legacyPackages."x86_64-linux".vimPlugins.neorg;
-          imports = [ nixvimModule ];
-        };
-        };
+      inputs.nixvim.legacyPackages."${system}".makeNixvimWithModule {
+        inherit pkgs; module = nixvimModule;
+      };
   };
 }

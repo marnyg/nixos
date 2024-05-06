@@ -193,12 +193,20 @@
       neorg = {
         enable = true;
         modules = {
-          "core.defaults" = { };
+          "core.defaults" = { __empty = null; };
+          "core.ui".__empty = null;
+          # these need nvim v10
+          "core.tempus".__empty = null;
+          "core.ui.calendar".__empty = null;
+          # these need nvim v10
+          "core.summary" = { __empty = null; };
           "core.concealer".config.icon_preset = "diamond";
           "core.dirman".config.workspaces.notes = "~/git/notes";
+          "core.dirman".config.workspaces.default = "~/git/notes";
           "core.keybinds".config.default_keybinds = true;
           "core.completion".config = { engine = "nvim-cmp"; };
-          "core.integrations.telescope".config = { };
+          "core.integrations.telescope" = { __empty = null; };
+          "core.integrations.treesitter" = { __empty = null; };
         };
       };
 
