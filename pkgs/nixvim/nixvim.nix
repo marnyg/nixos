@@ -66,6 +66,9 @@
       map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
       map('n', '<leader>.', ":e %:p:h<CR>", { desc = 'Open folder of current file' })
       map('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+      map("n", "<leader>x", "<cmd>.lua<CR>", { desc = "Execute the current line" })
+      map("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
+
 
       vim.notify = require('mini.notify').make_notify()
       vim.lsp.inlay_hint.enable(false)
