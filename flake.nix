@@ -14,7 +14,7 @@
     # home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
-    nixos-wsl.url = "github:nix-community/NixOS-WSL";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL?rev=03b52c7ff0ae73d5044cd00212eb5b776819f5f0";
 
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
