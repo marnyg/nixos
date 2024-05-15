@@ -69,6 +69,37 @@
       map("n", "<leader>x", "<cmd>.lua<CR>", { desc = "Execute the current line" })
       map("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
 
+      local neorg_callbacks = require("neorg.core.callbacks")
+      
+      neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
+          -- Map all the below keybinds only when the "norg" mode is active
+          keybinds.map_event_to_mode("norg", {
+              n = { -- Bind keys in normal mode
+                  { "<leader>nf", "core.integrations.telescope.find_linkable" },
+                  { "<leader>ni", "core.integrations.telescope.insert_link" },
+              },
+      
+              i = { -- Bind in insert mode
+                  { "<M-i>", "core.integrations.telescope.insert_link" },
+              },
+          }, {
+              silent = true,
+              noremap = true,
+          })
+      end)
+      do
+          local _, neorg = pcall(require, "neorg.core")
+          local dirman = neorg.modules.get_module("core.dirman")
+          local function get_todos(dir, states)
+              local current_workspace = dirman.get_current_workspace()
+              local dir = current_workspace[2]:tostring()
+              require('telescope.builtin').live_grep{ cwd = dir }
+              vim.fn.feedkeys('^ *([*]+|[-]+) +[(]' .. states .. '[)]')
+          end
+      
+          -- This can be bound to a key
+          vim.keymap.set('n', '<leader>nt', function() get_todos('~/notes', '[^x_]') end)
+      end
 
       vim.notify = require('mini.notify').make_notify()
       vim.lsp.inlay_hint.enable(false)
