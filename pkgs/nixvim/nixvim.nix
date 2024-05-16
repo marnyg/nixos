@@ -68,6 +68,7 @@
       map('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
       map("n", "<leader>x", "<cmd>.lua<CR>", { desc = "Execute the current line" })
       map("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
+      map("n", "<leader>fs", function() require("telescope.builtin").spell_suggest(require("telescope.themes").get_dropdown{}) end, { desc = 'Open [F]ixes for [S]pelling' })
 
       local neorg_callbacks = require("neorg.core.callbacks")
       
@@ -146,6 +147,7 @@
         enable = true;
         extensions.fzf-native.enable = true;
         extensions.ui-select.enable = true;
+
         extensions.frecency.enable = true;
         extensions.media-files.enable = true;
         extensions.undo.enable = true;
@@ -223,6 +225,20 @@
             mappings.windows = true;
           };
           # indentscope={ };
+        };
+      };
+      none-ls = {
+        enable = true;
+        enableLspFormat = true;
+
+        sources = {
+          hover.dictionary.enable = true;
+          hover.dictionary.withArgs = ''{filetypes = { "org", "text", "markdown", "norg"}}'';
+
+          code_actions.proselint.enable = true;
+          code_actions.proselint.withArgs = ''{filetypes = { "org", "text", "markdown", "norg"}}'';
+          code_actions.gitsigns.enable = true;
+
         };
       };
 
