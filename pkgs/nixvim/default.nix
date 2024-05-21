@@ -10,7 +10,6 @@ let
       system = "x86_64-linux";
       overlays = [
         inputs.neorg-overlay.overlays.default
-        inputs.neovim-nightly-overlay.overlays.default
       ];
     };
     # end tmp
@@ -71,7 +70,6 @@ in
               system = "x86_64-linux";
               overlays = [
                 inputs.neorg-overlay.overlays.default
-                inputs.neovim-nightly-overlay.overlays.default
               ];
             };
             # end tmp
@@ -94,7 +92,6 @@ in
       inherit system;
       overlays = [
         inputs.neorg-overlay.overlays.default
-        inputs.neovim-nightly-overlay.overlays.default
       ];
     };
     # end tmp

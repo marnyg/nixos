@@ -37,8 +37,6 @@
     #  https://github.com/nix-community/nixvim/issues/1395
     # nixpkgs-stabil.url = "github:NixOS/nixpkgs/nixos-23.11";
     neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
-    # ovarley for neovim nightly until it is v10 into nixpkgs
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
   outputs = inputs:

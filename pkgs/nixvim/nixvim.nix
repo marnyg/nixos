@@ -112,6 +112,7 @@
       nixpkgs-fmt
       ripgrep
       shellcheck
+      ollama
     ];
 
     # langs.ocaml.enable = true;
@@ -266,6 +267,16 @@
       luasnip = {
         enable = true;
         extraConfig.enable_autosnippets = true;
+      };
+      ollama = {
+        enable = true;
+        model = "llama3:8b";
+        prompts.Sample_Prompt = {
+          prompt = "This is a sample prompt that receives $input and $sel(ection), among others.";
+          inputLabel = "> ";
+          model = "llama3:8b";
+          action = "display";
+        };
       };
     };
     extraPlugins = with pkgs.vimPlugins; [
