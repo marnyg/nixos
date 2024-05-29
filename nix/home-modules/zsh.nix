@@ -138,6 +138,11 @@ with lib;
       # Source all plugins, nix-style
       plugins = [
         {
+          name = "vi-mode";
+          src = pkgs.zsh-vi-mode;
+          file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
+        }
+        {
           name = "zsh-abbr";
           src = pkgs.fetchFromGitHub {
             owner = "olets";
