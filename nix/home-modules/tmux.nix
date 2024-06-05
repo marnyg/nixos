@@ -53,6 +53,8 @@ in
         set-window-option -g pane-base-index 1
         set-option -g renumber-windows on
 
+        bind-key n popup "nvim ~/git/notes/index.norg"
+
         bind-key -r C-h prev
         bind-key -r C-l next
         bind-key -r C-j switch-client -p
