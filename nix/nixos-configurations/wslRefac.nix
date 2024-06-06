@@ -78,6 +78,12 @@ let
   };
 in
 {
+  # Enable the OpenSSH daemon.
+  services.openssh.enable = true;
+  users.users.mar.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBR+GCws2rQ30VOYAvIiWtbRrHfveej4H2L+/s28JTCG trash@win"
+  ];
+
   ##
   ## system modules config
   ##
