@@ -29,6 +29,19 @@ fi
 
 tmux switch-client -t $selected_name
 '';
+  toggle-side-notes = pkgs.writeScript "toggle-side-notes" ''
+    #!/usr/bin/env bash
+    P=$(tmux show -wqv @myspecialpane)
+    if [ -n "$P" ] && tmux list-panes -F'#{pane_id}' | grep -q "^$P$"; then
+         tmux send-keys -t "$P" 'Escape' C-m ':qa!' C-m
+         sleep .5  # Give some time for nvim to close
+         # tmux kill-pane -t "$P"
+         # tmux set -wu @myspecialpane
+    else
+         P=$(tmux splitw -PF'#{pane_id}' -- 'cd ~/git/notes/; nvim index.norg')
+         tmux set -w @myspecialpane "$P"
+    fi
+  '';
 in
 
 {
@@ -53,7 +66,7 @@ in
         set-window-option -g pane-base-index 1
         set-option -g renumber-windows on
 
-        bind-key n popup "nvim ~/git/notes/index.norg"
+        bind-key n run-shell "${toggle-side-notes}"
 
         bind-key -r C-h prev
         bind-key -r C-l next
