@@ -77,6 +77,8 @@ with lib;
         function ::() { sed "$ s/\n$//" | xargs -I_ --; }
         function gcm() { git commit -m "$*" }
 
+        zvm_bindkey vicmd '^e' accept-line 
+
         eval "$(${pkgs.starship}/bin/starship init zsh)"
       '';
 
