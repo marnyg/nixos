@@ -254,6 +254,7 @@
           # these need nvim v10
           "core.summary" = { __empty = null; };
           "core.concealer".config.icon_preset = "diamond";
+          # "core.concealer".config.icon_preset = "varied";
           "core.dirman".config.workspaces.notes = "~/git/notes";
           "core.dirman".config.workspaces.default = "~/git/notes";
           "core.keybinds".config.default_keybinds = true;
