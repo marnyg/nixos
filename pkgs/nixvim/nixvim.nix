@@ -10,6 +10,9 @@
       timeoutlen = 300;
       foldlevel = 20;
       conceallevel = 2;
+      expandtab = true;
+      shiftwidth = 2;
+      tabstop = 2;
     };
     autoCmd = [
       {
@@ -17,18 +20,18 @@
         desc = "Enable spell checking and set textwidth to 101 when entering a neorg file";
         pattern = [ "*.norg" ];
         command = ''
-          	set spell
-          	set tw=101
-          	'';
+          set spell
+          set tw=100
+        '';
       }
       {
         event = [ "BufLeave" "BufWinLeave" ];
         desc = "Disable spell checking and set textwidth to 0 when leaving a neorg file";
         pattern = [ "*.norg" ];
         command = ''
-          	set nospell
-          	set tw=0
-          	'';
+          set nospell
+          set tw=0
+        '';
       }
       {
         event = [ "BufReadPost" ];
