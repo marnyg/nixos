@@ -133,6 +133,16 @@
         enable = true;
         suggestion.enabled = false;
         panel.enabled = false;
+        filetypes = {
+          markdown = true;
+          cvs = false;
+          gitcommit = true;
+          gitrebase = true;
+          help = false;
+          hgcommit = true;
+          svn = false;
+          yaml = true;
+        };
       };
 
       friendly-snippets.enable = true;
@@ -293,19 +303,19 @@
       {
         plugin = boole-nvim;
         config = '' 
-           lua <<EOF
-           require('boole').setup({
-             mappings = {
-               increment = '<C-a>',
-               decrement = '<C-x>'
-             },
-             -- User defined loops
-             additions = { },
-             allow_caps_additions = { }
-           })
-             
-           EOF
-         '';
+            lua <<EOF
+            require('boole').setup({
+                mappings = {
+                increment = '<C-a>',
+                decrement = '<C-x>'
+                },
+                -- User defined loops
+                additions = { },
+                allow_caps_additions = { }
+                })
+
+          EOF
+            '';
       }
     ];
   };
