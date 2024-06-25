@@ -144,6 +144,9 @@
           yaml = true;
         };
       };
+      markdown-preview = {
+        enable = true;
+      };
 
       friendly-snippets.enable = true;
 
