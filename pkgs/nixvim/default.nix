@@ -6,12 +6,12 @@ let
     # tmp fix for broken neorg, see: 
     #  https://github.com/NixOS/nixpkgs/pull/302442
     #  https://github.com/nix-community/nixvim/issues/1395
-    _module.args.pkgs = import inputs.nixpkgs {
-      system = "x86_64-linux";
-      overlays = [
-        inputs.neorg-overlay.overlays.default
-      ];
-    };
+    #_module.args.pkgs = import inputs.nixpkgs {
+    #  system = "x86_64-linux";
+    #  overlays = [
+    #    inputs.neorg-overlay.overlays.default
+    #  ];
+    #};
     # end tmp
   };
 in
@@ -60,12 +60,12 @@ in
             # tmp fix for broken neorg, see: 
             #  https://github.com/NixOS/nixpkgs/pull/302442
             #  https://github.com/nix-community/nixvim/issues/1395
-            _module.args.pkgs = import inputs.nixpkgs {
-              system = "x86_64-linux";
-              overlays = [
-                inputs.neorg-overlay.overlays.default
-              ];
-            };
+#            _module.args.pkgs = import inputs.nixpkgs {
+#              system = "x86_64-linux";
+#              overlays = [
+#                inputs.neorg-overlay.overlays.default
+#              ];
+#            };
             # end tmp
             environment.systemPackages = [ self.packages.${pkgs.system}.nixvim ];
 
