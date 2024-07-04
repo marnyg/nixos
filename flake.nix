@@ -46,7 +46,7 @@
         imports = [
           inputs.treefmt-nix.flakeModule
           inputs.flake-root.flakeModule
-          inputs.mission-control.flakeModule
+          # inputs.mission-control.flakeModule
           inputs.pre-commit-hooks-nix.flakeModule
           inputs.process-compose-flake.flakeModule
           ./pkgs
