@@ -153,8 +153,11 @@
         echo "Home Manager setup complete!"
         echo "You can now edit ~/.config/home-manager/home.nix to customize your environment."
         echo "After making changes, run 'home-manager switch' to apply them."
-        sudo echo  ~/.nix-profile/bin/zsh >> /etc/shells
-        chsh -s ~/.nix-profile/bin/zsh
+
+        echo "sudo echo  ~/.nix-profile/bin/zsh >> /etc/shells"
+        echo "chsh -s ~/.nix-profile/bin/zsh"
+        #sudo echo  ~/.nix-profile/bin/zsh >> /etc/shells
+        #chsh -s ~/.nix-profile/bin/zsh
       '';
     };
   };
