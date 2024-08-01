@@ -95,7 +95,7 @@
                 modules = [
                   ./home.nix
                   {
-                    imports = custom-modules.hmModulesModules.all;
+                    imports = custom-modules.homemanagerModules.all;
                   }
                 ];
               };
@@ -125,7 +125,7 @@
         EOF
 
         echo "Running Home Manager install..."
-        nix run home-manager/master --extra-experimental-features nix-command  --extra-experimental-features flakes -- init switch
+        nix run home-manager/master --extra-experimental-features nix-command  --extra-experimental-features flakes -- init switch  --extra-experimental-features nix-command  --extra-experimental-features flakes 
 
         echo "Home Manager setup complete!"
         echo "You can now edit ~/.config/home-manager/home.nix to customize your environment."
