@@ -1,4 +1,4 @@
-{ inputs, self, ... }:
+{ inputs, self, pkgs, ... }:
 {
   flake.homeConfigurations.mar = inputs.home-manager.lib.homeManagerConfiguration
     {
