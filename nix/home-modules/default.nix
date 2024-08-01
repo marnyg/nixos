@@ -146,16 +146,18 @@
         EOF
 
         echo "Running Home Manager install..."
+        rm ~/.profile ~/.bashrc
         nix run home-manager/master --extra-experimental-features nix-command  --extra-experimental-features flakes -- init switch  --extra-experimental-features nix-command  --extra-experimental-features flakes 
 
         echo "Home Manager setup complete!"
         echo "You can now edit ~/.config/home-manager/home.nix to customize your environment."
         echo "After making changes, run 'home-manager switch' to apply them."
-
-        echo "sudo echo  ~/.nix-profile/bin/zsh >> /etc/shells"
+        echo 
+        echo "sudo su"
+        echo "echo  ~/.nix-profile/bin/zsh >> /etc/shells"
         echo "chsh -s ~/.nix-profile/bin/zsh"
-        #sudo echo  ~/.nix-profile/bin/zsh >> /etc/shells
-        #chsh -s ~/.nix-profile/bin/zsh
+        echo "exit"
+
       '';
     };
   };
