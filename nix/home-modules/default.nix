@@ -95,7 +95,7 @@
                 modules = [
                   ./home.nix
                   {
-                    imports = custom-modules.hmModulesModules.x86_64-linux;
+                    imports = custom-modules.hmModulesModules.all;
                   }
                 ];
               };
