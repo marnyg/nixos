@@ -110,8 +110,6 @@
           home.username = "$USER";
           home.homeDirectory = "$HOME";
               
-          home.stateVersion = "23.11";
-
           # Add more configuration as needed
           nix = {
             package = pkgs.nix;
