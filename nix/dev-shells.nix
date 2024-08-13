@@ -33,6 +33,7 @@
         settings.hooks.deadnix.enable = true;
         settings.hooks.nil.enable = true;
         settings.hooks.statix.enable = true;
+        settings.hooks.statix.args = [ "--config" "${pkgs.writeText "conf.toml" "disabled = [ repeated_keys ]"}" ];
         settings.hooks.typos.enable = true;
         settings.hooks.commitizen.enable = true;
         settings.hooks.yamllint.enable = true;
