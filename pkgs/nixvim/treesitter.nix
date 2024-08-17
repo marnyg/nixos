@@ -62,10 +62,10 @@ with lib;
       };
       treesitter = {
         enable = true;
-        indent = true;
+        settings.indent.enable = true;
+        settings.incremental_selection.enable = true;
         folding = true;
         nixvimInjections = true;
-        incrementalSelection.enable = true;
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
           bash
           c # c is implicit dependency, not specifying it will lead to healtcheck errors

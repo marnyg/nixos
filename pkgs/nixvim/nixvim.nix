@@ -254,10 +254,10 @@
 
         sources = {
           hover.dictionary.enable = true;
-          hover.dictionary.withArgs = ''{filetypes = { "org", "text", "markdown", "norg"}}'';
+          hover.dictionary.settings = ''{filetypes = { "org", "text", "markdown", "norg"}}'';
 
           code_actions.proselint.enable = true;
-          code_actions.proselint.withArgs = ''{filetypes = { "org", "text", "markdown", "norg"}}'';
+          code_actions.proselint.settings = ''{filetypes = { "org", "text", "markdown", "norg"}}'';
           code_actions.gitsigns.enable = true;
 
         };
@@ -287,7 +287,7 @@
 
       luasnip = {
         enable = true;
-        extraConfig.enable_autosnippets = true;
+        settings.enable_autosnippets = true;
       };
       ollama = {
         enable = true;
