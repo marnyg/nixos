@@ -110,6 +110,8 @@
     '';
 
     extraPackages = with pkgs; [
+      luajitPackages.magick # used by image.nvim
+      imagemagick #used by image.nvim
       fd
       gcc
       nixpkgs-fmt
@@ -149,6 +151,8 @@
       };
 
       friendly-snippets.enable = true;
+      image.enable = true;
+      # image.backend = "ueberzug";
 
       gitsigns.enable = true;
 
@@ -296,6 +300,7 @@
         };
       };
     };
+    extraLuaPackages = ps: [ ps.magick ];
     extraPlugins = with pkgs.vimPlugins; [
       lazygit-nvim # TODO: add keybindings for opening lazygit
       vim-dadbod

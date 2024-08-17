@@ -2,3 +2,4 @@ nixos.qcow2
 result
 nixos-wsl.tar.gz
 .pre-commit-config.yaml
+just-flake.just

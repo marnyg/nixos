@@ -65,6 +65,7 @@ in
         set -g pane-base-index 1
         set-window-option -g pane-base-index 1
         set-option -g renumber-windows on
+        set -g allow-passthrough on
 
         bind-key n run-shell "${toggle-side-notes}"
 

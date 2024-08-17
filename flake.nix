@@ -14,14 +14,14 @@
     # home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
-    nixos-wsl.url = "github:nix-community/NixOS-WSL?rev=03b52c7ff0ae73d5044cd00212eb5b776819f5f0";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
 
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
     flake-root.url = "github:srid/flake-root";
-    mission-control.url = "github:Platonic-Systems/mission-control";
     pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
     process-compose-flake.url = "github:Platonic-Systems/process-compose-flake";
+    just-flake.url = "github:juspay/just-flake";
 
     nixvim.url = "github:nix-community/nixvim";
     # nixvim.url = "github:nix-community/nixvim/nixos-23.11";
@@ -46,9 +46,9 @@
         imports = [
           inputs.treefmt-nix.flakeModule
           inputs.flake-root.flakeModule
-          # inputs.mission-control.flakeModule
           inputs.pre-commit-hooks-nix.flakeModule
           inputs.process-compose-flake.flakeModule
+          inputs.just-flake.flakeModule
           ./pkgs
           ./nix
         ];

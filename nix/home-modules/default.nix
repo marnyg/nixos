@@ -27,33 +27,33 @@
     lf = ./lf.nix;
     nur = inputs.nur.hmModules.nur;
     # all modules as a list
-    all = [
-      autorandr
-      bspwm
-      dunst
-      firefox
-      git
-      direnv
-      kitty
-      newsboat
-      polybar
-      xmonad
-      zellij
-      tmux
-      fzf
-      zsh
-      spotifyd
-      other
-      myPackages
-      cloneDefaultRepos
-      cloneWorkRepos
-      sharedDefaults
-      hyperland
-      wofi
-      waybar
-      lf
-      nur
-    ];
+    # all = [
+    #   autorandr
+    #   bspwm
+    #   dunst
+    #   firefox
+    #   git
+    #   direnv
+    #   kitty
+    #   newsboat
+    #   polybar
+    #   xmonad
+    #   zellij
+    #   tmux
+    #   fzf
+    #   zsh
+    #   spotifyd
+    #   other
+    #   myPackages
+    #   cloneDefaultRepos
+    #   cloneWorkRepos
+    #   sharedDefaults
+    #   hyperland
+    #   wofi
+    #   waybar
+    #   lf
+    #   nur
+    # ];
   };
 
   perSystem = { pkgs, ... }: {
