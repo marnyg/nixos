@@ -306,6 +306,30 @@
       vim-dadbod
       neorg-telescope
       virtual-types-nvim
+
+      #installing parrot.nvim from https://github.com/frankroeder/parrot.nvim?tab=readme-ov-file#roadmap
+      {
+        plugin = (pkgs.fetchFromGitHub
+          {
+            owner = "frankroeder";
+            repo = "parrot.nvim";
+            rev = "main";
+            sha256 = "sha256-3QhUMzvWA6pzCNKdQGx9M6TFLV52e0WVwD61SuLY5fU=";
+          });
+        config = ''
+          lua <<EOF
+            require("parrot").setup {
+              providers = {
+                anthropic = {
+                  api_key = os.getenv "ANTHROPIC_API_KEY",
+                },
+              },
+            }
+          EOF
+        '';
+
+      }
+
       vim-dadbod-ui # TODO: add keybindings for opening dbui
       # TODO: add https://github.com/chrisgrieser/nvim-various-textobjs
       {
