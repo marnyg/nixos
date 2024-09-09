@@ -74,7 +74,7 @@
       map("n", "<leader>fs", function() require("telescope.builtin").spell_suggest(require("telescope.themes").get_dropdown{}) end, { desc = 'Open [F]ixes for [S]pelling' })
 
       local neorg_callbacks = require("neorg.core.callbacks")
-      
+
       neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
           -- Map all the below keybinds only when the "norg" mode is active
           keybinds.map_event_to_mode("norg", {
@@ -82,7 +82,7 @@
                   { "<leader>nf", "core.integrations.telescope.find_linkable" },
                   { "<leader>ni", "core.integrations.telescope.insert_link" },
               },
-      
+
               i = { -- Bind in insert mode
                   { "<M-i>", "core.integrations.telescope.insert_link" },
               },
@@ -100,7 +100,7 @@
               require('telescope.builtin').live_grep{ cwd = dir }
               vim.fn.feedkeys('^ *([*]+|[-]+) +[(]' .. states .. '[)]')
           end
-      
+
           -- This can be bound to a key
           vim.keymap.set('n', '<leader>nt', function() get_todos('~/notes', '[^x_]') end)
       end
@@ -324,7 +324,21 @@
                   api_key = os.getenv "ANTHROPIC_API_KEY",
                 },
               },
+              -- Default target for  PrtChatToggle, PrtChatNew, PrtContext and the chats opened from the ChatFinder
+              -- values: popup / split / vsplit / tabnew
+              toggle_target = "popup",
             }
+
+            --keymaps
+            vim.g.mapleader = ' '
+            vim.g.maplocalleader = ' '
+            vim.api.nvim_set_keymap('n', '<leader>ac', '<cmd>PrtChatToggle<CR>', { noremap = true, silent = true })
+            vim.api.nvim_set_keymap('v', '<leader>ac', ":PrtChatPaste<CR>", { noremap = true, silent = true })
+            vim.api.nvim_set_keymap('n', '<leader>an', '<cmd>PrtChatNew popup<CR>', { noremap = true, silent = true })
+            vim.api.nvim_set_keymap('n', '<leader>af', '<cmd>PrtChatFinder<CR>', { noremap = true, silent = true })
+            vim.api.nvim_set_keymap('v', '<leader>ar', ":'<,'>PrtRewrite<CR>", { noremap = true, silent = true })
+            vim.api.nvim_set_keymap('v', '<leader>aa', ":'<,'>PrtAppend<CR>", { noremap = true, silent = true })
+            vim.api.nvim_set_keymap('v', '<leader>ap', ":'<,'>PrtPrepend<CR>", { noremap = true, silent = true })
           EOF
         '';
 
