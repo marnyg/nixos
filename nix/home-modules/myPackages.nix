@@ -61,6 +61,7 @@ with lib;
         scrot
         #nheko #matrix client
         pavucontrol
+        tldr
         #spotify
         # awscli2
         # aws-azure-login

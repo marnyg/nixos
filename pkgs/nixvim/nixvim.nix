@@ -313,8 +313,8 @@
           {
             owner = "frankroeder";
             repo = "parrot.nvim";
-            rev = "main";
-            sha256 = "sha256-3QhUMzvWA6pzCNKdQGx9M6TFLV52e0WVwD61SuLY5fU=";
+            rev = "976c37462436ada5ea2239430a1e5bb2ce52944a";
+            sha256 = "sha256-AF7nM/sWONhS7vDwbvOxEYHSwrRndaC1GvS5MlXBIts=";
           });
         config = ''
           lua <<EOF
