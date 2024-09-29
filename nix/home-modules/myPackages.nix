@@ -13,7 +13,7 @@ with lib;
         rofi
         dmenu
         feh
-        firefox
+        #firefox
 
         # Command-line tools
         #fzf

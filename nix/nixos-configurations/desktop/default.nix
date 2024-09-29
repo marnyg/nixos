@@ -10,7 +10,7 @@ let
     modules.zellij.enable = false;
     modules.tmux.enable = true;
     modules.fzf.enable = true;
-    #modules.firefox.enable = true;
+    modules.firefox.enable = true;
     modules.autorandr.enable = false;
     modules.bspwm.enable = true;
     modules.dunst.enable = false;
@@ -165,6 +165,11 @@ in
       };
     };
   };
+  programs.nix-ld.enable = true;
+
+  programs.nix-ld.libraries = with pkgs; [
+
+  ];
 
   system.autoUpgrade.enable = true;
   system.autoUpgrade.flake = "github:marnyg/nixos#laptop";
