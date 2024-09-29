@@ -13,7 +13,6 @@ let
       modules = [
         { _module.args = { pkgs = lib.mkForce pkgs; }; }
         self.nixosModules.default
-        self.nixosModules.nixvim
         module
       ];
     };
@@ -35,6 +34,7 @@ in
   flake.nixosConfigurations = {
     wsl = nixosSystemFor "x86_64-linux" ./wslRefac.nix;
     laptop = nixosSystemFor "x86_64-linux" ./laptop;
+    desktop = nixosSystemFor "x86_64-linux" ./desktop;
     miniVm = nixosSystemFor "x86_64-linux"
       ({ pkgs, ... }: {
 

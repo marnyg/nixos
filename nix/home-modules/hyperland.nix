@@ -108,16 +108,16 @@ dwindle {
 
 master {
     # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
-    new_is_master = true
+    #new_is_master = true
 }
 
 gestures {
     workspace_swipe = off
 }
 
-device:epic-mouse-v1 {
-    sensitivity = -0.5
-}
+#device:epic-mouse-v1 {
+#    sensitivity = -0.5
+#}
 
 # Example windowrule v1
 # windowrule = float, ^(kitty)$
@@ -127,7 +127,8 @@ device:epic-mouse-v1 {
 
 
 # See https://wiki.hyprland.org/Configuring/Keywords/ for more
-$mainMod = SUPER
+#$mainMod = SUPER
+$mainMod = ALT
 
 bind = $mainMod, W, exec, firefox 
 #bind = $mainMod, return, exec, kitty 

@@ -63,9 +63,7 @@ in
     #  https://github.com/nix-community/nixvim/issues/1395
     _module.args.pkgs = import inputs.nixpkgs {
       inherit system;
-      overlays = [
-        inputs.neorg-overlay.overlays.default
-      ];
+      overlays = [ inputs.neorg-overlay.overlays.default ];
     };
     # end tmp
 
