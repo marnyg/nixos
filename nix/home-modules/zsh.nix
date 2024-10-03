@@ -10,6 +10,9 @@ with lib;
     #  enable = true;
     #  enableZshIntegration = true;
     #};
+
+    modules.fzf.enable = true;
+
     programs.eza = {
       enable = true;
       enableZshIntegration = true;

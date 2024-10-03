@@ -9,7 +9,7 @@ let
     modules.direnv.enable = true;
     modules.zellij.enable = false;
     modules.tmux.enable = true;
-    modules.fzf.enable = true;
+    #modules.fzf.enable = false;
     modules.firefox.enable = true;
     modules.autorandr.enable = false;
     modules.bspwm.enable = false;

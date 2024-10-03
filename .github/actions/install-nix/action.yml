@@ -11,7 +11,6 @@ runs:
         else
           echo "nix-found=false" | tee -a $GITHUB_OUTPUT
         fi
-
     - name: Install Nix ❄️
       if: ${{ steps.check-nix.outputs.nix-found != 'true' }}
       uses: cachix/install-nix-action@v26

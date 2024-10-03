@@ -1,7 +1,24 @@
 { ... }: {
 
   perSystem = { config, pkgs, ... }: {
+
     config = {
+      packages.repo-hello = pkgs.writeShellScriptBin "repo-hello" ''
+        echo "Welcome to the repository!"
+        echo "Available commands:"
+        echo "  nix run .#buildWslImage"
+        echo "  nix run .#changelog     - Generate CHANGELOG.md using recent commits"
+        echo "  nix run .#check"
+        echo "  nix run .#fmt           - Auto-format the source tree using treefmt"
+        echo "  nix run .#reload"
+        echo "  nix run .#test          - Run and watch 'cargo test'"
+        echo "  nix run .#w             - Compile and watch the project"
+      '';
+
+      apps.repo-hello = {
+        type = "app";
+        program = "${pkgs.repo-hello}/bin/repo-hello";
+      };
 
       devShells.default = pkgs.mkShell
         {
@@ -35,7 +52,14 @@
         settings.hooks.typos.enable = true;
         settings.hooks.commitizen.enable = true;
         settings.hooks.yamllint.enable = true;
-        settings.hooks.yamllint.settings.preset = "relaxed";
+        settings.hooks.yamllint.settings.configData = ''
+          ---
+  
+          extends: relaxed
+  
+          rules:
+            line-length: disable
+        '';
         settings.hooks.statix.settings.format = "stderr";
         settings.hooks.typos.settings.ignored-words = [ "noice" ];
         settings.hooks.typos.stages = [ "manual" ];

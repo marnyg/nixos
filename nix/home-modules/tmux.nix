@@ -57,7 +57,7 @@ in
       mouse = true;
       terminal = "screen-256color";
       #newSession = true;
-      extraConfig = ''
+      extraConfig = /* */''
         set-option -ga terminal-overrides ",xterm-256color:Tc"
 
         # Start windows and panes at 1, not 0

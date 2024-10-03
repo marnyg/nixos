@@ -53,7 +53,7 @@
     globals = { };
     colorschemes.catppuccin = { enable = true; };
 
-    extraConfigLua = ''
+    extraConfigLua = /*lua*/''
       local map = vim.keymap.set
       -- better indenting
       map("v", ">", ">gv", { noremap = true, silent = true })
@@ -110,14 +110,13 @@
     '';
 
     extraPackages = with pkgs; [
-      luajitPackages.magick # used by image.nvim
-      imagemagick #used by image.nvim
       fd
       gcc
       nixpkgs-fmt
       ripgrep
+      fzf
       shellcheck
-      ollama
+      #ollama
     ];
 
     # langs.ocaml.enable = true;
@@ -151,8 +150,7 @@
       };
 
       friendly-snippets.enable = true;
-      image.enable = true;
-      # image.backend = "ueberzug";
+      image.enable = false;
 
       gitsigns.enable = true;
 
@@ -232,6 +230,7 @@
       };
       todo-comments.enable = true;
       tmux-navigator.enable = true;
+      web-devicons.enable = true;
       mini = {
         enable = true;
         modules = {
@@ -300,7 +299,6 @@
         };
       };
     };
-    extraLuaPackages = ps: [ ps.magick ];
     extraPlugins = with pkgs.vimPlugins; [
       lazygit-nvim # TODO: add keybindings for opening lazygit
       vim-dadbod
@@ -316,7 +314,7 @@
             rev = "976c37462436ada5ea2239430a1e5bb2ce52944a";
             sha256 = "sha256-AF7nM/sWONhS7vDwbvOxEYHSwrRndaC1GvS5MlXBIts=";
           });
-        config = ''
+        config = /*lua*/''
           lua <<EOF
             require("parrot").setup {
               providers = {
@@ -348,7 +346,7 @@
       # TODO: add https://github.com/chrisgrieser/nvim-various-textobjs
       {
         plugin = boole-nvim;
-        config = '' 
+        config = /*lua*/'' 
             lua <<EOF
             require('boole').setup({
                 mappings = {

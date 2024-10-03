@@ -2,23 +2,19 @@ inputs:
   expression:
     description: 'Nix expression to build'
     required: true
-
 outputs:
   derivation:
     description: 'Path to the built derivation'
     value: ${{ steps.build.outputs.derivation }}
-
 runs:
   using: 'composite'
   steps:
     - name: Install Nix ❄️
       uses: ./.github/actions/install-nix
     - run: nix --version
-
     - name: Build ${{ inputs.expression }} 🛠️
       id: build
       shell: bash
-          
       run: |
         JSON=$(mktemp)
         (nix build -L ${{ inputs.expression }} --no-link --json >$JSON) |& sed -uE 's/^(trace: +)?warning:(\s+|$)/::warning::/;s/^(trace: +)?error:(\s+|$)/::error::/;s/^trace:(\s+|$)/::notice::trace: /'

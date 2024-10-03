@@ -68,8 +68,7 @@ in
     # end tmp
 
     checks.nixvim = inputs.nixvim.lib."${system}".check.mkTestDerivationFromNixvimModule {
-      inherit pkgs;
-      module = nixvimModule;
+      inherit pkgs; module = nixvimModule;
     };
 
     packages.nixvim =
