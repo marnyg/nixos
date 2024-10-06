@@ -67,6 +67,7 @@ with lib;
           "extensions.pocket.enabled" = false;
           "identity.fxaccounts.enabled" = false;
           "toolkit.zoomManager.zoomValues" = ".8,.95,1,1.1,1.2";
+          "layout.css.devPixelsPerPx" = 0.8;
         };
         userChrome = ''
           /* hides the native tabs */

@@ -57,11 +57,16 @@ in
   ## 
   #  boot.tmp.cleanOnBoot = true;
   boot.loader.grub.device = "nodev";
-  #  boot.loader.systemd-boot.enable = true;
-  #  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.useOSProber = true;
+  # boot.loader.systemd-boot.enable = true;
+  # boot.loader.efi.canTouchEfiVariables = true;
   time.timeZone = "Europe/Oslo";
   i18n.defaultLocale = "en_US.UTF-8";
   networking.networkmanager.enable = true;
+  users.users.mar.extraGroups = [ "networkmanager" ];
+  programs.nm-applet.enable = true;
+
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
