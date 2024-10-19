@@ -1,6 +1,5 @@
 { pkgs, ... }:
 let
-
   #TODO:move this out into own users file
   defaultHMConfig = {
     myHmModules.sharedDefaults.enable = true;
@@ -14,6 +13,7 @@ let
     modules.bspwm.enable = true;
     modules.dunst.enable = false;
     modules.kitty.enable = true;
+    modules.kitty.fontsize = 11;
     myModules.git.enable = true;
     modules.newsboat.enable = false;
     modules.polybar.enable = false;
@@ -68,6 +68,7 @@ in
   programs.nm-applet.enable = true;
 
   hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
   services.blueman.enable = true;
 
 
@@ -118,7 +119,9 @@ in
     tmux
     bottom
   ];
-  #programs.steam.enable = true;
+
+  nixpkgs.config.allowUnfree = true;
+  programs.steam.enable = true;
 
   fonts.packages = with pkgs; [
     noto-fonts
@@ -138,7 +141,6 @@ in
   };
 
 
-  nixpkgs.config.allowUnfree = true;
 
   virtualisation = {
     docker = {
@@ -149,7 +151,10 @@ in
       };
     };
   };
+  users.groups.docker.members = [ "mar" ];
   virtualisation.libvirtd.enable = true;
+
+
   programs.dconf.enable = true;
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

@@ -2,7 +2,13 @@
 let
   nixosSystemFor = system: module:
     let
-      pkgs = withSystem system ({ pkgs, ... }: pkgs);
+      pkgs = withSystem system ({ ... }: import inputs.nixpkgs {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+      }
+      );
       #examples = withSystem system ({ examples, ... }: examples);
       #k8sResources = withSystem system ({ k8sResources, ... }: k8sResources);
 
