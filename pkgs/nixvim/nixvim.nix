@@ -288,16 +288,19 @@
         enable = true;
         settings.enable_autosnippets = true;
       };
-      ollama = {
+      avante = {
         enable = true;
-        model = "llama3:8b";
-        prompts.Sample_Prompt = {
-          prompt = "This is a sample prompt that receives $input and $sel(ection), among others.";
-          inputLabel = "> ";
-          model = "llama3:8b";
-          action = "display";
-        };
       };
+      # ollama = {
+      #   enable = true;
+      #   model = "llama3:8b";
+      #   prompts.Sample_Prompt = {
+      #     prompt = "This is a sample prompt that receives $input and $sel(ection), among others.";
+      #     inputLabel = "> ";
+      #     model = "llama3:8b";
+      #     action = "display";
+      #   };
+      # };
     };
     extraPlugins = with pkgs.vimPlugins; [
       lazygit-nvim # TODO: add keybindings for opening lazygit
