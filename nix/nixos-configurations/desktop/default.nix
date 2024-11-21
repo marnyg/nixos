@@ -143,15 +143,18 @@ in
 
 
   virtualisation = {
-    docker = {
+    containerd.enable = true;
+    podman = {
       enable = true;
-      autoPrune = {
-        enable = true;
-        dates = "weekly";
-      };
+
+      # Create a `docker` alias for podman, to use it as a drop-in replacement
+      dockerCompat = true;
+
+      # Required for containers under podman-compose to be able to talk to each other.
+      defaultNetwork.settings.dns_enabled = true;
     };
   };
-  users.groups.docker.members = [ "mar" ];
+
   virtualisation.libvirtd.enable = true;
 
 
