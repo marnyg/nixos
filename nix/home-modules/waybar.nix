@@ -12,19 +12,12 @@ with lib;
       {
         "mainBar": {
           "layer": "top",
-          "modules-left": [ "wlr/workspaces", "tray"],
+          "modules-left": [ "wlr/workspaces" ],
           "modules-center": ["hyprland/window"],
-          "modules-right": [  "cpu", "memory", "pulseaudio", "bluetooth", "network", "clock", "battery"],
-          "wlr/workspaces": {
-            "format": "{name}",
-            "format": "{icon}",
-            "tooltip": false,
-            "on-click": "activate",
-            "all-outputs": false,
+          "modules-right": [ "tray", "cpu", "memory", "pulseaudio", "bluetooth", "network", "clock", "battery"],
+          "hyprland/workspaces": {
+            "format": "{name}: {icon}",
             "format-icons": {
-              "active": "",
-              "default": "",
-              "urgent": "",
               "1": "1",
               "2": "2",
               "3": "3",
@@ -34,8 +27,11 @@ with lib;
               "7": "󰇮",
               "8": "",
               "9": "",
-              "0": "0"
-      	}
+              "0": "0",
+              "active": "",
+              "default": "",
+              "urgent": ""
+            }
           },
           "backlight": {
             "device": "intel_backlight",
@@ -60,7 +56,7 @@ with lib;
             "tooltip-format-enumerate-connected": "{device_alias}   {device_address}"
           },
           "network": {
-            "interface": "wlp2s0",
+            "interface": "wlp7s0",
             "format": "{ifname}",
             "format-wifi": "<span color='#b4befe'> </span>{essid}",
             "format-ethernet": "{ipaddr}/{cidr} ",
@@ -125,9 +121,9 @@ with lib;
           * {
         border: none;
         font-family: 'Fira Code', 'Symbols Nerd Font Mono';
-        font-size: 13px;
+        font-size: 15px;
         font-feature-settings: '"zero", "ss01", "ss02", "ss03", "ss04", "ss05", "cv31"';
-        min-height: 15px;
+        min-height: 17px;
       }
 
       window#waybar {

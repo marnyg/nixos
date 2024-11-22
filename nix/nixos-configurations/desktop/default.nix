@@ -56,11 +56,11 @@ in
   ## OTHER STUFF
   ## 
   #  boot.tmp.cleanOnBoot = true;
-  boot.loader.grub.device = "nodev";
-  boot.loader.grub.enable = true;
-  boot.loader.grub.useOSProber = true;
-  # boot.loader.systemd-boot.enable = true;
-  # boot.loader.efi.canTouchEfiVariables = true;
+  # boot.loader.grub.device = "nodev";
+  # boot.loader.grub.enable = true;
+  # boot.loader.grub.useOSProber = true;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
   time.timeZone = "Europe/Oslo";
   i18n.defaultLocale = "en_US.UTF-8";
   networking.networkmanager.enable = true;
@@ -118,7 +118,11 @@ in
     git
     tmux
     bottom
+    slack
   ];
+
+  # Enable the wayland suport for slack
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   nixpkgs.config.allowUnfree = true;
   programs.steam.enable = true;

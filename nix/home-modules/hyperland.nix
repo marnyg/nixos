@@ -11,6 +11,7 @@ with lib;
     modules.wofi.enable = true;
     modules.waybar.enable = true;
     programs.waybar.systemd.enable = true;
+    home.packages = [ pkgs.wl-clipboard ];
     services.mako.enable = true; # notification daemon
 
     # dimmin screen at night
@@ -144,6 +145,7 @@ with lib;
       bind = $mainMod, M, exit, 
       bind = $mainMod, E, exec, ${pkgs.dolphin}/bin/dolphin
       bind = $mainMod, V, togglefloating, 
+      bind = $mainMod, F, fullscreen, 
       bind = $mainMod, D, pseudo, # dwindle
       bind = $mainMod, S, togglesplit, # dwindle
 
