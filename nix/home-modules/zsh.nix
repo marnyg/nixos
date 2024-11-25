@@ -17,7 +17,7 @@ with lib;
       enable = true;
       enableZshIntegration = true;
       git = true;
-      icons = true;
+      icons = "auto";
       extraOptions = [ "-a" ];
     };
     programs.atuin = {
@@ -81,6 +81,9 @@ with lib;
         function gcm() { git commit -m "$*" }
 
         zvm_bindkey vicmd '^e' accept-line 
+
+        #export ANTHROPIC_API_KEY=$(cat ${config.age.secrets.claudeToken.path});
+        export ANTHROPIC_API_KEY=$(cat /run/agenix/claudeToken);
 
         eval "$(${pkgs.starship}/bin/starship init zsh)"
       '';

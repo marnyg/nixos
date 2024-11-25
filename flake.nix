@@ -8,6 +8,7 @@
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
+    agenix.url = "github:ryantm/agenix";
 
 
     home-manager.url = "github:nix-community/home-manager";

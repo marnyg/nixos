@@ -1,7 +1,8 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 let
   #TODO:move this out into own users file
   defaultHMConfig = {
+    imports = [ inputs.agenix.homeManagerModules.age ];
     myHmModules.sharedDefaults.enable = true;
 
     modules.zsh.enable = true;
@@ -24,10 +25,14 @@ let
     modules.myPackages.enable = true;
     modules.cloneDefaultRepos.enable = true;
     modules.lf.enable = true;
+    myModules.secrets.enable = true;
   };
 in
 {
-  imports = [ ./hardware-config.nix ];
+  imports = [ ./hardware-config.nix inputs.agenix.nixosModules.age ];
+  age.secrets.claudeToken.file = ../../home-modules/secrets/claudeToken.age;
+  age.secrets.claudeToken.owner = "mar";
+  age.identityPaths = [ "/home/mar/.ssh/id_ed25519" ];
   ##
   ## system modules config
   ##
@@ -64,7 +69,7 @@ in
   time.timeZone = "Europe/Oslo";
   i18n.defaultLocale = "en_US.UTF-8";
   networking.networkmanager.enable = true;
-  users.users.mar.extraGroups = [ "networkmanager" ];
+  users.users.mar.extraGroups = [ "docker" "networkmanager" ];
   programs.nm-applet.enable = true;
 
   hardware.bluetooth.enable = true;
@@ -113,6 +118,7 @@ in
   services.xserver.autoRepeatDelay = 200;
   services.xserver.autoRepeatInterval = 20;
   environment.systemPackages = with pkgs; [
+    inputs.agenix.packages.x86_64-linux.default
     vim #  The Nano editor is also installed by default.
     hyprland
     git
@@ -129,7 +135,7 @@ in
 
   fonts.packages = with pkgs; [
     noto-fonts
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     noto-fonts-emoji
     liberation_ttf
     fira-code
@@ -152,7 +158,7 @@ in
       enable = true;
 
       # Create a `docker` alias for podman, to use it as a drop-in replacement
-      dockerCompat = true;
+      # dockerCompat = true;
 
       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
@@ -160,7 +166,8 @@ in
   };
 
   virtualisation.libvirtd.enable = true;
-
+  virtualisation.docker.enable = true;
+  services.tailscale.enable = true;
 
   programs.dconf.enable = true;
   # Enable the OpenSSH daemon.
@@ -183,10 +190,7 @@ in
   };
   programs.nix-ld.enable = true;
 
-  programs.nix-ld.libraries = with pkgs; [
-
-  ];
-
+  programs.nix-ld.libraries = with pkgs; [ ];
   system.autoUpgrade.enable = true;
   system.autoUpgrade.flake = "github:marnyg/nixos#laptop";
   #system.autoUpgrade.allowReboot =true;

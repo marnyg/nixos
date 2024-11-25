@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.homemanagerModules = rec {
+  flake.homemanagerModules = {
     autorandr = ./autorandr/desktop.nix;
     bspwm = ./bspwm/bspwm.nix;
     dunst = ./dunst/dunst.nix;
@@ -25,6 +25,7 @@
     wofi = ./wofi.nix;
     waybar = ./waybar.nix;
     lf = ./lf.nix;
+    secrets = ./secrets/secretsModule.nix;
     nur = inputs.nur.hmModules.nur;
     # all modules as a list
     # all = [

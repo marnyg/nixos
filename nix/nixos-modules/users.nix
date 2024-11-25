@@ -52,8 +52,11 @@ in
 
       #sharedModules = lib.attrValues config.myHomemanagerModules.modules;
 
-      users = lib.listToAttrs (map (user: { name = user.name; value = user.homeManagerConf; })
-        (builtins.filter (user: user.homeManager) config.myModules.createUsers.users));
+      users = lib.listToAttrs (map
+        (user: { name = user.name; value = user.homeManagerConf; })
+        (builtins.filter
+          (user: user.homeManager)
+          config.myModules.createUsers.users));
     };
   };
 
