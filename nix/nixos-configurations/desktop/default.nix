@@ -2,7 +2,7 @@
 let
   #TODO:move this out into own users file
   defaultHMConfig = {
-    imports = [ inputs.agenix.homeManagerModules.age ];
+    imports = [ inputs.agenix.homeManagerModules.default ];
     myHmModules.sharedDefaults.enable = true;
 
     modules.zsh.enable = true;
