@@ -70,7 +70,7 @@ in
   i18n.defaultLocale = "en_US.UTF-8";
   networking.networkmanager.enable = true;
   users.users.mar.extraGroups = [ "docker" "networkmanager" ];
-  programs.nm-applet.enable = true;
+  #programs.nm-applet.enable = true;
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot

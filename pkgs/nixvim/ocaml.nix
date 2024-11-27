@@ -26,7 +26,7 @@ with lib;
         enable = true;
         servers = {
           ocamllsp.enable = true;
-          # FIXME: this will only work in nvim 10 and ocaml lsp 1.8.0 
+          ocamllsp.package = null;
           ocamllsp.onAttach.function = ''
             client.notify('workspace/didChangeConfiguration', {
               settings = {

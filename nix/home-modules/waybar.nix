@@ -8,11 +8,18 @@ with lib;
   config = mkIf config.modules.waybar.enable {
     programs.waybar.enable = true;
     programs.waybar.systemd.enable = true;
-    programs.waybar.settings = builtins.fromJSON ''
+
+    services.blueman-applet.enable = true;
+    services.network-manager-applet.enable = true;
+    services.gammastep.enable = true;
+    services.gammastep.longitude = 10.25;
+    services.gammastep.latitude = 63.25;
+    services.gammastep.tray = true;
+    programs.waybar.settings = builtins.fromJSON /* JSON */ ''
       {
         "mainBar": {
           "layer": "top",
-          "modules-left": [ "wlr/workspaces" ],
+          "modules-left": [ "hyprland/workspaces" ],
           "modules-center": ["hyprland/window"],
           "modules-right": [ "tray", "cpu", "memory", "pulseaudio", "bluetooth", "network", "clock", "battery"],
           "hyprland/workspaces": {
@@ -108,11 +115,8 @@ with lib;
           "memory": {
               "format": "<span color='#b4befe'>🖥 </span>{used}GiB",
               "interval": 3
-          },
-    
-          "hyprland/window": {
-              "format": "{}"
           }
+    
         }
       }
     '';

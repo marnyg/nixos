@@ -67,23 +67,23 @@ with lib;
             '';
           };
           snippet.expand = ''function(args) require('luasnip').lsp_expand(args.body) end'';
-          sorting.comparators = [
-            "require('copilot_cmp.comparators').prioritize"
-            "require('cmp.config.compare').offset"
-            "require('cmp.config.compare').exact"
-            "require('cmp.config.compare').score"
-            "require('cmp.config.compare').recently_used"
-            "require('cmp.config.compare').locality"
-            "require('cmp.config.compare').kind"
-            "require('cmp.config.compare').length"
-            "require('cmp.config.compare').order"
-          ];
+          # sorting.comparators = [
+          #   "require('copilot_cmp.comparators').prioritize"
+          #   "require('cmp.config.compare').offset"
+          #   "require('cmp.config.compare').exact"
+          #   "require('cmp.config.compare').score"
+          #   "require('cmp.config.compare').recently_used"
+          #   "require('cmp.config.compare').locality"
+          #   "require('cmp.config.compare').kind"
+          #   "require('cmp.config.compare').length"
+          #   "require('cmp.config.compare').order"
+          # ];
           sources = [
             { name = "neorg"; }
-            { name = "copilot"; }
             (mkIf config.plugins.lsp.enable { name = "nvim_lsp"; })
             (mkIf config.plugins.lsp.enable { name = "nvim_lsp_signature_help"; })
             (mkIf config.plugins.lsp.enable { name = "nvim_lsp_document_symbol"; })
+            { name = "copilot"; }
             { name = "luasnip"; }
             { name = "treesitter"; }
             { name = "nvim_lua"; }
@@ -92,7 +92,7 @@ with lib;
             { name = "spell"; }
             { name = "calc"; }
             { name = "emoji"; }
-            # { name = "cmdline"; } #breacs neorg # TODO:
+            { name = "cmdline"; }
           ];
         };
       };

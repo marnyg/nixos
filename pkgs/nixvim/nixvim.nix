@@ -119,9 +119,9 @@
       #ollama
     ];
 
-    # langs.ocaml.enable = true;
-    # langs.golang.enable = true;
-    # langs.terraform.enable = true;
+    langs.ocaml.enable = true;
+    langs.golang.enable = true;
+    langs.terraform.enable = true;
 
     plugins = {
       lsp.enable = true;
