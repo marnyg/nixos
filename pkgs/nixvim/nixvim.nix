@@ -1,7 +1,7 @@
 { config, pkgs, ... }: {
   options = { };
 
-  imports = [ ./golang.nix ./ocaml.nix ./lsp.nix ./treesitter.nix ./cmp.nix ./terraform.nix ];
+  imports = [ ./python.nix ./golang.nix ./ocaml.nix ./lsp.nix ./treesitter.nix ./cmp.nix ./terraform.nix ];
 
   config = {
     opts = {
@@ -120,13 +120,51 @@
     ];
 
     langs.ocaml.enable = true;
+    langs.python.enable = true;
     langs.golang.enable = true;
     langs.terraform.enable = true;
 
     plugins = {
       lsp.enable = true;
 
-      conform-nvim.enable = true;
+      conform-nvim = {
+        enable = true;
+        settings = {
+          enable = true;
+          formatters = {
+            nixfmt = {
+              command = "nixfmt";
+              # args = { "--check"; "--stdin"; };
+              formatStdin = true;
+            };
+          };
+          # formatOnSave = true;
+          format_on_save = # Lua
+            ''
+              function(bufnr)
+                if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+                  return
+                end
+
+                if slow_format_filetypes[vim.bo[bufnr].filetype] then
+                  return
+                end
+
+                local function on_format(err)
+                  if err and err:match("timeout$") then
+                    slow_format_filetypes[vim.bo[bufnr].filetype] = true
+                  end
+                end
+
+                return { timeout_ms = 200, lsp_fallback = true }, on_format
+               end
+            '';
+          format_by_ft = {
+            nix = "nixfmt";
+          };
+        };
+
+      };
       copilot-cmp = {
         enable = true;
       };
@@ -258,6 +296,8 @@
           code_actions.proselint.enable = true;
           code_actions.proselint.settings = ''{filetypes = { "org", "text", "markdown", "norg"}}'';
           code_actions.gitsigns.enable = true;
+
+          #formatting.treefmt.enable = true;
 
         };
       };

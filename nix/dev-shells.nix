@@ -24,6 +24,8 @@
         {
           shellHook = config.pre-commit.installationScript;
           inputsFrom = [ config.just-flake.outputs.devShell ];
+          buildInputs = [ config.treefmt.build.wrapper ];
+
         };
 
       just-flake.features = {

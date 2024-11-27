@@ -6,7 +6,6 @@
         tailscale
         wsl
         syncthingService
-        nvim
         users
         defaults
         myHomemanagerModules
@@ -22,7 +21,6 @@
     users = ./users.nix;
     defaults = ./defaults.nix;
 
-    nvim = ../../pkgs/nvim/nixosModule.nix;
     nur = inputs.nur.nixosModules.nur;
     myHomemanagerModules = { lib, ... }: { home-manager.sharedModules = lib.attrValues self.homemanagerModules; };
   };
