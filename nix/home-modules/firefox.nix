@@ -21,8 +21,9 @@ with lib;
               #h264ify
               #df-youtube
               #tree-style-tab
+              tridactyl
               bitwarden
-              vim-vixen
+
               sidebery
               #pkgs.saka
               #pkgs.saka-key
@@ -68,6 +69,142 @@ with lib;
           "identity.fxaccounts.enabled" = false;
           "toolkit.zoomManager.zoomValues" = ".8,.95,1,1.1,1.2";
           "layout.css.devPixelsPerPx" = 0.8;
+        };
+        search = {
+          force = true;
+          default = "Kagi";
+          order = [ "Kagi" "Youtube" "NixOS Options" "Nix Packages" "Home Manager" "GitHub" ];
+
+
+          engines = {
+            "Bing".metaData.hidden = true;
+            "Google".metaData.hidden = true;
+            "eBay".metaData.hidden = true;
+            "DuckDuckGo".metaData.hidden = true;
+            "Amazon.com".metaData.hidden = true;
+            "Wikipedia (en)".metaData.hidden = true;
+            "YouTube".metaata.hidden = true;
+            # "Kagi".metaData.hidden = true;
+            # "Nix Packages".metaData.hidden = true;
+            # "NixOS Options".metaData.hidden = true;
+            # "Home Manager".metaData.hidden = true;
+            # "SourceGraph".metaData.hidden = true;
+            # "GitHub".metaData.hidden = true;
+
+            "Kagi" = {
+              urls = [
+                {
+                  template = "https://kagi.com/search";
+                  params = [
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+
+            "Nix Packages" = {
+              # icon = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
+              iconUpdateURL = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
+              definedAliases = [ "@np" ];
+              urls = [
+                {
+                  template = "https://search.nixos.org/packages";
+                  params = [
+                    {
+                      name = "type";
+                      value = "packages";
+                    }
+                    {
+                      name = "query";
+                      value = "{searchTerms}";
+                    }
+                    {
+                      name = "channel";
+                      value = "unstable";
+                    }
+                  ];
+                }
+              ];
+            };
+
+
+            "NixOS Options" = {
+              # icon = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
+              iconUpdateURL = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
+              definedAliases = [ "@no" ];
+              urls = [
+                {
+                  template = "https://search.nixos.org/options";
+                  params = [
+                    {
+                      name = "channel";
+                      value = "unstable";
+                    }
+                    {
+                      name = "query";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+
+            "SourceGraph" = {
+              iconUpdateURL = "https://sourcegraph.com/.assets/img/sourcegraph-mark.svg";
+              definedAliases = [ "@sg" ];
+
+              urls = [
+                {
+                  template = "https://sourcegraph.com/search";
+                  params = [
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+
+            "GitHub" = {
+              iconUpdateURL = "https://github.com/favicon.ico";
+              updateInterval = 24 * 60 * 60 * 1000;
+              definedAliases = [ "@gh" ];
+
+              urls = [
+                {
+                  template = "https://github.com/search";
+                  params = [
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+
+            "Home Manager" = {
+              iconUpdateURL = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
+              definedAliases = [ "@hm" ];
+
+              urls = [
+                {
+                  template = "https://mipmip.github.io/home-manager-option-search/";
+                  params = [
+                    {
+                      name = "query";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+
+            };
+          };
         };
         userChrome = ''
           /* hides the native tabs */

@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ lib, config, ... }:
 with lib;
 {
   options.modules.kitty = {
@@ -12,10 +12,15 @@ with lib;
       #    font = "FiraCode nerd font";
       #font = pkgs.fira-code;
       #font = pkgs.noto-fonts;
+      settings = {
+        scrollback_lines = 10000;
+        enable_audio_bell = false;
+        update_check_interval = 0;
+      };
       font = {
-        package = (pkgs.nerdfonts.override {
-          fonts = [ "FiraCode" "DroidSansMono" "FiraMono" "JetBrainsMono" ];
-        });
+        # package = (pkgs.nerdfonts.override {
+        #   fonts = [ "FiraCode" "DroidSansMono" "FiraMono" "JetBrainsMono" ];
+        # });
         name = "Fira Code Nerd Font";
         size = config.modules.kitty.fontsize;
         #size = "6";

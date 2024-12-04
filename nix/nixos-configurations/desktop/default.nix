@@ -3,6 +3,8 @@ let
   #TODO:move this out into own users file
   defaultHMConfig = {
     imports = [ inputs.agenix.homeManagerModules.default ];
+    programs.spotify-player.enable = true;
+    programs.spotify-player.settings = { login_redirect_uri = "http://127.0.0.1:9090/login"; };
     myHmModules.sharedDefaults.enable = true;
 
     modules.zsh.enable = true;
@@ -36,6 +38,7 @@ in
   ##
   ## system modules config
   ##
+  home-manager.backupFileExtension = "backup";
   myModules.myNixvim.enable = true; # TODO: should be managed by homemanger
   myModules.wsl.enable = false;
   myModules.defaults.enable = true;

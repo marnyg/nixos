@@ -64,6 +64,7 @@ with lib;
         enable = true;
         settings.indent.enable = true;
         settings.incremental_selection.enable = true;
+        settings.highlight.enable = true;
         folding = true;
         nixvimInjections = true;
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [

@@ -12,7 +12,7 @@
     # Enable nix flakes
     nix = {
       settings.auto-optimise-store = true;
-      settings.experimental-features = [ "nix-command" "flakes" ];
+      settings.experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
     };
 
     virtualisation.libvirtd.enable = true;

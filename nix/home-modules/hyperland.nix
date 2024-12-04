@@ -12,7 +12,35 @@ with lib;
     modules.waybar.enable = true;
     programs.waybar.systemd.enable = true;
     home.packages = [ pkgs.wl-clipboard ];
-    services.mako.enable = true; # notification daemon
+    services.mako = {
+      enable = true; # notification daemon
+      # catppuccin.enable = true;
+      actions = true;
+      anchor = "top-right";
+      borderRadius = 8;
+      borderSize = 1;
+      defaultTimeout = 10000;
+
+      icons = true;
+      layer = "overlay";
+      maxVisible = 3;
+      padding = "10";
+      width = 300;
+      extraConfig = ''
+        [urgency=normal]
+        border-color=#d08770
+
+        [urgency=high]
+        border-color=#bf616a
+        default-timeout=0
+
+        [app-name=lightcord]
+        border-color=#88c0d0
+
+        [summary~="log-.*"]
+        border-color=#a3be8c
+      '';
+    };
 
     # dimmin screen at night
     services.wlsunset = {
@@ -146,7 +174,7 @@ with lib;
       bind = $mainMod, E, exec, ${pkgs.dolphin}/bin/dolphin
       bind = $mainMod, V, togglefloating, 
       bind = $mainMod, F, fullscreen, 
-      bind = $mainMod, D, pseudo, # dwindle
+      # bind = $mainMod, D, pseudo, # dwindle
       bind = $mainMod, S, togglesplit, # dwindle
 
       ## FOCUS WINDOW
@@ -210,6 +238,18 @@ with lib;
       # Move/resize windows with mainMod + LMB/RB and dragging
       bindm = $mainMod, mouse:272, movewindow
       bindm = $mainMod, mouse:273, resizewindow
+
+      # Media keys
+      bind=, , exec, vol --up
+      bindle=, XF86AudioRaiseVolume, exec, vol --up
+      bindle=, XF86AudioLowerVolume, exec, vol --down
+      bindle=, XF86MonBrightnessUp, exec, bri --up
+      bindle=, XF86MonBrightnessDown, exec, bri --down
+      # bindl=, XF86AudioMute, exec, amixer set Master toggle
+      bindl=, XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+      bindl=, XF86AudioPlay, exec, playerctl play-pause # the stupid key is called play , but it toggles 
+      bindl=, XF86AudioNext, exec, playerctl next 
+      bindl=, XF86AudioPrev, exec, playerctl previous
 
       ## RULES 
       windowrule = float, file_progress

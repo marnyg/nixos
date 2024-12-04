@@ -20,6 +20,40 @@ with lib;
   };
 
   config = mkIf config.langs.ocaml.enable {
+    globals = {
+      codelens_enabled = true;
+    };
+    autoCmd = [
+      {
+        event = [ "BufEnter" "CursorHold" "InsertLeave" ];
+        pattern = "*.ml";
+        callback = {
+          __raw = ''
+            function()
+              if vim.g.codelens_enabled then
+                vim.lsp.codelens.refresh({ bufnr = 0}) 
+              else
+                vim.lsp.codelens.clear()
+              end
+            end
+          '';
+        };
+      }
+    ];
+
+    keymaps = [
+      # toggle codelens
+      {
+        action = {
+          __raw = "function() vim.g.codelens_enabled = not (vim.g.codelens_enabled or false) end";
+        };
+        key = "<leader>cl";
+        options = {
+          silent = true;
+          desc = "Toggle [C]ode[L]ens";
+        };
+      }
+    ];
     plugins = {
 
       lsp = mkIf config.langs.ocaml.lsp.enable {
@@ -30,8 +64,7 @@ with lib;
           ocamllsp.onAttach.function = ''
             client.notify('workspace/didChangeConfiguration', {
               settings = {
-                inlayHints = { enable = true },
-                codelens= { enable = true }
+                codelens= { enable = true },
               }
             })
           '';

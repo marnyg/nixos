@@ -14,6 +14,7 @@ with lib;
         dmenu
         feh
         #firefox
+        coppwr
 
         # Command-line tools
         #fzf
