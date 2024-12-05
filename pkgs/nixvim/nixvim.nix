@@ -341,6 +341,7 @@
       #     action = "display";
       #   };
       # };
+      octo.enable = true;
     };
     extraPlugins = with pkgs.vimPlugins; [
       lazygit-nvim # TODO: add keybindings for opening lazygit

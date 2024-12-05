@@ -1,8 +1,11 @@
-{ pkgs, config, ... }:
+{ inputs, pkgs, config, ... }:
 let
   # TODO:move this out into own users file
   defaultHMConfig = { config, ... }: {
     #imports = builtins.attrValues config.myHomemanagerModules.modules;
+    imports = [ inputs.agenix.homeManagerModules.default ];
+    myModules.secrets.enable = true;
+
     myHmModules.sharedDefaults.enable = true;
 
     modules.zsh.enable = true;
@@ -44,6 +47,10 @@ let
   };
 in
 {
+  imports = [ inputs.agenix.nixosModules.age ];
+  age.secrets.claudeToken.file = ../home-modules/secrets/claudeToken.age;
+  age.secrets.claudeToken.owner = "mar";
+  age.identityPaths = [ "/home/mar/.ssh/id_ed25519" ];
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   users.users.mar.openssh.authorizedKeys.keys = [
@@ -100,7 +107,7 @@ in
     users = [
       # TODO: move this out into own users file
       { name = "mar"; homeManager = true; homeManagerConf = defaultHMConfig; }
-      { name = "test"; homeManager = true; }
+      # { name = "test"; homeManager = true; }
       { name = "notHM"; homeManager = false; }
     ];
   };
