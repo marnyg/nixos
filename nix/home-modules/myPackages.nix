@@ -33,6 +33,7 @@ with lib;
         #sct
         #hyperfine
         #unrar
+        devenv
         unzip
         sqlite
         lazygit
