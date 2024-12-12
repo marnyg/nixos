@@ -57,7 +57,7 @@ with lib;
 	'';
       };
       lsp-format.enable = lib.mkDefault (config.plugins.lsp.enable);
-      lsp-lines.enable = lib.mkDefault (config.plugins.lsp.enable);
+      # lsp-lines.enable = lib.mkDefault (config.plugins.lsp.enable);
       lspkind = {
         enable = lib.mkDefault (config.plugins.lsp.enable);
         symbolMap = {

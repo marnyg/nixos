@@ -52,6 +52,7 @@
 
     globals = { };
     colorschemes.catppuccin = { enable = true; };
+    diagnostics.virtual_text = true;
 
     extraConfigLua = /*lua*/''
       local map = vim.keymap.set
@@ -127,44 +128,6 @@
     plugins = {
       lsp.enable = true;
 
-      conform-nvim = {
-        enable = true;
-        settings = {
-          enable = true;
-          formatters = {
-            nixfmt = {
-              command = "nixfmt";
-              # args = { "--check"; "--stdin"; };
-              formatStdin = true;
-            };
-          };
-          # formatOnSave = true;
-          format_on_save = # Lua
-            ''
-              function(bufnr)
-                if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-                  return
-                end
-
-                if slow_format_filetypes[vim.bo[bufnr].filetype] then
-                  return
-                end
-
-                local function on_format(err)
-                  if err and err:match("timeout$") then
-                    slow_format_filetypes[vim.bo[bufnr].filetype] = true
-                  end
-                end
-
-                return { timeout_ms = 200, lsp_fallback = true }, on_format
-               end
-            '';
-          format_by_ft = {
-            nix = "nixfmt";
-          };
-        };
-
-      };
       copilot-cmp = {
         enable = true;
       };
@@ -297,8 +260,13 @@
           code_actions.proselint.settings = ''{filetypes = { "org", "text", "markdown", "norg"}}'';
           code_actions.gitsigns.enable = true;
 
-          #formatting.treefmt.enable = true;
-
+          formatting.treefmt.enable = true;
+          formatting.treefmt.package = null;
+          formatting.treefmt.settings = {
+            filetypes = { }; # All filetypes
+            formatStdin = true; # Read from formated file from stdin
+            condition.__raw = "function() return true end";
+          };
         };
       };
 
