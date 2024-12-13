@@ -299,16 +299,6 @@
       avante = {
         enable = true;
       };
-      # ollama = {
-      #   enable = true;
-      #   model = "llama3:8b";
-      #   prompts.Sample_Prompt = {
-      #     prompt = "This is a sample prompt that receives $input and $sel(ection), among others.";
-      #     inputLabel = "> ";
-      #     model = "llama3:8b";
-      #     action = "display";
-      #   };
-      # };
       octo.enable = true;
     };
     extraPlugins = with pkgs.vimPlugins; [
@@ -316,43 +306,6 @@
       vim-dadbod
       neorg-telescope
       virtual-types-nvim
-
-      #installing parrot.nvim from https://github.com/frankroeder/parrot.nvim?tab=readme-ov-file#roadmap
-      #{
-      #  plugin = (pkgs.fetchFromGitHub
-      #    {
-      #      owner = "frankroeder";
-      #      repo = "parrot.nvim";
-      #      rev = "976c37462436ada5ea2239430a1e5bb2ce52944a";
-      #      sha256 = "sha256-AF7nM/sWONhS7vDwbvOxEYHSwrRndaC1GvS5MlXBIts=";
-      #    });
-      #  config = /*lua*/''
-      #    lua <<EOF
-      #      require("parrot").setup {
-      #        providers = {
-      #          anthropic = {
-      #            api_key = os.getenv "ANTHROPIC_API_KEY",
-
-      #        },
-      #        -- Default target for  PrtChatToggle, PrtChatNew, PrtContext and the chats opened from the ChatFinder
-      #        -- values: popup / split / vsplit / tabnew
-      #        toggle_target = "popup",
-      #      }
-
-      #      --keymaps
-      #      vim.g.mapleader = ' '
-      #      vim.g.maplocalleader = ' '
-      #      vim.api.nvim_set_keymap('n', '<leader>ac', '<cmd>PrtChatToggle<CR>', { noremap = true, silent = true })
-      #      vim.api.nvim_set_keymap('v', '<leader>ac', ":PrtChatPaste<CR>", { noremap = true, silent = true })
-      #      vim.api.nvim_set_keymap('n', '<leader>an', '<cmd>PrtChatNew popup<CR>', { noremap = true, silent = true })
-      #      vim.api.nvim_set_keymap('n', '<leader>af', '<cmd>PrtChatFinder<CR>', { noremap = true, silent = true })
-      #      vim.api.nvim_set_keymap('v', '<leader>ar', ":'<,'>PrtRewrite<CR>", { noremap = true, silent = true })
-      #      vim.api.nvim_set_keymap('v', '<leader>aa', ":'<,'>PrtAppend<CR>", { noremap = true, silent = true })
-      #      vim.api.nvim_set_keymap('v', '<leader>ap', ":'<,'>PrtPrepend<CR>", { noremap = true, silent = true })
-      #    EOF
-      #  '';
-
-      #}
 
       vim-dadbod-ui # TODO: add keybindings for opening dbui
       # TODO: add https://github.com/chrisgrieser/nvim-various-textobjs
@@ -396,6 +349,10 @@
                     -- command = { "nix", "repl", "--expr", "'import <nixpkgs>{}'", "--extra-experimental-features", "pipe-operator" }, 
                     command = { "nix", "repl", "--extra-experimental-features", "pipe-operator" }, 
                     -- format = require("iron.fts.common").bracketed_paste_python
+                  },
+                  ocaml = {
+                    command = { "utop" }, 
+                    format = function(lines) table.insert(lines, ";;\13") return lines end
                   }
                 },
                 -- How the repl window will be displayed
