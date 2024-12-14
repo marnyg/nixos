@@ -42,6 +42,12 @@ in
   myModules.myNixvim.enable = true; # TODO: should be managed by homemanger
   myModules.wsl.enable = false;
   myModules.defaults.enable = true;
+  nix.channel.enable = false;
+  # Enable nix flakes
+  nix = {
+    settings.auto-optimise-store = true;
+    settings.experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
+  };
 
   ## 
   ## users and homemanager modules config

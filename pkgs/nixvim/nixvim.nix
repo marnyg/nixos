@@ -70,8 +70,11 @@
       map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
       map('n', '<leader>.', ":e %:p:h<CR>", { desc = 'Open folder of current file' })
       map('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
       map("n", "<leader>x", "<cmd>.lua<CR>", { desc = "Execute the current line" })
+      map("v", "<leader>x", ":'<,'>lua<CR>", { desc = "Execute selected Lua code" })
       map("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
+
       map("n", "<leader>fs", function() require("telescope.builtin").spell_suggest(require("telescope.themes").get_dropdown{}) end, { desc = 'Open [F]ixes for [S]pelling' })
 
       local neorg_callbacks = require("neorg.core.callbacks")
@@ -346,9 +349,7 @@
                     format = require("iron.fts.common").bracketed_paste_python
                   },
                   nix = {
-                    -- command = { "nix", "repl", "--expr", "'import <nixpkgs>{}'", "--extra-experimental-features", "pipe-operator" }, 
-                    command = { "nix", "repl", "--extra-experimental-features", "pipe-operator" }, 
-                    -- format = require("iron.fts.common").bracketed_paste_python
+                    command = { "nix", "repl", "--expr", "import <nixpkgs>{}" }, 
                   },
                   ocaml = {
                     command = { "utop" }, 
@@ -357,14 +358,14 @@
                 },
                 -- How the repl window will be displayed
                 -- See below for more information
-                repl_open_cmd = require('iron.view').bottom(40),
+                -- repl_open_cmd = require('iron.view').bottom(40),
               },
               -- Iron doesn't set keymaps by default anymore.
               -- You can set them here or manually add keymaps to the functions in iron.core
               keymaps = {
                 send_motion = "<space>sc",
                 visual_send = "<space>sc",
-                send_file = "<space>sf",
+                send_file = "<space>rf",
                 send_line = "<space>sl",
                 send_paragraph = "<space>sp",
                 send_until_cursor = "<space>su",
