@@ -350,7 +350,7 @@
                   },
                   nix = {
                     command = { "nix", "repl", "--expr", "import <nixpkgs>{}" }, 
-                  },
+                  };
                   ocaml = {
                     command = { "utop" }, 
                     format = function(lines) table.insert(lines, ";;\13") return lines end
@@ -359,13 +359,15 @@
                 -- How the repl window will be displayed
                 -- See below for more information
                 -- repl_open_cmd = require('iron.view').bottom(40),
+                repl_open_cmd = "vertical botright 80 split"
+                -- vim.print(require('iron.core'))
               },
               -- Iron doesn't set keymaps by default anymore.
               -- You can set them here or manually add keymaps to the functions in iron.core
               keymaps = {
                 send_motion = "<space>sc",
                 visual_send = "<space>sc",
-                send_file = "<space>rf",
+                send_file = "<space>ff",
                 send_line = "<space>sl",
                 send_paragraph = "<space>sp",
                 send_until_cursor = "<space>su",
