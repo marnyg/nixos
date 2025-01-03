@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ lib, config, ... }:
 with lib;
 {
   options.myModules.wsl = {
@@ -19,6 +19,6 @@ with lib;
       #docker-desktop.enable = true;
     };
     networking.nameservers = [ "1.1.1.1" ];
-    users.users.mar = { shell = pkgs.zsh; };
+    # users.users.mar = { shell = pkgs.zsh; };
   };
 }

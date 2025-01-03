@@ -167,7 +167,7 @@ with lib;
 
 
       bind = $mainMod, W, exec, firefox 
-      bind = $mainMod, return, exec, kitty 
+      bind = $mainMod, return, exec, ghostty
       # bind = $mainMod, return, exec, foot 
       bindr = $mainMod, Q, killactive, 
       bind = $mainMod, M, exit, 

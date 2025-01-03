@@ -26,7 +26,8 @@
     waybar = ./waybar.nix;
     lf = ./lf.nix;
     secrets = ./secrets/secretsModule.nix;
-    nur = inputs.nur.hmModules.nur;
+    nur = inputs.nur.modules.homeManager.default;
+    ghostty = ./ghostty.nix;
     # all modules as a list
     # all = [
     #   autorandr
@@ -159,4 +160,3 @@
     };
   };
 }
-

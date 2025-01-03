@@ -11,7 +11,7 @@
         myHomemanagerModules
         self.inputs.home-manager.nixosModules.home-manager
         self.inputs.nixos-wsl.nixosModules.wsl
-        inputs.nur.nixosModules.nur
+        inputs.nur.modules.nixos.default
         inputs.microvm.nixosModules.host
       ];
     };
@@ -21,7 +21,7 @@
     users = ./users.nix;
     defaults = ./defaults.nix;
 
-    nur = inputs.nur.nixosModules.nur;
+    nur = inputs.nur.modules.nixos.default;
     myHomemanagerModules = { lib, ... }: { home-manager.sharedModules = lib.attrValues self.homemanagerModules; };
   };
 }

@@ -8,7 +8,7 @@ let
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/git -mindepth 1 -maxdepth 4 -type d -name '.git' -exec dirname {} \; | fzf)
+    selected=$(${pkgs.findutils}/bin/find ~/git -mindepth 1 -maxdepth 4 -type d -name '.git' -exec dirname {} \; | fzf)
 fi
 
 if [[ -z $selected ]]; then
@@ -80,7 +80,7 @@ in
         bind -n M-u attach-session -t . -c '#{pane_current_path}'
         set -g repeat-time 1000
 
-        bind-key f run-shell "tmux neww ${tmux-sessionizer}"
+        bind-key f run-shell "tmux neww bash -c ${tmux-sessionizer}"
         bind-key r source-file ~/.config/tmux/tmux.conf
 
 
