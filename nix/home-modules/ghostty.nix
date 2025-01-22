@@ -65,6 +65,7 @@ with lib;
 
     };
 
+    programs.starship.enable = true;
     programs.starship.enableNushellIntegration = true;
 
 

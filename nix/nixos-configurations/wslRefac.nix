@@ -17,7 +17,8 @@ let
     modules.autorandr.enable = false;
     modules.bspwm.enable = false;
     modules.dunst.enable = false;
-    modules.kitty.enable = true;
+    modules.kitty.enable = false;
+    modules.ghostty.enable = true;
     myModules.git.enable = true;
     modules.newsboat.enable = false;
     modules.polybar.enable = false;
