@@ -3,8 +3,11 @@ let
   #TODO:move this out into own users file
   defaultHMConfig = {
     imports = [ inputs.agenix.homeManagerModules.default ];
-    programs.spotify-player.enable = true;
-    programs.spotify-player.settings = { login_redirect_uri = "http://127.0.0.1:9090/login"; };
+    # programs.spotify-player.enable = true;
+    # programs.spotify-player.settings = { login_redirect_uri = "http://127.0.0.1:9090/login"; };
+
+    programs.ncspot.enable = true;
+
     myHmModules.sharedDefaults.enable = true;
 
     modules.zsh.enable = true;
