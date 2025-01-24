@@ -14,6 +14,8 @@ with lib;
         $env.config.edit_mode = 'vi'
         $env.config.show_banner = false
         $env.ANTHROPIC_API_KEY = open "/run/agenix/claudeToken"
+        let-env PATH = $env.PATH
+
 
         def gcm [...message: string] {
             git commit -m ($message | str join " ")
