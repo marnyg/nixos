@@ -10,6 +10,7 @@ with lib;
       enable = true;
       nix-direnv.enable = true;
       enableZshIntegration = true;
+      enableNushellIntegration = true;
       config = {
         whitelist.prefix = [ "~/git/sendra" "~/git/nixos" "~/git/wellstarter" "~/git/personal" ];
       };
