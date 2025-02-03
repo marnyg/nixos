@@ -28,6 +28,7 @@
     secrets = ./secrets/secretsModule.nix;
     nur = inputs.nur.modules.homeManager.default;
     ghostty = ./ghostty.nix;
+    s3fs = ./s3fs.nix;
     # all modules as a list
     # all = [
     #   autorandr

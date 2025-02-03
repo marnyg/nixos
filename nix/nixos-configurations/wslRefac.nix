@@ -8,6 +8,10 @@ let
 
     myHmModules.sharedDefaults.enable = true;
 
+    myServices.s3fs.enable = true;
+    myServices.s3fs.keyId = "";
+    myServices.s3fs.accessKey = "";
+
     modules.zsh.enable = true;
     modules.direnv.enable = true;
     modules.zellij.enable = false;
