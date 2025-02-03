@@ -16,6 +16,18 @@
     };
     autoCmd = [
       {
+        event = [ "FileType" ];
+        desc = "Set up vim-dadbod-completion for SQL files";
+        pattern = [ "sql" "mysql" "plsql" ];
+        callback = {
+          __raw = ''
+            function()
+              require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
+            end
+          '';
+        };
+      }
+      {
         event = [ "BufEnter" "BufWinEnter" ];
         desc = "Enable spell checking and set textwidth to 101 when entering a neorg file";
         pattern = [ "*.norg" ];
@@ -307,6 +319,7 @@
     extraPlugins = with pkgs.vimPlugins; [
       lazygit-nvim # TODO: add keybindings for opening lazygit
       vim-dadbod
+      vim-dadbod-completion
       neorg-telescope
       virtual-types-nvim
 

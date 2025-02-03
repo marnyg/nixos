@@ -9,6 +9,7 @@ with lib;
         servers = {
           bashls.enable = true;
           nixd.enable = true;
+          sqls.enable = true;
         };
         onAttach = '' 
           local map = function(keys, func, desc)

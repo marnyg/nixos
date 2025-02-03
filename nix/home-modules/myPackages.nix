@@ -37,6 +37,7 @@ with lib;
         unzip
         sqlite
         lazygit
+        postgresql
 
         # GUI applications
         mpv
