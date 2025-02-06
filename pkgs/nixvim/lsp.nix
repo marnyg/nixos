@@ -8,6 +8,7 @@ with lib;
         # enable = true;
         servers = {
           bashls.enable = true;
+          lua_ls.enable = true;
           nixd.enable = true;
           sqls.enable = true;
         };
