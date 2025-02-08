@@ -47,7 +47,7 @@ with lib;
         #vscode
 
         # GUI File readers
-        mupdf
+        evince
         sxiv
 
         # Development

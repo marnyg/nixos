@@ -1,7 +1,7 @@
 { config, pkgs, ... }: {
   options = { };
 
-  imports = [ ./python.nix ./golang.nix ./ocaml.nix ./lsp.nix ./treesitter.nix ./cmp.nix ./terraform.nix ];
+  imports = [ ./python.nix ./rust.nix ./golang.nix ./ocaml.nix ./lsp.nix ./treesitter.nix ./cmp.nix ./terraform.nix ];
 
   config = {
     opts = {
@@ -138,6 +138,7 @@
     langs.ocaml.enable = true;
     langs.python.enable = true;
     langs.golang.enable = true;
+    langs.rust.enable = true;
     langs.terraform.enable = true;
 
     plugins = {
@@ -313,6 +314,14 @@
       };
       avante = {
         enable = true;
+        settings = {
+          claude = {
+            endpoint = "https://api.anthropic.com";
+            max_tokens = 4096;
+            model = "claude-3-5-sonnet-20240620";
+            temperature = 0;
+          };
+        };
       };
       octo.enable = true;
     };
