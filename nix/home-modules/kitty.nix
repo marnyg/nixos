@@ -7,6 +7,9 @@ with lib;
   };
 
   config = mkIf config.modules.kitty.enable {
+
+    modules.nushell.enable = true;
+
     programs.kitty = {
       enable = true;
       #    font = "FiraCode nerd font";

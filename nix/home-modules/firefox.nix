@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
 with lib;
 {
   options.modules.firefox = {
@@ -8,26 +8,21 @@ with lib;
   config = mkIf config.modules.firefox.enable {
     programs.firefox = {
       enable = true;
+      package = pkgs.firefox-bin;
       profiles.mar = {
-        extensions =
-          mkIf
-            (builtins.hasAttr "nur" config)
-            (with config.nur.repos.rycee.firefox-addons; [
-              decentraleyes
-              ublock-origin
-              clearurls
-              sponsorblock
-              darkreader
-              #h264ify
-              #df-youtube
-              #tree-style-tab
-              tridactyl
-              bitwarden
+        extensions = (with pkgs.nur.repos.rycee.firefox-addons; [
+          decentraleyes
+          ublock-origin
+          # clearurls #not working on mac
+          sponsorblock
+          darkreader
+          tridactyl
+          bitwarden
 
-              sidebery
-              #pkgs.saka
-              #pkgs.saka-key
-            ]);
+          sidebery
+          #pkgs.saka
+          #pkgs.saka-key
+        ]);
         settings = {
           "browser.ctrlTab.sortByRecentlyUsed" = true;
           "browser.startup.page" = 3;
@@ -68,7 +63,7 @@ with lib;
           "extensions.pocket.enabled" = false;
           "identity.fxaccounts.enabled" = false;
           "toolkit.zoomManager.zoomValues" = ".8,.95,1,1.1,1.2";
-          "layout.css.devPixelsPerPx" = 0.8;
+          "layout.css.devPixelsPerPx" = -1;
         };
         search = {
           force = true;
@@ -219,4 +214,3 @@ with lib;
     };
   };
 }
-

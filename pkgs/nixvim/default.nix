@@ -6,7 +6,7 @@ in
   flake.nixvimModules = {
     nixVim = nixvimModule;
   };
-  # flake.HomemanagerModules.nixvim = { pkgs, ... }: {
+  # flake.homemanagerModules.nixvim = { pkgs, ... }: {
   #   programs.nixvim.enable = true;
   #   programs.nixvim.pkgs = self.packages.${pkgs.system}.nixvim;
   # };

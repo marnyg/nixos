@@ -9,65 +9,37 @@ with lib;
 
 
       home.packages = with pkgs; [
-        #dwm
-        rofi
         dmenu
         feh
-        #firefox
-        coppwr
 
         # Command-line tools
-        #fzf
         ripgrep
         ffmpeg
-        #tealdeer
-        #exa
-        #duf
-        # spotify-tui
-        playerctl
+
         gnupg
-        #slop
-        #bat
-        #lf
         libnotify
-        #sct
-        #hyperfine
-        #unrar
         devenv
         unzip
-        sqlite
         lazygit
-        postgresql
 
-        # GUI applications
         mpv
-        #        nyxt
-        #luakit
-        arandr
-        #vscode
-
-        # GUI File readers
+        # GUI pkf readers
         evince
-        sxiv
-
-        # Development
-        #gcc
-        #gnumake
-        #python3
 
         # Other
-        # bitwarden
-        bitwarden-cli
         jq
+        tldr
+      ] ++ (if pkgs.system != "aarch64-darwin"
+      then [
+        rofi
+        coppwr
+        playerctl
+        sxiv
         xdotool
         xclip
         scrot
-        #nheko #matrix client
         pavucontrol
-        tldr
-        #spotify
-        # awscli2
-        # aws-azure-login
-      ];
+        bitwarden-cli
+      ] else [ ]);
     };
 }

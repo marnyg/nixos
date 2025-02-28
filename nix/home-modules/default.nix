@@ -25,10 +25,14 @@
     wofi = ./wofi.nix;
     waybar = ./waybar.nix;
     lf = ./lf.nix;
-    secrets = ./secrets/secretsModule.nix;
     nur = inputs.nur.modules.homeManager.default;
-    ghostty = ./ghostty.nix;
     s3fs = ./s3fs.nix;
+    nushell = ./nushell.nix;
+    #TODO: fix below
+    secrets = ./secrets/secretsModule.nix;
+    ghostty = ./ghostty.nix;
+    # --------- til here
+
     # all modules as a list
     # all = [
     #   autorandr

@@ -8,7 +8,7 @@ let
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(${pkgs.findutils}/bin/find ~/git -mindepth 1 -maxdepth 4 -type d -name '.git' -exec dirname {} \; | fzf)
+    selected=$(${pkgs.findutils}/bin/find ~/git -mindepth 1 -maxdepth 4 -type d -name '.git' -exec dirname {} \; | ${pkgs.fzf}/bin/fzf)
 fi
 
 if [[ -z $selected ]]; then

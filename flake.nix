@@ -31,6 +31,12 @@
     microvm.url = "github:astro/microvm.nix";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
 
+    darwin.url = "github:lnl7/nix-darwin/master";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
+    nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
+    mac-app-util.url = "github:hraban/mac-app-util";
+
+
 
 
     # tmp fix for broken neorg, see: 
@@ -43,7 +49,7 @@
   outputs = inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; }
       {
-        systems = [ "x86_64-linux" ];
+        systems = [ "x86_64-linux" "aarch64-darwin" ];
         imports = [
           inputs.treefmt-nix.flakeModule
           inputs.flake-root.flakeModule
@@ -52,6 +58,8 @@
           inputs.just-flake.flakeModule
           ./pkgs
           ./nix
+          ./darwin.nix
         ];
       };
+
 }
