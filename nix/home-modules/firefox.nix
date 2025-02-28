@@ -23,23 +23,6 @@ with lib;
           #pkgs.saka
           #pkgs.saka-key
         ]);
-        # mkIf
-        # (builtins.hasAttr "nur" config)
-        # (with config.nur.repos.rycee.firefox-addons; [
-        # [
-        #     decentraleyes
-        #     ublock-origin
-        #     clearurls
-        #     sponsorblock
-        #     darkreader
-        #     tridactyl
-        #     bitwarden
-        #
-        #     sidebery
-        #     #pkgs.saka
-        #     #pkgs.saka-key
-        #   ];
-        # );
         settings = {
           "browser.ctrlTab.sortByRecentlyUsed" = true;
           "browser.startup.page" = 3;
@@ -231,4 +214,3 @@ with lib;
     };
   };
 }
-

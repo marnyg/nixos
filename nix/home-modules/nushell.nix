@@ -13,7 +13,7 @@ with lib;
       configFile.text = ''
         $env.config.edit_mode = 'vi'
         $env.config.show_banner = false
-        #$env.ANTHROPIC_API_KEY = open "/run/agenix/claudeToken"
+        $env.ANTHROPIC_API_KEY = open "/run/agenix/claudeToken"
 
         let carapace_completer = {|spans|
             carapace $spans.0 nushell ...$spans | from json

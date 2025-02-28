@@ -29,8 +29,8 @@
     s3fs = ./s3fs.nix;
     nushell = ./nushell.nix;
     #TODO: fix below
-    # secrets = ./secrets/secretsModule.nix;
-    # ghostty = ./ghostty.nix;
+    secrets = ./secrets/secretsModule.nix;
+    ghostty = ./ghostty.nix;
     # --------- til here
 
     # all modules as a list
