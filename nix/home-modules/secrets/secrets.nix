@@ -9,6 +9,7 @@ let
   systems = [ ];
 in
 {
+  "openrouterToken.age".publicKeys = users;
   "claudeToken.age".publicKeys = users;
   "tstsecret.age".publicKeys = users ++ systems;
 }

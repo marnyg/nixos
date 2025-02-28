@@ -13,7 +13,8 @@ with lib;
       configFile.text = ''
         $env.config.edit_mode = 'vi'
         $env.config.show_banner = false
-        $env.ANTHROPIC_API_KEY = open "/run/agenix/claudeToken"
+        $env.ANTHROPIC_API_KEY = open "/run/agenix/claudeToken" | str trim
+        $env.OPENROUTER_API_KEY = open "/run/agenix/openrouterToken" | str trim
 
 
         def gcm [...message: string] {

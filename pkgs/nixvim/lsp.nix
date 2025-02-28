@@ -4,6 +4,7 @@ with lib;
   options = { };
   config = {
     plugins = {
+      lazydev.enable = true;
       lsp = mkIf config.plugins.lsp.enable {
         # enable = true;
         servers = {

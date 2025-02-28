@@ -53,6 +53,8 @@ let
 in
 {
   imports = [ inputs.agenix.nixosModules.age ];
+  age.secrets.openrouterToken.file = ../home-modules/secrets/claudeToken.age;
+  age.secrets.openrouterToken.owner = "mar";
   age.secrets.claudeToken.file = ../home-modules/secrets/claudeToken.age;
   age.secrets.claudeToken.owner = "mar";
   age.identityPaths = [ "/home/mar/.ssh/id_ed25519" ];

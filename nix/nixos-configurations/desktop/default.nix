@@ -10,6 +10,9 @@ let
 
     myHmModules.sharedDefaults.enable = true;
 
+    myServices.s3fs.enable = true;
+    myServices.s3fs.keyId = "tid_hDRNQPQfftgkNfOasaoExtxIaBq_jkLiWvimSMZzaNhtCdtEmF";
+    myServices.s3fs.accessKey = "tsec_PC4Z9WtxGiVwRGPDPBZhlTqfYHW3tbKo38PZ6izsDCKHVH-wAWskx7QkSs_zgXM8BWGVep";
     modules.zsh.enable = true;
     modules.direnv.enable = true;
     modules.zellij.enable = false;
@@ -35,9 +38,11 @@ let
 in
 {
   imports = [ ./hardware-config.nix inputs.agenix.nixosModules.age ];
+  age.identityPaths = [ "/home/mar/.ssh/id_ed25519" ];
+  age.secrets.openrouterToken.file = ../../home-modules/secrets/openrouterToken.age;
+  age.secrets.openrouterToken.owner = "mar";
   age.secrets.claudeToken.file = ../../home-modules/secrets/claudeToken.age;
   age.secrets.claudeToken.owner = "mar";
-  age.identityPaths = [ "/home/mar/.ssh/id_ed25519" ];
   ##
   ## system modules config
   ##
@@ -48,6 +53,7 @@ in
   nix.channel.enable = false;
   # Enable nix flakes
   nix = {
+    settings.trusted-users = [ "root" "mar" ];
     settings.auto-optimise-store = true;
     settings.experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
   };
@@ -137,6 +143,7 @@ in
     tmux
     bottom
     slack
+    prusa-slicer
   ];
 
   # Enable the wayland suport for slack

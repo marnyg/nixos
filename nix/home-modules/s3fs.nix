@@ -12,7 +12,7 @@ in
 
       bucket = mkOption {
         type = types.str;
-        default = "disksync";
+        default = "filesync";
         description = "Name of the S3 bucket to mount.";
       };
 
@@ -34,7 +34,7 @@ in
 
       mountPoint = mkOption {
         type = types.str;
-        default = "${config.home.homeDirectory}/s3";
+        default = "${config.home.homeDirectory}/sync";
         description = "Local mount point for the S3 bucket.";
       };
 
@@ -58,24 +58,16 @@ in
 
       Service = {
         ExecStartPre = [
-          # "${pkgs.coreutils}/bin/mkdir -p ${cfg.mountPoint}"
+          "${pkgs.coreutils}/bin/mkdir -p ${cfg.mountPoint}"
           "${pkgs.bash}/bin/bash -c '${pkgs.coreutils}/bin/echo \"${cfg.keyId}:${cfg.accessKey}\" > ${config.home.homeDirectory}/.config/s3fs-passwd && ${pkgs.coreutils}/bin/chmod 0600 ${config.home.homeDirectory}/.config/s3fs-passwd'"
         ];
         ExecStart = toString [
-          "${pkgs.s3fs}/bin/s3fs"
-          "-o passwd_file=%h/.config/s3fs-passwd"
-          "-o use_path_request_style"
-          "-o url=${cfg.url}"
-          "-o nonempty"
-          "-f"
-
-          #debug options
-          # "-o dbglevel=debug"
-          # "-o curldbg"
-          # "-d"
-
+          "${pkgs.goofys}/bin/goofys"
+          cfg.bucket
+          cfg.mountPoint
+          "--endpoint ${cfg.url}"
+          "--profile tigris"
           "${concatStringsSep " " cfg.extraOptions}"
-          "${cfg.bucket} ${cfg.mountPoint}"
         ];
         ExecStop = "${pkgs.fuse}/bin/fusermount -u ${cfg.mountPoint}";
         Restart = "always";

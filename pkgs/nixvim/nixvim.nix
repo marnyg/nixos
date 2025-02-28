@@ -118,7 +118,7 @@
           end
 
           -- This can be bound to a key
-          vim.keymap.set('n', '<leader>nt', function() get_todos('~/notes', '[^x_]') end)
+          vim.keymap.set('n', '<leader>nt', function() get_todos('~/syng/notes', '[^x_]') end)
       end
 
       vim.notify = require('mini.notify').make_notify()
@@ -321,6 +321,18 @@
             model = "claude-3-5-sonnet-20240620";
             temperature = 0;
           };
+
+          # provider = "openrouter";
+          # vendors = {
+          #   openrouter = {
+          #     __inherited_from = "openai";
+          #     endpoint = "https://openrouter.ai/api/v1";
+          #     api_key_name = "OPENROUTER_API_KEY";
+          #     # disable_tools = true;
+          #     # model = "deepseek/deepseek-r1";
+          #     model = "anthropic/claude-3.5-sonnet-20240620";
+          #   };
+          # };
         };
       };
       octo.enable = true;
