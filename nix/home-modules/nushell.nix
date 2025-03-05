@@ -7,14 +7,26 @@ with lib;
   };
 
   config = mkIf config.modules.nushell.enable {
+    home.shell.enableNushellIntegration = true;
+
+    # home.packages= [pkgs.bat];
+    programs.bat.enable = true;
+    programs.bat.config = {
+      paging = "never";
+      style = "plain";
+    };
+
     programs.nushell = {
       enable = true;
 
       configFile.text = ''
         $env.config.edit_mode = 'vi'
         $env.config.show_banner = false
-        $env.ANTHROPIC_API_KEY = open "/run/agenix/claudeToken" | str trim
-        $env.OPENROUTER_API_KEY = open "/run/agenix/openrouterToken" | str trim
+        ${lib.optionalString (config.age ? secrets && config.age.secrets ? claudeToken) ''
+          $env.ANTHROPIC_API_KEY = open "${config.age.secrets.claudeToken.path}" | str trim
+          $env.OPENROUTER_API_KEY = open "${config.age.secrets.openrouterToken.path}" | str trim
+        ''}
+
 
         let carapace_completer = {|spans|
             carapace $spans.0 nushell ...$spans | from json
@@ -50,7 +62,7 @@ with lib;
         alias mv = mv -iv;
         alias cp = cp -riv;
         alias cdn = cd ~/git/nixos;
-        alias cat = ${pkgs.bat}/bin/bat --paging=never --style=plain;
+        alias cat = bat;
         alias tree = ${pkgs.eza}/bin/eza --tree --icons;
         alias du = ${pkgs.du-dust}/bin/dust;
         alias dua = ${pkgs.dua}/bin/dua;
@@ -90,9 +102,9 @@ with lib;
 
 
     programs.carapace.enable = true;
-    programs.carapace.enableNushellIntegration = true;
+    # programs.carapace.enableNushellIntegration = true;
 
     programs.starship.enable = true;
-    programs.starship.enableNushellIntegration = true;
+    # programs.starship.enableNushellIntegration = true;
   };
 }

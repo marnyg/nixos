@@ -1,9 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
-  home.stateVersion = "23.05";
+  imports = [ inputs.agenix.homeManagerModules.default ];
 
-  # imports = [ inputs.agenix.homeManagerModules.default ];
+  home.stateVersion = "23.05";
+  home.homeDirectory = "/Users/mariusnygard";
 
   programs.ncspot.enable = true;
 
@@ -18,12 +19,12 @@
   myModules.git.enable = true;
   modules.kitty.enable = true;
 
-  #TODO: fix below
-  # myModules.secrets.enable = false;
-  # modules.ghostty.enable = false;
+  myModules.secrets.enable = true;
+  modules.ghostty.enable = true;
+  modules.ghostty.fontsize = 14;
   #TODO: switch to nushell
 
-  # modules.bspwm.enable = false;
+  # modules.bspwm.enable = lse;
   # modules.hyperland.enable = false;
   # modules.newsboat.enable = false;
   # modules.polybar.enable = false;
@@ -58,4 +59,3 @@
   ];
 
 }
-

@@ -343,6 +343,7 @@
       vim-dadbod-completion
       neorg-telescope
       virtual-types-nvim
+      img-clip-nvim
 
       vim-dadbod-ui # TODO: add keybindings for opening dbui
       # TODO: add https://github.com/chrisgrieser/nvim-various-textobjs

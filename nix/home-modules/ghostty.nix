@@ -12,14 +12,17 @@ with lib;
 
     programs.ghostty = {
       enable = true;
+      installBatSyntax = false;
 
       settings = {
         theme = "catppuccin-mocha";
-        font-size = 10;
-        # shell-integration = "none";
-        # title = " ";
+        font-size = config.modules.ghostty.fontsize;
+        font-family = "FiraCode Nerd Font Mono";
+        shell-integration = "none";
         window-decoration = false;
         confirm-close-surface = false;
+        # config-file = "~/.config/ghostty/conf";
+        # command = "nu";
       };
       themes = {
         catppuccin-mocha = {

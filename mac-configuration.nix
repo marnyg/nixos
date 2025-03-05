@@ -21,6 +21,17 @@
   programs.zsh.enable = true;
   # users.users.mariusnygard.shell = pkgs.nushell;
 
+  services.tailscale.enable = true;
+
+
+  fonts.packages = [
+    pkgs.nerd-fonts._0xproto
+    pkgs.nerd-fonts.droid-sans-mono
+    pkgs.fira-code
+    pkgs.jetbrains-mono
+    pkgs.fira-code-symbols
+    pkgs.fira-code-nerdfont
+  ];
 
   # Apps
   # `home-manager` currently has issues adding them to `~/Applications`
@@ -86,8 +97,12 @@
       alt - r : yabai -m rule --apply; launchctl stop org.nixos.skhd; launchctl start org.nixos.skhd; launchctl stop org.nixos.yabai; launchctl start org.nixos.yabai
 
       # Open apps
-      alt - return : kitty -d ~
+      #alt - return : kitty -d ~
+      alt - return : open ~/Applications/Home\ Manager\ Trampolines/Ghostty.app
+
       alt - f : open /Applications/Firefox.app
+
+
 
       # move window focus
 
@@ -122,5 +137,5 @@
   #system.keyboard.remapCapsLockToEscape = true;
 
   # Add ability to used TouchID for sudo authentication
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 }

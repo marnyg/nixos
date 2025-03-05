@@ -44,6 +44,9 @@
     #  https://github.com/nix-community/nixvim/issues/1395
     # nixpkgs-stabil.url = "github:NixOS/nixpkgs/nixos-23.11";
     neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
+    #ghostty on darwin
+    ghostty-darwin-overlay.url = "github:kbwhodat/ghostty-nix-darwin";
+
   };
 
   outputs = inputs:
@@ -60,6 +63,7 @@
           ./nix
           ./darwin.nix
         ];
+
       };
 
 }

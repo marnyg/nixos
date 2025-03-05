@@ -6,7 +6,12 @@ let
   pkgs = withSystem system ({ ... }: import inputs.nixpkgs {
     inherit system;
     config = { allowUnfree = true; };
-    overlays = [ inputs.nixpkgs-firefox-darwin.overlay inputs.nur.overlay ];
+    overlays = [
+      inputs.nixpkgs-firefox-darwin.overlay
+      inputs.nur.overlay
+      (inputs.ghostty-darwin-overlay.overlay { githubToken = ""; })
+      (_: super: { ghostty = super.ghostty-darwin; })
+    ];
   });
 in
 {
@@ -15,6 +20,7 @@ in
     mac = inputs.darwin.lib.darwinSystem {
       system = system;
       pkgs = pkgs;
+      specialArgs = { inherit inputs; };
       modules = [
         # Main `nix-darwin` config
         ./mac-configuration.nix
@@ -22,16 +28,19 @@ in
         # `home-manager` module
         inputs.home-manager.darwinModules.home-manager
         {
-
           users.users.mariusnygard.shell = pkgs.nushell;
           users.users.mariusnygard.home = "/Users/mariusnygard";
-          #nixpkgs = inputs.nixpkgs;
+
           # `home-manager` config
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.mariusnygard = import ./home.nix;
           home-manager.sharedModules = pkgs.lib.attrValues self.homemanagerModules ++ [ inputs.mac-app-util.homeManagerModules.default ];
+          home-manager.extraSpecialArgs = { inherit inputs; };
         }
+        # {
+        #   home-manager.users.mariusnygard.imports = [ inputs.agenix.homeManagerModules.default ];
+        # }
       ];
     };
   };
