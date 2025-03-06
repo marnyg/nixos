@@ -171,7 +171,6 @@ with lib;
       # bind = $mainMod, return, exec, foot 
       bindr = $mainMod, Q, killactive, 
       bind = $mainMod, M, exit, 
-      bind = $mainMod, E, exec, ${pkgs.dolphin}/bin/dolphin
       bind = $mainMod, V, togglefloating, 
       bind = $mainMod, F, fullscreen, 
       # bind = $mainMod, D, pseudo, # dwindle

@@ -1,7 +1,7 @@
 { config, pkgs, ... }: {
   options = { };
 
-  imports = [ ./python.nix ./rust.nix ./golang.nix ./ocaml.nix ./lsp.nix ./treesitter.nix ./cmp.nix ./terraform.nix ];
+  imports = [ ./langs ./lsp.nix ./treesitter.nix ./cmp.nix ];
 
   config = {
     opts = {
@@ -140,6 +140,7 @@
     langs.golang.enable = true;
     langs.rust.enable = true;
     langs.terraform.enable = true;
+    langs.gleam.enable = true;
 
     plugins = {
       lsp.enable = true;
@@ -346,6 +347,7 @@
       img-clip-nvim
 
       vim-dadbod-ui # TODO: add keybindings for opening dbui
+      img-clip-nvim
       # TODO: add https://github.com/chrisgrieser/nvim-various-textobjs
       {
         plugin = boole-nvim;

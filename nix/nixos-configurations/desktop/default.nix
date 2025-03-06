@@ -3,9 +3,6 @@ let
   #TODO:move this out into own users file
   defaultHMConfig = {
     imports = [ inputs.agenix.homeManagerModules.default ];
-    # programs.spotify-player.enable = true;
-    # programs.spotify-player.settings = { login_redirect_uri = "http://127.0.0.1:9090/login"; };
-
     programs.ncspot.enable = true;
 
     myHmModules.sharedDefaults.enable = true;
@@ -37,12 +34,8 @@ let
   };
 in
 {
-  imports = [ ./hardware-config.nix inputs.agenix.nixosModules.age ];
-  age.identityPaths = [ "/home/mar/.ssh/id_ed25519" ];
-  age.secrets.openrouterToken.file = ../../home-modules/secrets/openrouterToken.age;
-  age.secrets.openrouterToken.owner = "mar";
-  age.secrets.claudeToken.file = ../../home-modules/secrets/claudeToken.age;
-  age.secrets.claudeToken.owner = "mar";
+  imports = [ ./hardware-config.nix ];
+
   ##
   ## system modules config
   ##
