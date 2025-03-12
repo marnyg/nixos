@@ -28,6 +28,7 @@ let
 
 in
 {
+  imports = [ ./mac/darwin.nix ];
 
   /* NixOS config for a VM to quickly try out nix-snapshotter.
 

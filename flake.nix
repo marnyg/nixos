@@ -61,7 +61,7 @@
           inputs.just-flake.flakeModule
           ./pkgs
           ./nix
-          ./darwin.nix
+          # ./darwin.nix
         ];
 
       };
