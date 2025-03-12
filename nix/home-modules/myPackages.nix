@@ -15,6 +15,7 @@ with lib;
         # Command-line tools
         ripgrep
         ffmpeg
+        discord
 
         gnupg
         libnotify

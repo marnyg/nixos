@@ -13,7 +13,7 @@
   modules.direnv.enable = true;
   modules.myPackages.enable = true;
   modules.cloneDefaultRepos.enable = false;
-  modules.lf.enable = true;
+  modules.lf.enable = false;
   modules.tmux.enable = true;
   modules.firefox.enable = true;
   myModules.git.enable = true;
@@ -34,9 +34,8 @@
   # modules.zellij.enable = false;
   # modules.autorandr.enable = false;
   # modules.dunst.enable = false;
-  targets.darwin.keybindings = {
-    "^h" = "nil";
-  };
+
+  programs.yazi.enable = true;
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;

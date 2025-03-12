@@ -19,7 +19,8 @@
 
   # Create /etc/bashrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
-  # users.users.mariusnygard.shell = pkgs.nushell;
+  users.users.mariusnygard.shell = lib.mkForce pkgs.nushell;
+  environment.shells = [ pkgs.nushell ];
 
   services.tailscale.enable = true;
 
@@ -40,13 +41,32 @@
     terminal-notifier
   ];
 
-  system.defaults.NSGlobalDomain."com.apple.swipescrolldirection" = false;
-  system.defaults.NSGlobalDomain.InitialKeyRepeat = 15;
-  system.defaults.NSGlobalDomain.KeyRepeat = 2;
-  system.defaults.NSGlobalDomain.AppleShowAllExtensions = true;
-  system.defaults.NSGlobalDomain.AppleShowAllFiles = true;
-  system.defaults.NSGlobalDomain.AppleInterfaceStyle = "Dark";
-  system.defaults.WindowManager.EnableStandardClickToShowDesktop = false;
+  system.defaults = {
+
+    dock = {
+      autohide = true;
+      # orientation = "right";
+    };
+
+    finder = {
+      AppleShowAllExtensions = true;
+      _FXShowPosixPathInTitle = true;
+      FXEnableExtensionChangeWarning = false;
+    };
+
+    screencapture.location = "/tmp";
+
+    WindowManager.EnableStandardClickToShowDesktop = false;
+    NSGlobalDomain = {
+      "com.apple.swipescrolldirection" = false;
+      _HIHideMenuBar = true;
+      InitialKeyRepeat = 15;
+      KeyRepeat = 2;
+      AppleShowAllExtensions = true;
+      AppleShowAllFiles = true;
+      AppleInterfaceStyle = "Dark";
+    };
+  };
 
   services.yabai.enable = true;
   services.yabai.enableScriptingAddition = true;
@@ -91,31 +111,25 @@
   services.skhd = {
     enable = true;
     skhdConfig = ''
-      # alt + a / u / o / s are blocked due to umlaute
-
       # Reload config
       alt - r : yabai -m rule --apply; launchctl stop org.nixos.skhd; launchctl start org.nixos.skhd; launchctl stop org.nixos.yabai; launchctl start org.nixos.yabai
 
       # Open apps
-      #alt - return : kitty -d ~
-      alt - return : open ~/Applications/Home\ Manager\ Trampolines/Ghostty.app
-
-      alt - f : open /Applications/Firefox.app
+      alt - return : sh -c 'open ~/Applications/Home\ Manager\ Trampolines/Ghostty.app/'
+      alt - f : sh -c 'open ~/Applications/Home\ Manager\ Trampolines/Firefox.app/'
 
 
+      # move window focus (wrapped in sh -c for nushell compatability)
+      alt - h : sh -c "yabai -m window --focus west || yabai -m display --focus west"
+      alt - j : sh -c "yabai -m window --focus south || yabai -m display --focus south"
+      alt - k : sh -c "yabai -m window --focus north || yabai -m display --focus north"
+      alt - l : sh -c "yabai -m window --focus east || yabai -m display --focus east"
 
-      # move window focus
-
-      alt - h : yabai -m window --focus west || yabai -m display --focus west
-      alt - j : yabai -m window --focus south || yabai -m display --focus south
-      alt - k : yabai -m window --focus north || yabai -m display --focus north
-      alt - l : yabai -m window --focus east || yabai -m display --focus east
-
-      # swap managed window
-      shift + alt - h : yabai -m window --swap west || $(yabai -m window --display west; yabai -m display --focus west)
-      shift + alt - j : yabai -m window --swap south || $(yabai -m window --display south; yabai -m display --focus south)
-      shift + alt - k : yabai -m window --swap north || $(yabai -m window --display north; yabai -m display --focus north)
-      shift + alt - l : yabai -m window --swap east || $(yabai -m window --display east; yabai -m display --focus east)
+      # swap managed window (wrapped in sh -c for nushell compatability)
+      shift + alt - h : sh -c "yabai -m window --swap west || $(yabai -m window --display west; yabai -m display --focus west)"
+      shift + alt - j : sh -c "yabai -m window --swap south || $(yabai -m window --display south; yabai -m display --focus south)"
+      shift + alt - k : sh -c "yabai -m window --swap north || $(yabai -m window --display north; yabai -m display --focus north)"
+      shift + alt - l : sh -c "yabai -m window --swap east || $(yabai -m window --display east; yabai -m display --focus east)"
 
       alt - 1 : yabai -m space --focus 1
       alt - 2 : yabai -m space --focus 2
@@ -129,7 +143,8 @@
       shift + alt - 5 : yabai -m window --space 5
 
       # toggle layout
-      alt - d : yabai -m space --layout $(yabai -m query --spaces --space | jq -r 'if .type == "bsp" then "stack" else "bsp" end')
+      alt - d : sh -c "yabai -m space --layout $(yabai -m query --spaces --space | jq -r 'if .type == "bsp" then "stack" else "bsp" end')"
+      cmd - h : echo "no hide window"
     '';
   };
   # Keyboard
