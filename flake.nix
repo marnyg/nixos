@@ -19,10 +19,11 @@
 
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    flake-root.url = "github:srid/flake-root";
-    pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
-    process-compose-flake.url = "github:Platonic-Systems/process-compose-flake";
-    just-flake.url = "github:juspay/just-flake";
+    devenv.url = "github:cachix/devenv";
+    agenix-shell.url = "github:aciceri/agenix-shell";
+
+    nix2container.url = "github:nlewo/nix2container";
+    nix2container.inputs = { nixpkgs.follows = "nixpkgs"; };
 
     nixvim.url = "github:nix-community/nixvim";
     # nixvim.url = "github:nix-community/nixvim/nixos-23.11";
@@ -44,7 +45,6 @@
     #  https://github.com/nix-community/nixvim/issues/1395
     # nixpkgs-stabil.url = "github:NixOS/nixpkgs/nixos-23.11";
     neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
-    #ghostty on darwin
     ghostty-darwin-overlay.url = "github:kbwhodat/ghostty-nix-darwin";
 
   };
@@ -55,10 +55,7 @@
         systems = [ "x86_64-linux" "aarch64-darwin" ];
         imports = [
           inputs.treefmt-nix.flakeModule
-          inputs.flake-root.flakeModule
-          inputs.pre-commit-hooks-nix.flakeModule
-          inputs.process-compose-flake.flakeModule
-          inputs.just-flake.flakeModule
+          inputs.devenv.flakeModule
           ./pkgs
           ./nix
           # ./darwin.nix

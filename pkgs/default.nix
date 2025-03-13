@@ -1,9 +1,8 @@
 {
   imports = [
-    ./proc-compose-example
     ./nixvim
   ];
-  perSystem = { config, self', inputs', pkgs, system, ... }: {
+  perSystem = { pkgs, system, ... }: {
     packages.home-init = pkgs.writeShellApplication {
       name = "home-init";
       runtimeInputs = with pkgs; [ nix home-manager ];
