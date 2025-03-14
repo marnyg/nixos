@@ -26,6 +26,7 @@ with lib;
         mpv
         # GUI pkf readers
         evince
+        signal-desktop
 
         # Other
         jq

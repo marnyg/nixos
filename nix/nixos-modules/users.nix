@@ -47,8 +47,8 @@ in
     programs.zsh.enable = true; #TODO: needed if i set default user shell to zsh
 
     home-manager = lib.mkIf (anyHomeManagerUser config.myModules.createUsers.users) {
-      useGlobalPkgs = true;
-      useUserPackages = true;
+      # useGlobalPkgs = true;
+      # useUserPackages = true;
 
       #sharedModules = lib.attrValues config.myHomemanagerModules.modules;
 

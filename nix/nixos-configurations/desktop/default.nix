@@ -6,6 +6,8 @@ let
     programs.ncspot.enable = true;
 
     myHmModules.sharedDefaults.enable = true;
+    nixpkgs.config.allowUnfree = true;
+
 
     myServices.s3fs.enable = true;
     myServices.s3fs.keyId = "tid_hDRNQPQfftgkNfOasaoExtxIaBq_jkLiWvimSMZzaNhtCdtEmF";
