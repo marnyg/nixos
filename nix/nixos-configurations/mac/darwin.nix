@@ -7,10 +7,16 @@ let
     inherit system;
     config = { allowUnfree = true; };
     overlays = [
-      inputs.nixpkgs-firefox-darwin.overlay
-      inputs.nur.overlay
+      inputs.nur.overlays.default
       (inputs.ghostty-darwin-overlay.overlay { githubToken = ""; })
-      (_: super: { ghostty = super.ghostty-darwin; })
+      (_: super: {
+        ghostty = super.ghostty-darwin.overrideAttrs (oldAttrs: {
+          meta = (oldAttrs.meta or { }) // {
+            # Assuming the main executable is simply "ghostty"
+            mainProgram = "ghostty";
+          };
+        });
+      })
     ];
   });
 in
@@ -33,7 +39,7 @@ in
 
           # `home-manager` config
           home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
+          # home-manager.useUserPackages = true;
           home-manager.users.mariusnygard = import ./home.nix;
           home-manager.sharedModules = pkgs.lib.attrValues self.homemanagerModules ++ [ inputs.mac-app-util.homeManagerModules.default ];
           home-manager.extraSpecialArgs = { inherit inputs; };

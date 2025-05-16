@@ -12,6 +12,7 @@
   # nix.package = pkgs.nixUnstable;
   nix.extraOptions = ''
     auto-optimise-store = true
+    download-buffer-size = 268435456
     experimental-features = nix-command flakes
   '' + lib.optionalString (pkgs.system == "aarch64-darwin") ''
     extra-platforms = x86_64-darwin aarch64-darwin
@@ -26,12 +27,12 @@
 
 
   fonts.packages = [
+    pkgs.nerd-fonts.fira-code
     pkgs.nerd-fonts._0xproto
     pkgs.nerd-fonts.droid-sans-mono
     pkgs.fira-code
     pkgs.jetbrains-mono
     pkgs.fira-code-symbols
-    pkgs.fira-code-nerdfont
   ];
 
   # Apps
@@ -59,7 +60,7 @@
     WindowManager.EnableStandardClickToShowDesktop = false;
     NSGlobalDomain = {
       "com.apple.swipescrolldirection" = false;
-      _HIHideMenuBar = true;
+      _HIHideMenuBar = false;
       InitialKeyRepeat = 15;
       KeyRepeat = 2;
       AppleShowAllExtensions = true;

@@ -6,7 +6,6 @@ let
     programs.ncspot.enable = true;
 
     myHmModules.sharedDefaults.enable = true;
-    nixpkgs.config.allowUnfree = true;
 
 
     myServices.s3fs.enable = true;
@@ -144,8 +143,6 @@ in
   # Enable the wayland suport for slack
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-  nixpkgs.config.allowUnfree = true;
-  programs.steam.enable = true;
 
   fonts.packages = with pkgs; [
     noto-fonts

@@ -1,4 +1,4 @@
-{ inputs, pkgs, config, ... }:
+{ inputs, pkgs, ... }:
 let
   # TODO:move this out into own users file
   defaultHMConfig = { config, ... }: {
@@ -98,12 +98,6 @@ in
     };
   };
 
-
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [
-    "python-2.7.18.7"
-    "nix-2.16.2"
-  ];
   nix.settings.trusted-users = [ "root" "mar" ];
 
   ## 

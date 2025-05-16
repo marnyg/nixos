@@ -1,8 +1,5 @@
-{ inputs, config, ... }:
+{ inputs, ... }:
 {
-  nixpkgs.overlays = [ inputs.nur.overlay ];
-  nixpkgs.config.allowUnfree = true;
-
   imports = [
     inputs.nixos-wsl.nixosModules.wsl
     inputs.home-manager.nixosModules.home-manager

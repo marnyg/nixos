@@ -26,7 +26,6 @@ with lib;
         mpv
         # GUI pkf readers
         evince
-        signal-desktop
 
         # Other
         jq
@@ -42,6 +41,7 @@ with lib;
         scrot
         pavucontrol
         bitwarden-cli
+        signal-desktop
       ] else [ ]);
     };
 }

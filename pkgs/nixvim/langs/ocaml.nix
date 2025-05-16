@@ -78,15 +78,13 @@ with lib;
         ];
       };
 
+      dap-ui.enable = mkIf config.langs.ocaml.dap.enable true;
+      dap-virtual-text.enable = mkIf config.langs.ocaml.dap.enable true;
       dap = mkIf config.langs.ocaml.dap.enable {
         enable = true;
         adapters.executables.ocamlearlybird = {
           command = "${pkgs.ocamlPackages.earlybird}/bin/ocamlearlybird";
           args = [ "debug" ];
-        };
-        extensions = {
-          dap-ui.enable = true;
-          dap-virtual-text.enable = true;
         };
       };
     };

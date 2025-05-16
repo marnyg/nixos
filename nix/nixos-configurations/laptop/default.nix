@@ -137,8 +137,6 @@ in
   };
 
 
-  nixpkgs.config.allowUnfree = true;
-
   virtualisation = {
     docker = {
       enable = true;

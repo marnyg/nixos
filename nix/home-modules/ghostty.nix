@@ -13,6 +13,7 @@ with lib;
     programs.ghostty = {
       enable = true;
       installBatSyntax = false;
+      clearDefaultKeybinds = true;
 
       settings = {
         theme = "catppuccin-mocha";
@@ -52,16 +53,6 @@ with lib;
         };
 
       };
-
-      # font = {
-      #   name = "Fira Code Nerd Font";
-      #   size = config.modules.ghostty.fontsize;
-      #   #size = "6";
-      #   #name= "Fira Mono Nerd Font";
-      #   #name ="JetBrains Mono";
-      #   #name= "Droid Sans Mono Nerd Font";
-      #   #name= "Noto Nerd Font";
-      # };
     };
   };
 }

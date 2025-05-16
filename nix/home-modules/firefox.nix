@@ -10,7 +10,7 @@ with lib;
       enable = true;
       package = pkgs.firefox-bin;
       profiles.mar = {
-        extensions = (with pkgs.nur.repos.rycee.firefox-addons; [
+        extensions.packages = (with pkgs.nur.repos.rycee.firefox-addons; [
           decentraleyes
           ublock-origin
           # clearurls #not working on mac
@@ -72,13 +72,13 @@ with lib;
 
 
           engines = {
-            "Bing".metaData.hidden = true;
-            "Google".metaData.hidden = true;
-            "eBay".metaData.hidden = true;
-            "DuckDuckGo".metaData.hidden = true;
-            "Amazon.com".metaData.hidden = true;
-            "Wikipedia (en)".metaData.hidden = true;
-            "YouTube".metaata.hidden = true;
+            "bing".metaData.hidden = true;
+            "google".metaData.hidden = true;
+            "ebay".metaData.hidden = true;
+            "ddg".metaData.hidden = true;
+            "amazonedotcom-us".metaData.hidden = true;
+            "wikipedia".metaData.hidden = true;
+            "youtube".metaata.hidden = true;
             # "Kagi".metaData.hidden = true;
             # "Nix Packages".metaData.hidden = true;
             # "NixOS Options".metaData.hidden = true;
@@ -102,7 +102,7 @@ with lib;
 
             "Nix Packages" = {
               # icon = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
-              iconUpdateURL = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
+              icon = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
               definedAliases = [ "@np" ];
               urls = [
                 {
@@ -128,7 +128,7 @@ with lib;
 
             "NixOS Options" = {
               # icon = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
-              iconUpdateURL = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
+              icon = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
               definedAliases = [ "@no" ];
               urls = [
                 {
@@ -148,7 +148,7 @@ with lib;
             };
 
             "SourceGraph" = {
-              iconUpdateURL = "https://sourcegraph.com/.assets/img/sourcegraph-mark.svg";
+              icon = "https://sourcegraph.com/.assets/img/sourcegraph-mark.svg";
               definedAliases = [ "@sg" ];
 
               urls = [
@@ -165,7 +165,7 @@ with lib;
             };
 
             "GitHub" = {
-              iconUpdateURL = "https://github.com/favicon.ico";
+              icon = "https://github.com/favicon.ico";
               updateInterval = 24 * 60 * 60 * 1000;
               definedAliases = [ "@gh" ];
 
@@ -183,7 +183,7 @@ with lib;
             };
 
             "Home Manager" = {
-              iconUpdateURL = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
+              icon = "https://nixos.org/_astro/flake-blue.Bf2X2kC4_Z1yqDoT.svg";
               definedAliases = [ "@hm" ];
 
               urls = [

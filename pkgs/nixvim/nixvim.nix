@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ pkgs, ... }: {
   options = { };
 
   imports = [ ./langs ./lsp.nix ./treesitter.nix ./cmp.nix ];
@@ -64,7 +64,7 @@
 
     globals = { };
     colorschemes.catppuccin = { enable = true; };
-    diagnostics.virtual_text = true;
+    diagnostic.settings.virtual_text = true;
 
     extraConfigLua = /*lua*/''
       local map = vim.keymap.set
@@ -142,27 +142,28 @@
     langs.terraform.enable = true;
     langs.gleam.enable = true;
 
+
     plugins = {
       lsp.enable = true;
 
-      copilot-cmp = {
-        enable = true;
-      };
-      copilot-lua = {
-        enable = true;
-        suggestion.enabled = false;
-        panel.enabled = false;
-        filetypes = {
-          markdown = true;
-          cvs = false;
-          gitcommit = true;
-          gitrebase = true;
-          help = false;
-          hgcommit = true;
-          svn = false;
-          yaml = true;
-        };
-      };
+      # copilot-cmp = {
+      #   enable = true;
+      # };
+      # copilot-lua = {
+      #   enable = true;
+      #   suggestion.enabled = false;
+      #   panel.enabled = false;
+      #   filetypes = {
+      #     markdown = true;
+      #     cvs = false;
+      #     gitcommit = true;
+      #     gitrebase = true;
+      #     help = false;
+      #     hgcommit = true;
+      #     svn = false;
+      #     yaml = true;
+      #   };
+      # };
       markdown-preview = {
         enable = true;
       };
@@ -207,34 +208,18 @@
       };
 
       fidget.enable = true;
+
       harpoon = {
         enable = true;
         enableTelescope = true;
-        keymaps = {
-          toggleQuickMenu = "<leader>h";
-          addFile = "<leader>a";
-          navFile = {
-            "1" = "<leader>1";
-            "2" = "<leader>2";
-            "3" = "<leader>3";
-            "4" = "<leader>4";
-          };
-          gotoTerminal = {
-            "1" = "<leader>!";
-            "2" = "<leader>@";
-            "3" = "<leader>#";
-            "4" = "<leader>$";
-          };
-        };
-
-        # vim.keymap.set("n", "<leader>a", mark.add_file)
-        # vim.keymap.set("n", "<leader>h", ui.toggle_quick_menu)
-        #
-        # vim.keymap.set("n", "<leader>1", function() ui.nav_file(1) end)
-        # vim.keymap.set("n", "<leader>2", function() ui.nav_file(2) end)
-        # vim.keymap.set("n", "<leader>3", function() ui.nav_file(3) end)
-        # vim.keymap.set("n", "<leader>4", function() ui.nav_file(4) end)
-
+        luaConfig.post = ''
+          vim.keymap.set('n', '<leader>a', '<cmd>lua require"harpoon":list():add()<cr>')
+          vim.keymap.set('n', '<leader>h', '<cmd>lua require"harpoon".ui:toggle_quick_menu(require"harpoon":list())<cr>')
+          vim.keymap.set('n', '<C-j>', '<cmd>lua require"harpoon":list():select(1)<cr>')
+          vim.keymap.set('n', '<C-k>', '<cmd>lua require"harpoon":list():select(2)<cr>')
+          vim.keymap.set('n', '<C-l>', '<cmd>lua require"harpoon":list():select(3)<cr>')
+          vim.keymap.set('n', '<C-m>', '<cmd>lua require"harpoon":list():select(4)<cr>')
+        '';
       };
       oil = {
         enable = true;
@@ -289,7 +274,8 @@
 
       neorg = {
         enable = true;
-        modules = {
+        telescopeIntegration.enable = true;
+        settings.load = {
           "core.defaults" = { __empty = null; };
           "core.ui".__empty = null;
           # these need nvim v10
@@ -313,30 +299,74 @@
         enable = true;
         settings.enable_autosnippets = true;
       };
-      avante = {
+
+      octo.enable = true;
+      supermaven.enable = true;
+      iron = {
         enable = true;
+        # lazyLoad.settings.colorscheme = "catppuccin-mocha";
         settings = {
-          claude = {
-            endpoint = "https://api.anthropic.com";
-            max_tokens = 4096;
-            model = "claude-3-5-sonnet-20240620";
-            temperature = 0;
+          scratch_repl = true;
+
+          repl_definition = {
+            sh = {
+              command = [ "zsh" ];
+            };
+            python = {
+              command = [ "python3" ];
+              format = {
+                __raw = ''
+                  require("iron.fts.common").bracketed_paste_python
+                '';
+              };
+            };
+            nix = {
+              command = [ "nix" "repl" "--expr" "import <nixpkgs>{}" ];
+            };
+            ocaml = {
+              command = [ "utop" ];
+              format = {
+                __raw = ''
+                  function(lines)
+                    table.insert(lines, ";;\13")
+                    return lines
+                  end
+                '';
+              };
+            };
+          };
+          repl_open_cmd = "vertical botright 80 split";
+
+          keymaps = {
+            send_motion = "<space>sc";
+            visual_send = "<space>sc";
+            send_file = "<space>ff";
+            send_line = "<space>sl";
+            send_paragraph = "<space>sp";
+            send_until_cursor = "<space>su";
+            send_mark = "<space>sm";
+            mark_motion = "<space>mc";
+            mark_visual = "<space>mc";
+            remove_mark = "<space>md";
+            cr = "<space>s<cr>";
+            interrupt = "<space>s<space>";
+            exit = "<space>sq";
+            clear = "<space>cl";
           };
 
-          # provider = "openrouter";
-          # vendors = {
-          #   openrouter = {
-          #     __inherited_from = "openai";
-          #     endpoint = "https://openrouter.ai/api/v1";
-          #     api_key_name = "OPENROUTER_API_KEY";
-          #     # disable_tools = true;
-          #     # model = "deepseek/deepseek-r1";
-          #     model = "anthropic/claude-3.5-sonnet-20240620";
-          #   };
-          # };
+          highlight = {
+            italic = true;
+          };
+          ignore_blank_lines = true;
         };
+        luaConfig.post = ''
+          vim.keymap.set('n', '<space>rs', '<cmd>IronRepl<cr>')
+          vim.keymap.set('n', '<space>rr', '<cmd>IronRestart<cr>')
+          vim.keymap.set('n', '<space>rh', '<cmd>IronHide<cr>')
+          vim.keymap.set('n', '<space>rf', '<cmd>IronFocus<cr>')
+        '';
       };
-      octo.enable = true;
+
     };
     extraPlugins = with pkgs.vimPlugins; [
       lazygit-nvim # TODO: add keybindings for opening lazygit
@@ -345,6 +375,17 @@
       neorg-telescope
       virtual-types-nvim
       img-clip-nvim
+      (
+        pkgs.vimUtils.buildVimPlugin {
+          name = "carp-vim";
+          src = pkgs.fetchFromGitHub {
+            owner = "hellerve";
+            repo = "carp-vim";
+            rev = "d595753eacb167fbe42939f0cbee37d74e8a53e8";
+            hash = "sha256-1QW9HpB7ERz+6trsSKyA6+dZqeHOW1eHOpgcpVX7PO4=";
+          };
+        }
+      )
 
       vim-dadbod-ui # TODO: add keybindings for opening dbui
       img-clip-nvim
@@ -362,72 +403,6 @@
                 additions = { },
                 allow_caps_additions = { }
                 })
-
-          EOF
-            '';
-      }
-      {
-        plugin = iron-nvim;
-        config = /* lua */ '' 
-            lua <<EOF
-            require('iron.core').setup({
-              config = {
-                -- Whether a repl should be discarded or not
-                scratch_repl = true,
-                -- Your repl definitions come here
-                repl_definition = {
-                  sh = {
-                    -- Can be a table or a function that
-                    -- returns a table (see below)
-                    command = {"zsh"}
-                  },
-                  python = {
-                    command = { "python3" },  -- or { "ipython", "--no-autoindent" }
-                    format = require("iron.fts.common").bracketed_paste_python
-                  },
-                  nix = {
-                    command = { "nix", "repl", "--expr", "import <nixpkgs>{}" }, 
-                  };
-                  ocaml = {
-                    command = { "utop" }, 
-                    format = function(lines) table.insert(lines, ";;\13") return lines end
-                  }
-                },
-                -- How the repl window will be displayed
-                -- See below for more information
-                -- repl_open_cmd = require('iron.view').bottom(40),
-                repl_open_cmd = "vertical botright 80 split"
-                -- vim.print(require('iron.core'))
-              },
-              -- Iron doesn't set keymaps by default anymore.
-              -- You can set them here or manually add keymaps to the functions in iron.core
-              keymaps = {
-                send_motion = "<space>sc",
-                visual_send = "<space>sc",
-                send_file = "<space>ff",
-                send_line = "<space>sl",
-                send_paragraph = "<space>sp",
-                send_until_cursor = "<space>su",
-                send_mark = "<space>sm",
-                mark_motion = "<space>mc",
-                mark_visual = "<space>mc",
-                remove_mark = "<space>md",
-                cr = "<space>s<cr>",
-                interrupt = "<space>s<space>",
-                exit = "<space>sq",
-                clear = "<space>cl",
-              },
-              -- If the highlight is on, you can change how it looks
-              -- For the available options, check nvim_set_hl
-              highlight = {
-                italic = true
-              },
-              ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
-              })
-              vim.keymap.set('n', '<space>rs', '<cmd>IronRepl<cr>')
-              vim.keymap.set('n', '<space>rr', '<cmd>IronRestart<cr>')
-              vim.keymap.set('n', '<space>rh', '<cmd>IronHide<cr>')
-              vim.keymap.set('n', '<space>rf', '<cmd>IronFocus<cr>')
 
           EOF
             '';

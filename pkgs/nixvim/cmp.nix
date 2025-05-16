@@ -67,7 +67,8 @@ with lib;
             '';
           };
           snippet.expand = ''function(args) require('luasnip').lsp_expand(args.body) end'';
-          # sorting.comparators = [
+
+          #sorting.comparators = [
           #   "require('copilot_cmp.comparators').prioritize"
           #   "require('cmp.config.compare').offset"
           #   "require('cmp.config.compare').exact"
@@ -78,11 +79,13 @@ with lib;
           #   "require('cmp.config.compare').length"
           #   "require('cmp.config.compare').order"
           # ];
+
           sources = [
             { name = "neorg"; }
             (mkIf config.plugins.lsp.enable { name = "nvim_lsp"; })
             (mkIf config.plugins.lsp.enable { name = "nvim_lsp_signature_help"; })
             (mkIf config.plugins.lsp.enable { name = "nvim_lsp_document_symbol"; })
+            #(mkIf config.plugins.supermaven.enable { name = "supermaven"; })
             { name = "copilot"; }
             { name = "luasnip"; }
             { name = "treesitter"; }
