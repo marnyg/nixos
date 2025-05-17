@@ -7,15 +7,13 @@ let
         config = { allowUnfree = true; };
         overlays = [ inputs.nur.overlay ];
       });
-      #examples = withSystem system ({ examples, ... }: examples);
-      #k8sResources = withSystem system ({ k8sResources, ... }: k8sResources);
 
     in
     lib.nixosSystem {
       inherit system;
+      inherit pkgs;
       specialArgs = { inherit lib; inputs = self.inputs; };
       modules = [
-        { _module.args = { pkgs = lib.mkForce pkgs; }; }
         self.nixosModules.default
         module
       ];

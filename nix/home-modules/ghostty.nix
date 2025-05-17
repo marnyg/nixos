@@ -15,6 +15,8 @@ with lib;
       installBatSyntax = false;
       clearDefaultKeybinds = true;
 
+
+
       settings = {
         theme = "catppuccin-mocha";
         font-size = config.modules.ghostty.fontsize;
@@ -24,6 +26,13 @@ with lib;
         confirm-close-surface = false;
         # config-file = "~/.config/ghostty/conf";
         # command = "nu";
+        keybind = [
+          "ctrl+shift+c=copy_to_clipboard"
+          "ctrl+shift+v=paste_from_clipboard"
+          "ctrl+shift+a=select_all"
+          "ctrl+shift+comma=reload_config"
+          "ctrl+comma=open_config"
+        ];
       };
       themes = {
         catppuccin-mocha = {

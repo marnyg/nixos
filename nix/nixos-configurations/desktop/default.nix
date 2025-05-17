@@ -8,9 +8,10 @@ let
     myHmModules.sharedDefaults.enable = true;
 
 
-    myServices.s3fs.enable = true;
-    myServices.s3fs.keyId = "tid_hDRNQPQfftgkNfOasaoExtxIaBq_jkLiWvimSMZzaNhtCdtEmF";
-    myServices.s3fs.accessKey = "tsec_PC4Z9WtxGiVwRGPDPBZhlTqfYHW3tbKo38PZ6izsDCKHVH-wAWskx7QkSs_zgXM8BWGVep";
+    # myServices.s3fs.enable = true;
+    # myServices.s3fs.keyId = "tid_hDRNQPQfftgkNfOasaoExtxIaBq_jkLiWvimSMZzaNhtCdtEmF";
+    # myServices.s3fs.accessKey = "tsec_PC4Z9WtxGiVwRGPDPBZhlTqfYHW3tbKo38PZ6izsDCKHVH-wAWskx7QkSs_zgXM8BWGVep";
+
     modules.zsh.enable = true;
     modules.direnv.enable = true;
     modules.zellij.enable = false;
@@ -30,7 +31,8 @@ let
     modules.other.enable = false;
     modules.myPackages.enable = true;
     modules.cloneDefaultRepos.enable = true;
-    modules.lf.enable = true;
+    # modules.lf.enable = true;
+    programs.yazi.enable = true;
     myModules.secrets.enable = true;
   };
 in

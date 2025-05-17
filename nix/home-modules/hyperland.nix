@@ -14,32 +14,25 @@ with lib;
     home.packages = [ pkgs.wl-clipboard ];
     services.mako = {
       enable = true; # notification daemon
-      # catppuccin.enable = true;
-      actions = true;
-      anchor = "top-right";
-      borderRadius = 8;
-      borderSize = 1;
-      defaultTimeout = 10000;
+      settings = {
+        # catppuccin.enable = true;
+        actions = true;
+        anchor = "top-right";
+        borderRadius = 8;
+        borderSize = 1;
+        defaultTimeout = 10000;
 
-      icons = true;
-      layer = "overlay";
-      maxVisible = 3;
-      padding = "10";
-      width = 300;
-      extraConfig = ''
-        [urgency=normal]
-        border-color=#d08770
-
-        [urgency=high]
-        border-color=#bf616a
-        default-timeout=0
-
-        [app-name=lightcord]
-        border-color=#88c0d0
-
-        [summary~="log-.*"]
-        border-color=#a3be8c
-      '';
+        icons = true;
+        layer = "overlay";
+        maxVisible = 3;
+        padding = "10";
+        width = 300;
+        "urgency=normal".border-color = "#d08770";
+        "urgency=high".border-color = "#bf616a";
+        "urgency=high".default-timeout = 0;
+        "app-name=lightcord".border-color = "#88c0d0";
+        "summary~=\"log-.*\"".border-color = "#a3be8c";
+      };
     };
 
     # dimmin screen at night

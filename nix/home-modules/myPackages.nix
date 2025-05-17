@@ -16,6 +16,7 @@ with lib;
         ripgrep
         ffmpeg
         discord
+        code-cursor
 
         gnupg
         libnotify
