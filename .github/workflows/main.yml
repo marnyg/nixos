@@ -2,7 +2,7 @@ name: CI
 on:
   push:
     branches:
-      - main # Or your default branch
+      - master
     tags:
       - 'v*' # Also trigger on version tags
   pull_request: {}
