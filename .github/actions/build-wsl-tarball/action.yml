@@ -11,6 +11,7 @@ runs:
     - name: Build tarball builder 🛠️
       id: buildBuilder
       uses: ./.github/actions/build-nix-expression
+      shell: bash
       with:
         expression: '.#nixosConfigurations.${{ inputs.config }}.config.system.build.tarballBuilder'
     - name: Build tarball 📦
