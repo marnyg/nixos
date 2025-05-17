@@ -69,18 +69,9 @@ jobs:
           path: result-wsl-tarball # upload-artifact will follow the symlink
           if-no-files-found: error
           # retention-days: 7 # Adjust as needed
-    # - name: Build Desktop Tarball 🛠️
-    #   id: build_desktop
-    #   run: |
-    #     echo "Building Desktop tarball..."
-    #     nix build ".#nixosConfigurations.desktop.config.system.build.tarballBuilder" -L -o result-desktop-tarball
-    #     echo "Desktop tarball built: $(readlink -f result-desktop-tarball)"
-    #     # The output 'result-desktop-tarball' is a symlink to the actual tarball in the Nix store.
-    # - name: Upload Desktop Tarball 📤
-    #   id: upload_desktop
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: nixos-desktop-${{ steps.version_info.outputs.app_version }}
-    #     path: result-desktop-tarball # upload-artifact will follow the symlink
-    #     if-no-files-found: error
-    #     retention-days: 7 # Adjust as needed
+      - name: Ensure Desktop Builds 🛠️
+        id: build_desktop
+        run: |
+          echo "Building Desktop tarball..."
+            nix build ".#nixosConfigurations.desktop.config.system.build.toplevel" --dry-run -L
+          echo "Desktop tarball built: $(readlink -f result-desktop-tarball)"
