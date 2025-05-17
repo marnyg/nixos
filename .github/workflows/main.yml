@@ -1,56 +1,86 @@
 name: CI
 on:
-  push: {}
+  push:
+    branches:
+      - main # Or your default branch
+    tags:
+      - 'v*' # Also trigger on version tags
   pull_request: {}
-  workflow_call: {}
+  workflow_call:
+    outputs:
+      wsl_artifact_name:
+        description: "Name of the WSL tarball artifact"
+        value: ${{ jobs.build.outputs.wsl_artifact_name }}
+      desktop_artifact_name:
+        description: "Name of the Desktop tarball artifact"
+        value: ${{ jobs.build.outputs.desktop_artifact_name }}
 jobs:
-  # prepare:
-  #   name: Prepare 🚀
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     version: ${{ steps.version.outputs.version }}
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Install nix ❄️
-  #       uses: cachix/install-nix-action@v18
-  #       with:
-  #         extra_nix_config: access-tokens = github.com=${{ github.token }}
-  #     - name: Generate Version 🏷️
-  #       id: version
-  #       run: |
-  #         TAG_COUNT=$(git rev-list --tags --no-walk --count)  # Count all tags
-  #         COMMIT_COUNT=$(git rev-list --use-bitmap-index --count $(git rev-list --tags --no-walk --max-count=1)..HEAD)  # Count all commits since the last tag
-  #         NIXOS_VERSION=$(nix-instantiate --eval -E '(import ./.).inputs.nixpkgs.lib.version' | sed -E 's/"(.+\...).*"/\1/')  # Get NixOS version from nixpkgs
-  #         NIXOS_VERSION_MS=$(echo $NIXOS_VERSION | sed -E 's/\.0*(.+)/\.\1/')  # Remove the leading 0 from the minor version (if it exists)
-  #         NIXOS_WSL_VERSION=${NIXOS_VERSION_MS}.${TAG_COUNT}.${COMMIT_COUNT}  # Compose the NixOS-WSL version number
   build:
     name: Build 🛠️
     runs-on: ubuntu-latest
+    outputs:
+      wsl_artifact_name: ${{ steps.upload_wsl.outputs.artifact-name }}
+      desktop_artifact_name: ${{ steps.upload_desktop.outputs.artifact-name }}
+    permissions:
+      contents: read # To checkout
+      # id-token: write # If using Cachix with OIDC
+      packages: write # If using GitHub Packages as a Nix binary cache
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Required for git describe if not using `needs.prepare` for version
       - name: Install nix ❄️
         uses: cachix/install-nix-action@6a9a9e84a173d90b3ffb42c5ddaf9ea033fad011 # v23
         with:
-          extra_nix_config: access-tokens = github.com=${{ github.token }}
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+            experimental-features = nix-command flakes
       - name: Set version 🏷️
+        id: version_info
         run: |
-          echo ${{ needs.prepare.outputs.version }} > ./VERSION
-          echo $(git rev-parse HEAD) >> ./VERSION
+          if [ -z "${APP_VERSION}" ]; then
+            if [[ "${{ github.ref_type }}" == "tag" ]]; then
+              APP_VERSION="${{ github.ref_name }}"
+            else
+              APP_VERSION="dev-$(git rev-parse --short HEAD)"
+            fi
+            echo "Derived version: $APP_VERSION"
+          fi
+
+          echo "app_version=${APP_VERSION}" >> $GITHUB_OUTPUT
+          echo "${APP_VERSION}" > ./VERSION
+          echo "Commit: $(git rev-parse HEAD)" >> ./VERSION
+          echo "Full version string for artifacts/display: ${APP_VERSION}"
       - name: Summary Headline 📝
-        run: echo '## NixOS-WSL ${{ steps.version.outputs.version }}' >> $GITHUB_STEP_SUMMARY
-      - name: Build Tarball 🛠️
-        uses: ./.github/actions/build-wsl-tarball
-        with:
-          config: wsl
-          filename: nixos-wsl.tar.gz
-      - name: Upload Tarball 📤
+        run: echo '## NixOS-WSL Build (${{ steps.version_info.outputs.app_version }})' >> $GITHUB_STEP_SUMMARY
+      - name: Build WSL Tarball 🛠️
+        id: build_wsl
+        run: |
+          echo "Building WSL tarball..."
+          nix build ".#nixosConfigurations.wsl.config.system.build.tarball" -L -o result-wsl-tarball
+          echo "WSL tarball built: $(readlink -f result-wsl-tarball)"
+          # The output 'result-wsl-tarball' is a symlink to the actual tarball in the Nix store.
+      - name: Upload WSL Tarball 📤
+        id: upload_wsl
         uses: actions/upload-artifact@v4
         with:
-          name: tarball-${{ matrix.config }}
-          path: nixos-wsl.tar.gz
+          name: nixos-wsl-${{ steps.version_info.outputs.app_version }}
+          path: result-wsl-tarball # upload-artifact will follow the symlink
+          if-no-files-found: error
+          # retention-days: 7 # Adjust as needed
+      - name: Build Desktop Tarball 🛠️
+        id: build_desktop
+        run: |
+          echo "Building Desktop tarball..."
+          nix build ".#nixosConfigurations.desktop.config.system.build.tarball" -L -o result-desktop-tarball
+          echo "Desktop tarball built: $(readlink -f result-desktop-tarball)"
+          # The output 'result-desktop-tarball' is a symlink to the actual tarball in the Nix store.
+      - name: Upload Desktop Tarball 📤
+        id: upload_desktop
+        uses: actions/upload-artifact@v4
+        with:
+          name: nixos-desktop-${{ steps.version_info.outputs.app_version }}
+          path: result-desktop-tarball # upload-artifact will follow the symlink
+          if-no-files-found: error
+          retention-days: 7 # Adjust as needed
