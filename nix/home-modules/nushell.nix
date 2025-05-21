@@ -25,6 +25,7 @@ with lib;
         ${lib.optionalString (config.age ? secrets && config.age.secrets ? claudeToken) ''
           $env.ANTHROPIC_API_KEY = open "${config.age.secrets.claudeToken.path}" | str trim
           $env.OPENROUTER_API_KEY = open "${config.age.secrets.openrouterToken.path}" | str trim
+          $env.OPENAI_API_KEY = open "${config.age.secrets.openrouterToken.path}" | str trim
         ''}
 
 
@@ -111,7 +112,7 @@ with lib;
             "/bin"
             "/sbin"
         ]
-        $env.EDITOR = "VIM"
+        $env.EDITOR = "NVIM"
         $env.NIX_PATH = [
             $"darwin-config=($env.HOME)/.nixpkgs/darwin-configuration.nix"
             "/nix/var/nix/profiles/per-user/root/channels"

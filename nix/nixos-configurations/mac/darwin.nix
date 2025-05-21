@@ -3,22 +3,26 @@
 { inputs, self, withSystem, ... }:
 let
   system = "aarch64-darwin";
-  pkgs = withSystem system ({ ... }: import inputs.nixpkgs {
-    inherit system;
-    config = { allowUnfree = true; };
-    overlays = [
-      inputs.nur.overlays.default
-      (inputs.ghostty-darwin-overlay.overlay { githubToken = ""; })
-      (_: super: {
-        ghostty = super.ghostty-darwin.overrideAttrs (oldAttrs: {
-          meta = (oldAttrs.meta or { }) // {
-            # Assuming the main executable is simply "ghostty"
-            mainProgram = "ghostty";
-          };
-        });
-      })
-    ];
-  });
+  pkgs = withSystem system
+    ({ ... }: import inputs.nixpkgs {
+      inherit system;
+      config = { allowUnfree = true; };
+      overlays = [
+        inputs.nur.overlays.default
+        (_: _: { mcphub = inputs.mcphub-nvim.packages.${system}.default; })
+        (inputs.ghostty-darwin-overlay.overlay {
+          githubToken = "";
+        })
+        (_: super: {
+          ghostty = super.ghostty-darwin.overrideAttrs (oldAttrs: {
+            meta = (oldAttrs.meta or { }) // {
+              # Assuming the main executable is simply "ghostty"
+              mainProgram = "ghostty";
+            };
+          });
+        })
+      ];
+    });
 in
 {
 

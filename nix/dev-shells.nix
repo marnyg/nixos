@@ -1,10 +1,13 @@
-{ ... }:
+{ inputs, ... }:
 {
-  perSystem = { config, pkgs, ... }: {
+  perSystem = { config, pkgs, system, ... }: {
     config = {
 
       devenv.shells.default = {
-        packages = [ config.treefmt.build.wrapper ];
+        packages = [
+          config.treefmt.build.wrapper
+          inputs.agenix.packages.${system}.default
+        ];
 
         enterShell = ''
           echo "Welcome to the repository!"
@@ -21,6 +24,7 @@
         processes = {
           argocd = {
             exec = ''
+
             '';
           };
         };
@@ -48,4 +52,3 @@
     };
   };
 }
-

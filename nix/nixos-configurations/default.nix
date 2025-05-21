@@ -5,7 +5,7 @@ let
       pkgs = withSystem system ({ ... }: import inputs.nixpkgs {
         inherit system;
         config = { allowUnfree = true; };
-        overlays = [ inputs.nur.overlay ];
+        overlays = [ inputs.nur.overlay (_: _: { vimPlugins.mcphub = inputs.mcphub-nvim.packages.${system}.default; }) ];
       });
 
     in
