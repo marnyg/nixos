@@ -3,7 +3,7 @@ with lib;
 {
   options.modules.ghostty = {
     enable = mkOption { type = types.bool; default = false; };
-    fontsize = mkOption { type = types.number; default = 12; };
+    fontsize = mkOption { type = types.number; default = 14; };
   };
 
   config = mkIf config.modules.ghostty.enable {

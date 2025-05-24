@@ -15,6 +15,7 @@
     tmux = ./tmux.nix;
     fzf = ./fzf.nix;
     zsh = ./zsh.nix;
+    fish = ./fish.nix;
     spotifyd = ./spotifyd.nix;
     other = ./other.nix;
     myPackages = ./myPackages.nix;

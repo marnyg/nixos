@@ -49,12 +49,11 @@ with lib;
       $mainMod = ALT
 
       # Swee https://wiki.hyprland.org/Configuring/Monitors/
-      #monitor=HDMI-A-1,3840x2160@30,0x0,1.5
-
-      monitor=HDMI-A-1,2560x1440@60,0x0,1.0
+      monitor=HDMI-A-1,3840x2160@120,0x0,1.0
+      #monitor=HDMI-A-1,2560x1440@60,0x0,1.0
       #monitor=HDMI-A-1,1920x1080@120,0x0,1.0
 
-      bind = $mainMod CTRL, 2, exec,hyprctl keyword monitor "HDMI-A-1,2560x1440@60,0x0,1.0" && hyprctl keyword monitor "HDMI-A-1,2560x1440@60,0x0,1.0"
+      bind = $mainMod CTRL, 2, exec,hyprctl keyword monitor "HDMI-A-1,2560x1440@60,0x0,1.0" && hyprctl keyword monitor "HDMI-A-1,2560x1440@120,0x0,1.0"
       bind = $mainMod CTRL, 1, exec,hyprctl keyword monitor "HDMI-A-1,1920x1080@120,0x0,1.0" && hyprctl keyword monitor "HDMI-A-1,1920x1080@120,0x0,1.0"
 
       #monitor=,preferred,auto,1.0
@@ -87,7 +86,7 @@ with lib;
           kb_options = caps:escape
           kb_rules = 
           numlock_by_default = true
-          follow_mouse = 1
+          follow_mouse = 0
 
           touchpad {
               natural_scroll = no
