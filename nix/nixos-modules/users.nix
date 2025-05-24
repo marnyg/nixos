@@ -39,12 +39,14 @@ in
         name = user.name;
         value = {
           isNormalUser = lib.mkDefault true;
-          shell = pkgs.nushell; #todo why: because when wsl it will create user with bash as shell. but i dont know why mkDefault is not working
+          #shell = pkgs.nushell; #todo why: because when wsl it will create user with bash as shell. but i dont know why mkDefault is not working
+          shell = pkgs.fish; #todo why: because when wsl it will create user with bash as shell. but i dont know why mkDefault is not working
           extraGroups = [ "wheel" ];
         };
       })
       config.myModules.createUsers.users);
-    programs.zsh.enable = true; #TODO: needed if i set default user shell to zsh
+    #programs.zsh.enable = true; #TODO: needed if i set default user shell to zsh
+    programs.fish.enable = true; #TODO: needed if i set default user shell to zsh
 
     home-manager = lib.mkIf (anyHomeManagerUser config.myModules.createUsers.users) {
       useGlobalPkgs = true;

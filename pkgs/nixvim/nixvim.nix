@@ -97,9 +97,9 @@
       fzf
       shellcheck
       #ollama
-      pngpaste
-      mcphub # Added via overlay
       ty
+    ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+      pngpaste
     ];
 
     langs.ocaml.enable = true;
@@ -455,6 +455,7 @@
         config = /*lua*/''
           lua <<EOF
             require("mcphub").setup({
+              cmd = "${pkgs.mcphub}/bin/mcp-hub",
               extensions = {
                 avante = {
                     make_slash_commands = true, -- make /slash commands from MCP server prompts

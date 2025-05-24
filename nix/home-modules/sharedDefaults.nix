@@ -19,6 +19,7 @@
       enable = true;
       enableSshSupport = true;
       enableZshIntegration = true;
+      enableFishIntegration = true;
     };
 
     home = {

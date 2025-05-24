@@ -9,6 +9,7 @@ with lib;
     programs.fzf = {
       enable = true;
       enableZshIntegration = true;
+      enableFishIntegration = true;
       defaultOptions = [ "--bind" "'tab:toggle-up,btab:toggle-down'" ];
     };
   };

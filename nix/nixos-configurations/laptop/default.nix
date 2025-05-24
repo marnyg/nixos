@@ -111,7 +111,7 @@ in
   services.xserver.autoRepeatDelay = 200;
   services.xserver.autoRepeatInterval = 20;
   environment.systemPackages = with pkgs; [
-    vim #  The Nano editor is also installed by default.
+    #vim #  The Nano editor is also installed by default.
     hyprland
     git
     tmux

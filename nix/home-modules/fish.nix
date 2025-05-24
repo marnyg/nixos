@@ -3,15 +3,26 @@ with lib;
 {
   options.modules.fish.enable = mkOption { type = types.bool; default = false; };
 
-  config = mkIf config.modules.zsh.enable {
+  config = mkIf config.modules.fish.enable {
+    home.shell.enableFishIntegration = true;
     programs.starship = {
       enable = true;
       enableFishIntegration = true;
     };
     programs.fish = {
       enable = true;
+      interactiveShellInit = ''
+        fish_vi_key_bindings
+        set -gx ANTHROPIC_API_KEY $(cat ${config.age.secrets.claudeToken.path})
+        set -gx OPENROUTER_API_KEY $(cat ${config.age.secrets.openrouterToken.path})
+        set -gx OPENAI_API_KEY $(cat ${config.age.secrets.openrouterToken.path})
+      '';
+      functions = {
+        gcm = ''
+          git commit -m "$argv"
+        '';
+      };
       shellAliases = {
-        "::" = ''sed "$ s/\n$//" | xargs -I_ --'';
         c = "clear";
         chx = "chmod +x";
         v = "nvim";
@@ -32,9 +43,9 @@ with lib;
         gmv = "git mv";
         grm = "git rm";
         gs = "git status";
-        gss = "git status -s";
-        gl = "git pull";
-        gc = "git commit";
+        # gss = "git status -s";
+        # gl = "git pull";
+        # gc = "git commit";
         ga = "git add";
         gai = "git add -i";
         gi = "${pkgs.lazygit}/bin/lazygit";
@@ -58,19 +69,20 @@ with lib;
         hist = "tmux capture-pane -pS - | ${pkgs.fzf}/bin/fzf";
         fixSsh = "echo 'UPDATESTARTUPTTY' | gpg-connect-agent > /dev/null 2>&1";
       };
-      initExtra = ''
-        function col() { eval "awk '{ print \$$1 }'"; }
-        function skip() { tail -n +$(($1 + 1)); }
-        function take() { head -n $1; }
-        function up() { cd $(eval printf '../'%.0s {1..$1}); }
-        function mkcd() { mkdir -p "$1" && cd "$1" && pwd; }
-        function ::() { sed "$ s/\n$//" | xargs -I_ --; }
-        function gcm() { git commit -m "$*" }
 
-        export ANTHROPIC_API_KEY=$(cat ${config.age.secrets.claudeToken.path});
-        export OPENROUTER_API_KEY=$(cat ${config.age.secrets.openrouterToken.path});
-        export OPENAI_API_KEY=$(cat ${config.age.secrets.openrouterToken.path});
-      '';
+      # initExtra = ''
+      #   function col() { eval "awk '{ print \$$1 }'"; }
+      #   function skip() { tail -n +$(($1 + 1)); }
+      #   function take() { head -n $1; }
+      #   function up() { cd $(eval printf '../'%.0s {1..$1}); }
+      #   function mkcd() { mkdir -p "$1" && cd "$1" && pwd; }
+      #   function ::() { sed "$ s/\n$//" | xargs -I_ --; }
+      #   function gcm() { git commit -m "$*" }
+      #
+      #   export ANTHROPIC_API_KEY=$(cat ${config.age.secrets.claudeToken.path});
+      #   export OPENROUTER_API_KEY=$(cat ${config.age.secrets.openrouterToken.path});
+      #   export OPENAI_API_KEY=$(cat ${config.age.secrets.openrouterToken.path});
+      # '';
     };
   };
 }

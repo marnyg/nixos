@@ -7,7 +7,8 @@ with lib;
   };
 
   config = mkIf config.modules.ghostty.enable {
-    modules.nushell.enable = true;
+    #modules.nushell.enable = true;
+    modules.fish.enable = true;
 
 
     programs.ghostty = {
@@ -21,11 +22,12 @@ with lib;
         theme = "catppuccin-mocha";
         font-size = config.modules.ghostty.fontsize;
         font-family = "FiraCode Nerd Font Mono";
-        shell-integration = "none";
+        #shell-integration = "none";
+        shell-integration = "fish";
         window-decoration = false;
         confirm-close-surface = false;
         # config-file = "~/.config/ghostty/conf";
-        # command = "nu";
+        command = "fish";
         keybind = [
           "cmd+shift+c=copy_to_clipboard"
           "cmd+shift+v=paste_from_clipboard"

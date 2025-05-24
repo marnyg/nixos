@@ -12,7 +12,8 @@ let
     # myServices.s3fs.keyId = "tid_hDRNQPQfftgkNfOasaoExtxIaBq_jkLiWvimSMZzaNhtCdtEmF";
     # myServices.s3fs.accessKey = "tsec_PC4Z9WtxGiVwRGPDPBZhlTqfYHW3tbKo38PZ6izsDCKHVH-wAWskx7QkSs_zgXM8BWGVep";
 
-    modules.zsh.enable = true;
+    #modules.zsh.enable = true;
+    modules.fish.enable = true;
     modules.direnv.enable = true;
     modules.zellij.enable = false;
     modules.tmux.enable = true;
@@ -133,7 +134,7 @@ in
   services.xserver.autoRepeatInterval = 20;
   environment.systemPackages = with pkgs; [
     inputs.agenix.packages.x86_64-linux.default
-    vim #  The Nano editor is also installed by default.
+    #vim #  The Nano editor is also installed by default.
     hyprland
     git
     tmux

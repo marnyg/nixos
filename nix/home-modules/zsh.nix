@@ -6,16 +6,13 @@ with lib;
   };
 
   config = mkIf config.modules.zsh.enable {
-    #programs.starship = {
-    #  enable = true;
-    #  enableZshIntegration = true;
-    #};
 
     modules.fzf.enable = true;
 
     programs.eza = {
       enable = true;
       enableZshIntegration = true;
+      enableFishIntegration = true;
       git = true;
       icons = "auto";
       extraOptions = [ "-a" ];
@@ -23,6 +20,7 @@ with lib;
     programs.atuin = {
       enable = true;
       enableZshIntegration = true;
+      enableFishIntegration = true;
       flags = [ "--disable-up-arrow" ];
     };
 
@@ -37,7 +35,7 @@ with lib;
       syntaxHighlighting.enable = true;
 
       # .zshrc
-      initExtra = ''
+      initContent = ''
         PROMPT="%F{blue}%m %~%b "$'\n'"%(?.%F{green}%Bλ%b |.%F{red}?) %f"
         export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store";
         export ZK_NOTEBOOK_DIR="~/stuff/notes";
