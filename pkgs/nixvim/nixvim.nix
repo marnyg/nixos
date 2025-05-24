@@ -99,6 +99,7 @@
       #ollama
       pngpaste
       mcphub # Added via overlay
+      ty
     ];
 
     langs.ocaml.enable = true;
@@ -108,9 +109,27 @@
     langs.terraform.enable = true;
     langs.gleam.enable = true;
 
+    lsp.servers.ty = {
+      enable = true;
+      settings = {
+        cmd = [
+          "ty"
+          "server"
+        ];
+        filetypes = [
+          "python"
+        ];
+        rootMarkers = [ "pyproject.toml" "uv.lock" ".git" ];
+      };
+    };
 
     plugins = {
       lsp.enable = true;
+      lsp.servers.jsonls.enable = true;
+      lsp.servers.html.enable = true;
+      lsp.servers.postgres_lsp.enable = true;
+      lsp.servers.leanls.enable = true;
+
       #lsp.inlayHints.enable = true;
 
       # copilot-cmp = {

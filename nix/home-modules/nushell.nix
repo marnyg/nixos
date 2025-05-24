@@ -15,6 +15,8 @@ with lib;
       paging = "never";
       style = "plain";
     };
+    programs.zoxide.enable = true;
+    programs.zoxide.enableNushellIntegration = true;
 
     programs.nushell = {
       enable = true;

@@ -27,6 +27,8 @@ with lib;
         # config-file = "~/.config/ghostty/conf";
         # command = "nu";
         keybind = [
+          "cmd+shift+c=copy_to_clipboard"
+          "cmd+shift+v=paste_from_clipboard"
           "ctrl+shift+c=copy_to_clipboard"
           "ctrl+shift+v=paste_from_clipboard"
           "ctrl+shift+a=select_all"

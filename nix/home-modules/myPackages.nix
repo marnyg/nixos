@@ -17,6 +17,9 @@ with lib;
         ffmpeg
         discord
         code-cursor
+        uv
+        nodejs_24
+
 
         gnupg
         libnotify

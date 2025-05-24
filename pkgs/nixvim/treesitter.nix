@@ -91,7 +91,8 @@ with lib;
           vimdoc
           xml
           yaml
-          norg
+          #TODO: wait for unstable to add this
+          #norg
           terraform
         ];
       };
