@@ -5,10 +5,20 @@ with lib;
 
   config = mkIf config.modules.fish.enable {
     home.shell.enableFishIntegration = true;
-    programs.starship = {
+
+    programs.zoxide.enable = true;
+    programs.starship.enable = true;
+    programs.fzf.enable = true;
+    programs.atuin.enable = true;
+    programs.eza = {
       enable = true;
-      enableFishIntegration = true;
+      enableZshIntegration = true;
+      git = true;
+      icons = "auto";
     };
+
+
+
     programs.fish = {
       enable = true;
       interactiveShellInit = ''
@@ -32,7 +42,7 @@ with lib;
         cp = "cp -riv";
         cdn = "cd ~/git/nixos";
         cat = "${pkgs.bat}/bin/bat --paging=never --style=plain";
-        tree = "${pkgs.eza}/bin/eza --tree --icons";
+        #tree = "${pkgs.eza}/bin/eza --tree --icons";
         du = "${pkgs.du-dust}/bin/dust";
         dua = "${pkgs.dua}/bin/dua";
         df = "${pkgs.duf}/bin/duf";
@@ -48,7 +58,7 @@ with lib;
         # gc = "git commit";
         ga = "git add";
         gai = "git add -i";
-        gi = "${pkgs.lazygit}/bin/lazygit";
+        gi = "gitui";
         gap = "git add -p";
         gaa = "git add -A";
         gpr = "git pull --rebase";
