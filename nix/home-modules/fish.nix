@@ -80,6 +80,19 @@ with lib;
         fixSsh = "echo 'UPDATESTARTUPTTY' | gpg-connect-agent > /dev/null 2>&1";
       };
 
+      plugins = [
+        # pkgs.fishPlugins.bang-bang
+        {
+          name = "bang-bang";
+          src = pkgs.fetchFromGitHub {
+            owner = "oh-my-fish";
+            repo = "plugin-bang-bang";
+            rev = "master";
+            sha256 = "sha256-oPPCtFN2DPuM//c48SXb4TrFRjJtccg0YPXcAo0Lxq0=";
+          };
+        }
+      ];
+
       # initExtra = ''
       #   function col() { eval "awk '{ print \$$1 }'"; }
       #   function skip() { tail -n +$(($1 + 1)); }

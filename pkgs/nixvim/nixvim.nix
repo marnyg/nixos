@@ -442,6 +442,9 @@
             end,
 
           })
+          vim.keymap.set('n', '<leader>an', '<cmd>AvanteChatNew<cr>')
+          vim.keymap.set('n', '<leader>ah', '<cmd>AvanteHistory<cr>')
+
         '';
 
       };
