@@ -63,7 +63,7 @@ with lib;
           "extensions.pocket.enabled" = false;
           "identity.fxaccounts.enabled" = false;
           "toolkit.zoomManager.zoomValues" = ".8,.95,1,1.1,1.2";
-          "layout.css.devPixelsPerPx" = 1.2; # for some reason i need to set defaultzoom to 1 in the browser settings page manually, then this works
+          "layout.css.devPixelsPerPx" = (mkIf pkgs.stdenv.isLinux 1);
 
         };
         search = {

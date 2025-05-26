@@ -19,6 +19,7 @@
     spotifyd = ./spotifyd.nix;
     other = ./other.nix;
     myPackages = ./myPackages.nix;
+    mcphub = ./mcphub.nix;
     cloneDefaultRepos = ./cloneDefaultRepos.nix;
     cloneWorkRepos = ./cloneWorkRepos.nix;
     sharedDefaults = ./sharedDefaults.nix;

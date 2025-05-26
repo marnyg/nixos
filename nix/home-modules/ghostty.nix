@@ -27,7 +27,8 @@ with lib;
         window-decoration = false;
         confirm-close-surface = false;
         # config-file = "~/.config/ghostty/conf";
-        command = "fish";
+        command = "/run/current-system/sw/bin/fish";
+        #command = "fish";
         keybind = [
           "cmd+shift+c=copy_to_clipboard"
           "cmd+shift+v=paste_from_clipboard"

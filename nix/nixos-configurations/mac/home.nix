@@ -10,6 +10,7 @@
 
   myHmModules.sharedDefaults.enable = false;
   modules.zsh.enable = false;
+  modules.fish.enable = true;
   modules.direnv.enable = true;
   modules.myPackages.enable = true;
   modules.cloneDefaultRepos.enable = false;

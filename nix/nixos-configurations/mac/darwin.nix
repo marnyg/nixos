@@ -38,7 +38,7 @@ in
         # `home-manager` module
         inputs.home-manager.darwinModules.home-manager
         {
-          users.users.mariusnygard.shell = pkgs.nushell;
+          users.users.mariusnygard.shell = pkgs.fish;
           users.users.mariusnygard.home = "/Users/mariusnygard";
 
           # `home-manager` config

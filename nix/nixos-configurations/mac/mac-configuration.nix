@@ -20,8 +20,9 @@
 
   # Create /etc/bashrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
-  users.users.mariusnygard.shell = lib.mkForce pkgs.nushell;
-  environment.shells = [ pkgs.nushell ];
+  users.users.mariusnygard.shell = lib.mkForce pkgs.fish;
+  programs.fish.enable = true;
+  environment.shells = [ pkgs.fish ];
 
   services.tailscale.enable = true;
 
