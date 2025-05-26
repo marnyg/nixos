@@ -64,7 +64,7 @@ with lib;
       lspkind = {
         enable = lib.mkDefault (config.plugins.lsp.enable);
         symbolMap = {
-          Copilot = "";
+          #Copilot = "";
         };
       };
       treesitter-textobjects = {

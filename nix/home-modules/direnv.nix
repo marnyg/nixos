@@ -12,7 +12,8 @@ with lib;
       enableZshIntegration = true;
       enableNushellIntegration = true;
       config = {
-        whitelist.prefix = [ "~/git/sendra" "~/git/nixos" "~/git/wellstarter" "~/git/personal" ];
+        hide_env_diff = true;
+        whitelist.prefix = [ "~/git/nixos" "~/git/personal" "~/git/PerformanceLab" ];
       };
       # stdlib = ''
       #   # hash
