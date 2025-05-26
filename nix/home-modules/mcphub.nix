@@ -45,7 +45,7 @@ with lib;
             },
             "notionApi": {
               "env": {
-                "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer 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\", \"Notion-Version\": \"2022-06-28\" }"
+                "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer -----\", \"Notion-Version\": \"2022-06-28\" }"
               },
               "disabled": false,
               "args": [
