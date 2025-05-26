@@ -9,6 +9,7 @@
       updatetime = 250;
       timeoutlen = 300;
       foldlevel = 20;
+      foldmethod = "expr";
       conceallevel = 2;
       expandtab = true;
       shiftwidth = 2;
