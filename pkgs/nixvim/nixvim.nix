@@ -285,8 +285,8 @@
           "core.integrations.treesitter" = { __empty = null; };
         };
         luaConfig.post = /*lua*/''
-          local neorg_callbacks = require("neorg.core.callbacks")
 
+          -- local neorg_callbacks = require("neorg.core.callbacks")
           -- neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
           --     -- Map all the below keybinds only when the "norg" mode is active
           --     keybinds.map_event_to_mode("norg", {
@@ -312,12 +312,47 @@
                   require('telescope.builtin').live_grep{ cwd = dir }
                   vim.fn.feedkeys('^ *([*]+|[-]+) +[(]' .. states .. '[)]')
               end
-
               -- This can be bound to a key
               vim.keymap.set('n', '<leader>nt', function() get_todos('~/git/notes', '[^x_]') end)
+
+              local function new_note(note_name)
+                local dirman = require('neorg').modules.get_module("core.dirman")
+                local ISO8601_timestamp =os.date("!%Y-%m-%dT%H%M%SZ")
+                local file_path = "/zk/" .. ISO8601_timestamp .. ".norg"
+                local workspace = "notes"
+                local link_string = ":$".. workspace .. file_path .. ":"
+
+
+
+                -- insert link to new note
+                vim.api.nvim_put({"- " .. "{" .. link_string .. "}" .. "[".. note_name .."]"},"l", false, true)
+
+                dirman.create_file(file_path, workspace, {
+                    no_open  = false,  -- open file after creation?
+                    force    = false,  -- overwrite file if exists
+                    --metadata = { timestamp = ISO8601_timestamp }
+                dcd
+                })
+              end
+              local function new_zk_note()
+                local note_name 
+                vim.ui.input({ prompt = "Note name: " }, new_note)
+              end
+
+              vim.keymap.set('n', '<leader>nn', function() new_zk_note() end)
           end
           vim.keymap.set('n', '<leader>nj', '<cmd>Neorg journal today<cr>')
           vim.keymap.set('n', '<leader>nr', '<cmd>Neorg return<cr>')
+
+          -- set up autocommands
+          -- TODO: move neorg to module which also sets up autocommands
+          -- vim.api.nvim_create_autocmd({ "BufEnter" }, {
+          --   pattern = "*.norg",
+          --   callback = function()
+          --       vim.opt.spell = true
+          --       vim.opt.textwidth = 100
+          --   end,
+          -- })
         '';
       };
 
@@ -451,6 +486,7 @@
         '';
 
       };
+      marks.enable = true;
 
     };
     extraPlugins = with pkgs.vimPlugins; [
