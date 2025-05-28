@@ -287,25 +287,25 @@
         luaConfig.post = /*lua*/''
           local neorg_callbacks = require("neorg.core.callbacks")
 
-          neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
-              -- Map all the below keybinds only when the "norg" mode is active
-              keybinds.map_event_to_mode("norg", {
-                  n = { -- Bind keys in normal mode
-                      { "<leader>nf", "core.integrations.telescope.find_linkable" },
-                      { "<leader>ni", "core.integrations.telescope.insert_link" },
-                  },
-
-                  i = { -- Bind in insert mode
-                      { "<M-i>", "core.integrations.telescope.insert_link" },
-                  },
-              }, {
-                  silent = true,
-                  noremap = true,
-              })
-          end)
+          -- neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function(_, keybinds)
+          --     -- Map all the below keybinds only when the "norg" mode is active
+          --     keybinds.map_event_to_mode("norg", {
+          --         n = { -- Bind keys in normal mode
+          --             { "<leader>nf", "core.integrations.telescope.find_linkable" },
+          --             { "<leader>ni", "core.integrations.telescope.insert_link" },
+          --         },
+          --
+          --         i = { -- Bind in insert mode
+          --             { "<M-i>", "core.integrations.telescope.insert_link" },
+          --         },
+          --     }, {
+          --         silent = true,
+          --         noremap = true,
+          --     })
+          -- end)
           do
               local _, neorg = pcall(require, "neorg.core")
-              loirman = neorg.modules.get_module("core.dirman")
+              local dirman = neorg.modules.get_module("core.dirman")
               local function get_todos(dir, states)
                   local current_workspace = dirman.get_current_workspace()
                   local dir = current_workspace[2]:tostring()
@@ -314,8 +314,10 @@
               end
 
               -- This can be bound to a key
-              vim.keymap.set('n', '<leader>nt', function() get_todos('~/sync/notes', '[^x_]') end)
+              vim.keymap.set('n', '<leader>nt', function() get_todos('~/git/notes', '[^x_]') end)
           end
+          vim.keymap.set('n', '<leader>nj', '<cmd>Neorg journal today<cr>')
+          vim.keymap.set('n', '<leader>nr', '<cmd>Neorg return<cr>')
         '';
       };
 

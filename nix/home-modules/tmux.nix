@@ -32,15 +32,13 @@ tmux switch-client -t $selected_name
 '';
   toggle-side-notes = pkgs.writeScript "toggle-side-notes" ''
     #!/usr/bin/env bash
-    P=$(tmux show -wqv @myspecialpane)
-    if [ -n "$P" ] && tmux list-panes -F'#{pane_id}' | grep -q "^$P$"; then
-         tmux send-keys -t "$P" 'Escape' C-m ':qa!' C-m
-         sleep .5  # Give some time for nvim to close
-         # tmux kill-pane -t "$P"
-         # tmux set -wu @myspecialpane
+    P=$(tmux show -wqv @myspecialpane)                                            # get the special pane id
+    if [ -n "$P" ] && tmux list-panes -F'#{pane_id}' | grep -q "^$P$"; then       # check if notes pane is open
+         tmux send-keys -t "$P" 'Escape' C-m ':qa!' C-m                           # if nvim is open, close it. this will also close the pane
+         sleep .5                                                                 # Give some time for nvim to close
     else
-         P=$(tmux splitw -PF'#{pane_id}' -- 'cd ~/git/notes/; nvim index.norg')
-         tmux set -w @myspecialpane "$P"
+         P=$(tmux splitw -hPF'#{pane_id}' -- 'cd ~/git/notes/; nvim index.norg')   # if not, open a new one
+         tmux set -w @myspecialpane "$P"                                          # set the special pane id
     fi
   '';
 in
