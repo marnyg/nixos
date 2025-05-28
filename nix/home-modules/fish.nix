@@ -26,6 +26,7 @@ with lib;
         set -gx ANTHROPIC_API_KEY $(cat ${config.age.secrets.claudeToken.path})
         set -gx OPENROUTER_API_KEY $(cat ${config.age.secrets.openrouterToken.path})
         set -gx OPENAI_API_KEY $(cat ${config.age.secrets.openrouterToken.path})
+        set -gx EDITOR nvim
       '';
       functions = {
         gcm = ''

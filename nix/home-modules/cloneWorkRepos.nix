@@ -34,7 +34,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.user.services.cloneWorkRepos =
       let
-        cloneFunctionScript = pkgs.writeScript "clone_functions.sh" ''
+        cloneFunctionScript = pkgs.writeScript "clone_functions.sh" /*bash*/''
           clone() {
             local name=$1
             local repo_name=$(echo $2 | awk -F '/' '{ print $NF }')
