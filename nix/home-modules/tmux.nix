@@ -39,7 +39,7 @@ tmux switch-client -t $selected_name
          # tmux kill-pane -t "$P"
          # tmux set -wu @myspecialpane
     else
-         P=$(tmux splitw -PF'#{pane_id}' -- 'cd ~/sync/notes/; nvim index.norg')
+         P=$(tmux splitw -PF'#{pane_id}' -- 'cd ~/git/notes/; nvim index.norg')
          tmux set -w @myspecialpane "$P"
     fi
   '';

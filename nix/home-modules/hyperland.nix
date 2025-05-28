@@ -53,8 +53,8 @@ with lib;
       #monitor=HDMI-A-1,2560x1440@60,0x0,1.0
       #monitor=HDMI-A-1,1920x1080@120,0x0,1.0
 
-      bind = $mainMod CTRL, 2, exec,hyprctl keyword monitor "HDMI-A-1,2560x1440@60,0x0,1.0" && hyprctl keyword monitor "HDMI-A-1,2560x1440@120,0x0,1.0"
-      bind = $mainMod CTRL, 1, exec,hyprctl keyword monitor "HDMI-A-1,1920x1080@120,0x0,1.0" && hyprctl keyword monitor "HDMI-A-1,1920x1080@120,0x0,1.0"
+      #bind = $mainMod CTRL, 2, exec,hyprctl keyword monitor "HDMI-A-1,2560x1440@60,0x0,1.0" && hyprctl keyword monitor "HDMI-A-1,2560x1440@120,0x0,1.0"
+      #bind = $mainMod CTRL, 1, exec,hyprctl keyword monitor "HDMI-A-1,1920x1080@120,0x0,1.0" && hyprctl keyword monitor "HDMI-A-1,1920x1080@120,0x0,1.0"
 
       #monitor=,preferred,auto,1.0
       #monitor=DP-3,2560x1440@59.951,3840x0,1,transform,1

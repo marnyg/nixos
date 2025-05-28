@@ -204,10 +204,10 @@
         luaConfig.post = ''
           vim.keymap.set('n', '<leader>a', '<cmd>lua require"harpoon":list():add()<cr>')
           vim.keymap.set('n', '<leader>h', '<cmd>lua require"harpoon".ui:toggle_quick_menu(require"harpoon":list())<cr>')
-          vim.keymap.set('n', '<C-j>', '<cmd>lua require"harpoon":list():select(1)<cr>')
-          vim.keymap.set('n', '<C-k>', '<cmd>lua require"harpoon":list():select(2)<cr>')
-          vim.keymap.set('n', '<C-l>', '<cmd>lua require"harpoon":list():select(3)<cr>')
-          vim.keymap.set('n', '<C-m>', '<cmd>lua require"harpoon":list():select(4)<cr>')
+          vim.keymap.set('n', '<leader>j', '<cmd>lua require"harpoon":list():select(1)<cr>')
+          vim.keymap.set('n', '<leader>k', '<cmd>lua require"harpoon":list():select(2)<cr>')
+          vim.keymap.set('n', '<leader>l', '<cmd>lua require"harpoon":list():select(3)<cr>')
+          vim.keymap.set('n', '<leader>;', '<cmd>lua require"harpoon":list():select(4)<cr>')
         '';
       };
       oil = {
