@@ -128,8 +128,8 @@ in
 
   # Enable touchpad support (enabled default in most desktopManager).
   #services.xserver.libinput.enable = true;
-  services.xserver.layout = "us";
-  services.xserver.xkbOptions = "caps:escare";
+  services.xserver.xkb.layout = "us";
+  services.xserver.xkb.options = "caps:escare";
   console.useXkbConfig = true;
   services.xserver.autoRepeatDelay = 200;
   services.xserver.autoRepeatInterval = 20;
