@@ -6,8 +6,7 @@
   config = {
     opts = {
       relativenumber = true; # Show relative line numbers
-      updatetime = 250;
-      timeoutlen = 300;
+      timeoutlen = 500;
       foldlevel = 20;
       foldmethod = "expr";
       conceallevel = 2;
@@ -278,7 +277,7 @@
           "core.concealer".config.icon_preset = "diamond";
           # "core.concealer".config.icon_preset = "varied";
           "core.dirman".config.workspaces.notes = "~/git/notes";
-          "core.dirman".config.workspaces.default = "~/git/notes";
+          #"core.dirman".config.workspaces.default = "~/git/notes";
           "core.keybinds".config.default_keybinds = true;
           "core.completion".config = { engine = "nvim-cmp"; };
           "core.integrations.telescope" = { __empty = null; };
@@ -303,6 +302,17 @@
           --         noremap = true,
           --     })
           -- end)
+
+
+
+          -- local ui= require('neorg').modules.get_module("core.ui")
+          -- vim.print(ui.createDisplay())
+          -- local calendar= require('neorg').modules.get_module("core.ui.calendar")
+          -- calendar.select_date({callback = function(date) print(date) end})
+          -- calendar.open({})
+          -- vim.print(calendar.open)
+
+
           do
               local _, neorg = pcall(require, "neorg.core")
               local dirman = neorg.modules.get_module("core.dirman")
@@ -343,6 +353,15 @@
           end
           vim.keymap.set('n', '<leader>nj', '<cmd>Neorg journal today<cr>')
           vim.keymap.set('n', '<leader>nr', '<cmd>Neorg return<cr>')
+
+        -- #   require("neorg").setup({
+        -- #     load = {
+        -- #       ["external.query"] = {
+        -- #         index_on_launch = true,
+        -- #         update_on_change = true,
+        -- #       }
+        -- #     }
+        -- #   })
 
           -- set up autocommands
           -- TODO: move neorg to module which also sets up autocommands
@@ -518,6 +537,19 @@
           };
         }
       )
+      {
+        plugin =
+          (pkgs.vimUtils.buildVimPlugin {
+            name = "neorg-query";
+            src = pkgs.fetchFromGitHub {
+              owner = "benlubas";
+              repo = "neorg-query";
+              rev = "main";
+              hash = "sha256-AWB2p9dizeVq5ieLJHU1eL0TjoNIEUwKazVNnFNwO9s=";
+            };
+            doCheck = false;
+          });
+      }
 
 
       # TODO: add https://github.com/chrisgrieser/nvim-various-textobjs

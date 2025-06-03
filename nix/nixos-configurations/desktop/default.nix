@@ -32,6 +32,7 @@ let
     modules.other.enable = false;
     modules.myPackages.enable = true;
     modules.cloneDefaultRepos.enable = true;
+    modules.qutebrowser.enable = true;
     # modules.lf.enable = true;
     programs.yazi.enable = true;
     myModules.secrets.enable = true;
@@ -206,7 +207,7 @@ in
 
   programs.nix-ld.libraries = with pkgs; [ ];
   system.autoUpgrade.enable = true;
-  system.autoUpgrade.flake = "github:marnyg/nixos#laptop";
+  system.autoUpgrade.flake = "github:marnyg/nixos#desktop";
   #system.autoUpgrade.allowReboot =true;
 
 

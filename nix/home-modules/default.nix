@@ -32,6 +32,7 @@
     nushell = ./nushell.nix;
     secrets = ./secrets/secretsModule.nix;
     ghostty = ./ghostty.nix;
+    qutebrowser = ./qutebrowser.nix;
 
     # all modules as a list
     # all = [
