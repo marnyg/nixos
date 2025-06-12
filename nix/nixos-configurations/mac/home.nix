@@ -45,7 +45,7 @@
     slack
     teams-for-linux
     # outlook
-    github-cli
+    #    github-cli
 
     #m-cli # useful macOS CLI commands
   ];
