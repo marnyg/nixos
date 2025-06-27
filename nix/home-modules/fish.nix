@@ -9,7 +9,14 @@ with lib;
     programs.zoxide.enable = true;
     programs.starship.enable = true;
     programs.fzf.enable = true;
-    programs.atuin.enable = true;
+    programs.atuin = {
+      enable = true;
+      flags = [ "--disable-up-arrow" ];
+      settings = {
+        inline_height = 0;
+        style = "compact";
+      };
+    };
     programs.eza = {
       enable = true;
       enableZshIntegration = true;
