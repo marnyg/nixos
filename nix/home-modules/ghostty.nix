@@ -28,6 +28,7 @@ with lib;
         confirm-close-surface = false;
         # config-file = "~/.config/ghostty/conf";
         command = "/run/current-system/sw/bin/fish";
+
         #command = "fish";
         keybind = [
           "cmd+shift+c=copy_to_clipboard"
@@ -41,29 +42,30 @@ with lib;
       };
       themes = {
         catppuccin-mocha = {
-          background = "1e1e2e";
-          cursor-color = "f5e0dc";
-          foreground = "cdd6f4";
+          background = "24273a";
+          cursor-color = "f4dbd6";
+          foreground = "cad3f5";
           palette = [
-            "0=#45475a"
-            "1=#f38ba8"
-            "2=#a6e3a1"
-            "3=#f9e2af"
-            "4=#89b4fa"
-            "5=#f5c2e7"
-            "6=#94e2d5"
-            "7=#bac2de"
-            "8=#585b70"
-            "9=#f38ba8"
-            "10=#a6e3a1"
-            "11=#f9e2af"
-            "12=#89b4fa"
-            "13=#f5c2e7"
-            "14=#94e2d5"
-            "15=#a6adc8"
+            "0=#494d64" # Black
+            "1=#ed8796" # Red
+            "2=#a6da95" # Green
+            #"3=#eed49f" # Yellow
+            "4=#5b7fcf" # Blue (darker for better contrast)
+            "4=#8aadf4"
+            "5=#f5bde6" # Magenta
+            "6=#8bd5ca" # Cyan
+            "7=#f0f0f0" # White (brighter for better contrast)
+            "8=#5b6078" # Bright Black
+            "9=#ed8796"
+            "10=#a6da95"
+            "11=#eed49f"
+            "12=#8aadf4"
+            "13=#f5bde6"
+            "14=#8bd5ca"
+            "15=#b8c0e0"
           ];
-          selection-background = "353749";
-          selection-foreground = "cdd6f4";
+          selection-background = "3a3e53";
+          selection-foreground = "cad3f5";
         };
 
       };

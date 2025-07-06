@@ -79,9 +79,22 @@ in
         bind -n M-u attach-session -t . -c '#{pane_current_path}'
         set -g repeat-time 1000
 
-        bind-key f run-shell "tmux neww bash -c ${tmux-sessionizer}"
         bind-key r source-file ~/.config/tmux/tmux.conf
+        # --- POPUP BINDINGS ---
+        # `f` for find-session (sessionizer)
+        bind-key f run-shell "tmux display-popup -w 90% -h 90% -E '${tmux-sessionizer}'"
 
+        # `g` for git 
+        bind-key g run-shell "tmux display-popup -w 90% -h 90% -d '#{pane_current_path}' -T 'GitUi' -E 'gitui'"
+
+        # `y` for yazi file manager
+        bind-key y run-shell "tmux display-popup -w 90% -h 90% -d '#{pane_current_path}' -T 'Yazi' -E 'yazi'"
+
+        # `s` for ncspot (Spotify client)
+        bind-key s run-shell "tmux display-popup -w 90% -h 90% -T 'ncspot' -E 'ncspot'"
+
+        # `k` for keybingd
+        bind-key k run-shell "tmux display-popup -w 90% -h 90% -d '#{pane_current_path}' -T 'Keybindings' -E 'tmux list-keys | fzf'"
 
         # yank keybinds
         bind-key -T copy-mode-vi v send-keys -X begin-selection
