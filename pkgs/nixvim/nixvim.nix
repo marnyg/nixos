@@ -345,7 +345,7 @@
                 })
               end
               local function new_zk_note()
-                local note_name 
+                local note_name
                 vim.ui.input({ prompt = "Note name: " }, new_note)
               end
 
@@ -383,7 +383,7 @@
       octo.enable = true;
       supermaven.enable = true;
       iron = {
-        enable = true;
+        enable = false;
         # lazyLoad.settings.colorscheme = "catppuccin-mocha";
         settings = {
           scratch_repl = true;
@@ -482,8 +482,81 @@
             model = "agentic",
             provider = "openai",
             openai = {
+              hide_in_model_selector = true,
               endpoint = "https://openrouter.ai/api/v1",
-              model = "google/gemini-2.5-pro-preview",
+            },
+            claude_opus = {
+              hide_in_model_selector = true,
+            },
+            claude_hiku= {
+              hide_in_model_selector = true,
+            },
+            aihubmix= {
+              hide_in_model_selector = true,
+            },
+            ["aihubmix-claude"]= {
+              hide_in_model_selector = true,
+            },
+            openai_gpt_4o= {
+              hide_in_model_selector = true,
+            },
+            ["openai-gpt-4o-mini"] = {
+              hide_in_model_selector = true,
+            },
+            openai_4o= {
+              hide_in_model_selector = true,
+            },
+            bedrock = {
+              hide_in_model_selector = true,
+            },
+            bedrock_claude_3 = {
+              hide_in_model_selector = true,
+            },
+            vertex_claude = {
+              hide_in_model_selector = true,
+            },
+            vertex= {
+              hide_in_model_selector = true,
+            },
+            cohere= {
+              hide_in_model_selector = true,
+            },
+            copilot= {
+              hide_in_model_selector = true,
+            },
+            claude= {
+              hide_in_model_selector = true,
+            },
+            ["claude-haiku"]= {
+              hide_in_model_selector = true,
+            },
+            ["claude-opus"]= {
+              hide_in_model_selector = true,
+            },
+            gemini= {
+              hide_in_model_selector = true,
+            },
+            ["bedrock-claude-3.7-sonnet"] = {
+              hide_in_model_selector = true,
+            },
+
+            vendors = {
+              openrouter_gemini= {
+                __inherited_from = "openai",
+                hide_in_model_selector = false,
+                model = "google/gemini-2.5-pro-preview",
+              },
+              openrouter_claude_opus = {
+                __inherited_from = "openai",
+                model = "anthropic/claude-opus-4",
+                hide_in_model_selector = false,
+              },
+              -- does not have tool use
+              -- openrouter_deepseek= {
+              --   __inherited_from = "openai",
+              --
+              --   model = "deepseek/deepseek-r1-0528",
+              -- },
             },
             -- system_prompt as function ensures LLM always has latest MCP server state
             -- This is evaluated for every message, even in existing chats
@@ -501,6 +574,7 @@
           })
           vim.keymap.set('n', '<leader>an', '<cmd>AvanteChatNew<cr>')
           vim.keymap.set('n', '<leader>ah', '<cmd>AvanteHistory<cr>')
+          vim.keymap.set('n', '<leader>am', '<cmd>AvanteModels<cr>')
 
         '';
 
@@ -555,7 +629,7 @@
       # TODO: add https://github.com/chrisgrieser/nvim-various-textobjs
       {
         plugin = boole-nvim;
-        config = /*lua*/'' 
+        config = /*lua*/''
             lua <<EOF
             require('boole').setup({
                 mappings = {
@@ -568,7 +642,7 @@
                 })
 
           EOF
-            '';
+        '';
       }
     ];
   };

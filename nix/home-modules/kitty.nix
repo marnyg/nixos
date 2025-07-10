@@ -8,7 +8,7 @@ with lib;
 
   config = mkIf config.modules.kitty.enable {
 
-    modules.nushell.enable = true;
+    #modules.nushell.enable = true;
 
     programs.kitty = {
       enable = true;

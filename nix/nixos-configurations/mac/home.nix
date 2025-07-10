@@ -9,7 +9,7 @@
   programs.ncspot.enable = true;
 
   myHmModules.sharedDefaults.enable = false;
-  modules.zsh.enable = true;
+  modules.zsh.enable = false;
   modules.fish.enable = true;
   modules.direnv.enable = true;
   modules.myPackages.enable = true;
@@ -18,6 +18,7 @@
   modules.firefox.enable = true;
   myModules.git.enable = true;
   modules.kitty.enable = true;
+  #modules.qutebrowser.enable = true;
 
   myModules.secrets.enable = true;
   modules.ghostty.enable = true;
