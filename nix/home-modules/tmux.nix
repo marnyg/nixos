@@ -1,6 +1,26 @@
 { pkgs, lib, config, ... }:
 with lib;
 let
+  ncspot = pkgs.writeScript "ncspot" ''
+          
+#!/bin/bash
+
+# The name for our dedicated ncspot session
+SESSION_NAME="ncspot-music"
+
+# Check if the session already exists.
+if ! tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+    # If it doesn't exist, create it detached (-d) and run ncspot.
+    echo "Creating new ncspot session..."
+    tmux new-session -d -s "$SESSION_NAME" "ncspot"
+fi
+
+# Attach to the session.
+exec tmux attach-session -t "$SESSION_NAME"
+'';
+
+
+
   tmux-sessionizer = pkgs.writeScript "tmux-sessionizer" ''
 
 #!/usr/bin/env bash
@@ -91,7 +111,7 @@ in
         bind-key y run-shell "tmux display-popup -w 90% -h 90% -d '#{pane_current_path}' -T 'Yazi' -E 'yazi'"
 
         # `s` for ncspot (Spotify client)
-        bind-key s run-shell "tmux display-popup -w 90% -h 90% -T 'ncspot' -E 'ncspot'"
+        bind-key m run-shell "tmux display-popup -w 90% -h 90% -T 'ncspot' -E '${ncspot}'"
 
         # `k` for keybingd
         bind-key k run-shell "tmux display-popup -w 90% -h 90% -d '#{pane_current_path}' -T 'Keybindings' -E 'tmux list-keys | fzf'"
