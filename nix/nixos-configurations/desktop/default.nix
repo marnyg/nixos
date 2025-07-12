@@ -42,6 +42,30 @@ in
   imports = [ ./hardware-config.nix ];
 
   ##
+  ## NVIDIA gpu config
+  ##
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  # This is crucial for modern GPUs and for Wayland support
+  hardware.nvidia.modesetting.enable = true;
+
+  # For power management, recommended for desktops and essential for laptops
+  hardware.nvidia.powerManagement.enable = true;
+  # For finer-grained power management on recent GPUs (Turing architecture and newer)
+  # You can leave this on for older cards too, it will just be ignored.
+  #hardware.nvidia.powerManagement.finegrained = true;
+
+  # Use the proprietary (closed-source) driver.
+  # Set to true to use the open-source "open-gpu-kernel-modules"
+  hardware.nvidia.open = false;
+
+  # Enable OpenGL
+  hardware.opengl.enable = true;
+  #hardware.opengl.driSupport = true;
+  #hardware.opengl.driSupport32Bit = true; # For 32-bit games/apps
+
+
+  ##
   ## system modules config
   ##
   home-manager.backupFileExtension = "backup";
