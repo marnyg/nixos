@@ -49,7 +49,8 @@ with lib;
       $mainMod = ALT
 
       # Swee https://wiki.hyprland.org/Configuring/Monitors/
-      monitor=HDMI-A-1,3840x2160@120,0x0,1.0
+      monitor=HDMI-A-1,3840x2160@120,1080x0,1.0
+      monitor=HDMI-A-3,1920x1080@60.00Hz,0x0,1, transform,3
       #monitor=HDMI-A-1,2560x1440@60,0x0,1.0
       #monitor=HDMI-A-1,1920x1080@120,0x0,1.0
 
