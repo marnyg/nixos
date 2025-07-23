@@ -183,8 +183,8 @@
           "<leader>sh" = { action = "help_tags"; options.desc = "[S]earch [H]elp"; };
           "<leader>sk" = { action = "keymaps"; options.desc = "[S]earch [K]eymaps"; };
           "<leader>sf" = { action = "find_files"; options.desc = "[S]earch [F]iles"; };
-          # "<leader>ff" = { action = "frecency"; desc = "[F]recuant [F]iles"; };
-          # "<leader>su" = { action = "undo"; desc = "[S]earch [U]ndo"; };
+          "<leader>ff" = { action = "frecency"; options.desc = "[F]recuant [F]iles"; };
+          "<leader>su" = { action = "undo"; options.desc = "[S]earch [U]ndo"; };
           "<leader>ss" = { action = "builtin"; options.desc = "[S]earch [S]elect Telescope"; };
           "<leader>sw" = { action = "grep_string"; options.desc = "[S]earch current [W]ord"; };
           "<leader>sg" = { action = "live_grep"; options.desc = "[S]earch by [G]rep"; };
@@ -471,79 +471,70 @@
       };
       avante = {
         enable = true;
-        #  settings = {
-        #    mode = "agentic";
-        #    provider = "openai";
-        #    openai = {
-        #      endpoint = "https://openrouter.ai/api/v1";
-        #      model = "google/gemini-2.5-pro-preview";
-        #    };
-        #  };
 
         luaConfig.post = /*lua*/''
           require("avante").setup({
             model = "agentic",
             provider = "openai",
-            openai = {
-              hide_in_model_selector = true,
-              endpoint = "https://openrouter.ai/api/v1",
-            },
-            claude_opus = {
-              hide_in_model_selector = true,
-            },
-            claude_hiku= {
-              hide_in_model_selector = true,
-            },
-            aihubmix= {
-              hide_in_model_selector = true,
-            },
-            ["aihubmix-claude"]= {
-              hide_in_model_selector = true,
-            },
-            openai_gpt_4o= {
-              hide_in_model_selector = true,
-            },
-            ["openai-gpt-4o-mini"] = {
-              hide_in_model_selector = true,
-            },
-            openai_4o= {
-              hide_in_model_selector = true,
-            },
-            bedrock = {
-              hide_in_model_selector = true,
-            },
-            bedrock_claude_3 = {
-              hide_in_model_selector = true,
-            },
-            vertex_claude = {
-              hide_in_model_selector = true,
-            },
-            vertex= {
-              hide_in_model_selector = true,
-            },
-            cohere= {
-              hide_in_model_selector = true,
-            },
-            copilot= {
-              hide_in_model_selector = true,
-            },
-            claude= {
-              hide_in_model_selector = true,
-            },
-            ["claude-haiku"]= {
-              hide_in_model_selector = true,
-            },
-            ["claude-opus"]= {
-              hide_in_model_selector = true,
-            },
-            gemini= {
-              hide_in_model_selector = true,
-            },
-            ["bedrock-claude-3.7-sonnet"] = {
-              hide_in_model_selector = true,
-            },
-
-            vendors = {
+            providers = {
+              openai = {
+                hide_in_model_selector = true,
+                endpoint = "https://openrouter.ai/api/v1",
+              },
+              claude_opus = {
+                hide_in_model_selector = true,
+              },
+              claude_hiku= {
+                hide_in_model_selector = true,
+              },
+              aihubmix= {
+                hide_in_model_selector = true,
+              },
+              ["aihubmix-claude"]= {
+                hide_in_model_selector = true,
+              },
+              openai_gpt_4o= {
+                hide_in_model_selector = true,
+              },
+              ["openai-gpt-4o-mini"] = {
+                hide_in_model_selector = true,
+              },
+              openai_4o= {
+                hide_in_model_selector = true,
+              },
+              bedrock = {
+                hide_in_model_selector = true,
+              },
+              bedrock_claude_3 = {
+                hide_in_model_selector = true,
+              },
+              vertex_claude = {
+                hide_in_model_selector = true,
+              },
+              vertex= {
+                hide_in_model_selector = true,
+              },
+              cohere= {
+                hide_in_model_selector = true,
+              },
+              copilot= {
+                hide_in_model_selector = true,
+              },
+              claude= {
+                hide_in_model_selector = true,
+              },
+              ["claude-haiku"]= {
+                hide_in_model_selector = true,
+              },
+              ["claude-opus"]= {
+                hide_in_model_selector = true,
+              },
+              gemini= {
+                hide_in_model_selector = true,
+              },
+              ["bedrock-claude-3.7-sonnet"] = {
+                hide_in_model_selector = true,
+              },
               openrouter_gemini= {
                 __inherited_from = "openai",
                 hide_in_model_selector = false,
@@ -561,6 +552,7 @@
               --   model = "deepseek/deepseek-r1-0528",
               -- },
             },
+
             -- system_prompt as function ensures LLM always has latest MCP server state
             -- This is evaluated for every message, even in existing chats
             system_prompt = function()
