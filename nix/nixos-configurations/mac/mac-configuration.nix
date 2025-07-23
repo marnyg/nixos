@@ -127,22 +127,25 @@
       alt - k : sh -c "yabai -m window --focus north || yabai -m display --focus north"
       alt - l : sh -c "yabai -m window --focus east || yabai -m display --focus east"
 
-      # swap managed window (wrapped in sh -c for nushell compatability)
-      shift + alt - h : sh -c "yabai -m window --swap west || $(yabai -m window --display west; yabai -m display --focus west)"
-      shift + alt - j : sh -c "yabai -m window --swap south || $(yabai -m window --display south; yabai -m display --focus south)"
-      shift + alt - k : sh -c "yabai -m window --swap north || $(yabai -m window --display north; yabai -m display --focus north)"
-      shift + alt - l : sh -c "yabai -m window --swap east || $(yabai -m window --display east; yabai -m display --focus east)"
+      alt - n : yabai -m window --focus stack.next || yabai -m window --focus next || yabai -m window --focus first
+      alt - p : yabai -m window --focus stack.prev || yabai -m window --focus prev || yabai -m window --focus last
 
-      alt - 1 : yabai -m space --focus 1
-      alt - 2 : yabai -m space --focus 2
-      alt - 3 : yabai -m space --focus 3
-      alt - 4 : yabai -m space --focus 4
-      alt - 5 : yabai -m space --focus 5
-      shift + alt - 1 : yabai -m window --space 1
-      shift + alt - 2 : yabai -m window --space 2
-      shift + alt - 3 : yabai -m window --space 3
-      shift + alt - 4 : yabai -m window --space 4
-      shift + alt - 5 : yabai -m window --space 5
+      # swap managed window (wrapped in sh -c for nushell compatability)
+      # shift + alt - h : sh -c "yabai -m window --swap west || $(yabai -m window --display west; yabai -m display --focus west)"
+      # shift + alt - j : sh -c "yabai -m window --swap south || $(yabai -m window --display south; yabai -m display --focus south)"
+      # shift + alt - k : sh -c "yabai -m window --swap north || $(yabai -m window --display north; yabai -m display --focus north)"
+      # shift + alt - l : sh -c "yabai -m window --swap east || $(yabai -m window --display east; yabai -m display --focus east)"
+
+      # alt - 1 : yabai -m space --focus 1
+      # alt - 2 : yabai -m space --focus 2
+      # alt - 3 : yabai -m space --focus 3
+      # alt - 4 : yabai -m space --focus 4
+      # alt - 5 : yabai -m space --focus 5
+      # shift + alt - 1 : yabai -m window --space 1
+      # shift + alt - 2 : yabai -m window --space 2
+      # shift + alt - 3 : yabai -m window --space 3
+      # shift + alt - 4 : yabai -m window --space 4
+      # shift + alt - 5 : yabai -m window --space 5
 
       # toggle layout
       alt - d : sh -c "yabai -m space --layout $(yabai -m query --spaces --space | jq -r 'if .type == "bsp" then "stack" else "bsp" end')"

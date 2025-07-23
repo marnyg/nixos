@@ -87,6 +87,8 @@
       map("v", "<leader>x", ":'<,'>lua<CR>", { desc = "Execute selected Lua code" })
       map("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
 
+      dofile("${./strudel.lua}")
+
     '';
 
     extraPackages = with pkgs; [
@@ -96,6 +98,7 @@
       ripgrep
       fzf
       shellcheck
+      websocat
       #ollama
       ty
     ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
