@@ -106,6 +106,7 @@
     ];
 
     langs.ocaml.enable = true;
+    langs.elixir.enable = true;
     langs.python.enable = true;
     langs.golang.enable = true;
     langs.rust.enable = true;
@@ -386,17 +387,20 @@
       octo.enable = true;
       supermaven.enable = true;
       iron = {
-        enable = false;
+        enable = true;
         # lazyLoad.settings.colorscheme = "catppuccin-mocha";
         settings = {
           scratch_repl = true;
 
           repl_definition = {
+            # elixir = {
+            #   command = [ "elixir" ];
+            # };
             sh = {
               command = [ "zsh" ];
             };
             python = {
-              command = [ "python3" ];
+              command = [ "uv run python" ];
               format = {
                 __raw = ''
                   require("iron.fts.common").bracketed_paste_python
@@ -421,20 +425,20 @@
           repl_open_cmd = "vertical botright 80 split";
 
           keymaps = {
-            send_motion = "<space>sc";
-            visual_send = "<space>sc";
-            send_file = "<space>ff";
-            send_line = "<space>sl";
-            send_paragraph = "<space>sp";
-            send_until_cursor = "<space>su";
-            send_mark = "<space>sm";
-            mark_motion = "<space>mc";
-            mark_visual = "<space>mc";
-            remove_mark = "<space>md";
-            cr = "<space>s<cr>";
-            interrupt = "<space>s<space>";
-            exit = "<space>sq";
-            clear = "<space>cl";
+            send_motion = "<space>rc";
+            visual_send = "<space>rc";
+            send_file = "<space>rf";
+            send_line = "<space>rl";
+            send_paragraph = "<space>rp";
+            send_until_cursor = "<space>ru";
+            send_mark = "<space>rm";
+            mark_motion = "<space>rc";
+            mark_visual = "<space>rc";
+            remove_mark = "<space>rd";
+            cr = "<space>r<cr>";
+            interrupt = "<space>r<space>";
+            exit = "<space>rq";
+            clear = "<space>rl";
           };
 
           highlight = {
@@ -482,57 +486,75 @@
                 endpoint = "https://openrouter.ai/api/v1",
               },
               claude_opus = {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               claude_hiku= {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               aihubmix= {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               ["aihubmix-claude"]= {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               openai_gpt_4o= {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               ["openai-gpt-4o-mini"] = {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               openai_4o= {
                 hide_in_model_selector = true,
+                __inherited_from = "openai",
               },
               bedrock = {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               bedrock_claude_3 = {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               vertex_claude = {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               vertex= {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               cohere= {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               copilot= {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               claude= {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               ["claude-haiku"]= {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               ["claude-opus"]= {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               gemini= {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               ["bedrock-claude-3.7-sonnet"] = {
+                __inherited_from = "openai",
                 hide_in_model_selector = true,
               },
               openrouter_gemini= {

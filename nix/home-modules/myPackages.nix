@@ -30,6 +30,7 @@ with lib;
         mpv
         # GUI pkf readers
         evince
+        claude-code
 
         # Other
         jq

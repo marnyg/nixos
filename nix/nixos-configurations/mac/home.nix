@@ -18,6 +18,7 @@
   modules.firefox.enable = true;
   myModules.git.enable = true;
   modules.kitty.enable = true;
+  modules.spotifyd.enable = true;
   #modules.qutebrowser.enable = true;
 
   myModules.secrets.enable = true;

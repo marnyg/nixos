@@ -15,7 +15,7 @@
           echo -e "\033[0;32mWelcome to the repository!\033[0m"
           echo -e "\033[0;32mAvailable commands:\033[0m"
           echo "  sudo nixos-rebuild switch --flake .#<system>" # To rebuild and switch a nixos system"
-          echo "  nix run nix-darwin/nix-darwin-24.11#darwin-rebuild -- switch --flake .#mac" # To rebuild and switch a darwin system"
+          echo "  darwin-rebuild switch --flake .#mac" # To rebuild and switch a darwin system"
           echo
         '';
 

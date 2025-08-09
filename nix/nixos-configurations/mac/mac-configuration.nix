@@ -127,8 +127,8 @@
       alt - k : sh -c "yabai -m window --focus north || yabai -m display --focus north"
       alt - l : sh -c "yabai -m window --focus east || yabai -m display --focus east"
 
-      alt - n : yabai -m window --focus stack.next || yabai -m window --focus next || yabai -m window --focus first
-      alt - p : yabai -m window --focus stack.prev || yabai -m window --focus prev || yabai -m window --focus last
+      alt - p : yabai -m window --focus stack.prev || yabai -m window --focus stack.last
+      alt - n : yabai -m window --focus stack.next || yabai -m window --focus stack.first
 
       # swap managed window (wrapped in sh -c for nushell compatability)
       # shift + alt - h : sh -c "yabai -m window --swap west || $(yabai -m window --display west; yabai -m display --focus west)"

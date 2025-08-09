@@ -30,8 +30,7 @@
     nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
     mac-app-util.url = "github:hraban/mac-app-util";
 
-    # mcphub-nvim.url = "github:ravitemer/mcphub.nvim"; # is broken, using pin until fixed
-    mcphub-nvim.url = "github:ravitemer/mcphub.nvim/9831d87774a416dd0fa067c7116bc526ab0a5fb1";
+    mcphub-nvim.url = "github:ravitemer/mcphub.nvim"; # is broken, using pin until fixed
     mcphub.url = "github:ravitemer/mcp-hub";
 
     ghostty-darwin-overlay.url = "github:kbwhodat/ghostty-nix-darwin";
