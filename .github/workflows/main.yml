@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - flake-updates
     tags:
       - 'v*' # Also trigger on version tags
   pull_request: {}
