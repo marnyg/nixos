@@ -31,6 +31,7 @@ with lib;
         # GUI pkf readers
         evince
         claude-code
+        crush
 
         # Other
         jq
