@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mix new:*)",
+      "Bash(mkdir:*)",
+      "Bash(mix deps.get:*)",
+      "Bash(mix compile)",
+      "Bash(mix ecto.create:*)",
+      "Bash(mix ecto.migrate:*)",
+      "Bash(mix run:*)"
+    ],
+    "deny": []
+  }
+}

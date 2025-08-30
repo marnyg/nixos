@@ -628,19 +628,19 @@
           };
         }
       )
-      {
-        plugin =
-          (pkgs.vimUtils.buildVimPlugin {
-            name = "neorg-query";
-            src = pkgs.fetchFromGitHub {
-              owner = "benlubas";
-              repo = "neorg-query";
-              rev = "main";
-              hash = "sha256-AWB2p9dizeVq5ieLJHU1eL0TjoNIEUwKazVNnFNwO9s=";
-            };
-            doCheck = false;
-          });
-      }
+      # {
+      #   plugin =
+      #     (pkgs.vimUtils.buildVimPlugin {
+      #       name = "neorg-query";
+      #       src = pkgs.fetchFromGitHub {
+      #         owner = "benlubas";
+      #         repo = "neorg-query";
+      #         rev = "main";
+      #         hash = "sha256-AWB2p9dizeVq5ieLJHU1eL0TjoNIEUwKazVNnFNwO9s=";
+      #       };
+      #       doCheck = false;
+      #     });
+      # }
 
 
       # TODO: add https://github.com/chrisgrieser/nvim-various-textobjs

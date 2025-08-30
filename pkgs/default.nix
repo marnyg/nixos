@@ -1,6 +1,7 @@
 {
   imports = [
     ./nixvim
+    ./agentic-dm
   ];
   perSystem = { pkgs, system, ... }: {
     packages.home-init = pkgs.writeShellApplication {
