@@ -22,6 +22,6 @@
     defaults = ./defaults.nix;
 
     nur = inputs.nur.modules.nixos.default;
-    myHomemanagerModules = { lib, ... }: { home-manager.sharedModules = lib.attrValues self.homemanagerModules; };
+    myHomemanagerModules = { ... }: { home-manager.sharedModules = [ ]; };
   };
 }

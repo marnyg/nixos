@@ -1,55 +1,8 @@
 { inputs, pkgs, ... }:
 let
-  # TODO:move this out into own users file
-  defaultHMConfig = { config, ... }: {
-    #imports = builtins.attrValues config.myHomemanagerModules.modules;
-    imports = [ inputs.agenix.homeManagerModules.default ];
-    myModules.secrets.enable = true;
-
-    myHmModules.sharedDefaults.enable = true;
-
-    myServices.s3fs.enable = true;
-    myServices.s3fs.keyId = "";
-    myServices.s3fs.accessKey = "";
-
-    modules.zsh.enable = true;
-    modules.direnv.enable = true;
-    modules.zellij.enable = false;
-    modules.tmux.enable = true;
-    #modules.fzf.enable = false;
-    modules.firefox.enable = true;
-    modules.autorandr.enable = false;
-    modules.bspwm.enable = false;
-    modules.dunst.enable = false;
-    modules.kitty.enable = false;
-    modules.ghostty.enable = true;
-    myModules.git.enable = true;
-    modules.newsboat.enable = false;
-    modules.polybar.enable = false;
-    modules.xmonad.enable = false;
-    modules.spotifyd.enable = false;
-    modules.other.enable = false;
-    modules.myPackages.enable = true;
-    modules.cloneDefaultRepos.enable = true;
-    modules.services.cloneWorkRepos = {
-      enable = false;
-      gitDir = "${config.home.homeDirectory}/git";
-      repoInfo = {
-        sendra = {
-          key = "${config.home.homeDirectory}/.ssh/id_rsa";
-          repos = [
-          ];
-        };
-        hiplog = {
-          key = "${config.home.homeDirectory}/.ssh/id_ed25519";
-          repos = [
-          ];
-        };
-      };
-    };
-    modules.lf.enable = true;
-    programs.yazi.enable = true;
-  };
+  # Import shared user configurations
+  userConfigs = import ./home-modules/userConfigurations.nix { inherit inputs; };
+  defaultHMConfig = userConfigs.wsl;
 in
 {
   imports = [ inputs.agenix.nixosModules.age ];
@@ -67,8 +20,7 @@ in
   ##
   ## system modules config
   ##
-  # myModules.myNvim.enable = true; # TODO: should be managed by homemanger
-  myModules.myNixvim.enable = true;
+  # Nixvim is now managed per-user via Home Manager
 
   myModules.wsl.enable = true;
   myModules.defaults.enable = true;

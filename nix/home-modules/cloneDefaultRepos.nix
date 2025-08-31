@@ -29,7 +29,7 @@ in
   config = mkIf config.modules.cloneDefaultRepos.enable
     {
       home.file.".ssh/.envrc".text = ''
-        #TODO: move this logic into a nix expression/flake
+        # SSH key management via Bitwarden
         export BW_SESSION=$(${pkgs.bitwarden-cli}/bin/bw login --raw)
         ${pkgs.bitwarden-cli}/bin/bw get notes prores-gitlab-ssh.priv > /home/mar/.ssh/id_rsa
         ${pkgs.bitwarden-cli}/bin/bw get notes wellstarter-gitlab-ssh.priv > /home/mar/.ssh/id_ed25519

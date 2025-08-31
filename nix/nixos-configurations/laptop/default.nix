@@ -1,38 +1,18 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 let
-
-  #TODO:move this out into own users file
-  defaultHMConfig = {
-    myHmModules.sharedDefaults.enable = true;
-
-    modules.zsh.enable = true;
-    modules.direnv.enable = true;
-    modules.zellij.enable = false;
-    modules.tmux.enable = true;
-    modules.fzf.enable = true;
-    modules.firefox.enable = true;
-    modules.autorandr.enable = false;
-    modules.bspwm.enable = true;
-    modules.dunst.enable = false;
-    modules.kitty.enable = true;
-    myModules.git.enable = true;
-    modules.newsboat.enable = false;
-    modules.polybar.enable = false;
-    modules.xmonad.enable = false;
-    modules.hyperland.enable = true;
-    modules.spotifyd.enable = false;
-    modules.other.enable = false;
-    modules.myPackages.enable = true;
-    modules.cloneDefaultRepos.enable = false;
-    modules.lf.enable = true;
-  };
+  # Import shared user configurations
+  userConfigs = import ../home-modules/userConfigurations.nix { inherit inputs; };
+  defaultHMConfig = userConfigs.laptop;
 in
 {
-  imports = [ ./hardware-config.nix ];
+  imports = [
+    ./hardware-config.nix
+    ../common.nix
+  ];
   ##
   ## system modules config
   ##
-  myModules.myNvim.enable = true; # TODO: should be managed by homemanger
+  # Nixvim is now managed per-user via Home Manager
   myModules.wsl.enable = false;
   myModules.defaults.enable = true;
 
@@ -60,8 +40,7 @@ in
   boot.loader.grub.device = "nodev";
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  time.timeZone = "Europe/Oslo";
-  i18n.defaultLocale = "en_US.UTF-8";
+  # Time zone and locale are set in common.nix
   networking.useDHCP = false;
   networking.interfaces.enp2s0.useDHCP = true;
   networking.interfaces.wlp3s0.useDHCP = true;

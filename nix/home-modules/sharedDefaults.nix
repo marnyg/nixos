@@ -1,12 +1,18 @@
 { config, lib, pkgs, ... }:
 {
-  options.myHmModules.sharedDefaults.enable = lib.mkEnableOption "Create users";
+  options.modules.sharedDefaults.enable = lib.mkEnableOption ''
+    shared default configuration for Home Manager users.
+    
+    Enables basic programs (home-manager, bash), GitHub CLI with extensions,
+    GPG agent with SSH support, and sets up essential environment variables
+    and session paths
+  '';
 
-  config = lib.mkIf config.myHmModules.sharedDefaults.enable {
+  config = lib.mkIf config.modules.sharedDefaults.enable {
     programs.home-manager.enable = true;
     programs.bash.enable = true;
 
-    #todo: refactor into own module
+    # GitHub CLI with useful extensions
     programs.gh.enable = true;
     programs.gh.extensions = [
       pkgs.gh-copilot
@@ -24,7 +30,6 @@
 
     home = {
       stateVersion = "23.11";
-      #username = user;
 
       sessionVariables = {
         EDITOR = "nvim";

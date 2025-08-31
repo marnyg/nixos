@@ -1,45 +1,58 @@
 { inputs, config, pkgs, ... }:
 let
-  #TODO:move this out into own users file
+  # Define a more modular home-manager configuration
   defaultHMConfig = {
-    imports = [ inputs.agenix.homeManagerModules.default ];
-    programs.ncspot.enable = true;
+    # Import all home modules to ensure dependencies are available
+    imports = [
+      inputs.agenix.homeManagerModules.default
+      ../../home-modules/mcphub.nix
+      ../../home-modules/fish.nix
+      ../../home-modules/git.nix
+      ../../home-modules/hyperland.nix
+      ../../home-modules/waybar.nix
+      ../../home-modules/direnv.nix
+      ../../home-modules/sharedShellConfig.nix
+      ../../home-modules/wofi.nix
+      ../../home-modules/ghostty.nix
+      ../../home-modules/lf.nix
+      ../../home-modules/myPackages.nix
+      ../../home-modules/nvim.nix
+      ../../home-modules/nixvim.nix
+      ../../home-modules/tmux.nix
+      ../../home-modules/fzf.nix
+      ../../home-modules/zsh.nix
+      ../../home-modules/secrets/secretsModule.nix
+    ];
 
-    myHmModules.sharedDefaults.enable = true;
+    # Enable the imported modules
+    modules = {
+      mcpServer.enable = true;
+      fish.enable = true;
+      git.enable = true;
+      hyperland.enable = true;
+      waybar.enable = true;
+      direnv.enable = true;
+      sharedShellConfig.enable = true;
+      wofi.enable = true;
+      ghostty.enable = true;
+      secrets.enable = true;
+    };
 
+    # Add any desktop-specific packages
+    home.packages = with pkgs; [
+      firefox
+      neovim
+    ];
 
-    # myServices.s3fs.enable = true;
-    # myServices.s3fs.keyId = "tid_hDRNQPQfftgkNfOasaoExtxIaBq_jkLiWvimSMZzaNhtCdtEmF";
-    # myServices.s3fs.accessKey = "tsec_PC4Z9WtxGiVwRGPDPBZhlTqfYHW3tbKo38PZ6izsDCKHVH-wAWskx7QkSs_zgXM8BWGVep";
-
-    #modules.zsh.enable = true;
-    modules.fish.enable = true;
-    modules.direnv.enable = true;
-    modules.zellij.enable = false;
-    modules.tmux.enable = true;
-    modules.firefox.enable = true;
-    modules.autorandr.enable = false;
-    modules.bspwm.enable = true;
-    modules.dunst.enable = false;
-    modules.kitty.enable = false;
-    modules.ghostty.enable = true;
-    myModules.git.enable = true;
-    modules.newsboat.enable = false;
-    modules.polybar.enable = false;
-    modules.xmonad.enable = false;
-    modules.hyperland.enable = true;
-    modules.spotifyd.enable = false;
-    modules.other.enable = false;
-    modules.myPackages.enable = true;
-    modules.cloneDefaultRepos.enable = true;
-    modules.qutebrowser.enable = true;
-    # modules.lf.enable = true;
-    programs.yazi.enable = true;
-    myModules.secrets.enable = true;
+    # Required state version
+    home.stateVersion = "22.11";
   };
 in
 {
-  imports = [ ./hardware-config.nix ];
+  imports = [
+    ./hardware-config.nix
+    ../common.nix
+  ];
 
   ##
   ## NVIDIA gpu config
@@ -53,7 +66,6 @@ in
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
-
     # Modesetting is required.
     modesetting.enable = true;
 
@@ -82,42 +94,18 @@ in
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
-  # services.xserver.videoDrivers = [ "nvidia" ];
-
-  # This is crucial for modern GPUs and for Wayland support
-  # hardware.nvidia.modesetting.enable = true;
-  # hardware.nvidia.optimus.enable = true;
-
-  # For power management, recommended for desktops and essential for laptops
-  # hardware.nvidia.powerManagement.enable = true;
-  # For finer-grained power management on recent GPUs (Turing architecture and newer)
-  # You can leave this on for older cards too, it will just be ignored.
-  #hardware.nvidia.powerManagement.finegrained = true;
-
-  # Use the proprietary (closed-source) driver.
-  # Set to true to use the open-source "open-gpu-kernel-modules"
-  # hardware.nvidia.open = false;
-
-  # Enable OpenGL
-  # hardware.opengl.enable = true;
-  # hardware.opengl.driSupport = true;
-  # hardware.opengl.driSupport32Bit = true; # For 32-bit games/apps
-
 
   ##
   ## system modules config
   ##
-  home-manager.backupFileExtension = "backup";
-  myModules.myNixvim.enable = true; # TODO: should be managed by homemanger
+  home-manager.backupFileExtension = "hm-backup";
+  # Nixvim is now managed per-user via Home Manager
   myModules.wsl.enable = false;
   myModules.defaults.enable = true;
   nix.channel.enable = false;
-  # Enable nix flakes
-  nix = {
-    settings.trusted-users = [ "root" "mar" ];
-    settings.auto-optimise-store = true;
-    settings.experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
-  };
+  # Additional nix settings (common.nix provides base settings)
+  nix.settings.trusted-users = [ "root" "mar" ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
 
   ## 
   ## users and homemanager modules config
@@ -132,31 +120,20 @@ in
     ];
   };
 
-
-
-
-
   ## 
   ## OTHER STUFF
   ## 
-  #  boot.tmp.cleanOnBoot = true;
-  # boot.loader.grub.device = "nodev";
-  # boot.loader.grub.enable = true;
-  # boot.loader.grub.useOSProber = true;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  time.timeZone = "Europe/Oslo";
-  i18n.defaultLocale = "en_US.UTF-8";
+  # Time zone and locale are set in common.nix
   networking.networkmanager.enable = true;
   users.users.mar.extraGroups = [ "docker" "networkmanager" ];
-  #programs.nm-applet.enable = true;
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
   services.blueman.enable = true;
 
-
-  #programs.hyprland.enable = true;
+  programs.hyprland.enable = true;
   programs.sway.enable = true;
   services.greetd = {
     enable = true;
@@ -169,28 +146,21 @@ in
     sway
   '';
 
-
-  # Enable sound.
-  #sound.enable = true;
-
+  # Audio configuration
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
   };
   services.pipewire.wireplumber.enable = true;
 
-  #for hyperland
+  # For Hyprland
   xdg.portal = { enable = true; extraPortals = [ pkgs.xdg-desktop-portal-gtk ]; };
   security.polkit.enable = true;
 
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  #services.xserver.libinput.enable = true;
+  # X11 configuration
   services.xserver.xkb.layout = "us";
   services.xserver.xkb.options = "caps:escare";
   console.useXkbConfig = true;
@@ -198,18 +168,19 @@ in
   services.xserver.autoRepeatInterval = 20;
   environment.systemPackages = with pkgs; [
     inputs.agenix.packages.x86_64-linux.default
-    #vim #  The Nano editor is also installed by default.
     hyprland
+    waybar
     git
     tmux
     bottom
     slack
     prusa-slicer
+    starship
+    atuin
   ];
 
-  # Enable the wayland suport for slack
+  # Enable Wayland support for Slack
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
-
 
   fonts.packages = with pkgs; [
     noto-fonts
@@ -218,7 +189,6 @@ in
     liberation_ttf
     fira-code
     fira-code-symbols
-    #mplus-outline-fonts
     dina-font
     proggyfonts
   ];
@@ -228,17 +198,10 @@ in
     enableSSHSupport = true;
   };
 
-
-
   virtualisation = {
     containerd.enable = true;
     podman = {
       enable = true;
-
-      # Create a `docker` alias for podman, to use it as a drop-in replacement
-      # dockerCompat = true;
-
-      # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
     };
   };
@@ -267,12 +230,7 @@ in
     };
   };
   programs.nix-ld.enable = true;
-
   programs.nix-ld.libraries = with pkgs; [ ];
   system.autoUpgrade.enable = true;
   system.autoUpgrade.flake = "github:marnyg/nixos#desktop";
-  #system.autoUpgrade.allowReboot =true;
-
-
-
 }

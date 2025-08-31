@@ -6,7 +6,7 @@ with lib;
   };
   config = mkIf config.modules.mcpServer.enable
     {
-      home.file.".config/mcphub/server.json.nixGen".text = ''
+      home.file.".config/mcphub/servers.json".text = ''
         {
           "nativeMCPServers": [ ],
           "mcpServers": {
@@ -23,12 +23,14 @@ with lib;
               "command": "uv"
             },
             "kubernetes": {
+              "disabled": true,
               "args": [
                 "mcp-server-kubernetes"
               ],
               "command": "npx"
             },
             "postgres": {
+              "disabled": true,
               "args": [
                 "-y",
                 "@modelcontextprotocol/server-postgres",
@@ -37,6 +39,7 @@ with lib;
               "command": "npx"
             },
             "memory": {
+              "disabled": true,
               "args": [
                 "-y",
                 "@modelcontextprotocol/server-memory"
@@ -44,6 +47,7 @@ with lib;
               "command": "npx"
             },
             "notionApi": {
+              "disabled": true,
               "env": {
                 "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer -----\", \"Notion-Version\": \"2022-06-28\" }"
               },
@@ -55,6 +59,7 @@ with lib;
               "command": "npx"
             },
             "github": {
+              "disabled": true,
               "env": {
                 "GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>"
               },
@@ -75,6 +80,19 @@ with lib;
                 "mcp-server-git"
               ],
               "command": "uvx"
+            },
+            "zettelkasten": {
+              "command": "nix",
+              "args": [
+                "run",
+                "/home/mar/git/tst#default",
+                "--",
+                "server"
+              ],
+              "env": {
+                "ZETTEL_NODES_DIR": "/home/mar/git/tst/nodes",
+                "ZETTEL_CACHE_DIR": "/home/mar/git/tst/cache"
+              }
             }
           }
         }

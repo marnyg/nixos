@@ -1,11 +1,17 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.myModules.git = {
-    enable = mkEnableOption "enable personal git config";
+  options.modules.git = {
+    enable = mkEnableOption ''
+      personal Git configuration.
+      
+      Configures Git with personal settings, aliases, and integrations.
+      Includes GitHub CLI (gh), GitUI, and personal user information.
+      Sets up useful Git aliases and configuration for daily development work
+    '';
   };
 
-  config = mkIf config.myModules.git.enable {
+  config = mkIf config.modules.git.enable {
     # programs.git-credential-oauth.enable = true;
     programs.gh = {
       enable = true;

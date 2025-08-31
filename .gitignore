@@ -5,3 +5,4 @@ nixos-wsl.tar.gz
 just-flake.just
 .direnv
 .devenv
+.crush

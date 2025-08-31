@@ -1,6 +1,7 @@
 { inputs, ... }:
-{
-  flake.homemanagerModules = {
+let
+  # Define modules
+  modules = {
     autorandr = ./autorandr/desktop.nix;
     bspwm = ./bspwm/bspwm.nix;
     dunst = ./dunst/dunst.nix;
@@ -33,35 +34,15 @@
     secrets = ./secrets/secretsModule.nix;
     ghostty = ./ghostty.nix;
     qutebrowser = ./qutebrowser.nix;
-
-    # all modules as a list
-    # all = [
-    #   autorandr
-    #   bspwm
-    #   dunst
-    #   firefox
-    #   git
-    #   direnv
-    #   kitty
-    #   newsboat
-    #   polybar
-    #   xmonad
-    #   zellij
-    #   tmux
-    #   fzf
-    #   zsh
-    #   spotifyd
-    #   other
-    #   myPackages
-    #   cloneDefaultRepos
-    #   cloneWorkRepos
-    #   sharedDefaults
-    #   hyperland
-    #   wofi
-    #   waybar
-    #   lf
-    #   nur
-    # ];
+    userConfigurations = ./userConfigurations.nix;
+    sharedShellConfig = ./sharedShellConfig.nix;
+    nixvim = ./nixvim.nix;
+  };
+in
+{
+  flake.homemanagerModules = modules // {
+    # Add all modules as a list for easy importing
+    all = builtins.attrValues modules;
   };
 
   perSystem = { pkgs, ... }: {
@@ -126,7 +107,7 @@
 
           imports = [
             {
-              myHmModules.sharedDefaults.enable = true;
+              modules.sharedDefaults.enable = true;
 
               modules.zsh.enable = true;
               modules.direnv.enable = true;
@@ -138,7 +119,7 @@
               modules.bspwm.enable = false;
               modules.dunst.enable = false;
               modules.kitty.enable = true;
-              myModules.git.enable = true;
+              modules.git.enable = true;
               modules.newsboat.enable = false;
               modules.polybar.enable = false;
               modules.xmonad.enable = false;
