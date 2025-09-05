@@ -6,7 +6,7 @@
     inputs.devenv.flakeModule
   ];
 
-  perSystem = { config, pkgs, ... }: {
+  perSystem = { pkgs, ... }: {
     # Development shells
     devenv.shells = {
       # Default shell for NixOS development
@@ -29,8 +29,6 @@
         env = {
           EDITOR = "vim";
         };
-
-        devenv.root = "${../..}";
 
         enterShell = ''
           echo "🚀 NixOS Development Environment"
@@ -56,10 +54,6 @@
             };
             commitizen.enable = true;
             yamlfmt.enable = true;
-            statix = {
-              enable = true;
-              settings.format = "stderr";
-            };
           };
         };
       };
@@ -78,7 +72,6 @@
       agentic-dm = {
         name = "agentic-dm-dev";
         languages.elixir.enable = true;
-        devenv.root = "${../../pkgs/agentic-dm/agentic_dm}";
 
         enterShell = ''
           echo "🎲 Agentic DM Development Environment"

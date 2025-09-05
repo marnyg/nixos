@@ -63,7 +63,7 @@ with lib;
       # lsp-lines.enable = lib.mkDefault (config.plugins.lsp.enable);
       lspkind = {
         enable = lib.mkDefault (config.plugins.lsp.enable);
-        symbolMap = {
+        settings.symbol_map = {
           #Copilot = "";
         };
       };

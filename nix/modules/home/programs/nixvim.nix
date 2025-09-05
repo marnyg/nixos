@@ -1,5 +1,9 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, inputs, ... }:
 with lib;
+let
+  # Get the nixvim package from the flake
+  nixvim = inputs.self.packages.${pkgs.system}.nixvim or pkgs.neovim;
+in
 {
   options.modules.nixvim = {
     enable = mkOption {
@@ -10,8 +14,14 @@ with lib;
   };
 
   config = mkIf config.modules.nixvim.enable {
-    # Install neovim (the nixvim package would need to be passed through flake inputs)
-    home.packages = [ pkgs.neovim ];
+    # Install the custom nixvim package and related tools
+    home.packages = [ nixvim ] ++ (with pkgs; [
+      # Language servers and tools that nixvim might use
+      ripgrep
+      fd
+      fzf
+      tree-sitter
+    ]);
 
     # Set nvim as the default editor
     home.sessionVariables = {
@@ -19,7 +29,10 @@ with lib;
       VISUAL = "nvim";
     };
 
-    # This could be extended to include the custom nixvim configuration
-    # when the flake structure allows proper access to the custom package
+    # Create vim/nvim aliases to use nixvim
+    home.shellAliases = {
+      vim = "nvim";
+      vi = "nvim";
+    };
   };
 }
