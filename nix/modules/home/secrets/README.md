@@ -6,6 +6,7 @@ This directory contains encrypted secrets using agenix. Secrets are encrypted wi
 
 - `claudeToken.age` - Anthropic Claude API token
 - `openrouterToken.age` - OpenRouter API token
+- `tailscaleAuthKey.age` - Tailscale authentication key (used for auto-connect)
 
 ## Setting Up Secrets
 

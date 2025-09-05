@@ -1,5 +1,5 @@
 # Shared secrets configuration module
-{ lib, config, ... }:
+{ lib, config, secretPaths, ... }:
 
 with lib;
 
@@ -19,11 +19,11 @@ with lib;
     age = {
       secrets = mkIf config.myModules.secrets.claudeTokens {
         openrouterToken = {
-          file = ../../home/secrets/claudeToken.age;
+          file = secretPaths.openrouterToken;
           owner = "mar";
         };
         claudeToken = {
-          file = ../../home/secrets/claudeToken.age;
+          file = secretPaths.claudeToken;
           owner = "mar";
         };
       };

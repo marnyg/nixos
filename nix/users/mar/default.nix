@@ -2,7 +2,7 @@
 {
   username = "mar";
   fullName = "Marius Nygård";
-  email = "mar@example.com"; # Update with actual email
+  email = "marnyg@pm.me";
 
   # User preferences
   preferences = {

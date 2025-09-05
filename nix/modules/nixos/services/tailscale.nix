@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, secretPaths, ... }:
 with lib;
 {
   options.modules.tailscale-autoconnect = {
@@ -8,6 +8,14 @@ with lib;
   config = mkIf config.modules.tailscale-autoconnect.enable {
     services.tailscale.enable = true;
     services.tailscale.port = 12345;
+
+    # Require the tailscale auth key secret from flake outputs
+    age.secrets.tailscaleAuthKey = {
+      file = secretPaths.tailscaleAuthKey;
+      owner = "root";
+      group = "root";
+      mode = "0400";
+    };
 
     systemd.services.tailscale-autoconnect = {
       description = "Automatic connection to Tailscale";
@@ -32,8 +40,7 @@ with lib;
         fi
 
         # otherwise authenticate with tailscale
-        ${tailscale}/bin/tailscale up -authkey xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-        # ${tailscale}/bin/tailscale up -authkey tskey-kNoFRv2CNTRL-6XQhDpk6odhiMUimcQYhf
+        ${tailscale}/bin/tailscale up -authkey "$(cat ${config.age.secrets.tailscaleAuthKey.path})"
       '';
     };
   };

@@ -1,26 +1,10 @@
 # Desktop host configuration
-{ inputs, config, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
-    # Hardware configuration
+    # Hardware configuration is still local
     ./hardware.nix
-
-    # System profiles
-    ../../modules/nixos/profiles/desktop.nix
-
-    # Core modules
-    ../../modules/nixos/core/defaults.nix
-    ../../modules/nixos/core/users.nix
-    ../../modules/nixos/core/secrets.nix
-    ../../modules/nixos/core/nix-settings.nix
-
-    # Services
-    ../../modules/nixos/services/tailscale.nix
-    ../../modules/nixos/services/syncthing.nix
-
-    # Input modules
-    inputs.agenix.nixosModules.age
   ];
 
   # Boot configuration

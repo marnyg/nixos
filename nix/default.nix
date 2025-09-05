@@ -18,12 +18,21 @@
 
 {
   imports = [
-    # Flake-parts modules for better organization
+    # Core flake-parts modules for better organization
     ./flake-modules/systems.nix
     ./flake-modules/overlays.nix
-    ./flake-modules/nixos.nix
     ./flake-modules/home-manager.nix
     ./flake-modules/devshells.nix
     ./flake-modules/packages.nix
+
+    # Localized module registries
+    ./modules/home/flake-module.nix
+    ./modules/nixos/flake-module.nix
+    ./users/flake-module.nix
+
+    # Host configurations with localized imports
+    ./hosts/desktop/flake-module.nix
+    ./hosts/laptop/flake-module.nix
+    ./hosts/wsl/flake-module.nix
   ];
 }

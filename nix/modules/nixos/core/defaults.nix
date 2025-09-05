@@ -15,6 +15,6 @@
     virtualisation.libvirtd.enable = true;
     programs.virt-manager.enable = true;
 
-    system.stateVersion = lib.mkDefault "22.11";
+    system.stateVersion = lib.mkDefault "23.11";
   };
 }

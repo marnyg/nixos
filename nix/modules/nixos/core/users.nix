@@ -15,7 +15,7 @@
 #     profiles = [ "developer" "desktop" ];
 #   };
 
-{ pkgs, lib, config, inputs, ... }:
+{ pkgs, lib, config, inputs, self, userRegistry, homeModules, ... }:
 
 let
   cfg = config.my.users;
@@ -55,13 +55,8 @@ let
     };
   };
 
-  # Available users registry
-  userRegistry = {
-    users = {
-      mar = ../../../users/mar;
-      testUser = ../../../users/testUser;
-    };
-  };
+  # Use the userRegistry passed from flake outputs
+  users = userRegistry;
 
   # Get enabled users
   enabledUsers = lib.filterAttrs (_name: cfg: cfg.enable) cfg;
@@ -77,9 +72,8 @@ let
   # extra configuration specified at the host level
   buildSystemUser = name: userCfg:
     let
-      userPath = userRegistry.users.${name};
-      systemConfigFn = import "${userPath}/system.nix";
-      systemConfig = systemConfigFn { inherit pkgs config lib inputs; };
+      user = users.${name};
+      systemConfig = import user.systemConfig { inherit pkgs config lib inputs; };
     in
     systemConfig // userCfg.extraSystemConfig;
 
@@ -90,12 +84,10 @@ let
   # 3. Setting up basic home directory structure and environment
   buildHomeConfig = name: userCfg:
     let
-      # Collect profile modules - profiles are predefined sets of configurations
-      # that group related functionality (e.g., all desktop apps, all dev tools)
+      # Collect profile modules from the homeModules registry
+      # Profiles are predefined sets of configurations that group related functionality
       profileModules = map
-        (profile:
-          ../../../modules/home/profiles/${profile}.nix
-        )
+        (profile: homeModules.profiles.${profile})
         userCfg.profiles;
     in
     { inputs, ... }: {
@@ -167,8 +159,8 @@ in
 
         # Share home-manager modules across all users
         sharedModules = [
-          # Import all home modules so they're available
-          { imports = lib.attrValues (import ../../../modules/home { inherit inputs; }); }
+          # Use homeManagerModules.default from flake outputs
+          self.homeManagerModules.default
         ];
       };
     })
