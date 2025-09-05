@@ -22,22 +22,8 @@ let
 
 in
 {
-  perSystem = { pkgs, system, ... }: {
-    # Per-system packages or checks could go here if needed
-    packages.home-example = homeManagerFor pkgs "mar" [
-      {
-        modules = {
-          sharedDefaults.enable = true;
-          nixvim.enable = true;
-          fish.enable = true;
-          git.enable = true;
-          direnv.enable = true;
-          tmux.enable = true;
-          myPackages.enable = true;
-        };
-      }
-    ];
-  };
+  # Removed perSystem packages as home-manager configurations 
+  # are better accessed through homeConfigurations attribute
 
   # Also provide flake-level configurations for backward compatibility
   flake.homeConfigurations = {
@@ -51,6 +37,7 @@ in
           direnv.enable = true;
           tmux.enable = true;
           myPackages.enable = true;
+          secrets.enable = false; # Disabled for standalone config without agenix
         };
       }
     ];
