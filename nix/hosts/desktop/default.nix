@@ -40,25 +40,27 @@
   };
 
   # NVIDIA GPU configuration
+  # Required for NVIDIA graphics cards - adjust based on your GPU
   hardware.graphics = {
     enable = true;
-    enable32Bit = true;
+    enable32Bit = true; # Support for 32-bit applications (Steam, Wine)
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
-    open = true;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    modesetting.enable = true; # Required for Wayland compositors
+    powerManagement.enable = false; # Can cause issues with some GPUs
+    powerManagement.finegrained = false; # Disable for desktop systems
+    open = true; # Use open-source kernel modules where possible
+    nvidiaSettings = true; # GUI for NVIDIA settings
+    package = config.boot.kernelPackages.nvidiaPackages.stable; # Use stable driver
   };
 
   # Desktop-specific services
   services = {
-    # Display manager - using greetd like before
+    # Display manager - greetd with TUI greeter
+    # This provides a minimal, fast login screen that launches directly into Hyprland
     greetd = {
       enable = true;
       settings.default_session.command = ''
@@ -215,35 +217,51 @@
     mar = {
       enable = true;
       enableHome = true;
-      profiles = [ "developer" "desktop" ];
+      profiles = [ "developer" "desktop" ]; # Load both developer tools and desktop apps
+
+      # Fine-tune module selection beyond what profiles provide
+      # This allows overriding profile defaults or adding specific modules
       extraHomeModules = [
         {
-          programs.ncspot.enable = true;
+          programs.ncspot.enable = true; # Terminal Spotify client
 
-          modules.sharedDefaults.enable = true;
-          modules.nixvim.enable = true;
-          modules.git.enable = true;
+          # Core modules
+          modules.sharedDefaults.enable = true; # Common defaults for all environments
+          modules.nixvim.enable = true; # Neovim distribution
+          modules.git.enable = true; # Git configuration
 
-          modules.fish.enable = true;
-          modules.direnv.enable = true;
-          modules.zellij.enable = false;
-          modules.tmux.enable = true;
-          modules.firefox.enable = true;
-          modules.autorandr.enable = false;
-          modules.bspwm.enable = true;
-          modules.dunst.enable = false;
-          modules.kitty.enable = false;
-          modules.ghostty.enable = true;
-          modules.newsboat.enable = false;
-          modules.polybar.enable = false;
-          modules.xmonad.enable = false;
-          modules.hyperland.enable = true;
-          modules.spotifyd.enable = false;
-          modules.other.enable = false;
-          modules.myPackages.enable = true;
-          modules.cloneDefaultRepos.enable = true;
-          modules.qutebrowser.enable = true;
-          programs.yazi.enable = true;
+          # Shell and terminal
+          modules.fish.enable = true; # Fish shell
+          modules.direnv.enable = true; # Auto-load project environments
+          modules.zellij.enable = false; # Terminal multiplexer (alternative to tmux)
+          modules.tmux.enable = true; # Terminal multiplexer
+
+          # Browsers
+          modules.firefox.enable = true; # Primary browser
+          modules.qutebrowser.enable = true; # Keyboard-driven browser
+
+          # Window managers and desktop
+          modules.autorandr.enable = false; # Auto display configuration (X11)
+          modules.bspwm.enable = true; # Tiling WM (X11)
+          modules.xmonad.enable = false; # Tiling WM (X11, Haskell)
+          modules.hyperland.enable = true; # Wayland compositor
+
+          # Desktop utilities
+          modules.dunst.enable = false; # Notification daemon (X11)
+          modules.polybar.enable = false; # Status bar (X11)
+
+          # Terminal emulators
+          modules.kitty.enable = false; # GPU-accelerated terminal
+          modules.ghostty.enable = true; # Modern terminal emulator
+
+          # Other services
+          modules.newsboat.enable = false; # RSS reader
+          modules.spotifyd.enable = false; # Spotify daemon
+          modules.other.enable = false; # Miscellaneous configurations
+          modules.myPackages.enable = true; # Custom package collection
+          modules.cloneDefaultRepos.enable = true; # Clone standard repos on first login
+
+          programs.yazi.enable = true; # Terminal file manager
         }
       ];
     };

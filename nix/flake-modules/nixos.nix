@@ -1,13 +1,21 @@
 # NixOS configurations flake module
+#
+# This module defines all NixOS system configurations and provides helper
+# functions for building and testing them. It uses flake-parts to organize
+# the configurations in a modular way.
+
 { self, lib, inputs, ... }:
 
 let
-
   # Helper function to create NixOS system
+  # This wraps lib.nixosSystem with our standard module imports and configuration
+  # Parameters:
+  #   system: The system architecture (e.g., "x86_64-linux")
+  #   hostPath: Path to the host's configuration directory
   nixosSystemFor = system: hostPath:
     lib.nixosSystem {
       inherit system;
-      specialArgs = { inherit lib inputs; };
+      specialArgs = { inherit lib inputs; }; # Make flake inputs available to modules
       modules = [
         # Import the host configuration
         hostPath
@@ -23,11 +31,13 @@ let
         inputs.microvm.nixosModules.host
 
         # System-wide nixpkgs configuration
+        # This ensures all hosts have consistent package availability
         {
           nixpkgs = {
-            config.allowUnfree = true;
+            config.allowUnfree = true; # Required for nvidia drivers, spotify, etc.
             overlays = [
-              inputs.nur.overlays.default
+              inputs.nur.overlays.default # Nix User Repository packages
+              # Custom overlay for flake inputs that provide packages
               (final: _prev: {
                 mcphub-nvim = inputs.mcphub-nvim.packages.${final.system}.default or null;
                 mcphub = inputs.mcphub.packages.${final.system}.default or null;
@@ -55,10 +65,13 @@ let
     };
 
   # VM app helper
+  # Creates a nix app that runs a NixOS configuration as a QEMU VM
+  # This is useful for testing configurations without deploying to hardware
+  # Usage: nix run .#<hostname>
   vmApp = name:
     let
       vmScript = self.nixosConfigurations.${name}.config.system.build.vm;
-      # The VM script name includes the hostname
+      # The VM script name includes the hostname from the configuration
       hostname = self.nixosConfigurations.${name}.config.networking.hostName;
       binName = "run-${hostname}-vm";
     in
@@ -76,9 +89,11 @@ in
     laptop = nixosSystemFor "x86_64-linux" ../hosts/laptop;
 
     # Test/development VM
+    # Minimal VM configuration for testing the module system and basic functionality
+    # This VM can be run with: nix run .#miniVm
     miniVm = nixosSystemFor "x86_64-linux" ({ pkgs, modulesPath, ... }: {
       imports = [
-        "${modulesPath}/virtualisation/qemu-vm.nix"
+        "${modulesPath}/virtualisation/qemu-vm.nix" # QEMU VM support
       ];
 
       # VM configuration

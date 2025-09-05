@@ -1,5 +1,20 @@
 # NixOS User Management Module
-# This module handles the creation of system users and optionally configures home-manager for them
+#
+# This module provides a unified interface for managing system users and their
+# home-manager configurations. It implements a registry-based approach where:
+#
+# 1. Users are defined in nix/users/<username>/ with metadata and config
+# 2. Users can be enabled/disabled per host
+# 3. Home-manager integration is optional per user
+# 4. Profiles provide pre-configured sets of modules
+#
+# Usage in host configuration:
+#   my.users.mar = {
+#     enable = true;
+#     enableHome = true;
+#     profiles = [ "developer" "desktop" ];
+#   };
+
 { pkgs, lib, config, inputs, ... }:
 
 let
@@ -58,6 +73,8 @@ let
   anyHomeManagerUser = (lib.length (lib.attrNames homeManagerUsers)) > 0;
 
   # Build system user configuration
+  # This function reads the user's system.nix file and merges it with any
+  # extra configuration specified at the host level
   buildSystemUser = name: userCfg:
     let
       userPath = userRegistry.users.${name};
@@ -67,10 +84,14 @@ let
     systemConfig // userCfg.extraSystemConfig;
 
   # Build home-manager configuration
+  # This function creates a home-manager configuration by:
+  # 1. Loading the requested profile modules (desktop, developer, minimal)
+  # 2. Adding any extra modules specified at the host level
+  # 3. Setting up basic home directory structure and environment
   buildHomeConfig = name: userCfg:
     let
-
-      # Collect profile modules
+      # Collect profile modules - profiles are predefined sets of configurations
+      # that group related functionality (e.g., all desktop apps, all dev tools)
       profileModules = map
         (profile:
           ../../../modules/home/profiles/${profile}.nix
@@ -79,7 +100,7 @@ let
     in
     { inputs, ... }: {
       imports = [
-        inputs.agenix.homeManagerModules.default
+        inputs.agenix.homeManagerModules.default # Secret management
       ] ++ profileModules ++ userCfg.extraHomeModules;
 
       # Basic home configuration - applied directly instead of importing

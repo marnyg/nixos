@@ -1,4 +1,21 @@
-# New NixOS configuration structure
+# Module System Architecture
+# 
+# This file serves as the entry point for the flake-parts module system.
+# It imports all flake modules that define different aspects of the configuration:
+#
+# - systems.nix: Defines supported system architectures (x86_64-linux, aarch64-linux, etc.)
+# - overlays.nix: Package overlays and modifications to nixpkgs
+# - nixos.nix: NixOS system configurations for all hosts
+# - home-manager.nix: Home Manager configurations and integration
+# - devshells.nix: Development environments and shells
+# - packages.nix: Custom packages and derivations
+#
+# The modular structure allows for:
+# 1. Clear separation of concerns
+# 2. Easier testing of individual components
+# 3. Reusability across different hosts
+# 4. Simplified maintenance and updates
+
 {
   imports = [
     # Flake-parts modules for better organization

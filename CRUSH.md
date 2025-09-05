@@ -1,4 +1,9 @@
-# Development Commands
+# CRUSH.md - Code Reference for Unified Shell Habits
+
+This file contains quick reference commands and code style guidelines for developing
+this NixOS configuration. Keep this file open in a split pane for easy reference.
+
+## Development Commands
 - Build system: `nixos-rebuild switch --flake .#<system>`
 - Run tests: `nix flake check` 
 - Run specific test: `nix build .#checks.x86_64-linux.<test-name>`
