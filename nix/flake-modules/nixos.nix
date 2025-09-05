@@ -1,24 +1,12 @@
 # NixOS configurations flake module
-{ self, lib, withSystem, inputs, ... }:
+{ self, lib, inputs, ... }:
 
 let
+
   # Helper function to create NixOS system
   nixosSystemFor = system: hostPath:
-    let
-      pkgs = withSystem system ({ ... }: import inputs.nixpkgs {
-        inherit system;
-        config = { allowUnfree = true; };
-        overlays = [
-          inputs.nur.overlays.default
-          (_: _: {
-            mcphub-nvim = inputs.mcphub-nvim.packages.${system}.default;
-            mcphub = inputs.mcphub.packages.${system}.default;
-          })
-        ];
-      });
-    in
     lib.nixosSystem {
-      inherit system pkgs;
+      inherit system;
       specialArgs = { inherit lib inputs; };
       modules = [
         # Import the host configuration
@@ -33,6 +21,20 @@ let
         inputs.nixos-wsl.nixosModules.wsl
         inputs.nur.modules.nixos.default
         inputs.microvm.nixosModules.host
+
+        # System-wide nixpkgs configuration
+        {
+          nixpkgs = {
+            config.allowUnfree = true;
+            overlays = [
+              inputs.nur.overlays.default
+              (final: _prev: {
+                mcphub-nvim = inputs.mcphub-nvim.packages.${final.system}.default or null;
+                mcphub = inputs.mcphub.packages.${final.system}.default or null;
+              })
+            ];
+          };
+        }
 
         # Home-manager integration
         {

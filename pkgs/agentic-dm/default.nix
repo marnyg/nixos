@@ -1,22 +1,6 @@
 { ... }: {
-  perSystem = { config, ... }:
-    {
-      config = {
-        treefmt.config = {
-          programs.nixpkgs-fmt.enable = true;
-          programs.yamlfmt.enable = true;
-        };
-
-        devenv.shells.agentic-dm = {
-          name = "my-project";
-          imports = [ ];
-          languages.elixir.enable = true;
-          #languages.gleam.enable = true;
-          # packages = with pkgs; [
-          #   gleam
-          #   erlang
-          # ];
-        };
-      };
-    };
+  # This directory contains the agentic-dm Elixir project
+  # Development shell is provided via devShells.agentic-dm
+  # No packages are built from this directory
+  perSystem = { ... }: { };
 }

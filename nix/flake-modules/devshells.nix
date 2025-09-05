@@ -30,6 +30,8 @@
           EDITOR = "vim";
         };
 
+        devenv.root = "${../..}";
+
         enterShell = ''
           echo "🚀 NixOS Development Environment"
           echo "Available hosts: wsl, desktop, laptop, miniVm"
@@ -40,6 +42,26 @@
           echo "  nix run .#<host> (to test VM)"
           echo ""
         '';
+
+        # Git hooks configuration
+        git-hooks = {
+          hooks = {
+            nixpkgs-fmt.enable = true;
+            deadnix.enable = true;
+            nil.enable = true;
+            typos = {
+              enable = true;
+              settings.ignored-words = [ "noice" ];
+              stages = [ "manual" ];
+            };
+            commitizen.enable = true;
+            yamlfmt.enable = true;
+            statix = {
+              enable = true;
+              settings.format = "stderr";
+            };
+          };
+        };
       };
 
       # Shell for working on packages
@@ -51,12 +73,25 @@
           nixpkgs-review
         ];
       };
+
+      # Agentic DM development shell
+      agentic-dm = {
+        name = "agentic-dm-dev";
+        languages.elixir.enable = true;
+        devenv.root = "${../../pkgs/agentic-dm/agentic_dm}";
+
+        enterShell = ''
+          echo "🎲 Agentic DM Development Environment"
+          echo "Elixir project for AI-powered tabletop RPG assistant"
+          echo ""
+          echo "Available commands:"
+          echo "  mix deps.get"
+          echo "  mix compile" 
+          echo "  mix test"
+        '';
+      };
     };
 
-    # Keep the old devShells for compatibility
-    devShells = {
-      default = config.devenv.shells.default.env;
-      packages = config.devenv.shells.packages.env;
-    };
+    # devenv automatically creates devShells, so we don't need to manually define them
   };
 }

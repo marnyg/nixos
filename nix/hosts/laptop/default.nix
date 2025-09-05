@@ -12,6 +12,8 @@
     # Core modules
     ../../modules/nixos/core/defaults.nix
     ../../modules/nixos/core/users.nix
+    ../../modules/nixos/core/secrets.nix
+    ../../modules/nixos/core/nix-settings.nix
 
     # Services
     ../../modules/nixos/services/tailscale.nix
@@ -27,21 +29,8 @@
   # Enable modules
   myModules = {
     defaults.enable = true;
-  };
-
-  # Age secrets configuration
-  age = {
-    secrets = {
-      openrouterToken = {
-        file = ../../modules/home/secrets/claudeToken.age;
-        owner = "mar";
-      };
-      claudeToken = {
-        file = ../../modules/home/secrets/claudeToken.age;
-        owner = "mar";
-      };
-    };
-    identityPaths = [ "/home/mar/.ssh/id_ed25519" ];
+    secrets.enable = true;
+    nixSettings.enable = true;
   };
 
   # Laptop-specific configuration

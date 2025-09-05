@@ -1,47 +1,41 @@
 # Desktop system profile
+# Contains common settings for desktop systems
 { lib, pkgs, ... }:
 
 {
-  # Enable X11/Wayland
-  services.xserver = {
-    enable = lib.mkDefault true;
-    displayManager.gdm.enable = lib.mkDefault true;
-    desktopManager.gnome.enable = lib.mkDefault false;
-  };
-
-  # Audio
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
   # Graphics drivers
   hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
+    enable = lib.mkDefault true;
+    enable32Bit = lib.mkDefault true;
   };
 
-  # Printing
-  services.printing.enable = lib.mkDefault true;
+  # Audio - keep these as defaults since they're common
+  security.rtkit.enable = lib.mkDefault true;
+  services.pipewire = {
+    enable = lib.mkDefault true;
+    alsa.enable = lib.mkDefault true;
+    alsa.support32Bit = lib.mkDefault true;
+    pulse.enable = lib.mkDefault true;
+    wireplumber.enable = lib.mkDefault true;
+  };
+
+  # Bluetooth - common for desktops
+  hardware.bluetooth.enable = lib.mkDefault true;
+  hardware.bluetooth.powerOnBoot = lib.mkDefault false;
+  services.blueman.enable = lib.mkDefault true;
 
   # Network manager for GUI
   networking.networkmanager.enable = lib.mkDefault true;
 
-  # Enable CUPS for printing
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-  };
-
-  # Bluetooth
-  hardware.bluetooth.enable = lib.mkDefault true;
-  services.blueman.enable = lib.mkDefault true;
-
   # Power management
-  services.upower.enable = true;
+  services.upower.enable = lib.mkDefault true;
+
+  # Printing support
+  services.printing.enable = lib.mkDefault true;
+  services.avahi = {
+    enable = lib.mkDefault true;
+    nssmdns4 = lib.mkDefault true;
+  };
 
   # Common desktop packages
   environment.systemPackages = with pkgs; [

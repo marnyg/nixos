@@ -3,13 +3,13 @@
 
 let
   # Helper to create home-manager configuration
-  homeManagerFor = system: username: modules:
+  homeManagerFor = pkgs: username: modules:
     inputs.home-manager.lib.homeManagerConfiguration {
-      pkgs = inputs.nixpkgs.legacyPackages.${system};
+      inherit pkgs;
       extraSpecialArgs = { inherit inputs; };
       modules = [
         # Import all home modules
-        { imports = lib.attrValues (import ../modules/home); }
+        { imports = lib.attrValues (import ../modules/home { inherit inputs; }); }
 
         # Basic configuration
         {
@@ -22,10 +22,26 @@ let
 
 in
 {
-  # Standalone home configurations for systems without NixOS
+  perSystem = { pkgs, system, ... }: {
+    # Per-system packages or checks could go here if needed
+    packages.home-example = homeManagerFor pkgs "mar" [
+      {
+        modules = {
+          sharedDefaults.enable = true;
+          nixvim.enable = true;
+          fish.enable = true;
+          git.enable = true;
+          direnv.enable = true;
+          tmux.enable = true;
+          myPackages.enable = true;
+        };
+      }
+    ];
+  };
+
+  # Also provide flake-level configurations for backward compatibility
   flake.homeConfigurations = {
-    # Example standalone home config
-    "mar@standalone" = homeManagerFor "x86_64-linux" "mar" [
+    "mar@standalone" = homeManagerFor inputs.nixpkgs.legacyPackages.x86_64-linux "mar" [
       {
         modules = {
           sharedDefaults.enable = true;
