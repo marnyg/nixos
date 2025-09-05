@@ -30,6 +30,7 @@
         git-hooks = {
           hooks.nixpkgs-fmt.enable = true;
           hooks.deadnix.enable = true;
+          hooks.deadnix.settings.quiet = true;
           hooks.nil.enable = true;
           hooks.typos.enable = true;
           hooks.commitizen.enable = true;

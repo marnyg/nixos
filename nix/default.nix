@@ -1,10 +1,10 @@
+# New NixOS configuration structure
 {
   imports = [
-    ./nixos-modules
-    ./home-modules
-    ./home-configurations
-    ./nixos-configurations
-    ./dev-shells.nix
-    ./overlay.nix
+    # Flake-parts modules for better organization
+    ./flake-modules/nixos.nix
+    ./flake-modules/home-manager.nix
+    ./flake-modules/devshells.nix
+    ./flake-modules/packages.nix
   ];
 }
