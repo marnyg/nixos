@@ -31,17 +31,13 @@ let
         inputs.microvm.nixosModules.host
 
         # System-wide nixpkgs configuration
-        # This ensures all hosts have consistent package availability
+        # Import the overlays defined in overlays.nix for consistency
         {
           nixpkgs = {
             config.allowUnfree = true; # Required for nvidia drivers, spotify, etc.
-            overlays = [
-              inputs.nur.overlays.default # Nix User Repository packages
-              # Custom overlay for flake inputs that provide packages
-              (final: _prev: {
-                mcphub-nvim = inputs.mcphub-nvim.packages.${final.system}.default or null;
-                mcphub = inputs.mcphub.packages.${final.system}.default or null;
-              })
+            overlays = with self.overlays; [
+              default # Custom packages (mcphub, etc.)
+              nur # NUR packages
             ];
           };
         }

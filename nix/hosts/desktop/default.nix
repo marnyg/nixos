@@ -244,7 +244,7 @@
           modules.autorandr.enable = false; # Auto display configuration (X11)
           modules.bspwm.enable = true; # Tiling WM (X11)
           modules.xmonad.enable = false; # Tiling WM (X11, Haskell)
-          modules.hyperland.enable = true; # Wayland compositor
+          modules.hyprland.enable = true; # Wayland compositor
 
           # Desktop utilities
           modules.dunst.enable = false; # Notification daemon (X11)

@@ -4,8 +4,8 @@
 {
   imports = [
     inputs.treefmt-nix.flakeModule
-    # Import the pkgs directory directly as a flake-parts module
-    ../../pkgs
+    # Import the projects directory directly as a flake-parts module
+    ../../projects
   ];
 
   perSystem = { config, pkgs, ... }: {

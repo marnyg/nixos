@@ -15,7 +15,7 @@
     # Window managers (choose one)
     bspwm.enable = lib.mkDefault false;
     xmonad.enable = lib.mkDefault false;
-    hyperland.enable = lib.mkDefault true;
+    hyprland.enable = lib.mkDefault true;
 
     # Desktop utilities
     dunst.enable = lib.mkDefault false;

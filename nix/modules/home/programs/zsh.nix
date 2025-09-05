@@ -74,8 +74,11 @@ with lib;
 
         zvm_bindkey vicmd '^e' accept-line 
 
-        #export ANTHROPIC_API_KEY=$(cat ${config.age.secrets.claudeToken.path});
-        export ANTHROPIC_API_KEY=$(cat /run/agenix/claudeToken);
+        # API key management (if secrets are configured)
+        ${lib.optionalString (config.age ? secrets && config.age.secrets ? claudeToken) ''
+          export ANTHROPIC_API_KEY=$(cat ${config.age.secrets.claudeToken.path});
+          export OPENROUTER_API_KEY=$(cat ${config.age.secrets.openrouterToken.path});
+        ''}
 
         eval "$(${pkgs.starship}/bin/starship init zsh)"
       '';
@@ -85,7 +88,7 @@ with lib;
         path = "$HOME/.cache/zsh_history";
       };
 
-      # ZSH-specific aliases
+      # ZSH-specific aliases (common aliases are in sharedShellConfig)
       shellAliases = {
         "::" = ''sed "$ s/\n$//" | xargs -I_ --'';
         gi = "${pkgs.lazygit}/bin/lazygit";

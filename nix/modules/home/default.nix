@@ -39,7 +39,7 @@ let
     autorandr = ./programs/autorandr/desktop.nix;
 
     # Desktop environments - Wayland
-    hyperland = ./programs/hyperland.nix;
+    hyprland = ./programs/hyprland.nix;
     waybar = ./programs/waybar.nix;
     wofi = ./programs/wofi.nix;
 

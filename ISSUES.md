@@ -1,26 +1,29 @@
-# GitHub Issues to Create
-
-These TODOs were extracted from the README and should be created as GitHub issues:
+# Issues 
 
 ## Configuration Tasks
 
-### Issue: Configure lf file manager previewer
-**Description:** Set up lf (terminal file manager) with proper preview functionality
-**Reference:** https://rycee.gitlab.io/home-manager/options.html#opt-programs.lf.previewer.source
-**Labels:** enhancement, home-manager
+### Issue: Replace placeholder email and user data
+**Description:** Update placeholder values like "mar@example.com" with actual user information throughout the configuration
+**Files to check:**
+- `nix/users/mar/default.nix` - email field
+- `nix/hosts/*/default.nix` - any user-specific data
+- Git configuration - actual email for commits
+**Labels:** configuration, security
+
+### Issue: Properly configure all secrets with agenix
+**Description:** Ensure all sensitive data is properly managed through agenix instead of being hardcoded or using placeholders
+**Tasks:**
+- Document all required secrets
+- Create age keys for all systems
+- Move any hardcoded API keys to agenix
+- Add setup instructions for new users
+**Reference:** See `CONFIG_TEMPLATE.md` and `nix/modules/home/secrets/README.md`
+**Labels:** security, documentation
 
 ### Issue: Configure tmux shell integration
 **Description:** Set up tmux with proper shell configuration
 **Reference:** https://rycee.gitlab.io/home-manager/options.html#opt-programs.tmux.shell
 **Labels:** enhancement, home-manager
-
-### Issue: Fix nvim flake system installation
-**Description:** Fix neovim flake to be properly installed on NixOS system level
-**Labels:** bug, nixos
-
-### Issue: Migrate from bspwm to xmonad
-**Description:** Try using xmonad as the primary window manager instead of bspwm
-**Labels:** enhancement, desktop
 
 ### Issue: Fix 1TB NVMe disk recognition
 **Description:** Troubleshoot and fix the 1TB NVMe disk that's not being recognized
@@ -33,7 +36,7 @@ These TODOs were extracted from the README and should be created as GitHub issue
 ## Desktop Environment Enhancements
 
 ### Issue: Add keyboard shortcuts to sxhkd
-**Description:** Configure additional keyboard shortcuts for:
+**Description:** Configure additional keyboard shortcuts for(the shortcuts can change, only a sugestiong):
 - Screenshot (Print key) - flameshot gui
 - Clipboard manager (super + v) - rofi clipboard
 - Emoji picker (super + period) - rofi emoji
@@ -53,10 +56,6 @@ These TODOs were extracted from the README and should be created as GitHub issue
 **Labels:** research, desktop
 
 ## Infrastructure & Automation
-
-### Issue: Clean flake structure inspiration
-**Description:** Review and potentially adopt patterns from https://git.sr.ht/~misterio/nix-config/tree/main/item/flake.nix
-**Labels:** refactor, architecture
 
 ### Issue: Automate cloud NixOS with Terraform
 **Description:** Set up automated cloud deployment of NixOS using Terraform
@@ -79,19 +78,3 @@ These TODOs were extracted from the README and should be created as GitHub issue
 - https://xeiaso.net/blog/gitea-release-tool-2020-05-31
 - https://www.drone.io/
 **Labels:** infrastructure, self-hosting
-
-## How to Create These Issues
-
-1. Go to your GitHub repository
-2. Navigate to the Issues tab
-3. Click "New Issue"
-4. Copy the title and description from each issue above
-5. Add the suggested labels
-6. Optionally add milestones or assign to yourself
-
-You can also use GitHub CLI:
-```bash
-gh issue create --title "Configure lf file manager previewer" \
-  --body "Set up lf (terminal file manager) with proper preview functionality\nReference: https://rycee.gitlab.io/home-manager/options.html#opt-programs.lf.previewer.source" \
-  --label "enhancement,home-manager"
-```

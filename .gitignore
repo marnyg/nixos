@@ -1,8 +1,60 @@
-nixos.qcow2
+# Nix build outputs
 result
+result*
+nixos.qcow2
 nixos-wsl.tar.gz
-.pre-commit-config.yaml
-just-flake.just
+
+# Development environment
 .direnv
 .devenv
+.envrc.local
+.pre-commit-config.yaml
+just-flake.just
+
+# Project-specific build artifacts
+## OCaml
+*.cmi
+*.cmo
+*.cmx
+*.cma
+*.cmxa
+*.o
+
+## Elixir/Erlang
+_build/
+deps/
+*.ez
+*.beam
+.elixir_ls/
+
+## Databases
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Scratch directory - for temporary experiments
+/scratch/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Secrets (exclude tracked .age files)
+*.key
+*.pem
+*.crt
+# Note: .age files in nix/modules/home/secrets/ are tracked encrypted secrets
+
+# Logs
+*.log
+logs/
+
+# Custom local files
 .crush
+*.local

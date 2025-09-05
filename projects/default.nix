@@ -1,9 +1,18 @@
+# Projects module - imports all project-specific flake-parts modules
+{ ... }:
 {
   imports = [
+    # Active projects
     ./nixvim
     ./agentic-dm
+
+    # Note: experimental projects can be added here when ready:
+    # ./experimental/radRePomodora
+    # ./experimental/scheduler
   ];
+
   perSystem = { pkgs, system, ... }: {
+    # Utility package for initializing home-manager standalone
     packages.home-init = pkgs.writeShellApplication {
       name = "home-init";
       runtimeInputs = with pkgs; [ nix home-manager ];
@@ -27,9 +36,9 @@
           outputs = { nixpkgs, home-manager, custom-modules, ... }:
             let
               system = "x86_64-linux";
-              pkgs = nixpkgs.legacyPackages.${system};
+              pkgs = nixpkgs.legacyPackages.\${system};
             in {
-              homeConfigurations.$USER = home-manager.lib.homeManagerConfiguration {
+              homeConfigurations.\$USER = home-manager.lib.homeManagerConfiguration {
                 inherit pkgs;
                 modules = [
                   ./home.nix
@@ -44,8 +53,8 @@
         { config, pkgs, ... }:
 
         {
-          home.username = "$USER";
-          home.homeDirectory = "$HOME";
+          home.username = "\$USER";
+          home.homeDirectory = "\$HOME";
               
           home.stateVersion = "23.11";
 

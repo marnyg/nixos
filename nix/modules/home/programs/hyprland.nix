@@ -1,11 +1,16 @@
+# Hyprland Wayland compositor configuration
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.hyperland = {
-    enable = mkOption { type = types.bool; default = false; };
+  options.modules.hyprland = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable Hyprland Wayland compositor with custom configuration";
+    };
   };
 
-  config = mkIf config.modules.hyperland.enable {
+  config = mkIf config.modules.hyprland.enable {
 
 
     modules.wofi.enable = true;

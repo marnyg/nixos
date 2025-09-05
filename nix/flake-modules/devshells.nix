@@ -67,22 +67,6 @@
           nixpkgs-review
         ];
       };
-
-      # Agentic DM development shell
-      agentic-dm = {
-        name = "agentic-dm-dev";
-        languages.elixir.enable = true;
-
-        enterShell = ''
-          echo "🎲 Agentic DM Development Environment"
-          echo "Elixir project for AI-powered tabletop RPG assistant"
-          echo ""
-          echo "Available commands:"
-          echo "  mix deps.get"
-          echo "  mix compile" 
-          echo "  mix test"
-        '';
-      };
     };
 
     # devenv automatically creates devShells, so we don't need to manually define them
