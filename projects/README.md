@@ -80,10 +80,10 @@ mkdir projects/my-project
     packages.my-project = pkgs.callPackage ./package.nix { };
 
     # Define development shell
-    devenv.shells.my-project = {
+    devShells.my-project = pkgs.mkShell {
       name = "my-project";
       packages = with pkgs; [ ];
-      enterShell = ''
+      shellHook = ''
         echo "My Project Development Environment"
       '';
     };

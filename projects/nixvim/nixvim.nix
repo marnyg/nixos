@@ -385,7 +385,6 @@
       };
 
       octo.enable = true;
-      supermaven.enable = true;
       iron = {
         enable = true;
         # lazyLoad.settings.colorscheme = "catppuccin-mocha";

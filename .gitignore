@@ -7,6 +7,9 @@ nixos-wsl.tar.gz
 # Development environment
 .direnv
 .devenv
+.devenv*
+.devenv.flake.nix
+devenv.local.nix
 .envrc.local
 .pre-commit-config.yaml
 just-flake.just

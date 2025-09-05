@@ -74,6 +74,7 @@ let
     {
       type = "app";
       program = "${vmScript}/bin/${binName}";
+      meta.description = "Run ${name} NixOS configuration as a virtual machine";
     };
 
 in
@@ -138,7 +139,7 @@ in
 
   perSystem = { ... }: {
     apps = {
-      wsl = vmApp "wsl";
+      # Note: WSL configurations cannot be run as VMs
       desktop = vmApp "desktop";
       laptop = vmApp "laptop";
       miniVm = vmApp "miniVm";

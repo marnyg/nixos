@@ -1,28 +1,24 @@
 # Agentic DM - AI-powered tabletop RPG assistant
 { ... }: {
-  perSystem = { pkgs, lib, ... }: {
+  perSystem = { pkgs, ... }: {
     # Development shell for Agentic DM
-    devenv.shells.agentic-dm = {
+    devShells.agentic-dm = pkgs.mkShell {
       name = "agentic-dm";
-
-      # Disable container processes (requires additional flake inputs)
-      containers = lib.mkForce { };
-
-      # Enable Elixir development environment
-      languages.elixir.enable = true;
-
-      # PostgreSQL for game data storage
-      services.postgres = {
-        enable = true;
-        initialDatabases = [{ name = "dnd_sessions_dev"; }];
-      };
 
       # Project-specific packages
       packages = with pkgs; [
+        # Elixir development
+        elixir
+        erlang
+
+        # Database
+        postgresql
+
+        # Phoenix tools
         inotify-tools # For Phoenix live reload
       ];
 
-      enterShell = ''
+      shellHook = ''
         echo "🎲 Agentic DM Development Environment"
         echo "AI-powered tabletop RPG assistant"
         echo ""
@@ -34,7 +30,15 @@
         echo "  mix ecto.migrate  - Run migrations"
         echo "  iex -S mix        - Start interactive shell"
         echo ""
+        echo "Note: PostgreSQL service needs to be started separately"
+        echo "  pg_ctl -D $PGDATA init    - Initialize database"
+        echo "  pg_ctl -D $PGDATA start   - Start PostgreSQL"
+        echo ""
       '';
+
+      # Environment variables for PostgreSQL
+      PGDATA = "./postgres_data";
+      DATABASE_URL = "postgresql://localhost/dnd_sessions_dev";
     };
 
     # Future: package the application

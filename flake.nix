@@ -13,7 +13,6 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    devenv.url = "github:cachix/devenv";
     agenix-shell.url = "github:aciceri/agenix-shell";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
 

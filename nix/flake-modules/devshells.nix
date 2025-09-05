@@ -1,16 +1,12 @@
 # Development shells flake module
-{ inputs, ... }:
+{ ... }:
 
 {
-  imports = [
-    inputs.devenv.flakeModule
-  ];
-
   perSystem = { pkgs, ... }: {
     # Development shells
-    devenv.shells = {
+    devShells = {
       # Default shell for NixOS development
-      default = {
+      default = pkgs.mkShell {
         packages = with pkgs; [
           # Nix tools
           nixpkgs-fmt
@@ -26,11 +22,7 @@
           fh # Flake helper
         ];
 
-        env = {
-          EDITOR = "vim";
-        };
-
-        enterShell = ''
+        shellHook = ''
           echo "🚀 NixOS Development Environment"
           echo "Available hosts: wsl, desktop, laptop, miniVm"
           echo ""
@@ -41,25 +33,11 @@
           echo ""
         '';
 
-        # Git hooks configuration
-        git-hooks = {
-          hooks = {
-            nixpkgs-fmt.enable = true;
-            deadnix.enable = true;
-            nil.enable = true;
-            typos = {
-              enable = true;
-              settings.ignored-words = [ "noice" ];
-              stages = [ "manual" ];
-            };
-            commitizen.enable = true;
-            yamlfmt.enable = true;
-          };
-        };
+        EDITOR = "vim";
       };
 
       # Shell for working on packages
-      packages = {
+      packages = pkgs.mkShell {
         packages = with pkgs; [
           # Package development tools
           nix-build-uncached
@@ -68,7 +46,5 @@
         ];
       };
     };
-
-    # devenv automatically creates devShells, so we don't need to manually define them
   };
 }
