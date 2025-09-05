@@ -27,11 +27,10 @@
   swapDevices =
     [{ device = "/dev/disk/by-uuid/c6511e4f-1ccb-421a-97fe-0929abdc0dfd"; }];
 
-  # Enable OpenGL
-  hardware.opengl = {
+  # Enable graphics support
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
   };
 
   # Load nvidia driver for Xorg and Wayland

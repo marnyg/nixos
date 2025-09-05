@@ -74,9 +74,5 @@
       enableHome = true;
       profiles = [ "minimal" ];
     };
-    notHM = {
-      enable = true;
-      enableHome = false;
-    };
   };
 }

@@ -10,16 +10,19 @@ This directory contains encrypted secrets using agenix. Secrets are encrypted wi
 ## Setting Up Secrets
 
 ### 1. Create your age key (if you don't have one):
+
 ```bash
 age-keygen -o ~/.config/age/keys.txt
 ```
 
 ### 2. Get your public key:
+
 ```bash
 age-keygen -y ~/.config/age/keys.txt
 ```
 
 ### 3. Update secrets.nix with your public key:
+
 ```nix
 # secrets.nix
 let
@@ -32,6 +35,7 @@ in
 ```
 
 ### 4. Create/edit secrets:
+
 ```bash
 # Edit existing secret
 agenix -e claudeToken.age
@@ -43,11 +47,13 @@ echo "your-secret-value" | agenix -e newsecret.age
 ## Adding New Secrets
 
 1. Add the secret file to `secrets.nix`:
+
 ```nix
 "myNewSecret.age".publicKeys = [ yourPublicKey ];
 ```
 
 2. Reference it in your module:
+
 ```nix
 age.secrets.myNewSecret = {
   file = ./secrets/myNewSecret.age;
@@ -58,6 +64,7 @@ age.secrets.myNewSecret = {
 ```
 
 3. Use the secret in your configuration:
+
 ```nix
 # In shell config
 export MY_SECRET=$(cat ${config.age.secrets.myNewSecret.path})

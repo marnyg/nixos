@@ -15,17 +15,20 @@ An AI-powered Dungeon Master system built with Elixir that provides an interacti
 ## Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository_url>
    cd agentic_dm
    ```
 
 2. **Install dependencies**
+
    ```bash
    mix deps.get
    ```
 
 3. **Set up the database**
+
    ```bash
    mix ecto.create
    mix ecto.migrate
@@ -79,6 +82,7 @@ Simply type your actions in natural language:
 - "I cast fireball at the goblins"
 
 The AI will automatically:
+
 - Roll appropriate dice
 - Update character stats
 - Modify world state
@@ -155,6 +159,7 @@ MIT License - see LICENSE file for details.
 ### Common Issues
 
 **Database errors**: Ensure the database is created and migrated:
+
 ```bash
 mix ecto.create
 mix ecto.migrate
@@ -167,4 +172,3 @@ mix ecto.migrate
 ### Support
 
 For issues and questions, please open an issue on GitHub.
-

@@ -23,6 +23,12 @@
     inputs.agenix.nixosModules.age
   ];
 
+  # Boot configuration
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+  };
+
   # System configuration
   system.stateVersion = "23.11";
 

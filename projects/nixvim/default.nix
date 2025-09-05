@@ -4,9 +4,8 @@ let
 
 in
 {
-  flake.nixvimModules = {
-    nixVim = nixvimModule;
-  };
+  # Note: nixvimModules removed as it's not a standard flake output
+  # The module is used directly in checks and packages below
 
   perSystem = { pkgs, system, ... }: {
 

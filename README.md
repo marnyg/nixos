@@ -5,18 +5,21 @@ A modular, flake-based NixOS configuration supporting multiple hosts (desktop, l
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - NixOS with flakes enabled
 - Git for cloning the repository
 
 ### Installation
 
 1. Clone this repository:
+
 ```bash
 git clone https://github.com/marnyg/nixos.git ~/nixos
 cd ~/nixos
 ```
 
 2. Build and switch to a configuration:
+
 ```bash
 # For desktop
 sudo nixos-rebuild switch --flake .#desktop
@@ -31,6 +34,7 @@ sudo nixos-rebuild switch --flake .#wsl
 ### Development Environment
 
 Enter the development shell with all tools:
+
 ```bash
 nix develop
 # or with direnv installed
@@ -73,11 +77,13 @@ This configuration uses a layered module system:
 ### Adding a New Host
 
 1. Create a new directory under `nix/hosts/`:
+
 ```bash
 mkdir -p nix/hosts/myhost
 ```
 
 2. Create `default.nix` with your configuration:
+
 ```nix
 { inputs, config, pkgs, ... }:
 {
@@ -100,6 +106,7 @@ mkdir -p nix/hosts/myhost
 ```
 
 3. Add to `nix/flake-modules/nixos.nix`:
+
 ```nix
 flake.nixosConfigurations = {
   # ... existing hosts ...
@@ -110,11 +117,13 @@ flake.nixosConfigurations = {
 ### Adding a New User
 
 1. Create user directory structure:
+
 ```bash
 mkdir -p nix/users/newuser
 ```
 
 2. Create user metadata (`nix/users/newuser/default.nix`):
+
 ```nix
 {
   username = "newuser";
@@ -137,6 +146,7 @@ mkdir -p nix/users/newuser
 ```
 
 3. Create system configuration (`nix/users/newuser/system.nix`):
+
 ```nix
 { pkgs, ... }:
 {
@@ -149,6 +159,7 @@ mkdir -p nix/users/newuser
 ```
 
 4. Register in `nix/modules/nixos/core/users.nix`:
+
 ```nix
 userRegistry = {
   users = {
@@ -167,6 +178,7 @@ Profiles are collections of modules that work well together:
 - **`desktop`**: GUI applications and desktop environment
 
 To use profiles, specify them in your user configuration:
+
 ```nix
 my.users.username = {
   enable = true;
@@ -178,6 +190,7 @@ my.users.username = {
 ### Enabling/Disabling Modules
 
 Modules can be controlled at the host level:
+
 ```nix
 # In your host configuration
 my.users.mar = {
@@ -196,6 +209,7 @@ my.users.mar = {
 See `CRUSH.md` for the full development command reference.
 
 Common commands:
+
 ```bash
 # Rebuild system
 sudo nixos-rebuild switch --flake .#<host>
@@ -219,11 +233,13 @@ nix build .#nixosConfigurations.miniVm.config.system.build.vm
 For WSL environments, follow these steps:
 
 1. Build the WSL installer:
+
 ```bash
 nix build .#nixosConfigurations.wsl.config.system.build.installer
 ```
 
 2. Import in Windows:
+
 ```powershell
 wsl --import NixOS C:\path\to\storage .\result\tarball\nixos-wsl-installer.tar.gz --version 2
 wsl -d NixOS

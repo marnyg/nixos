@@ -1,9 +1,12 @@
 # Agentic DM - AI-powered tabletop RPG assistant
 { ... }: {
-  perSystem = { pkgs, ... }: {
+  perSystem = { pkgs, lib, ... }: {
     # Development shell for Agentic DM
     devenv.shells.agentic-dm = {
       name = "agentic-dm";
+
+      # Disable container processes (requires additional flake inputs)
+      containers = lib.mkForce { };
 
       # Enable Elixir development environment
       languages.elixir.enable = true;

@@ -5,7 +5,9 @@ This file lists all the placeholder values that should be customized when using 
 ## User Information
 
 ### File: `nix/users/mar/default.nix`
+
 Replace these values with your actual information:
+
 ```nix
 {
   username = "mar";           # Your username
@@ -15,7 +17,9 @@ Replace these values with your actual information:
 ```
 
 ### SSH Keys
+
 Add your SSH public keys in `nix/users/mar/system.nix`:
+
 ```nix
 openssh.authorizedKeys.keys = [
   "ssh-rsa AAAAB3..." # Your SSH public key
@@ -25,6 +29,7 @@ openssh.authorizedKeys.keys = [
 ## Secrets Setup
 
 ### Required Secrets
+
 These secrets need to be created if you use certain features:
 
 1. **API Tokens** (for AI tools):
@@ -36,7 +41,9 @@ See `nix/modules/home/secrets/README.md` for setup instructions.
 ## Git Configuration
 
 ### File: `nix/modules/home/programs/git.nix`
+
 Update with your information:
+
 ```nix
 userName = "Your Name";
 userEmail = "your.email@example.com";
@@ -46,12 +53,15 @@ signing.key = "YOUR_GPG_KEY_ID"; # If using commit signing
 ## Host-Specific Settings
 
 ### Network Configuration
+
 Update hostnames in host files:
+
 - `nix/hosts/desktop/default.nix`
 - `nix/hosts/laptop/default.nix`
 - `nix/hosts/wsl/default.nix`
 
 ### Hardware Configuration
+
 - Review and update hardware configs for your actual hardware
 - GPU settings (NVIDIA/AMD/Intel)
 - Display configuration in Hyprland
@@ -59,17 +69,23 @@ Update hostnames in host files:
 ## Optional Services
 
 ### Syncthing
+
 If using Syncthing, update device IDs and folder paths in:
+
 - `nix/modules/nixos/services/syncthing.nix`
 
 ### Tailscale
+
 Configure your Tailscale authentication if using it:
+
 - `nix/modules/nixos/services/tailscale.nix`
 
 ## Auto-upgrade Settings
 
 ### File: `nix/hosts/desktop/default.nix`
+
 Update the flake URL for auto-upgrades:
+
 ```nix
 system.autoUpgrade = {
   enable = true;

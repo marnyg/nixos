@@ -58,12 +58,15 @@
 
   # Auto-suspend
   services.logind = {
-    lidSwitch = "suspend";
-    lidSwitchExternalPower = "ignore";
-    extraConfig = ''
-      HandlePowerKey=suspend
-      IdleAction=suspend
-      IdleActionSec=15min
-    '';
+    # Use the new settings format for all logind options
+    settings = {
+      Login = {
+        HandleLidSwitch = "suspend";
+        HandleLidSwitchExternalPower = "ignore";
+        HandlePowerKey = "suspend";
+        IdleAction = "suspend";
+        IdleActionSec = "15min";
+      };
+    };
   };
 }

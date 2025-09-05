@@ -5,7 +5,7 @@ on:
       - master
       - flake-updates
     tags:
-      - 'v*' # Also trigger on version tags
+      - "v*" # Also trigger on version tags
   pull_request: {}
   workflow_call:
     outputs:

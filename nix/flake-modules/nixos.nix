@@ -87,7 +87,7 @@ in
     # Test/development VM
     # Minimal VM configuration for testing the module system and basic functionality
     # This VM can be run with: nix run .#miniVm
-    miniVm = nixosSystemFor "x86_64-linux" ({ pkgs, modulesPath, ... }: {
+    miniVm = nixosSystemFor "x86_64-linux" ({ modulesPath, ... }: {
       imports = [
         "${modulesPath}/virtualisation/qemu-vm.nix" # QEMU VM support
       ];
@@ -110,18 +110,14 @@ in
       };
 
       # Simple VM configuration for testing
-      users.users.mar = {
-        isNormalUser = true;
-        shell = pkgs.bash;
-        extraGroups = [ "wheel" ];
-        password = "123";
-      };
-
-      # Enable basic modules for testing
+      # Use the my.users system instead of defining users directly
       my.users.mar = {
         enable = true;
         enableHome = false; # Disable home-manager for simplest test
         profiles = [ ];
+        extraSystemConfig = {
+          password = "123"; # Simple password for VM testing
+        };
       };
 
       # Enable SSH for easy access
@@ -141,7 +137,6 @@ in
   };
 
   perSystem = { ... }: {
-    # VM apps for easy testing
     apps = {
       wsl = vmApp "wsl";
       desktop = vmApp "desktop";

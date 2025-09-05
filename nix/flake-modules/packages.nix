@@ -12,7 +12,7 @@
     # Add home-manager modules export package
     packages.homemanagerModules = pkgs.runCommand "homemanager-modules" { } ''
       mkdir -p $out
-      cp -r ${../../modules/home}/* $out/
+      cp -r ${../../nix/modules/home}/* $out/
     '';
 
     # Formatter configuration
