@@ -1,53 +1,21 @@
-{ pkgs, lib, config, ... }:
+# DEPRECATED: This module is being phased out
+# Packages have been moved to appropriate profiles:
+# - Developer tools -> profiles/developer.nix
+# - Desktop applications -> profiles/desktop.nix
+# - Minimal utilities -> profiles/minimal.nix
+{ lib, config, ... }:
 with lib;
 {
   options.modules.my.myPackages = {
-    enable = mkOption { type = types.bool; default = false; };
-  };
-  config = mkIf config.modules.my.myPackages.enable
-    {
-
-
-      home.packages = with pkgs; [
-        dmenu
-        feh
-
-        # Command-line tools
-        ripgrep
-        ffmpeg
-        discord
-        code-cursor
-        uv
-        nodejs_24
-
-
-        gnupg
-        libnotify
-        devenv
-        unzip
-        lazygit
-
-        mpv
-        # GUI pkf readers
-        evince
-        claude-code
-        crush
-
-        # Other
-        jq
-        tldr
-      ] ++ (if pkgs.system != "aarch64-darwin"
-      then [
-        rofi
-        coppwr
-        playerctl
-        sxiv
-        xdotool
-        xclip
-        scrot
-        pavucontrol
-        bitwarden-cli
-        signal-desktop
-      ] else [ ]);
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "DEPRECATED: Use profiles instead for package management";
     };
+  };
+
+  config = mkIf config.modules.my.myPackages.enable {
+    # Empty - all packages moved to profiles
+    # This module is kept for backward compatibility only
+  };
 }

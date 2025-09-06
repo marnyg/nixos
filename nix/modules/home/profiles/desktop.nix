@@ -44,6 +44,13 @@
     xsel
     wl-clipboard
     flameshot
+    rofi
+    dmenu
+    feh
+    sxiv
+    xdotool
+    scrot
+    libnotify
 
     # File management
     nautilus
@@ -52,7 +59,10 @@
     # Media
     vlc
     spotify
+    mpv
     pavucontrol
+    playerctl
+    coppwr
 
     # Graphics
     gimp
@@ -67,9 +77,14 @@
     slack
     signal-desktop
 
+    # Development GUIs
+    code-cursor
+    claude-code
+
     # System utilities
     gnome-system-monitor
     baobab # Disk usage analyzer
+    crush # Process manager
 
     # Fonts
     nerd-fonts.fira-code
@@ -77,6 +92,9 @@
     source-code-pro
     roboto
     liberation_ttf
+  ] ++ lib.optionals (pkgs.stdenv.isLinux && !pkgs.stdenv.isAarch64) [
+    # Linux/X11 specific
+    bitwarden-cli
   ];
 
   # Desktop-specific configuration

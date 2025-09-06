@@ -24,7 +24,7 @@
 
         shellHook = ''
           echo "🚀 NixOS Development Environment"
-          echo "Available hosts: wsl, desktop, laptop, miniVm"
+          echo "Available hosts: wsl, desktop, laptop"
           echo ""
           echo "Commands:"
           echo "  nix build .#nixosConfigurations.<host>.config.system.build.toplevel"

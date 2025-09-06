@@ -7,7 +7,7 @@
   # Shell hook
   enterShell = ''
     echo "🚀 NixOS Development Environment (via devenv)"
-    echo "Available hosts: wsl, desktop, laptop, miniVm"
+    echo "Available hosts: wsl, desktop, laptop"
     echo ""
     echo "Commands:"
     echo "  nix build .#nixosConfigurations.<host>.config.system.build.toplevel"
@@ -16,8 +16,8 @@
     echo ""
   '';
 
-  # Git hooks configuration
-  pre-commit.hooks = {
+  # Pre-commit hooks configuration
+  git-hooks.hooks = {
     nixpkgs-fmt.enable = true;
     deadnix.enable = true;
     nil.enable = true;
@@ -30,8 +30,16 @@
     yamlfmt.enable = true;
   };
 
-  # Languages support (optional, add as needed)
+  # Languages support (add as needed for specific project development)
   languages = {
     nix.enable = true;
   };
+
+  # Development-specific tools can be added here:
+  # - Scripts for automation
+  # - Task runners
+  # - Language servers and tools
+  # - Local development processes
+  # - Services (databases, etc.)
+  # - Containers for testing
 }

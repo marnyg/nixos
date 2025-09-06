@@ -36,6 +36,12 @@
     fd
     yq-go
     btop
+    ffmpeg
+    jq
+    tldr
+
+    # Version control
+    lazygit
 
     # Build tools
     gnumake
@@ -46,6 +52,8 @@
     nil # Nix LSP
     nixpkgs-fmt
     nodePackages.prettier
+    nodejs_24
+    uv # Python package manager
 
     # Container tools
     docker-compose
@@ -70,6 +78,13 @@
     unzip
     zip
     unrar
+
+    # Security
+    gnupg
+    bitwarden-cli
+
+    # Development environments
+    devenv
   ];
 
   # Shell aliases for development
