@@ -2,17 +2,20 @@
 { lib, pkgs, ... }:
 
 {
-  # Essential development tools
+  # Development modules
   modules.my = {
-    git.enable = true;
-    direnv.enable = true;
-    tmux.enable = true;
-    fzf.enable = true;
-    nixvim.enable = lib.mkDefault true;
-    fish.enable = lib.mkDefault true;
-    ghostty.enable = lib.mkDefault true;
-    myPackages.enable = true;
-    cloneDefaultRepos.enable = lib.mkDefault true;
+    # CORE: Essential for any developer
+    git.enable = true; # Version control is mandatory
+    direnv.enable = true; # Project environment management
+    tmux.enable = true; # Terminal multiplexing for productivity
+    fzf.enable = true; # Fuzzy finding is essential for navigation
+    myPackages.enable = true; # Core development packages
+
+    # OPTIONAL: Sensible defaults but can be overridden
+    nixvim.enable = lib.mkDefault true; # Default editor, but vim/emacs users may override
+    fish.enable = lib.mkDefault true; # Default shell, but zsh/bash users may override
+    ghostty.enable = lib.mkDefault true; # Default terminal, but can be changed
+    cloneDefaultRepos.enable = lib.mkDefault true; # Helpful but not mandatory
   };
 
   # Development programs

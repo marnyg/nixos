@@ -22,26 +22,6 @@
 4. Add to hardware.nix with appropriate mount point
 5. Rebuild NixOS configuration
 
-## Medium Priority Improvements
-
-### Code Organization
-
-#### Review lib.mkDefault usage
-
-**Issue:** Found 100+ instances of lib.mkDefault, many unnecessary
-**Action:** Only use mkDefault where host-level overrides are expected
-
-```nix
-# In profiles
-modules.my = {
-  # Required for profile
-  firefox.enable = true;
-
-  # Optional (overrideable by hosts)
-  qutebrowser.enable = lib.mkDefault true;
-}
-```
-
 ### Future Considerations
 
 #### Add VM integration testing

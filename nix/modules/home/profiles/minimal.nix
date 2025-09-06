@@ -2,9 +2,13 @@
 { lib, pkgs, ... }:
 
 {
-  # Only the most essential modules (use mkDefault so other profiles can override)
+  # Minimal profile modules
   modules.my = {
-    sharedDefaults.enable = true;
+    # CORE: Absolute minimum configuration
+    sharedDefaults.enable = true; # Basic home-manager settings
+
+    # Everything else is optional and disabled by default
+    # These can be enabled by hosts that need them
     git.enable = lib.mkDefault false;
     direnv.enable = lib.mkDefault false;
     tmux.enable = lib.mkDefault false;

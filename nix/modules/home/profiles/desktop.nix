@@ -4,37 +4,39 @@
 {
   # Desktop modules
   modules.my = {
-    # Browsers
-    firefox.enable = true;
-    qutebrowser.enable = lib.mkDefault false;
+    # CORE: Essential for desktop profile
+    firefox.enable = true; # Every desktop needs a web browser
 
-    # Terminal emulators
+    # OPTIONAL: Sensible defaults that can be overridden
+    # Terminal emulators (at least one needed, but choice is flexible)
     ghostty.enable = lib.mkDefault true;
     kitty.enable = lib.mkDefault false;
 
-    # Window managers (choose one)
+    # Window managers (one should be active, but choice is flexible)
     bspwm.enable = lib.mkDefault false;
     xmonad.enable = lib.mkDefault false;
     hyprland.enable = lib.mkDefault true;
 
-    # Desktop utilities
+    # Desktop utilities (helpful but not essential)
     dunst.enable = lib.mkDefault false;
     polybar.enable = lib.mkDefault false;
-    waybar.enable = lib.mkDefault true;
-    wofi.enable = lib.mkDefault true;
+    waybar.enable = lib.mkDefault true; # Pairs with hyprland default
+    wofi.enable = lib.mkDefault true; # Pairs with hyprland default
+    rofi.enable = lib.mkDefault false; # Alternative to wofi
 
-    # Media
+    # Optional features
+    qutebrowser.enable = lib.mkDefault false;
     spotifyd.enable = lib.mkDefault false;
   };
 
   # GUI programs
   programs = {
-    # Media players
-    mpv.enable = true;
-    ncspot.enable = lib.mkDefault true;
+    # CORE: Essential GUI programs for desktop
+    mpv.enable = true; # Video player is essential for desktop
+    yazi.enable = true; # File manager is essential for desktop
 
-    # File managers
-    yazi.enable = true;
+    # OPTIONAL: Nice to have but not essential
+    ncspot.enable = lib.mkDefault true;
   };
 
   # Desktop packages

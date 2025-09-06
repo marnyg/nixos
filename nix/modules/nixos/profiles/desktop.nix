@@ -10,7 +10,7 @@
     ../hardware/nvidia.nix
   ];
 
-  # Core modules
+  # Core modules - these define what a desktop system IS
   modules.my = {
     defaults.enable = true;
     secrets.enable = true;
@@ -19,33 +19,37 @@
 
   # Hardware profiles for desktop
   hardware.profiles = {
+    # Audio is essential for desktop
     audio = {
-      enable = lib.mkDefault true;
-      backend = lib.mkDefault "pipewire";
-      support32Bit = lib.mkDefault true;
+      enable = true;
+      backend = lib.mkDefault "pipewire"; # Pipewire is sensible default but can be changed
+      support32Bit = lib.mkDefault true; # Gaming support, but can be disabled
     };
 
+    # Bluetooth is expected on modern desktops but can be disabled
     bluetooth = {
       enable = lib.mkDefault true;
       powerOnBoot = lib.mkDefault true;
     };
   };
 
-  # Boot configuration (common for desktops)
+  # CORE: Essential desktop configuration
+
+  # Boot configuration (UEFI is standard for modern desktops)
   boot.loader = {
-    systemd-boot.enable = lib.mkDefault true;
-    efi.canTouchEfiVariables = lib.mkDefault true;
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
   };
 
-  # Graphics drivers (base configuration, NVIDIA is optional)
+  # Graphics are essential for desktop
   hardware.graphics = {
-    enable = lib.mkDefault true;
-    enable32Bit = lib.mkDefault true;
+    enable = true;
+    enable32Bit = lib.mkDefault true; # For compatibility, but can be disabled
   };
 
-  # X server configuration
+  # X server is essential for desktop (even for Wayland compatibility)
   services.xserver = {
-    enable = lib.mkDefault true;
+    enable = true;
     xkb = {
       layout = lib.mkDefault "us";
       options = lib.mkDefault "caps:escape";
@@ -54,12 +58,12 @@
     autoRepeatInterval = lib.mkDefault 20;
   };
 
-  # Console configuration
-  console.useXkbConfig = lib.mkDefault true;
+  # Console should use X keyboard config
+  console.useXkbConfig = true;
 
-  # Display manager - greetd with TUI greeter
+  # Display manager - essential for desktop
   services.greetd = {
-    enable = lib.mkDefault true;
+    enable = true;
     settings.default_session.command = lib.mkDefault ''
       ${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd Hyprland
     '';
@@ -70,18 +74,18 @@
     sway
   '';
 
-  # Window managers (can be overridden by hosts)
+  # Window managers - at least one needed, but choice is flexible
   programs.hyprland.enable = lib.mkDefault true;
   programs.sway.enable = lib.mkDefault true;
 
-  # XDG portals for Wayland
+  # XDG portals for Wayland - essential for modern desktop
   xdg.portal = {
-    enable = lib.mkDefault true;
-    extraPortals = lib.mkDefault [ pkgs.xdg-desktop-portal-gtk ];
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
-  # Security
-  security.polkit.enable = lib.mkDefault true;
+  # Security - essential for desktop
+  security.polkit.enable = true;
 
   # Systemd service for polkit authentication
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
@@ -98,18 +102,18 @@
     };
   };
 
-  # Network manager for GUI
-  networking.networkmanager.enable = lib.mkDefault true;
+  # Network manager - essential for desktop GUI network management
+  networking.networkmanager.enable = true;
 
-  # Common services
+  # OPTIONAL: Common services that are helpful but not essential
   services.openssh.enable = lib.mkDefault true;
   services.tailscale.enable = lib.mkDefault true;
 
-  # Time zone and locale (can be overridden)
+  # Locale settings - sensible defaults
   time.timeZone = lib.mkDefault "Europe/Oslo";
   i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
 
-  # Virtualization support
+  # Virtualization - helpful for developers but not essential
   virtualisation = {
     docker.enable = lib.mkDefault true;
     libvirtd.enable = lib.mkDefault true;
@@ -120,21 +124,21 @@
     };
   };
 
-  # Common programs
+  # Common programs - mix of essential and optional
   programs = {
     gnupg.agent = {
-      enable = lib.mkDefault true;
+      enable = true; # Security is essential
       enableSSHSupport = lib.mkDefault true;
     };
-    dconf.enable = lib.mkDefault true;
+    dconf.enable = true; # Essential for GTK apps
     nix-ld = {
       enable = lib.mkDefault true;
       libraries = lib.mkDefault (with pkgs; [ ]);
     };
   };
 
-  # Fonts
-  fonts.packages = lib.mkDefault (with pkgs; [
+  # Fonts - essential for desktop
+  fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-emoji
@@ -143,9 +147,9 @@
     fira-code-symbols
     dina-font
     proggyfonts
-  ]);
+  ];
 
-  # Common desktop packages
+  # Common desktop packages - essential GUI tools
   environment.systemPackages = with pkgs; [
     git
     tmux
@@ -159,18 +163,18 @@
   ];
 
   # Enable Wayland support for Electron apps
-  environment.sessionVariables.NIXOS_OZONE_WL = lib.mkDefault "1";
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-  # Home Manager backup extension
+  # Home Manager settings
   home-manager.backupFileExtension = lib.mkDefault "backup";
 
-  # Printing support
+  # Printing support - optional but commonly needed
   services.printing.enable = lib.mkDefault true;
   services.avahi = {
     enable = lib.mkDefault true;
     nssmdns4 = lib.mkDefault true;
   };
 
-  # Power management
-  services.upower.enable = lib.mkDefault true;
+  # Power management - essential for desktop
+  services.upower.enable = true;
 }

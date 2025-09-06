@@ -7,21 +7,23 @@
     ../hardware/laptop-power.nix # Laptop-specific power management
   ];
 
-  # Enable laptop power management
+  # CORE: Essential laptop features
+
+  # Laptop power management is essential
   hardware.profiles.laptopPower = {
-    enable = lib.mkDefault true;
-    cpuFreqGovernor = lib.mkDefault "powersave";
-    enableTlp = lib.mkDefault true;
+    enable = true; # Power management is mandatory for laptops
+    cpuFreqGovernor = lib.mkDefault "powersave"; # Can be changed for performance
+    enableTlp = lib.mkDefault true; # TLP is recommended but can be replaced
     batteryThresholds = {
-      start = lib.mkDefault 75;
+      start = lib.mkDefault 75; # Can be customized per user preference
       stop = lib.mkDefault 80;
     };
   };
 
-  # Bluetooth typically off on boot for laptops to save power
-  hardware.profiles.bluetooth.powerOnBoot = lib.mkForce false;
+  # Bluetooth power optimization for laptops
+  hardware.profiles.bluetooth.powerOnBoot = lib.mkForce false; # Force off to save battery
 
-  # Touchpad support
+  # Touchpad support is essential for laptops
   services.libinput = {
     enable = true;
     touchpad = {
@@ -30,9 +32,9 @@
     };
   };
 
-  # WiFi with power management
+  # WiFi is essential for laptops
   networking.wireless.iwd = {
-    enable = lib.mkDefault true;
+    enable = true; # Laptops must have WiFi
     settings = {
       General = {
         EnableNetworkConfiguration = true;
