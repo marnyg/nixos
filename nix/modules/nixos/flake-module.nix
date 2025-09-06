@@ -10,8 +10,15 @@
 
     # Profile modules
     profile-desktop = ./profiles/desktop.nix;
+    profile-laptop = ./profiles/laptop.nix;
     profile-minimal = ./profiles/minimal.nix;
     profile-wsl = ./profiles/wsl.nix;
+
+    # Hardware modules
+    hardware-audio = ./hardware/audio.nix;
+    hardware-bluetooth = ./hardware/bluetooth.nix;
+    hardware-laptop-power = ./hardware/laptop-power.nix;
+    hardware-nvidia = ./hardware/nvidia.nix;
 
     # Service modules
     service-syncthing = ./services/syncthing.nix;

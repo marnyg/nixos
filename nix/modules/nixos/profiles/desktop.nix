@@ -1,13 +1,34 @@
 # Desktop system profile
 # Contains common settings for desktop systems
-{ lib, pkgs, config, inputs, ... }:
+{ lib, pkgs, inputs, ... }:
 
 {
+  imports = [
+    # Import hardware profiles
+    ../hardware/audio.nix
+    ../hardware/bluetooth.nix
+    ../hardware/nvidia.nix
+  ];
+
   # Core modules
   modules.my = {
     defaults.enable = true;
     secrets.enable = true;
     nixSettings.enable = true;
+  };
+
+  # Hardware profiles for desktop
+  hardware.profiles = {
+    audio = {
+      enable = lib.mkDefault true;
+      backend = lib.mkDefault "pipewire";
+      support32Bit = lib.mkDefault true;
+    };
+
+    bluetooth = {
+      enable = lib.mkDefault true;
+      powerOnBoot = lib.mkDefault true;
+    };
   };
 
   # Boot configuration (common for desktops)
@@ -16,7 +37,7 @@
     efi.canTouchEfiVariables = lib.mkDefault true;
   };
 
-  # Graphics drivers
+  # Graphics drivers (base configuration, NVIDIA is optional)
   hardware.graphics = {
     enable = lib.mkDefault true;
     enable32Bit = lib.mkDefault true;
@@ -35,16 +56,6 @@
 
   # Console configuration
   console.useXkbConfig = lib.mkDefault true;
-
-  # Audio
-  security.rtkit.enable = lib.mkDefault true;
-  services.pipewire = {
-    enable = lib.mkDefault true;
-    alsa.enable = lib.mkDefault true;
-    alsa.support32Bit = lib.mkDefault true;
-    pulse.enable = lib.mkDefault true;
-    wireplumber.enable = lib.mkDefault true;
-  };
 
   # Display manager - greetd with TUI greeter
   services.greetd = {
@@ -86,13 +97,6 @@
       TimeoutStopSec = 10;
     };
   };
-
-  # Bluetooth
-  hardware.bluetooth = {
-    enable = lib.mkDefault true;
-    powerOnBoot = lib.mkDefault true;
-  };
-  services.blueman.enable = lib.mkDefault true;
 
   # Network manager for GUI
   networking.networkmanager.enable = lib.mkDefault true;

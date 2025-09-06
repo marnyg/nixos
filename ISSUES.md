@@ -55,10 +55,18 @@ modules.my = {
 
 ### Desktop Environment Enhancements
 
+#### Configure tmux shell integration
+
+**Reference:** https://rycee.gitlab.io/home-manager/options.html#opt-programs.tmux.shell
+
 #### Configure screenshot utility
 
 **Current:** Using flameshot
 **Task:** Ensure proper keybinding configuration
+
+#### Improve rofi appearance
+
+**Task:** Apply custom theme for better appearance
 
 #### Add keyboard shortcuts
 
@@ -69,23 +77,13 @@ Configure additional shortcuts for:
 - Power menu (super + q)
 - Other utility shortcuts as needed
 
-#### Improve rofi appearance
-
-**Task:** Apply custom theme for better appearance
-
-### Development Environment
-
-#### Configure tmux shell integration
-
-**Reference:** https://rycee.gitlab.io/home-manager/options.html#opt-programs.tmux.shell
-
 ### Future Considerations
 
 #### Add VM integration testing
 
 **Reference:** https://nixos.org/guides/integration-testing-using-virtual-machines.html
 
-#### Automate cloud NixOS with Terraform
+#### Automate cloud NixOS with Terraform/terranix/pulumi or raw sdk if i am feeling spicy
 
 **Reference:** https://nixos.org/guides/deploying-nixos-using-terraform.html
 

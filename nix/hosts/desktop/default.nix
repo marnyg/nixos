@@ -1,5 +1,5 @@
 # Desktop host configuration
-{ config, pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -9,16 +9,14 @@
 
   system.stateVersion = "23.11";
 
-  # Desktop-specific: NVIDIA GPU configuration
-  services.xserver.videoDrivers = [ "nvidia" ];
-
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
-    open = true;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  # Desktop-specific: Enable NVIDIA GPU
+  hardware.profiles.nvidia = {
+    enable = true;
+    driver = "stable";
+    powerManagement = {
+      enable = false; # Can cause issues with desktop GPUs
+      finegrained = false; # Not needed for desktop
+    };
   };
 
   # Desktop-specific packages

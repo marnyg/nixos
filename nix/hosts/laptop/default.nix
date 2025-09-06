@@ -1,5 +1,5 @@
 # Laptop host configuration
-{ inputs, ... }:
+{ ... }:
 
 {
   imports = [
@@ -9,8 +9,7 @@
 
   system.stateVersion = "23.11";
 
-  # Laptop-specific: battery optimization
-  hardware.acpilight.enable = true;
+  # No specific hardware overrides needed - laptop profile handles it all
 
   # User configuration
   my.users.mar = {
