@@ -1,11 +1,11 @@
 { lib, config, ... }:
 with lib;
 {
-  options.modules.direnv = {
+  options.modules.my.direnv = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.direnv.enable {
+  config = mkIf config.modules.my.direnv.enable {
     programs.direnv = {
       enable = true;
       nix-direnv.enable = true;

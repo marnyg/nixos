@@ -3,7 +3,7 @@
 
 {
   # Only the most essential modules (use mkDefault so other profiles can override)
-  modules = {
+  modules.my = {
     sharedDefaults.enable = true;
     git.enable = lib.mkDefault false;
     direnv.enable = lib.mkDefault false;

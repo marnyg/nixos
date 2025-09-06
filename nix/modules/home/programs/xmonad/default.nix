@@ -2,10 +2,10 @@
 with lib;
 
 {
-  options.modules.xmonad = {
+  options.modules.my.xmonad = {
     enable = mkOption { type = types.bool; default = false; };
   };
-  config = mkIf config.modules.xmonad.enable
+  config = mkIf config.modules.my.xmonad.enable
     {
       #let
       #  #extra = ''

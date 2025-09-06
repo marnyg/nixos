@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.modules.services.cloneWorkRepos;
+  cfg = config.modules.my.services.cloneWorkRepos;
 in
 {
-  options.modules.services.cloneWorkRepos = {
+  options.modules.my.services.cloneWorkRepos = {
     enable = lib.mkEnableOption "Enable Git Repos cloning service";
 
     gitDir = lib.mkOption {

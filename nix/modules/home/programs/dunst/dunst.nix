@@ -1,11 +1,11 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.dunst = {
+  options.modules.my.dunst = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.dunst.enable {
+  config = mkIf config.modules.my.dunst.enable {
     # home.file = {
     #   ".config/dunst/dunstrc" = {
     #     source = ./dunstrc;

@@ -1,11 +1,11 @@
 { lib, config, ... }:
 with lib;
 {
-  options.modules.zellij = {
+  options.modules.my.zellij = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.zellij.enable {
+  config = mkIf config.modules.my.zellij.enable {
     programs.zellij = {
       enable = true;
       settings = {

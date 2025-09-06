@@ -1,11 +1,11 @@
 { lib, config, ... }:
 with lib;
 {
-  options.modules.wofi = {
+  options.modules.my.wofi = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.wofi.enable {
+  config = mkIf config.modules.my.wofi.enable {
     programs.wofi.enable = true;
 
     # For Hyprland

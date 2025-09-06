@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.lf = {
+  options.modules.my.lf = {
     enable = mkOption { type = types.bool; default = false; };
   };
-  config = mkIf config.modules.lf.enable
+  config = mkIf config.modules.my.lf.enable
     {
       programs.lf.enable = true;
       programs.lf.settings = {

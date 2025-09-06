@@ -64,11 +64,11 @@ tmux switch-client -t $selected_name
 in
 
 {
-  options.modules.tmux = {
+  options.modules.my.tmux = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.tmux.enable {
+  config = mkIf config.modules.my.tmux.enable {
     programs.tmux = {
       enable = true;
       keyMode = "vi";

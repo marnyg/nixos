@@ -2,7 +2,7 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.hyprland = {
+  options.modules.my.hyprland = {
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -10,11 +10,11 @@ with lib;
     };
   };
 
-  config = mkIf config.modules.hyprland.enable {
+  config = mkIf config.modules.my.hyprland.enable {
 
 
-    modules.wofi.enable = true;
-    modules.waybar.enable = true;
+    modules.my.wofi.enable = true;
+    modules.my.waybar.enable = true;
     programs.waybar.systemd.enable = true;
     home.packages = [ pkgs.wl-clipboard ];
     services.mako = {

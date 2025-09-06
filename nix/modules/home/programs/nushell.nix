@@ -4,7 +4,7 @@
 { lib, config, pkgs, ... }:
 with lib;
 {
-  options.modules.nushell = {
+  options.modules.my.nushell = {
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -12,9 +12,9 @@ with lib;
     };
   };
 
-  config = mkIf config.modules.nushell.enable {
+  config = mkIf config.modules.my.nushell.enable {
     # Enable shared shell configuration for common aliases and tools
-    modules.sharedShellConfig.enable = true;
+    modules.my.sharedShellConfig.enable = true;
 
     # Nushell-specific integrations
     programs.zoxide.enableNushellIntegration = true;

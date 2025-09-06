@@ -23,10 +23,10 @@ let
 
 in
 {
-  options.modules.cloneDefaultRepos = {
+  options.modules.my.cloneDefaultRepos = {
     enable = mkOption { type = types.bool; default = false; };
   };
-  config = mkIf config.modules.cloneDefaultRepos.enable
+  config = mkIf config.modules.my.cloneDefaultRepos.enable
     {
       home.file.".ssh/.envrc".text = ''
         # SSH key management via Bitwarden

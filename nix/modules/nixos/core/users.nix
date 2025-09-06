@@ -101,7 +101,7 @@ let
       home.stateVersion = "23.11";
 
       # Enable secrets management 
-      modules.secrets.enable = true;
+      modules.my.secrets.enable = true;
 
       # Basic session variables
       home.sessionVariables = {

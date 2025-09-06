@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.git = {
+  options.modules.my.git = {
     enable = mkEnableOption ''
       personal Git configuration.
       
@@ -11,7 +11,7 @@ with lib;
     '';
   };
 
-  config = mkIf config.modules.git.enable {
+  config = mkIf config.modules.my.git.enable {
     # programs.git-credential-oauth.enable = true;
     programs.gh = {
       enable = true;

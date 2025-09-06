@@ -1,11 +1,11 @@
 { lib, config, ... }:
 with lib;
 {
-  options.modules.fzf = {
+  options.modules.my.fzf = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.fzf.enable {
+  config = mkIf config.modules.my.fzf.enable {
     programs.fzf = {
       enable = true;
       enableZshIntegration = true;

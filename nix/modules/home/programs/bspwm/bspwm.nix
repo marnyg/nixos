@@ -1,11 +1,11 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.bspwm = {
+  options.modules.my.bspwm = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.bspwm.enable {
+  config = mkIf config.modules.my.bspwm.enable {
     # home.file.".config/bspwm/bspwmrc" = {
     #   text = (builtins.readFile ./bspwmrc);
     # };

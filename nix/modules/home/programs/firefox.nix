@@ -1,11 +1,11 @@
 { pkgs, config, lib, ... }:
 with lib;
 {
-  options.modules.firefox = {
+  options.modules.my.firefox = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.firefox.enable {
+  config = mkIf config.modules.my.firefox.enable {
     programs.firefox = {
       enable = true;
       package = pkgs.firefox-bin;

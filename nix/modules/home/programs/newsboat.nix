@@ -1,11 +1,11 @@
 { lib, config, ... }:
 with lib;
 {
-  options.modules.newsboat = {
+  options.modules.my.newsboat = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.newsboat.enable {
+  config = mkIf config.modules.my.newsboat.enable {
     programs.newsboat = {
       enable = true;
       autoReload = true;

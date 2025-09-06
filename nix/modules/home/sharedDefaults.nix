@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 {
-  options.modules.sharedDefaults.enable = lib.mkEnableOption ''
+  options.modules.my.sharedDefaults.enable = lib.mkEnableOption ''
     shared default configuration for Home Manager users.
     
     Enables basic programs (home-manager, bash), GitHub CLI with extensions,
@@ -8,7 +8,7 @@
     and session paths
   '';
 
-  config = lib.mkIf config.modules.sharedDefaults.enable {
+  config = lib.mkIf config.modules.my.sharedDefaults.enable {
     programs.home-manager.enable = true;
     programs.bash.enable = true;
 

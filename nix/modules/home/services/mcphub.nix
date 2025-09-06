@@ -1,10 +1,10 @@
 { lib, config, ... }:
 with lib;
 {
-  options.modules.mcpServer = {
+  options.modules.my.mcpServer = {
     enable = mkOption { type = types.bool; default = true; };
   };
-  config = mkIf config.modules.mcpServer.enable
+  config = mkIf config.modules.my.mcpServer.enable
     {
       home.file.".config/mcphub/servers.json".text = ''
         {

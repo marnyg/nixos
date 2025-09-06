@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.sharedShellConfig = {
+  options.modules.my.sharedShellConfig = {
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -15,7 +15,7 @@ with lib;
     };
   };
 
-  config = mkIf config.modules.sharedShellConfig.enable {
+  config = mkIf config.modules.my.sharedShellConfig.enable {
     # Shared CLI tools and configuration
     programs.eza = {
       enable = true;

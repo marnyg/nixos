@@ -1,11 +1,11 @@
 { pkgs, lib, config, secretPaths, ... }:
 with lib;
 {
-  options.modules.tailscale-autoconnect = {
+  options.modules.my.tailscale-autoconnect = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.tailscale-autoconnect.enable {
+  config = mkIf config.modules.my.tailscale-autoconnect.enable {
     services.tailscale.enable = true;
     services.tailscale.port = 12345;
 

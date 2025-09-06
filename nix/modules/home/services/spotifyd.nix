@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.spotifyd = {
+  options.modules.my.spotifyd = {
     enable = mkOption { type = types.bool; default = false; };
   };
-  config = mkIf config.modules.spotifyd.enable
+  config = mkIf config.modules.my.spotifyd.enable
     {
       home.packages = [ pkgs.spotify-player ];
       services.spotifyd = (if pkgs.system != "aarch64-darwin" then {

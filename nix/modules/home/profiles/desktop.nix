@@ -3,7 +3,7 @@
 
 {
   # Desktop modules
-  modules = {
+  modules.my = {
     # Browsers
     firefox.enable = true;
     qutebrowser.enable = lib.mkDefault false;

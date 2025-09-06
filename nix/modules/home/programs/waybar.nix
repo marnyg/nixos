@@ -1,11 +1,11 @@
 { lib, config, ... }:
 with lib;
 {
-  options.modules.waybar = {
+  options.modules.my.waybar = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.waybar.enable {
+  config = mkIf config.modules.my.waybar.enable {
     programs.waybar.enable = true;
     programs.waybar.systemd.enable = true;
 

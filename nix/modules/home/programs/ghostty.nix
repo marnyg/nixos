@@ -1,14 +1,14 @@
 { lib, config, ... }:
 with lib;
 {
-  options.modules.ghostty = {
+  options.modules.my.ghostty = {
     enable = mkOption { type = types.bool; default = false; };
     fontsize = mkOption { type = types.number; default = 14; };
   };
 
-  config = mkIf config.modules.ghostty.enable {
-    #modules.nushell.enable = true;
-    modules.fish.enable = true;
+  config = mkIf config.modules.my.ghostty.enable {
+    #modules.my.nushell.enable = true;
+    modules.my.fish.enable = true;
 
 
     programs.ghostty = {
@@ -20,7 +20,7 @@ with lib;
 
       settings = {
         theme = "catppuccin-mocha";
-        font-size = config.modules.ghostty.fontsize;
+        font-size = config.modules.my.ghostty.fontsize;
         font-family = "FiraCode Nerd Font Mono";
         #shell-integration = "none";
         shell-integration = "fish";

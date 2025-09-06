@@ -5,7 +5,7 @@ let
   nixvim = inputs.self.packages.${pkgs.system}.nixvim or pkgs.neovim;
 in
 {
-  options.modules.nixvim = {
+  options.modules.my.nixvim = {
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -13,7 +13,7 @@ in
     };
   };
 
-  config = mkIf config.modules.nixvim.enable {
+  config = mkIf config.modules.my.nixvim.enable {
     # Install the custom nixvim package and related tools
     home.packages = [ nixvim ] ++ (with pkgs; [
       # Language servers and tools that nixvim might use

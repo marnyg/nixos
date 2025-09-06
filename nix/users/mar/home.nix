@@ -11,11 +11,11 @@
   home.stateVersion = "23.11";
 
   # Enable secrets management
-  modules.secrets.enable = true;
+  modules.my.secrets.enable = true;
 
   # Default module selections
   # These can be overridden by profiles
-  modules = {
+  modules.my = {
     sharedDefaults.enable = lib.mkDefault true;
     nixvim.enable = lib.mkDefault true;
     fish.enable = lib.mkDefault true;

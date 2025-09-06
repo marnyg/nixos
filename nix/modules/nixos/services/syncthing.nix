@@ -1,11 +1,11 @@
 { lib, config, ... }:
 with lib;
 {
-  options.modules.syncthing = {
+  options.modules.my.syncthing = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.syncthing.enable
+  config = mkIf config.modules.my.syncthing.enable
     {
       services.syncthing = {
         enable = true;

@@ -1,14 +1,14 @@
 { lib, config, ... }:
 with lib;
 {
-  options.modules.kitty = {
+  options.modules.my.kitty = {
     enable = mkOption { type = types.bool; default = false; };
     fontsize = mkOption { type = types.number; default = 12; };
   };
 
-  config = mkIf config.modules.kitty.enable {
+  config = mkIf config.modules.my.kitty.enable {
 
-    #modules.nushell.enable = true;
+    #modules.my.nushell.enable = true;
 
     programs.kitty = {
       enable = true;
@@ -25,7 +25,7 @@ with lib;
         #   fonts = [ "FiraCode" "DroidSansMono" "FiraMono" "JetBrainsMono" ];
         # });
         name = "Fira Code Nerd Font";
-        size = config.modules.kitty.fontsize;
+        size = config.modules.my.kitty.fontsize;
         #size = "6";
         #name= "Fira Mono Nerd Font";
         #name ="JetBrains Mono";

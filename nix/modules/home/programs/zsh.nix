@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.zsh = {
+  options.modules.my.zsh = {
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -15,9 +15,9 @@ with lib;
     };
   };
 
-  config = mkIf config.modules.zsh.enable {
+  config = mkIf config.modules.my.zsh.enable {
     # Enable shared shell configuration
-    modules.sharedShellConfig.enable = true;
+    modules.my.sharedShellConfig.enable = true;
 
     programs.zsh = {
       enable = true;

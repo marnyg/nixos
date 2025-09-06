@@ -10,11 +10,11 @@
 { lib, config, ... }:
 with lib;
 {
-  options.modules.autorandr = {
+  options.modules.my.autorandr = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.autorandr.enable {
+  config = mkIf config.modules.my.autorandr.enable {
 
 
     # systemd.services.my-autorandr = {

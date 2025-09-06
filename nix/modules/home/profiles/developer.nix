@@ -3,7 +3,7 @@
 
 {
   # Essential development tools
-  modules = {
+  modules.my = {
     git.enable = true;
     direnv.enable = true;
     tmux.enable = true;

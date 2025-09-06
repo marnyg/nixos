@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-  options.modules.fish.enable = mkOption {
+  options.modules.my.fish.enable = mkOption {
     type = types.bool;
     default = false;
     description = ''
@@ -13,9 +13,9 @@ with lib;
     '';
   };
 
-  config = mkIf config.modules.fish.enable {
+  config = mkIf config.modules.my.fish.enable {
     # Enable shared shell configuration
-    modules.sharedShellConfig.enable = true;
+    modules.my.sharedShellConfig.enable = true;
 
 
 

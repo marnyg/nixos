@@ -1,11 +1,11 @@
 { lib, config, ... }:
 with lib;
 {
-  options.modules.qutebrowser = {
+  options.modules.my.qutebrowser = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.qutebrowser.enable {
+  config = mkIf config.modules.my.qutebrowser.enable {
     #§    home.packages = [ pkgs.keyutils ];
     home.sessionVariables.QT_SCALE_FACTOR = "1.5";
     home.sessionVariables.b = "1.5";
