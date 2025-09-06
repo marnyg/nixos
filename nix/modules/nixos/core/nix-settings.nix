@@ -4,7 +4,7 @@
 with lib;
 
 {
-  options.myModules.nixSettings = {
+  options.modules.my.nixSettings = {
     enable = mkEnableOption "shared Nix settings";
 
     flakes = mkOption {
@@ -20,12 +20,12 @@ with lib;
     };
   };
 
-  config = mkIf config.myModules.nixSettings.enable {
+  config = mkIf config.modules.my.nixSettings.enable {
     nix = {
       settings = {
-        trusted-users = config.myModules.nixSettings.trustedUsers;
+        trusted-users = config.modules.my.nixSettings.trustedUsers;
         auto-optimise-store = true;
-        experimental-features = mkIf config.myModules.nixSettings.flakes [
+        experimental-features = mkIf config.modules.my.nixSettings.flakes [
           "nix-command"
           "flakes"
           "pipe-operators"

@@ -10,7 +10,7 @@
   system.stateVersion = "23.11";
 
   # Enable modules
-  myModules = {
+  modules.my = {
     wsl.enable = true;
     defaults.enable = true;
     secrets.enable = true;

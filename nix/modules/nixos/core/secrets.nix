@@ -4,7 +4,7 @@
 with lib;
 
 {
-  options.myModules.secrets = {
+  options.modules.my.secrets = {
     enable = mkEnableOption "shared secrets configuration";
 
     claudeTokens = mkOption {
@@ -14,10 +14,10 @@ with lib;
     };
   };
 
-  config = mkIf config.myModules.secrets.enable {
+  config = mkIf config.modules.my.secrets.enable {
     # Age secrets configuration
     age = {
-      secrets = mkIf config.myModules.secrets.claudeTokens {
+      secrets = mkIf config.modules.my.secrets.claudeTokens {
         openrouterToken = {
           file = secretPaths.openrouterToken;
           owner = "mar";

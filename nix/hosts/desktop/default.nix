@@ -1,5 +1,5 @@
 # Desktop host configuration
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports = [
@@ -17,7 +17,7 @@
   system.stateVersion = "23.11";
 
   # Enable modules
-  myModules = {
+  modules.my = {
     defaults.enable = true;
     secrets.enable = true;
     nixSettings.enable = true;

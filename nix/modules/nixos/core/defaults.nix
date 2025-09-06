@@ -1,8 +1,8 @@
 { pkgs, lib, config, ... }:
 {
-  options.myModules.defaults.enable = lib.mkEnableOption "Create users";
+  options.modules.my.defaults.enable = lib.mkEnableOption "Create users";
 
-  config = lib.mkIf config.myModules.defaults.enable {
+  config = lib.mkIf config.modules.my.defaults.enable {
 
     environment.systemPackages = with pkgs; [ wget curl tmux ];
 

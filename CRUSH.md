@@ -20,4 +20,4 @@ this NixOS configuration. Keep this file open in a split pane for easy reference
 - Error handling: Use mkIf for conditional config, wrap with lib.optional
 - Comments: Only for complex logic, avoid obvious comments
 - Module structure: options with descriptions, config with mkIf guards
-- Home Manager: modules._ namespace, NixOS: myModules._ namespace
+- Home Manager: modules.my._ namespace, NixOS: modules.my._ namespace

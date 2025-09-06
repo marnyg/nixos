@@ -1,11 +1,11 @@
 { lib, config, ... }:
 with lib;
 {
-  options.myModules.wsl = {
+  options.modules.my.wsl = {
     enable = mkEnableOption "enable wsl with my default";
   };
 
-  config = mkIf config.myModules.wsl.enable {
+  config = mkIf config.modules.my.wsl.enable {
     wsl = {
       enable = true;
       wslConf.automount.root = "/mnt";

@@ -195,9 +195,9 @@ Modules can be controlled at the host level:
 # In your host configuration
 my.users.mar = {
   extraHomeModules = [{
-    modules.firefox.enable = true;
-    modules.nixvim.enable = true;
-    modules.tmux.enable = false;
+    modules.my.firefox.enable = true;
+    modules.my.nixvim.enable = true;
+    modules.my.tmux.enable = false;
   }];
 };
 ```
