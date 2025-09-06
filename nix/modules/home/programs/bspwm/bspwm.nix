@@ -6,6 +6,8 @@ with lib;
   };
 
   config = mkIf config.modules.my.bspwm.enable {
+    # Enable rofi with custom theme
+    modules.my.rofi.enable = true;
     # home.file.".config/bspwm/bspwmrc" = {
     #   text = (builtins.readFile ./bspwmrc);
     # };

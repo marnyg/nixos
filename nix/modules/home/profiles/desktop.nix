@@ -52,6 +52,20 @@
     scrot
     libnotify
 
+    # Screenshot and clipboard utilities
+    grim
+    slurp
+    cliphist
+    clipmenu
+
+    # Color pickers
+    hyprpicker
+    gpick
+
+    # Lock screens
+    swaylock
+    i3lock
+
     # File management
     nautilus
     pcmanfm

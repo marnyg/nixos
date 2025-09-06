@@ -42,41 +42,6 @@ modules.my = {
 }
 ```
 
-#### Hardware profiles
-
-**Proposed:** Create hardware profiles for common patterns:
-
-- nvidia.nix - NVIDIA GPU configuration
-- audio.nix - Audio setup (pipewire, etc.)
-- bluetooth.nix - Bluetooth configuration
-- laptop-power.nix - Power management for laptops
-
-## Low Priority / Nice to Have
-
-### Desktop Environment Enhancements
-
-#### Configure tmux shell integration
-
-**Reference:** https://rycee.gitlab.io/home-manager/options.html#opt-programs.tmux.shell
-
-#### Configure screenshot utility
-
-**Current:** Using flameshot
-**Task:** Ensure proper keybinding configuration
-
-#### Improve rofi appearance
-
-**Task:** Apply custom theme for better appearance
-
-#### Add keyboard shortcuts
-
-Configure additional shortcuts for:
-
-- Screenshot (Print) - flameshot gui
-- Clipboard manager (super + v)
-- Power menu (super + q)
-- Other utility shortcuts as needed
-
 ### Future Considerations
 
 #### Add VM integration testing

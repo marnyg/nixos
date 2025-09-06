@@ -48,6 +48,7 @@
           ./programs/hyprland.nix
           ./programs/waybar.nix
           ./programs/wofi.nix
+          ./programs/rofi.nix
           ./programs/newsboat.nix
 
           # Services

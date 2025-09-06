@@ -174,6 +174,25 @@ with lib;
       # bind = $mainMod, D, pseudo, # dwindle
       bind = $mainMod, S, togglesplit, # dwindle
 
+      ## UTILITY KEYBINDINGS
+      # Launcher (wofi)
+      bind = $mainMod, D, exec, wofi --show drun
+      bind = $mainMod, R, exec, wofi --show run
+      
+      # Screenshot with flameshot
+      bind = SUPER SHIFT, S, exec, flameshot gui
+      bind = , Print, exec, flameshot full --path ~/Pictures/Screenshots
+      bind = SHIFT, Print, exec, flameshot screen --path ~/Pictures/Screenshots
+      
+      # Clipboard manager (using wofi with wl-clipboard)
+      bind = SUPER SHIFT, V, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy
+      
+      # Power menu
+      bind = SUPER SHIFT, P, exec, echo -e "Lock\nLogout\nSuspend\nReboot\nShutdown" | wofi --dmenu --prompt "Power Menu" | xargs -I {} sh -c 'case {} in Lock) swaylock;; Logout) hyprctl dispatch exit;; Suspend) systemctl suspend;; Reboot) systemctl reboot;; Shutdown) systemctl poweroff;; esac'
+      
+      # Color picker
+      bind = SUPER SHIFT, C, exec, hyprpicker -a
+
       ## FOCUS WINDOW
       bind = $mainMod, left, movefocus, l
       bind = $mainMod, right, movefocus, r

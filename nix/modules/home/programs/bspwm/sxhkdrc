@@ -8,7 +8,7 @@ super + Return
 
 # program launcher
 super + @space
-	rofi
+	rofi -show drun
 
 super + p
 	rofi -show run
@@ -16,6 +16,32 @@ super + p
 # make sxhkd reload its configuration files:
 super + Escape
 	pkill -USR1 -x sxhkd
+
+#
+# utility hotkeys  
+#
+
+# screenshot with flameshot
+super + shift + s
+	flameshot gui
+
+Print
+	flameshot full --path ~/Pictures/Screenshots
+
+shift + Print
+	flameshot screen --path ~/Pictures/Screenshots
+
+# clipboard manager (using clipmenu)
+super + shift + v
+	clipmenu
+
+# power menu
+super + shift + p
+	echo -e "Lock\nLogout\nSuspend\nReboot\nShutdown" | rofi -dmenu -p "Power Menu" | xargs -I {} sh -c 'case {} in Lock) i3lock;; Logout) bspc quit;; Suspend) systemctl suspend;; Reboot) systemctl reboot;; Shutdown) systemctl poweroff;; esac'
+
+# color picker
+super + shift + c
+	gpick -s
 
 #
 # bspwm hotkeys

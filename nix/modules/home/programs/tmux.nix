@@ -75,6 +75,7 @@ in
       escapeTime = 0;
       mouse = true;
       terminal = "screen-256color";
+      #shell = "${pkgs.fish}/bin/fish";
       #newSession = true;
       extraConfig = /* */''
         set-option -ga terminal-overrides ",xterm-256color:Tc"
