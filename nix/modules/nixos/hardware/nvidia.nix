@@ -29,28 +29,29 @@ with lib;
   };
 
   config = mkIf config.hardware.profiles.nvidia.enable {
-    # Enable graphics drivers
+    # Enable graphics drivers (same as old config)
     hardware.graphics = {
       enable = true;
       enable32Bit = true; # Support for 32-bit applications (Steam, Wine)
     };
 
-    # NVIDIA specific configuration
+    # NVIDIA specific configuration - CRITICAL: must load nvidia driver
     services.xserver.videoDrivers = [ "nvidia" ];
 
     hardware.nvidia = {
-      modesetting.enable = true; # Required for Wayland compositors
+      # Modesetting is REQUIRED - same as old config
+      modesetting.enable = true;
 
       powerManagement = {
         enable = config.hardware.profiles.nvidia.powerManagement.enable;
         finegrained = config.hardware.profiles.nvidia.powerManagement.finegrained;
       };
 
-      # Use open-source kernel modules where possible
-      open = mkDefault true;
+      # Use open-source kernel modules - matching old config exactly
+      open = true; # Don't use mkDefault - this was true in working config
 
-      # GUI for NVIDIA settings
-      nvidiaSettings = mkDefault true;
+      # Enable NVIDIA settings menu
+      nvidiaSettings = true;
 
       # Select driver package based on option
       package =
@@ -65,12 +66,15 @@ with lib;
           config.boot.kernelPackages.nvidiaPackages.production;
     };
 
-    # Environment variables for better NVIDIA support
+    # Environment variables for NVIDIA support
     environment.sessionVariables = {
       # For Wayland compatibility
-      WLR_NO_HARDWARE_CURSORS = mkDefault "1";
+      WLR_NO_HARDWARE_CURSORS = "1";
+      LIBVA_DRIVER_NAME = "nvidia";
+      XDG_SESSION_TYPE = "wayland";
+      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
       # For better Vulkan support
-      VK_DRIVER_FILES = mkDefault "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
+      VK_DRIVER_FILES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
     };
   };
 }
