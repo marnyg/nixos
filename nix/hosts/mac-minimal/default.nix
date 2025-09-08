@@ -1,6 +1,9 @@
 # Minimal Mac host configuration
-{ pkgs, ... }:
+{ self, ... }:
 {
+  # Use the minimal profile
+  imports = [ self.darwinModules.profile-minimal ];
+
   # Host identification
   networking.hostName = "mac-minimal";
   networking.computerName = "Mac Minimal";

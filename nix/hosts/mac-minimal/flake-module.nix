@@ -9,8 +9,8 @@
       # Host-specific configuration
       ./default.nix
 
-      # Use the minimal profile (no Yabai/skhd)
-      self.darwinModules.profile-minimal
+      # Import Darwin modules bundle
+      self.darwinModules.default
 
       # External inputs
       inputs.home-manager.darwinModules.home-manager

@@ -62,8 +62,8 @@ in
             shift + cmd - k : yabai -m window --resize top:0:-40
             shift + cmd - l : yabai -m window --resize right:40:0
           
-            # Layout management
-            alt - d : sh -c "yabai -m space --layout $(yabai -m query --spaces --space | jq -r 'if .type == \"bsp\" then \"stack\" else \"bsp\" end')"
+            # Layout management - using explicit bash to handle command substitution
+            alt - d : /bin/bash -c 'yabai -m space --layout $(yabai -m query --spaces --space | ${pkgs.jq}/bin/jq -r "if .type == \"bsp\" then \"stack\" else \"bsp\" end")'
             alt - t : yabai -m window --toggle float
             alt - m : yabai -m window --toggle zoom-fullscreen
           

@@ -1,47 +1,70 @@
-# Darwin workstation profile
-# Configures a full-featured macOS development workstation
-{ pkgs, lib, ... }:
+# Full workstation Darwin profile
+# Complete development workstation with window management
+{ lib, pkgs, ... }:
 {
-  # Import core modules and services
-  imports = [
-    ../core/defaults.nix
-    ../core/nix-settings.nix # Now optimized for macOS performance
-    ../core/fonts.nix
-    ../services/yabai.nix
-    ../services/skhd.nix
-    ../services/tailscale.nix
-  ];
+  imports = [ ./developer.nix ];
 
-  # Enable and configure services
-  modules.darwin.services.yabai = {
-    enable = true;
-    layout = "bsp";
-    workspaces = {
-      "1" = { label = "todo"; apps = [ "Reminder" "Mail" "Calendar" ]; };
-      "2" = { label = "code"; apps = [ "Visual Studio Code" "IntelliJ IDEA" "Xcode" ]; };
-      "3" = { label = "productive"; apps = [ "Alacritty" "Arc" "Safari" "Firefox" ]; };
-      "4" = { label = "utils"; apps = [ "Spotify" "Music" "Finder" ]; };
-      "5" = { label = "chat"; apps = [ "Microsoft Teams" "Slack" "Signal" "Messages" "Discord" ]; };
+  # Workstation modules
+  modules.darwin = {
+    # Window management
+    windowManagement = {
+      enable = true;
+      layout = lib.mkDefault "bsp";
+
+      workspaces = lib.mkDefault [
+        { number = 1; label = "todo"; apps = [ "Reminder" "Mail" "Calendar" ]; }
+        { number = 2; label = "code"; apps = [ "Visual Studio Code" "IntelliJ IDEA" "Xcode" ]; }
+        { number = 3; label = "productive"; apps = [ "Alacritty" "Arc" "Safari" "Firefox" ]; }
+        { number = 4; label = "utils"; apps = [ "Spotify" "Music" "Finder" ]; }
+        { number = 5; label = "chat"; apps = [ "Microsoft Teams" "Slack" "Signal" "Messages" "Discord" ]; }
+      ];
+
+      rules = lib.mkDefault [
+        { app = "^System Settings$"; manage = false; }
+        { app = "^System Information$"; manage = false; }
+        { app = "^System Preferences$"; manage = false; }
+        { title = "Preferences$"; manage = false; }
+        { title = "Settings$"; manage = false; }
+      ];
+    };
+
+    # Additional brew packages for workstation (only if Homebrew is installed)
+    brew = {
+      enable = lib.mkDefault false; # Enable manually if Homebrew is installed
+      casks = lib.mkDefault [
+        "arc"
+        "firefox"
+        "slack"
+        "spotify"
+        "rectangle" # Window management fallback
+        "raycast" # Spotlight replacement
+        "iterm2" # Terminal alternative
+      ];
+
+      masApps = lib.mkDefault {
+        "1Password for Safari" = 1569813296;
+        "Amphetamine" = 937984704; # Keep Mac awake
+      };
     };
   };
 
-  modules.darwin.services.skhd = {
-    enable = true;
-    defaultKeybindings = true;
-  };
+  # Tailscale VPN
+  services.tailscale.enable = lib.mkDefault true;
 
-  modules.darwin.services.tailscale.enable = true;
-
-  # Additional system packages
+  # Additional workstation packages
   environment.systemPackages = with pkgs; [
     terminal-notifier
     mas # Mac App Store CLI
     cocoapods
   ];
 
-  # Enable specific shells
-  environment.shells = [ pkgs.fish pkgs.zsh pkgs.bash ];
+  # Fonts for development
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code
+    fira-code
+    source-code-pro
+  ];
 
-  # User configuration
+  # System primary user
   system.primaryUser = lib.mkDefault "mariusnygard";
 }

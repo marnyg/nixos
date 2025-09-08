@@ -1,18 +1,27 @@
 # Minimal Darwin profile
-# Basic macOS configuration without window management
-{ pkgs, ... }:
+# Bare essentials for a Darwin system
+{ lib, pkgs, ... }:
 {
-  # Import core modules only
-  imports = [
-    ../core/defaults.nix
-    ../core/nix-settings.nix
-  ];
+  imports = [ ./base.nix ];
 
-  # Basic packages only
-  environment.systemPackages = with pkgs; [
-    terminal-notifier
-  ];
+  # Minimal configuration - just the essentials
+  modules.darwin = {
+    # Use conservative Nix settings for minimal systems
+    nixSettings = {
+      performance = {
+        httpConnections = lib.mkDefault 32; # Fewer connections
+        downloadBufferSize = lib.mkDefault 67108864; # 64MB buffer
+      };
+      optimizations = {
+        gcAutomatic = lib.mkDefault false; # Manual GC only
+      };
+    };
+  };
 
-  # Enable basic shells
-  environment.shells = [ pkgs.fish pkgs.zsh pkgs.bash ];
+  # Only the most essential packages
+  environment.systemPackages = lib.mkForce (with pkgs; [
+    git
+    vim
+    curl
+  ]);
 }
