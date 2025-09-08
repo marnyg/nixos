@@ -27,6 +27,7 @@ with lib;
       difftastic.enable = true;
       ignores = [
         "**/.envrc"
+        "**/scratch"
         "${config.home.homeDirectory}/git/sendra/**/flake.*"
         "${config.home.homeDirectory}/git/wellstarter/**/flake.*"
       ];

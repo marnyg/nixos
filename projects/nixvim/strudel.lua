@@ -80,16 +80,31 @@ function M.send_buffer()
   send_code(code)
 end
 
---local strudel = require(€ý,'strudel')
+-- Function to send hush command (stops all sound)
+function M.send_hush_command()
+  local code = b64_encode("#hush")
+  send_code(code)
+end
+
+--local strudel = require(ï¿½ï¿½,'strudel')
 
 -- Keymap for sending the entire file
 -- Leader + s + a (send all)
 --vim.keymap.set('n', '<leader>sa', strudel.send_buffer, { desc = "Strudel: Send All to browser" })
 vim.keymap.set('n', '<leader>sa', M.send_buffer, { desc = "Strudel: Send All to browser" })
+vim.keymap.set('n', '<leader>sh', M.send_hush_command, { desc = "Strudel: Send hush command to stop all sound" })
 
 -- Keymap for sending a visual selection
 -- After selecting text, press Leader + s + s (send selection)
 --vim.keymap.set('v', '<leader>ss', '":lua require("strudel").send_selection()<CR>',
 --{ desc = "Strudel: Send Selection to browser", silent = true })
+
+-- File type associations for Strudel files
+vim.filetype.add({
+  extension = {
+    strudel = 'javascript',
+    str = 'javascript',
+  },
+})
 
 return M

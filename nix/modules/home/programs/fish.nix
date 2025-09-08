@@ -40,6 +40,9 @@ with lib;
       # Fish-specific aliases (shared ones are in sharedShellConfig)
       shellAliases = {
         gi = "gitui";
+      } // lib.optionalAttrs pkgs.stdenv.isDarwin {
+        # macOS-specific: Podman Desktop installs to /opt/podman
+        podman = "/opt/podman/bin/podman";
       };
 
       plugins = [
