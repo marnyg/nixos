@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 with lib;
 {
   options.modules.my.direnv = {
@@ -12,7 +12,10 @@ with lib;
       enableZshIntegration = true;
       enableNushellIntegration = true;
       config = {
-        hide_env_diff = true;
+        # Performance optimizations for macOS
+        hide_env_diff = true; # Disable expensive diff output
+        warn_timeout = lib.mkDefault "30s";
+        load_dotenv = true; # Cache direnv results longer
         whitelist.prefix = [ "~/git/nixos" "~/git/personal" "~/git/PerformanceLab" ];
       };
       # stdlib = ''

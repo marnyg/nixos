@@ -13,9 +13,12 @@
 
         # Database
         postgresql
-
-        # Phoenix tools
+      ] ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
+        # Phoenix tools (Linux only)
         inotify-tools # For Phoenix live reload
+      ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+        # macOS alternatives
+        # fswatch could be used as an alternative on macOS
       ];
 
       shellHook = ''
