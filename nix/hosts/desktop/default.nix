@@ -5,7 +5,11 @@
   imports = [
     ./hardware.nix
     ../../modules/nixos/profiles/desktop.nix
+    ../../modules/nixos/core/nix-network-settings.nix
   ];
+
+  # Enable enhanced network timeout settings
+  modules.my.nixNetworkSettings.enable = true;
 
   system.stateVersion = "23.11";
 

@@ -27,7 +27,7 @@
 
       # Network performance
       http-connections = lib.mkDefault 128;
-      connect-timeout = lib.mkDefault 5;
+      connect-timeout = lib.mkDefault 30;
 
       # Don't auto-optimise on APFS (slow)
       auto-optimise-store = lib.mkDefault false;
