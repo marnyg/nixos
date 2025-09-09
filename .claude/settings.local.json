@@ -1,6 +1,10 @@
 {
   "permissions": {
-    "allow": ["Bash(mv:*)", "Bash(nix flake check:*)"],
+    "allow": [
+      "Bash(mv:*)",
+      "Bash(nix flake check:*)",
+      "Bash(echo $TERM)"
+    ],
     "deny": []
   }
 }

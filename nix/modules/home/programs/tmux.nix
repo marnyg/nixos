@@ -74,18 +74,33 @@ in
       keyMode = "vi";
       escapeTime = 0;
       mouse = true;
-      terminal = "screen-256color";
+      terminal = "tmux-256color";
       #shell = "${pkgs.fish}/bin/fish";
       #newSession = true;
       extraConfig = /* */''
         set-option -ga terminal-overrides ",xterm-256color:Tc"
+        set-option -ga terminal-overrides ",ghostty:Tc"
+        
+        # Enable RGB colour if running in xterm or 256 color mode
+        set-option -sa terminal-features ',xterm-256color:RGB'
+        set-option -sa terminal-features ',tmux-256color:RGB'
+        
+        # Enable extended keys
+        set -s extended-keys on
+        
+        # Enable focus events  
+        set -g focus-events on
 
         # Start windows and panes at 1, not 0
         set -g base-index 1
         set -g pane-base-index 1
         set-window-option -g pane-base-index 1
         set-option -g renumber-windows on
+        
+        # CRITICAL: Set allow-passthrough to 'on' for image support
+        # Note: image.nvim expects 'on' not 'all'
         set -g allow-passthrough on
+        set -g visual-activity off
 
         bind-key n run-shell "${toggle-side-notes}"
 
