@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ... }: {
   options = { };
 
   imports = [ ./langs ./lsp.nix ./treesitter.nix ./cmp.nix ];
@@ -160,7 +160,7 @@
       };
 
       friendly-snippets.enable = true;
-      image.enable = true;
+      image.enable = lib.mkDefault (builtins.getEnv "TERM" != "");
       image.settings = {
         max_height_window_percentage = 50;
         max_width_window_percentage = 50;
