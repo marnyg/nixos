@@ -9,6 +9,9 @@
       # Custom packages from inputs
       mcphub-nvim = inputs.mcphub-nvim.packages.${final.system}.default or null;
       mcphub = inputs.mcphub.packages.${final.system}.default or null;
+
+      # Replace neovim with nixvim globally
+      neovim = inputs.self.packages.${final.system}.nixvim or prev.neovim;
     };
 
     # NUR overlay
@@ -23,9 +26,11 @@
       config.allowUnfree = true;
       overlays = [
         inputs.nur.overlays.default
-        (final: _prev: {
+        (final: prev: {
           mcphub-nvim = inputs.mcphub-nvim.packages.${final.system}.default or null;
           mcphub = inputs.mcphub.packages.${final.system}.default or null;
+          # Replace neovim with nixvim globally
+          neovim = inputs.self.packages.${final.system}.nixvim or prev.neovim;
         })
       ];
     };

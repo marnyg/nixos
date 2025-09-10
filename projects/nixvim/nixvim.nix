@@ -160,7 +160,7 @@
       };
 
       friendly-snippets.enable = true;
-      image.enable = lib.mkDefault (builtins.getEnv "TERM" != "");
+      image.enable = lib.mkDefault true;
       image.settings = {
         max_height_window_percentage = 50;
         max_width_window_percentage = 50;

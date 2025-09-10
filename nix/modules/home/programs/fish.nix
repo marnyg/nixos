@@ -22,6 +22,11 @@ with lib;
     programs.fish = {
       enable = true;
       interactiveShellInit = ''
+        ${lib.optionalString pkgs.stdenv.isDarwin ''
+          # Darwin-specific: Ensure home-manager managed packages are in PATH
+          fish_add_path --prepend /etc/profiles/per-user/$USER/bin
+        ''}
+        
         fish_vi_key_bindings
         ${lib.optionalString (config.age.secrets ? claudeToken) ''
           set -gx ANTHROPIC_API_KEY $(cat ${config.age.secrets.claudeToken.path})
