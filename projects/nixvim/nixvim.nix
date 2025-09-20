@@ -160,12 +160,66 @@
       };
 
       friendly-snippets.enable = true;
-      image.enable = lib.mkDefault true;
+      image.enable = true;
       image.settings = {
         max_height_window_percentage = 50;
         max_width_window_percentage = 50;
-        tmux_show_only_in_active_window = false;
+        tmux_show_only_in_active_window = true;
+        editor_only_render_when_focused = true;
+        integrations = {
+          markdown = {
+            editor_only_render_when_focused = true;
+            only_render_image_at_cursor = true;
+            only_render_image_at_cursor_mode = "popup";
+          };
+        };
       };
+
+      minuet = {
+        enable = true;
+        settings = {
+          provider = "openai_compatible";
+          request_timeout = 2.5;
+          throttle = 1500; # -- Increase to reduce costs and avoid rate limits
+          debounce = 600; #-- Increase to reduce costs and avoid rate limits
+          provider_options = {
+            openai_compatible = {
+              api_key = "OPENROUTER_API_KEY";
+              end_point = "https://openrouter.ai/api/v1/chat/completions";
+              model = "moonshotai/kimi-k2";
+              name = "Openrouter";
+              optional = {
+                max_tokens = 56;
+                top_p = 0.9;
+                provider = {
+                  #-- Prioritize throughput for faster completion
+                  sort = "throughput";
+                };
+              };
+            };
+          };
+          virtualtext = {
+            auto_trigger_ft = [ "markdown" "python" "lua" "md" ];
+            keymap = {
+              #TODO: change to not use alt
+
+              # accept whole completion
+              accept = "<A-A>";
+              # accept one line
+              accept_line = "<A-a>";
+              # accept n lines (prompts for number)
+              # e.g. "A-z 2 CR" will accept 2 lines
+              accept_n_lines = "<A-z>";
+              # Cycle to prev completion item; or manually invoke completion
+              prev = "<A-N>";
+              # Cycle to next completion item; or manually invoke completion
+              next = "<A-n>";
+              dismiss = "<A-e>";
+            };
+          };
+        };
+      };
+
 
       gitsigns.enable = true;
 

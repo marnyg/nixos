@@ -38,6 +38,9 @@ with lib;
           "ctrl+shift+a=select_all"
           "ctrl+shift+comma=reload_config"
           "ctrl+comma=open_config"
+          "ctrl+plus=increase_font_size:1"
+          "ctrl+equal=increase_font_size:1"
+          "ctrl+minus=decrease_font_size:1"
         ];
       };
       themes = {
