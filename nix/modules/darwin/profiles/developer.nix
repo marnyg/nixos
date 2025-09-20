@@ -73,7 +73,8 @@
     # Development utilities
     direnv
     tmux
-    neovim # Will be replaced by nixvim via overlay
+    neovim
+    claude-code
   ];
 
   # Enable developer shells
