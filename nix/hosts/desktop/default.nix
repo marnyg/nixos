@@ -31,7 +31,7 @@
 
   # Auto-upgrade configuration specific to this host
   system.autoUpgrade = {
-    enable = true;
+    enable = false;
     flake = "github:marnyg/nixos#desktop";
   };
 
