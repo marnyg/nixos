@@ -5,6 +5,7 @@
 {
   # Use the workstation profile
   imports = [ self.darwinModules.profile-workstation ];
+  nix.enable = false;
 
   # Host identification
   networking.hostName = "marius-mac";

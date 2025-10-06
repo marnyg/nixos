@@ -9,7 +9,7 @@ with lib;
     enable = mkEnableOption "enhanced network timeout settings for Nix";
   };
 
-  config = mkIf config.modules.my.nixNetworkSettings.enable {
+  config = mkIf false {
     nix = {
       settings = {
         # Network performance with longer timeouts

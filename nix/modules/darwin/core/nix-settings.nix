@@ -91,7 +91,6 @@ in
 
   config = lib.mkIf cfg.enable {
     nix = {
-      enable = true;
 
       settings = {
         # Binary caches
@@ -106,7 +105,7 @@ in
 
         # Performance tuning
         max-jobs = if cfg.maxJobs != null then cfg.maxJobs else "auto";
-        cores = if cfg.buildCores != null then cfg.buildCores else 0;
+        #cores = if cfg.buildCores != null then cfg.buildCores else 0;
 
         # Network performance
         http-connections = cfg.performance.httpConnections;
@@ -157,9 +156,6 @@ in
           system-features = [ "big-parallel" "benchmark" "nixos-test" "apple-silicon" ]
         ''}
         
-        # Evaluation cache
-        eval-cache = true
-        
         # Flake settings
         accept-flake-config = true
         
@@ -175,7 +171,7 @@ in
       '';
 
       # Garbage collection
-      gc = lib.mkIf cfg.optimizations.gcAutomatic {
+      gc = lib.mkIf (cfg.optimizations.gcAutomatic && config.nix.enable) {
         automatic = true;
         interval = lib.mkDefault {
           Hour = 3;

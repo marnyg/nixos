@@ -18,6 +18,7 @@ with lib;
       gitCredentialHelper.enable = true;
     };
     programs.gh-dash.enable = true;
+    programs.mergiraf.enable = true;
 
     programs.git = {
       package = pkgs.gitFull;

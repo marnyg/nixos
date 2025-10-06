@@ -7,10 +7,10 @@
     environment.systemPackages = with pkgs; [ wget curl tmux ];
 
     # Enable nix flakes
-    nix = {
-      settings.auto-optimise-store = true;
-      settings.experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
-    };
+    #    nix = {
+    #  settings.auto-optimise-store = true;
+    #  settings.experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
+    #};
 
     virtualisation.libvirtd.enable = true;
     programs.virt-manager.enable = true;
