@@ -61,6 +61,8 @@ with lib;
         push.autoSetupRemote = true;
         core.editor = "nvim";
         pull.rebase = true;
+
+        merge.conflictStyle = "diff3"; # Shows common ancestor for better conflict resolution
       };
     };
     programs.gitui = {
