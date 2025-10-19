@@ -66,6 +66,8 @@
     curl
     wget
     httpie
+    natscli
+    inetutils
 
     # File tools
     tree

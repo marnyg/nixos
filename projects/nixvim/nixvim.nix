@@ -106,6 +106,7 @@
       #ollama
       imagemagick
       ty
+      natscli
     ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
       pngpaste
     ];
