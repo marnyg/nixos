@@ -26,11 +26,11 @@ with lib;
         settings = {
           "browser.ctrlTab.sortByRecentlyUsed" = true;
           "browser.startup.page" = 3;
-          "media.peerconnection.enabled" = false;
-          "media.peerconnection.turn.disable" = true;
-          "media.peerconnection.use_document_iceservers" = false;
-          "media.peerconnection.video.enabled" = false;
-          "media.peerconnection.identity.timeout" = 1;
+          # "media.peerconnection.enabled" = false;
+          # "media.peerconnection.turn.disable" = true;
+          # "media.peerconnection.use_document_iceservers" = false;
+          # "media.peerconnection.video.enabled" = false;
+          # "media.peerconnection.identity.timeout" = 1;
           "privacy.resistFingerprinting" = true;
           "privacy.trackingprotection.fingerprinting.enabled" = true;
           "privacy.trackingprotection.cryptomining.enabled" = true;

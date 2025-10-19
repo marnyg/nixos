@@ -29,6 +29,9 @@
     prusa-slicer
   ];
 
+  # Kernel modules needed for Docker/Dagger networking
+  boot.kernelModules = [ "iptable_nat" "iptable_mangle" "iptable_filter" ];
+
   # Auto-upgrade configuration specific to this host
   system.autoUpgrade = {
     enable = false;
@@ -37,6 +40,25 @@
 
   # Gaming support (desktop-specific)
   programs.steam.enable = true;
+
+  # Docker configuration for Dagger support
+  virtualisation.docker = {
+    enable = true;
+    extraOptions = "--iptables=true";
+    daemon.settings = {
+      features = {
+        buildkit = true;
+      };
+    };
+  };
+
+  # Ollama with CUDA acceleration
+  services.ollama = {
+    enable = true;
+    acceleration = "cuda";
+    openFirewall = true;
+    host = "0.0.0.0"; # Listen on all interfaces for Tailnet access
+  };
 
   # User configuration
   my.users.mar = {
