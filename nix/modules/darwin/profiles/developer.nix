@@ -74,7 +74,7 @@
     direnv
     tmux
     neovim
-    claude-code
+    claude-code # Temporarily disabled for debugging
   ];
 
   # Enable developer shells

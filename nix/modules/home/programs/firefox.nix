@@ -9,6 +9,8 @@ with lib;
     programs.firefox = {
       enable = true;
       package = pkgs.firefox-bin;
+
+      # Use default firefox package instead of overriding
       profiles.mar = {
         extensions.packages = (with pkgs.nur.repos.rycee.firefox-addons; [
           decentraleyes
@@ -20,6 +22,7 @@ with lib;
           bitwarden
 
           sidebery
+          metamask
           #pkgs.saka
           #pkgs.saka-key
         ]);
@@ -63,8 +66,8 @@ with lib;
           "extensions.pocket.enabled" = false;
           "identity.fxaccounts.enabled" = false;
           "toolkit.zoomManager.zoomValues" = ".8,.95,1,1.1,1.2";
-          "layout.css.devPixelsPerPx" = (mkIf pkgs.stdenv.isLinux 1);
-
+        } // optionalAttrs pkgs.stdenv.isLinux {
+          "layout.css.devPixelsPerPx" = 1;
         };
         search = {
           force = true;

@@ -89,6 +89,10 @@
 
       dofile("${./strudel.lua}")
 
+      -- Load NATS CLI module
+      package.preload['nats-nvim-cli'] = function()
+        return dofile("${./nats-nvim-cli.lua}")
+      end
     '';
 
     extraPackages = with pkgs; [
@@ -471,7 +475,7 @@
         settings.enable_autosnippets = true;
       };
 
-      octo.enable = true;
+      octo.enable = false;
       iron = {
         enable = true;
         # lazyLoad.settings.colorscheme = "catppuccin-mocha";

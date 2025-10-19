@@ -22,14 +22,6 @@
           overlays = [
             self.overlays.default
             self.overlays.nur
-            (inputs.ghostty-darwin-overlay.overlay { githubToken = ""; })
-            (_: super: {
-              ghostty = super.ghostty-darwin.overrideAttrs (oldAttrs: {
-                meta = (oldAttrs.meta or { }) // {
-                  mainProgram = "ghostty";
-                };
-              });
-            })
           ];
         };
 

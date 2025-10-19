@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 with lib;
 {
   options.modules.my.ghostty = {
@@ -15,6 +15,7 @@ with lib;
       enable = true;
       installBatSyntax = false;
       clearDefaultKeybinds = true;
+      package = if pkgs.stdenv.isLinux then pkgs.ghostty else pkgs.ghostty-bin;
 
 
 

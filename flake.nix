@@ -3,7 +3,7 @@
 
   inputs = {
 
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
@@ -27,14 +27,10 @@
 
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
-    nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
     mac-app-util.url = "github:hraban/mac-app-util";
 
     mcphub-nvim.url = "github:ravitemer/mcphub.nvim"; # is broken, using pin until fixed
     mcphub.url = "github:ravitemer/mcp-hub";
-
-    ghostty-darwin-overlay.url = "github:kbwhodat/ghostty-nix-darwin";
-
   };
 
   outputs = inputs:
@@ -44,5 +40,4 @@
         ./nix
       ];
     };
-
 }
