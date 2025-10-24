@@ -38,11 +38,8 @@ local NATS_URL = "tls://connect.ngs.global"
 -- ]]}
 
 -- Example 1: Basic Connection and Publishing
-local function example_publish()
+local function example_publish(conn)
   print("=== Example 1: Basic Publishing ===")
-
-  -- Create a connection
-  local conn = nats.Connection:new(NATS_URL, AUTH)
 
   -- Publish a simple message
   conn:publish("test.subject", "Hello from Lua FFI!")
@@ -53,16 +50,12 @@ local function example_publish()
   conn:publish("test.json", data)
   print("Published JSON message to 'test.json'")
 
-  -- Clean up
-  conn:close()
-  print("Connection closed\n")
+  print("Publishing completed\n")
 end
 
 -- Example 2: Synchronous Subscribe (blocking)
-local function example_subscribe_sync()
+local function example_subscribe_sync(conn)
   print("=== Example 2: Synchronous Subscribe ===")
-
-  local conn = nats.Connection:new(NATS_URL, CREDENTIALS_FILE)
 
   -- Create a synchronous subscription
   local sub = conn:subscribe_sync("test.>")
@@ -90,7 +83,6 @@ local function example_subscribe_sync()
 
   -- Clean up
   sub:unsubscribe()
-  conn:close()
   print("Subscription closed\n")
 end
 
@@ -136,10 +128,8 @@ local function example_request_reply()
 end
 
 -- Example 4: Working with Multiple Subjects (Pub/Sub Pattern)
-local function example_multi_subject()
+local function example_multi_subject(conn)
   print("=== Example 4: Multiple Subjects ===")
-
-  local conn = nats.Connection:new(NATS_URL, CREDENTIALS_FILE)
 
   -- Subscribe to multiple subjects using wildcards
   local subs = {
@@ -189,7 +179,6 @@ local function example_multi_subject()
   for _, sub in ipairs(subs) do
     sub:unsubscribe()
   end
-  conn:close()
   print("\nMulti-subject example completed\n")
 end
 
@@ -260,15 +249,13 @@ local function example_authentication()
 end
 
 -- Example 7: Vim/Neovim Integration
-local function example_vim_integration()
+local function example_vim_integration(conn)
   if not vim then
     print("=== Example 7: Vim Integration (skipped - not in Neovim) ===")
     return
   end
 
   print("=== Example 7: Vim Integration ===")
-
-  local conn = nats.Connection:new(NATS_URL, AUTH)
 
   -- Subscribe to editor events
   local sub = conn:subscribe_sync("editor.events")
@@ -305,7 +292,6 @@ local function example_vim_integration()
 
   -- Clean up
   sub:unsubscribe()
-  conn:close()
   print("\nVim integration example completed\n")
 end
 
@@ -338,18 +324,25 @@ local function main()
   else
     print("Successfully connected to NATS at " .. NATS_URL .. "\n")
 
-    -- Run all examples
-    example_publish()
+    -- Create ONE shared connection for all examples
+    local conn = nats.Connection:new(NATS_URL, AUTH)
+
+    -- Run all examples with the shared connection
+    example_publish(conn)
 
     -- Note: For subscribe examples to work properly, you need to publish from another client
     print("NOTE: Subscribe examples work best with messages published from another client\n")
 
-    example_subscribe_sync()
-    example_request_reply()
-    example_multi_subject()
+    example_subscribe_sync(conn)
+    -- example_request_reply(conn)  -- Commented out - needs request() method
+    example_multi_subject(conn)
     example_error_handling()
     example_authentication()
-    example_vim_integration()
+    example_vim_integration(conn)
+
+    -- Close the shared connection at the end
+    conn:close()
+    print("\nClosed NATS connection")
   end
 
   print("All examples completed!")

@@ -22,6 +22,8 @@ ffi.cdef[[
     // Core functions
     natsStatus natsConnection_Connect(natsConnection **nc, natsOptions *options);
     natsStatus natsConnection_ConnectTo(natsConnection **nc, const char *url);
+    natsStatus natsConnection_Flush(natsConnection *nc);
+    natsStatus natsConnection_FlushTimeout(natsConnection *nc, int64_t timeout);
     void natsConnection_Destroy(natsConnection *nc);
     
     // Options
@@ -135,8 +137,10 @@ function M.Connection:new(url, auth)
                 error(string.format("Credentials file not found: %s", creds_path))
             end
 
+            -- Pass NULL as second parameter for chained credentials file
+            local null_ptr = ffi.cast("const char*", nil)
             check_status(
-                nats.natsOptions_SetUserCredentialsFromFiles(opts[0], creds_path, nil),
+                nats.natsOptions_SetUserCredentialsFromFiles(opts[0], creds_path, null_ptr),
                 "natsOptions_SetUserCredentialsFromFiles"
             )
         elseif type(auth) == "table" then
@@ -166,8 +170,10 @@ function M.Connection:new(url, auth)
                     error(string.format("Seed file not found: %s", seed_path))
                 end
 
+                -- Convert nil to NULL pointer for FFI
+                local seed_ptr = seed_path and seed_path or ffi.cast("const char*", nil)
                 check_status(
-                    nats.natsOptions_SetUserCredentialsFromFiles(opts[0], creds_path, seed_path),
+                    nats.natsOptions_SetUserCredentialsFromFiles(opts[0], creds_path, seed_ptr),
                     "natsOptions_SetUserCredentialsFromFiles"
                 )
             elseif auth.user and auth.password then
@@ -217,6 +223,10 @@ end
 
 function M.Connection:close()
     if self.nc then
+        -- Flush any pending messages before closing (ignore errors)
+        pcall(function()
+            nats.natsConnection_FlushTimeout(self.nc, 1000) -- 1 second timeout
+        end)
         nats.natsConnection_Destroy(self.nc)
         self.nc = nil
     end

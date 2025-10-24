@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, inputs, ... }:
 with lib;
 {
   options.modules.my.git = {
@@ -20,12 +20,15 @@ with lib;
     programs.gh-dash.enable = true;
     programs.mergiraf.enable = true;
 
+    # Difftastic configuration (moved from programs.git)
+    programs.difftastic = {
+      enable = true;
+      git.enable = true; # Explicitly enable git integration
+    };
+
     programs.git = {
       package = pkgs.gitFull;
       enable = true;
-      userName = "marius";
-      userEmail = "marnyg@proton.me";
-      difftastic.enable = true;
       ignores = [
         "**/.envrc"
         "**/scratch"
@@ -33,23 +36,32 @@ with lib;
         "${config.home.homeDirectory}/git/wellstarter/**/flake.*"
       ];
       #lsf.enabled =true;
-      aliases = {
-        co = "checkout";
-        b = "branch";
-        ps = "push";
-        pl = "pull";
-        c = "commit";
-        cm = "commit -m";
-        a = "add";
-        ai = "add -i";
-        s = "status";
-        undo = "reset HEAD~";
-        lg =
-          "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all";
-        lg2 =
-          "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all";
-      };
-      extraConfig = {
+      settings = {
+        # User configuration (previously userName and userEmail)
+        user = {
+          name = "marius";
+          email = "marnyg@proton.me";
+        };
+
+        # Aliases (previously programs.git.aliases)
+        alias = {
+          co = "checkout";
+          b = "branch";
+          ps = "push";
+          pl = "pull";
+          c = "commit";
+          cm = "commit -m";
+          a = "add";
+          ai = "add -i";
+          s = "status";
+          undo = "reset HEAD~";
+          lg =
+            "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all";
+          lg2 =
+            "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all";
+        };
+
+        # Extra configuration (previously programs.git.extraConfig)
         init = {
           defaultBranch = "main";
         };
@@ -61,12 +73,12 @@ with lib;
         push.autoSetupRemote = true;
         core.editor = "nvim";
         pull.rebase = true;
-
         merge.conflictStyle = "diff3"; # Shows common ancestor for better conflict resolution
       };
     };
     programs.gitui = {
       enable = true;
+      package = inputs.nixpkgs-old.legacyPackages.x86_64-linux.gitui;
       keyConfig = ''
          (
             move_left: Some(( code: Char('h'), modifiers: "")),
