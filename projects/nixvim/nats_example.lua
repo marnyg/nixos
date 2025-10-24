@@ -211,43 +211,6 @@ local function example_error_handling()
   print("\nError handling example completed\n")
 end
 
--- Example 6: Different Authentication Methods
-local function example_authentication()
-  print("=== Example 6: Different Authentication Methods ===")
-
-  -- Test with no authentication (only if server allows it)
-  print("\n1. No authentication:")
-  local success, conn = pcall(function()
-    return nats.Connection:new("nats://localhost:4222", nil)
-  end)
-  if success then
-    print("   Connected successfully without auth")
-    conn:close()
-  else
-    print("   Server requires authentication")
-  end
-
-  -- Demonstrate credential file authentication (commented - update paths)
-  print("\n2. Credentials file authentication:")
-  print("   local conn = nats.Connection:new(url, \"/path/to/nats.creds\")")
-  print("   -- or --")
-  print("   local conn = nats.Connection:new(url, {file = \"/path/to/nats.creds\"})")
-
-  -- Demonstrate username/password authentication (commented - update credentials)
-  print("\n3. Username/password authentication:")
-  print("   local conn = nats.Connection:new(url, {user = \"myuser\", password = \"mypass\"})")
-
-  -- Demonstrate token authentication (commented - update token)
-  print("\n4. Token authentication:")
-  print("   local conn = nats.Connection:new(url, {token = \"my-secret-token\"})")
-
-  -- Demonstrate embedded JWT authentication (commented - update JWT)
-  print("\n5. Embedded JWT authentication:")
-  print("   local conn = nats.Connection:new(url, {jwt_and_seed = [[...JWT and seed...]]})")
-
-  print("\nAuthentication example completed\n")
-end
-
 -- Example 7: Vim/Neovim Integration
 local function example_vim_integration(conn)
   if not vim then
@@ -289,6 +252,11 @@ local function example_vim_integration(conn)
         end
     })
     ]])
+  vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+    callback = function(ev)
+      conn:publish("editor.file.saved", ev.file)
+    end
+  })
 
   -- Clean up
   sub:unsubscribe()
@@ -337,11 +305,10 @@ local function main()
     -- example_request_reply(conn)  -- Commented out - needs request() method
     example_multi_subject(conn)
     example_error_handling()
-    example_authentication()
     example_vim_integration(conn)
 
     -- Close the shared connection at the end
-    conn:close()
+    -- conn:close()
     print("\nClosed NATS connection")
   end
 
