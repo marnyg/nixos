@@ -87,12 +87,14 @@
       map("v", "<leader>x", ":'<,'>lua<CR>", { desc = "Execute selected Lua code" })
       map("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
 
-      dofile("${./strudel.lua}")
+      -- Make library path available to LuaJIT FFI
+      local nats_lib_path = "${import ./nats-c.nix { inherit pkgs; }}/lib"
+      -- Detect platform for library extension
+      local lib_ext = vim.fn.has("mac") == 1 and "dylib" or "so"
+      package.cpath = package.cpath .. ";" .. nats_lib_path .. "/?." .. lib_ext
+      -- Also set a global for direct library loading
+      vim.g.nats_library_path = nats_lib_path .. "/libnats." .. lib_ext
 
-      -- Load NATS CLI module
-      package.preload['nats-nvim-cli'] = function()
-        return dofile("${./nats-nvim-cli.lua}")
-      end
     '';
 
     extraPackages = with pkgs; [
@@ -106,7 +108,6 @@
       #ollama
       imagemagick
       ty
-      natscli
     ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
       pngpaste
     ];
@@ -285,9 +286,12 @@
           "<leader>sr" = { action = "resume"; options.desc = "[S]earch [R]esume"; };
           "<leader>s," = { action = "oldfiles"; options.desc = "[S]earch Recent Files (\",\" for repeat)"; };
           "<leader><leader>" = { action = "buffers"; options.desc = "[ ] Find existing buffers"; };
+          "<leader>j" = { action = "jsonfly"; options.desc = "[J]sonFly"; };
         };
         luaConfig.post = ''
           vim.keymap.set("n", "<leader>fs", function() require("telescope.builtin").spell_suggest(require("telescope.themes").get_dropdown{}) end, { desc = 'Open [F]ixes for [S]pelling' })
+          require("telescope").load_extension("jsonfly")
+
         '';
       };
 
@@ -732,6 +736,19 @@
       #       doCheck = false;
       #     });
       # }
+      {
+        plugin =
+
+          (pkgs.vimUtils.buildVimPlugin {
+            name = "jsonfly";
+            src = pkgs.fetchFromGitHub {
+              owner = "Myzel394";
+              repo = "jsonfly.nvim";
+              rev = "main";
+              hash = "sha256-PmYm+vZ0XONoHUo08haBozbXRpN+/LAlr6Fyg7anTNw=";
+            };
+          });
+      }
 
 
       # TODO: add https://github.com/chrisgrieser/nvim-various-textobjs

@@ -4,6 +4,10 @@
   inputs = {
 
     nixpkgs.url = "github:nixos/nixpkgs";
+    # nixpkgs-old for this issue on darwin:
+    # https://github.com/nixos/nixpkgs/issues/450861
+    nixpkgs-old.url = "github:NixOS/nixpkgs/c9bd50a653957ee895ff8b6936864b7ece0a7fb6";
+
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";

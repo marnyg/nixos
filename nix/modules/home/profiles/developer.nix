@@ -45,6 +45,7 @@
 
     # Version control
     lazygit
+    natscli
 
     # Build tools
     gnumake
