@@ -8,7 +8,6 @@ with lib;
   config = mkIf config.modules.my.firefox.enable {
     programs.firefox = {
       enable = true;
-      package = pkgs.firefox-bin;
 
       # Use default firefox package instead of overriding
       profiles.mar = {

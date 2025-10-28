@@ -65,7 +65,7 @@ with lib;
       # Enhanced CLI tools
       cat = "${pkgs.bat}/bin/bat --paging=never --style=plain";
       tree = "${pkgs.eza}/bin/eza --tree --icons";
-      du = "${pkgs.du-dust}/bin/dust";
+      du = "${pkgs.dust}/bin/dust";
       dua = "${pkgs.dua}/bin/dua";
       df = "${pkgs.duf}/bin/duf";
       lf = "${pkgs.yazi}/bin/yazi";
