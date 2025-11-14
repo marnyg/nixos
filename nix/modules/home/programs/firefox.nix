@@ -39,7 +39,7 @@ with lib;
           "privacy.trackingprotection.enabled" = true;
           "browser.send_pings" = false;
           "browser.urlbar.speculativeConnect.enabled" = false;
-          "dom.event.clipboardevents.enabled" = false;
+          #"dom.event.clipboardevents.enabled" = false;
           "media.navigator.enabled" = false;
           "network.http.referer.XOriginTrimmingPolicy" = 2;
           "beacon.enabled" = false;

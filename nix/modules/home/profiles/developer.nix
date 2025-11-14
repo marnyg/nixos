@@ -91,6 +91,7 @@
 
     # Development environments
     devenv
+    taskwarrior3
   ];
 
   # Shell aliases for development
