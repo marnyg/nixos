@@ -139,7 +139,7 @@
       lsp.servers.jsonls.enable = true;
       lsp.servers.html.enable = true;
       lsp.servers.postgres_lsp.enable = true;
-      lsp.servers.leanls.enable = true;
+      #lsp.servers.leanls.enable = true;
 
       #lsp.inlayHints.enable = true;
 
@@ -569,7 +569,7 @@
         enable = true;
       };
       avante = {
-        enable = true;
+        enable = false;
 
         luaConfig.post = /*lua*/''
           require("avante").setup({
@@ -697,21 +697,22 @@
     extraPlugins = with pkgs.vimPlugins; [
       img-clip-nvim
 
-      {
-        plugin = pkgs.mcphub-nvim; # Added via overlay
-        config = /*lua*/''
-          lua <<EOF
-            require("mcphub").setup({
-              cmd = "${pkgs.mcphub}/bin/mcp-hub",
-              extensions = {
-                avante = {
-                    make_slash_commands = true, -- make /slash commands from MCP server prompts
-                }
-              }
-            })
-          EOF
-        '';
-      }
+      # {
+      #   enable = false;
+      #   plugin = pkgs.mcphub-nvim; # Added via overlay
+      #   config = /*lua*/''
+      #     lua <<EOF
+      #       require("mcphub").setup({
+      #         cmd = "${pkgs.mcphub}/bin/mcp-hub",
+      #         extensions = {
+      #           avante = {
+      #               make_slash_commands = true, -- make /slash commands from MCP server prompts
+      #           }
+      #         }
+      #       })
+      #     EOF
+      #   '';
+      # }
       (
         pkgs.vimUtils.buildVimPlugin {
           name = "carp-vim";

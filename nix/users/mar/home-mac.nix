@@ -1,5 +1,5 @@
 # Home-manager configuration for user 'mar' on macOS
-{ lib, inputs, ... }:
+{ pkgs, inputs, ... }:
 {
   # Import base configuration and Mac profile
   imports = [
@@ -10,6 +10,7 @@
   # macOS-specific home directory
   home.homeDirectory = "/Users/mariusnygard";
   home.stateVersion = "23.11";
+  home.packages = [ pkgs.taskwarrior3 pkgs.taskwarrior-tui ];
 
   # Enable secrets management
   modules.my.secrets.enable = true;

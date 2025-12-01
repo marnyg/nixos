@@ -31,6 +31,9 @@ with lib;
 
       # .zshrc
       initContent = ''
+        # Increase file descriptor limit for Nix operations
+        ulimit -n 524288
+
         PROMPT="%F{blue}%m %~%b "$'\n'"%(?.%F{green}%Bλ%b |.%F{red}?) %f"
         
         # Shell functions

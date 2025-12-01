@@ -3,15 +3,12 @@
 
   inputs = {
 
-    nixpkgs.url = "github:nixos/nixpkgs";
-    # nixpkgs-old for this issue on darwin:
-    # https://github.com/nixos/nixpkgs/issues/450861
-    nixpkgs-old.url = "github:NixOS/nixpkgs/c9bd50a653957ee895ff8b6936864b7ece0a7fb6";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
@@ -33,7 +30,7 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     mac-app-util.url = "github:hraban/mac-app-util";
 
-    mcphub-nvim.url = "github:ravitemer/mcphub.nvim"; # is broken, using pin until fixed
+    mcphub-nvim.url = "github:ravitemer/mcphub.nvim";
     mcphub.url = "github:ravitemer/mcp-hub";
   };
 

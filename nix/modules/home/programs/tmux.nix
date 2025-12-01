@@ -2,20 +2,21 @@
 with lib;
 let
   ncspot = pkgs.writeScript "ncspot" ''
-          
+
 #!/bin/bash
 
 # The name for our dedicated ncspot session
 SESSION_NAME="ncspot-music"
 
-# Check if the session already exists.
+# Check if the session already exists
 if ! tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
-    # If it doesn't exist, create it detached (-d) and run ncspot.
+    # If it doesn't exist, create it detached (-d) and run ncspot
     echo "Creating new ncspot session..."
     tmux new-session -d -s "$SESSION_NAME" "ncspot"
 fi
 
-# Attach to the session.
+# Simply attach to the session - the popup will handle the toggle
+# When you press Escape or the keybinding again, the popup closes
 exec tmux attach-session -t "$SESSION_NAME"
 '';
 
@@ -126,8 +127,8 @@ in
         # `y` for yazi file manager
         bind-key y run-shell "tmux display-popup -w 90% -h 90% -d '#{pane_current_path}' -T 'Yazi' -E 'yazi'"
 
-        # `s` for ncspot (Spotify client)
-        bind-key m run-shell "tmux display-popup -w 90% -h 90% -T 'ncspot' -E '${ncspot}'"
+        # `m` for music (ncspot Spotify client) - toggles popup
+        bind-key m if-shell -F '#{==:#{session_name},ncspot-music}' 'detach-client' "run-shell \"tmux display-popup -w 90% -h 90% -T 'ncspot' -E '${ncspot}'\""
 
         # `k` for keybingd
         bind-key k run-shell "tmux display-popup -w 90% -h 90% -d '#{pane_current_path}' -T 'Keybindings' -E 'tmux list-keys | fzf'"
