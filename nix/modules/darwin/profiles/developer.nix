@@ -75,6 +75,7 @@
     tmux
     neovim
     claude-code
+    uv
     natscli
   ];
 

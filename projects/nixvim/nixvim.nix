@@ -97,6 +97,10 @@
 
     '';
 
+    extraLuaPackages = luapkgs: [
+      (luapkgs.callPackage ./natsLua.nix { })
+    ];
+
     extraPackages = with pkgs; [
       fd
       gcc
@@ -122,7 +126,7 @@
 
     lsp.servers.ty = {
       enable = true;
-      settings = {
+      config = {
         cmd = [
           "ty"
           "server"
@@ -130,7 +134,11 @@
         filetypes = [
           "python"
         ];
-        rootMarkers = [ "pyproject.toml" "uv.lock" ".git" ];
+        root_dir = {
+          __raw = ''
+            require('lspconfig.util').root_pattern('pyproject.toml', 'uv.lock', '.git')
+          '';
+        };
       };
     };
 
@@ -175,7 +183,7 @@
         integrations = {
           markdown = {
             editor_only_render_when_focused = true;
-            only_render_image_at_cursor = true;
+            only_render_image_at_cursor = false;
             only_render_image_at_cursor_mode = "popup";
           };
         };
@@ -221,7 +229,7 @@
               model = "moonshotai/kimi-k2";
               name = "Openrouter";
               optional = {
-                max_tokens = 56;
+                max_tokens = 500;
                 top_p = 0.9;
                 provider = {
                   #-- Prioritize throughput for faster completion

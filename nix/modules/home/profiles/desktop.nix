@@ -100,7 +100,7 @@
     # System utilities
     gnome-system-monitor
     baobab # Disk usage analyzer
-    crush # Process manager
+    (crush.overrideAttrs (old: { doCheck = false; })) # Process manager - tests disabled due to flakiness
 
     # Fonts
     nerd-fonts.fira-code

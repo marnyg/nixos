@@ -1,25 +1,30 @@
 { lib
 , buildLuaPackage
+, buildLuarocksPackage
 , fetchFromGitHub
 , lua
+, luasec
 , luasocket
 , lua-cjson
+, basexx
+, lua-resty-openssl
 }:
 
 buildLuaPackage rec {
   pname = "lua-nats";
-  version = "0.0.5"; # Update to match the actual version
+  version = "0.0.5-nkey";
 
-  src = fetchFromGitHub {
-    owner = "DawnAngel";
-    repo = "lua-nats";
-    rev = "master"; # Or use a specific commit/tag
-    sha256 = "sha256-Jmp1lh0cLQ9yeG2AiRBWJ+q9GQM8BrRJ+uvNj8KX+IM=";
-  };
+  # Use local nats.lua with NKEY support
+  src = ./.;
 
   propagatedBuildInputs = [
     luasocket
+    luasec
     lua-cjson
+    basexx
+    lua-resty-openssl # For ed25519 signing
+
+    # UUID library
     (buildLuaPackage rec {
       pname = "uuid";
       version = "unstable-2024-01-01";
@@ -57,9 +62,9 @@ buildLuaPackage rec {
   installPhase = ''
     runHook preInstall
 
-    # Install Lua modules
+    # Install Lua modules from local nats.lua
     mkdir -p $out/share/lua/${lua.luaversion}
-    cp src/nats.lua $out/share/lua/${lua.luaversion}/
+    cp nats.lua $out/share/lua/${lua.luaversion}/
 
     runHook postInstall
   '';

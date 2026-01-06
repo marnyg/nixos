@@ -68,7 +68,7 @@ with lib;
         };
       };
       treesitter-textobjects = {
-        lspInterop.enable = true;
+        settings.lsp_interop.enable = true;
       };
     };
   };
