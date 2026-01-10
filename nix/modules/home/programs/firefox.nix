@@ -28,6 +28,25 @@ with lib;
         settings = {
           "browser.ctrlTab.sortByRecentlyUsed" = true;
           "browser.startup.page" = 3;
+
+          # Process and memory mapping limits (reduce vm.max_map_count pressure)
+          "dom.ipc.processCount" = 4; # Default is 8, reduce content processes
+          #"dom.ipc.processCount.extension" = 2;
+          "fission.autostart" = false; # Disable site isolation (major memory mapping fix)
+          "browser.tabs.remote.autostart" = true;
+          #"dom.ipc.processPrelaunch.enabled" = false;
+          "dom.ipc.keepProcessesAlive.web" = 2; # Keep fewer processes alive
+          "security.sandbox.content.level" = 2; # Lower sandbox level (default is 4)
+
+          # Memory and cache limits
+          "browser.cache.disk.enable" = false; # Use memory cache only
+          "browser.cache.memory.enable" = true;
+          "browser.cache.memory.capacity" = 524288; # 512MB cache limit
+          "browser.sessionhistory.max_total_viewers" = 2; # Limit back/forward cache
+
+          # Disable unnecessary process features
+          "browser.tabs.remote.separatePrivilegedContentProcess" = false;
+
           # "media.peerconnection.enabled" = false;
           # "media.peerconnection.turn.disable" = true;
           # "media.peerconnection.use_document_iceservers" = false;

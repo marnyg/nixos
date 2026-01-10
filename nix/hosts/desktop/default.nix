@@ -32,6 +32,13 @@
   # Kernel modules needed for Docker/Dagger networking
   boot.kernelModules = [ "iptable_nat" "iptable_mangle" "iptable_filter" ];
 
+  # Kernel sysctl parameters for Firefox memory mapping limits
+  boot.kernel.sysctl = {
+    "vm.max_map_count" = 1048576; # Increased from default 65530 for Firefox
+    "vm.vfs_cache_pressure" = 300; # More aggressive cache reclaim
+    "vm.page-cluster" = 0; # Disable readahead for swap
+  };
+
   # Auto-upgrade configuration specific to this host
   system.autoUpgrade = {
     enable = false;
