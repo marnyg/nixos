@@ -7,7 +7,7 @@ with lib;
   config = mkIf config.modules.my.spotifyd.enable
     {
       home.packages = [ pkgs.spotify-player ];
-      services.spotifyd = (if pkgs.system != "aarch64-darwin" then {
+      services.spotifyd = (if pkgs.stdenv.hostPlatform.system != "aarch64-darwin" then {
         enable = true;
         # package = pkgs.spotifyd.override {
         #   withMpris = true;

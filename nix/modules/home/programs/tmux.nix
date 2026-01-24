@@ -89,8 +89,11 @@ in
         # Enable extended keys
         set -s extended-keys on
         
-        # Enable focus events  
+        # Enable focus events
         set -g focus-events on
+
+        # Fix double-click to select pane - select and pass through in one click
+        bind -n MouseDown1Pane select-pane -t = \; send-keys -M
 
         # Start windows and panes at 1, not 0
         set -g base-index 1

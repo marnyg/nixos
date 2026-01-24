@@ -15,7 +15,7 @@
     # GitHub CLI with useful extensions
     programs.gh.enable = true;
     programs.gh.extensions = [
-      pkgs.gh-copilot
+      #pkgs.gh-copilot
       pkgs.gh-poi
       pkgs.gh-cal
       pkgs.gh-dash

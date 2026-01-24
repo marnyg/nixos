@@ -66,7 +66,7 @@ with lib;
         alias gi = ${pkgs.lazygit}/bin/lazygit
       '';
 
-      envFile.text = lib.optionalString (pkgs.system == "aarch64-darwin") ''
+      envFile.text = lib.optionalString (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") ''
         $env.__NIX_DARWIN_SET_ENVIRONMENT_DONE = 1 
         $env.PATH = [
             $"($env.HOME)/.nix-profile/bin"

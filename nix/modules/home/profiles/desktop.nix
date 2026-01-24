@@ -94,13 +94,12 @@
     signal-desktop
 
     # Development GUIs
-    code-cursor
     claude-code
 
     # System utilities
     gnome-system-monitor
     baobab # Disk usage analyzer
-    (crush.overrideAttrs (old: { doCheck = false; })) # Process manager - tests disabled due to flakiness
+    (crush.overrideAttrs (_: { doCheck = false; })) # Process manager - tests disabled due to flakiness
 
     # Fonts
     nerd-fonts.fira-code

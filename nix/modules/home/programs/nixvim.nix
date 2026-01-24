@@ -2,7 +2,7 @@
 with lib;
 let
   # Get the nixvim package from the flake
-  nixvim = inputs.self.packages.${pkgs.system}.nixvim or pkgs.neovim;
+  nixvim = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.nixvim or pkgs.neovim;
 in
 {
   options.modules.my.nixvim = {

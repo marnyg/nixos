@@ -149,7 +149,7 @@ in
         max-free = ${toString (5 * 1024 * 1024 * 1024)}
         
         # Platform settings for Apple Silicon
-        ${lib.optionalString (pkgs.system == "aarch64-darwin") ''
+        ${lib.optionalString (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") ''
           # Prefer native builds, add x86_64 as secondary
           extra-platforms = x86_64-darwin aarch64-darwin
           # But prefer aarch64 when possible

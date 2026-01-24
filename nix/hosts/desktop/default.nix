@@ -61,7 +61,7 @@
 
   # Ollama with CUDA acceleration
   services.ollama = {
-    enable = true;
+    enable = false;
     package = pkgs.ollama-cuda;
     openFirewall = true;
     host = "0.0.0.0"; # Listen on all interfaces for Tailnet access

@@ -192,49 +192,50 @@
       minuet = {
         enable = true;
         settings = {
-          #provider = "openai_compatible";
-          provider = "openai_fim_compatible";
+          provider = "openai_compatible";
+          # provider = "openai_fim_compatible";
           n_completions = 10;
           request_timeout = 2.5;
           # throttle = 1500; # -- Increase to reduce costs and avoid rate limits
           # debounce = 600; #-- Increase to reduce costs and avoid rate limits
           provider_options = {
-            openai_fim_compatible = {
-              # -- For Windows users, TERM may not be present in environment variables.
-              # -- Consider using APPDATA instead.
-              api_key = "TERM";
-              name = "Ollama";
-              end_point = "http://nixos:11434/v1/completions";
-              # model = "qwen2.5-coder:7b";
-              model = "magistral";
-              optional = {
-                max_tokens = 56;
-                top_p = 0.9;
-              };
-              template = {
-                prompt__raw = ''function(context_before_cursor, context_after_cursor, _)
-                        return '<|fim_prefix|>'
-                            .. context_before_cursor
-                            .. '<|fim_suffix|>'
-                            .. context_after_cursor
-                            .. '<|fim_middle|>'
-                    end
-                    '';
-                suffix = false;
-              };
-            };
+            # openai_fim_compatible = {
+            #   # -- this will start ollamma in the background
+            #   api_key = "TERM";
+            #   name = "Ollama";
+            #   end_point = "http://nixos:11434/v1/completions";
+            #   # model = "qwen2.5-coder:7b";
+            #   model = "magistral";
+            #   optional = {
+            #     max_tokens = 56;
+            #     top_p = 0.9;
+            #   };
+            #   template = {
+            #     prompt__raw = ''function(context_before_cursor, context_after_cursor, _)
+            #             return '<|fim_prefix|>'
+            #                 .. context_before_cursor
+            #                 .. '<|fim_suffix|>'
+            #                 .. context_after_cursor
+            #                 .. '<|fim_middle|>'
+            #         end
+            #         '';
+            #     suffix = false;
+            #   };
+            # };
             openai_compatible = {
               api_key = "OPENROUTER_API_KEY";
               end_point = "https://openrouter.ai/api/v1/chat/completions";
-              model = "moonshotai/kimi-k2";
+              model = "xiaomi/mimo-v2-flash:free";
               name = "Openrouter";
               optional = {
-                max_tokens = 500;
+                max_tokens = 1000;
+                max_output_tokens = 1000;
                 top_p = 0.9;
                 provider = {
                   #-- Prioritize throughput for faster completion
-                  # sort = "throughput";
+                  #sort = "throughput";
                 };
+                stream = true;
               };
             };
           };
