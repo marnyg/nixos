@@ -10,7 +10,7 @@
   # macOS-specific home directory
   home.homeDirectory = "/Users/mariusnygard";
   home.stateVersion = "23.11";
-  home.packages = [ pkgs.taskwarrior3 pkgs.taskwarrior-tui ];
+  home.packages = [ pkgs.taskwarrior3 pkgs.taskwarrior-tui pkgs.uv ];
 
   # Enable secrets management
   modules.my.secrets.enable = true;
