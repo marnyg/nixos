@@ -59,6 +59,12 @@
     };
   };
 
+  # PXE boot server firewall rules
+  networking.firewall = {
+    allowedUDPPorts = [ 67 69 ]; # DHCP and TFTP
+    allowedTCPPorts = [ 50084 ]; # HTTP booter
+  };
+
   # Ollama with CUDA acceleration
   services.ollama = {
     enable = false;
