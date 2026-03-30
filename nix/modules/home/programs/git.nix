@@ -1,5 +1,68 @@
 { pkgs, lib, config, ... }:
 with lib;
+let
+  git-bare-clone = pkgs.writeShellApplication {
+    name = "git-bare-clone";
+    runtimeInputs = with pkgs; [ git coreutils ];
+    text = ''
+      url_decode() {
+        local input="$1" result=""
+        while [[ "$input" =~ (%)([0-9A-Fa-f][0-9A-Fa-f]) ]]; do
+          result+="''${input%%"%"*}"
+          printf -v decoded '%b' "\\x''${BASH_REMATCH[2]}"
+          result+="$decoded"
+          input="''${input#*"''${BASH_REMATCH[0]}"}"
+        done
+        result+="$input"
+        printf '%s' "$result"
+      }
+
+      derive_dirname() {
+        local url="$1"
+        url="''${url%/}"
+        url="''${url%.git}"
+        local basename
+        basename="''${url##*/}"
+        basename="$(url_decode "$basename")"
+        basename="''${basename//[[:space:]\/\\:%+]/_}"
+        while [[ "$basename" == *__* ]]; do basename="''${basename//__/_}"; done
+        basename="''${basename#_}"
+        basename="''${basename%_}"
+        echo "$basename"
+      }
+
+      if [[ $# -lt 1 ]]; then
+        echo "Usage: git-bare-clone <repo-url> [directory]" >&2
+        exit 1
+      fi
+
+      REPO_URL="$1"
+      TARGET_DIR="''${2:-$(derive_dirname "$REPO_URL")}"
+
+      if [[ -z "$TARGET_DIR" ]]; then
+        echo "Error: Could not derive directory name from URL" >&2
+        exit 1
+      fi
+
+      if [[ -d "$TARGET_DIR" ]]; then
+        echo "Error: Directory '$TARGET_DIR' already exists" >&2
+        exit 1
+      fi
+
+      echo "Bare-cloning into $TARGET_DIR/.git ..."
+      git clone --bare "$REPO_URL" "$TARGET_DIR/.git"
+
+      cd "$TARGET_DIR"
+      git config core.bare true
+      git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+
+      echo "Fetching remote branches..."
+      git fetch origin
+
+      echo "Done. Ready for: git worktree add ./<dir> <branch>"
+    '';
+  };
+in
 {
   options.modules.my.git = {
     enable = mkEnableOption ''
@@ -12,6 +75,8 @@ with lib;
   };
 
   config = mkIf config.modules.my.git.enable {
+    home.packages = [ git-bare-clone ];
+
     # programs.git-credential-oauth.enable = true;
     programs.gh = {
       enable = true;

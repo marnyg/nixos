@@ -225,7 +225,7 @@
             openai_compatible = {
               api_key = "OPENROUTER_API_KEY";
               end_point = "https://openrouter.ai/api/v1/chat/completions";
-              #model = "xiaomi/mimo-v2-flash:free";
+              #kodel = "xiaomi/mimo-v2-flash:free";
               model = "moonshotai/kimi-k2.5";
 
               name = "Openrouter";
@@ -235,7 +235,7 @@
                 top_p = 0.9;
                 provider = {
                   #-- Prioritize throughput for faster completion
-                  #sort = "throughput";
+                  sort = "latency";
                 };
                 stream = true;
               };

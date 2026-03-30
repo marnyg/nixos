@@ -74,7 +74,8 @@
     direnv
     tmux
     neovim
-    claude-code
+    #claude-code
+    devenv
     uv
     natscli
   ];
