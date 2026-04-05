@@ -84,6 +84,7 @@ in
     };
     programs.gh-dash.enable = true;
     programs.mergiraf.enable = true;
+    programs.mergiraf.enableGitIntegration = true;
 
     # Difftastic configuration (moved from programs.git)
     programs.difftastic = {
@@ -94,6 +95,7 @@ in
     programs.git = {
       package = pkgs.gitFull;
       enable = true;
+      signing.format = null;
       ignores = [
         "**/.envrc"
         "**/scratch"

@@ -29,6 +29,11 @@
     prusa-slicer
   ];
 
+  # Disable power save on MT7921E WiFi to prevent rfkill soft-block loops
+  boot.extraModprobeConfig = ''
+    options mt7921e power_save=0
+  '';
+
   # Kernel modules needed for Docker/Dagger networking
   boot.kernelModules = [ "iptable_nat" "iptable_mangle" "iptable_filter" ];
 
@@ -62,7 +67,7 @@
   # PXE boot server firewall rules
   networking.firewall = {
     allowedUDPPorts = [ 67 69 ]; # DHCP and TFTP
-    allowedTCPPorts = [ 50084 ]; # HTTP booter
+    allowedTCPPorts = [ 50084 8080 ]; # HTTP booter, config server
   };
 
   # Ollama with CUDA acceleration

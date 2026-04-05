@@ -55,7 +55,7 @@
     # Language servers and formatters
     nil # Nix LSP
     nixpkgs-fmt
-    nodePackages.prettier
+    prettier
     nodejs_24
     uv # Python package manager
 

@@ -30,6 +30,7 @@
   # Programs that should be enabled by default
   programs = {
     yazi.enable = true;
+    yazi.shellWrapperName = "y";
     ncspot.enable = lib.mkDefault false;
   };
 

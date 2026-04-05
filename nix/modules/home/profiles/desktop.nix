@@ -123,6 +123,7 @@
   # GTK theme configuration
   gtk = {
     enable = true;
+    gtk4.theme = null;
     theme = {
       name = "Adwaita-dark";
       package = pkgs.gnome-themes-extra;
