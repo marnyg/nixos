@@ -34,6 +34,7 @@
     # CORE: Essential GUI programs for desktop
     mpv.enable = true; # Video player is essential for desktop
     yazi.enable = true; # File manager is essential for desktop
+    yazi.shellWrapperName = "y";
 
     # OPTIONAL: Nice to have but not essential
     ncspot.enable = lib.mkDefault true;

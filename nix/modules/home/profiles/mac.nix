@@ -28,6 +28,7 @@
     htop.enable = lib.mkDefault true;
     htop.settings.show_program_path = lib.mkDefault true;
     yazi.enable = lib.mkDefault true;
+    yazi.shellWrapperName = "y";
 
     direnv = {
       enable = lib.mkDefault true;
