@@ -7,11 +7,12 @@
   # Shell hook
   enterShell = ''
     echo "🚀 NixOS Development Environment (via devenv)"
-    echo "Available hosts: wsl, desktop, laptop"
+    echo "Available hosts: wsl, desktop, laptop, mac"
     echo ""
     echo "Commands:"
     echo "  nix build .#nixosConfigurations.<host>.config.system.build.toplevel"
     echo "  nixos-rebuild switch --flake .#<host> (on NixOS)"
+    echo "  darwin-rebuild switch --flake .#mac (on macOS)"
     echo "  nix run .#<host> (to test VM)"
     echo ""
   '';
