@@ -16,11 +16,11 @@
   modules.darwin = {
     # Custom workspace configuration for this machine
     windowManagement.workspaces = [
-      { number = 1; label = "todo"; apps = [ "Reminder" "Mail" "Calendar" ]; }
-      { number = 2; label = "code"; apps = [ "Visual Studio Code" "Ghostty" "Xcode" ]; }
-      { number = 3; label = "web"; apps = [ "Arc" "Safari" "Firefox" ]; }
-      { number = 4; label = "utils"; apps = [ "Spotify" "Music" "Finder" ]; }
-      { number = 5; label = "chat"; apps = [ "Slack" "Signal" "Messages" "Discord" ]; }
+      { number = 1; label = "code"; monitor = "main"; apps = [ "Visual Studio Code" "Ghostty" "Xcode" ]; }
+      { number = 2; label = "web"; monitor = "main"; apps = [ "Arc" "Safari" "Firefox" ]; }
+      { number = 3; label = "todo"; monitor = "main"; apps = [ "Reminder" "Mail" "Calendar" ]; }
+      { number = 4; label = "utils"; monitor = "secondary"; apps = [ "Spotify" "Music" "Finder" ]; }
+      { number = 5; label = "chat"; monitor = "secondary"; apps = [ "Slack" "Signal" "Messages" "Discord" "Microsoft Teams" "Microsoft Outlook" ]; }
     ];
 
     # Additional brew packages specific to this machine

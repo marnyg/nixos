@@ -33,6 +33,17 @@ let
         ws.apps)
     cfg.workspaces;
 
+  # Generate workspace-to-monitor assignment
+  monitorAssignment = lib.listToAttrs (
+    lib.concatMap
+      (ws:
+        lib.optional (ws.monitor != null) {
+          name = ws.label;
+          value = ws.monitor;
+        })
+      cfg.workspaces
+  );
+
   # Generate floating window rules from rules config
   floatingRules = map
     (rule: {
@@ -114,6 +125,11 @@ in
             default = [ ];
             description = "Apps to assign to this workspace";
           };
+          monitor = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = "Monitor to pin this workspace to (e.g. 'main', 'secondary', or monitor ID)";
+          };
         };
       });
       default = [ ];
@@ -193,6 +209,8 @@ in
           inner = { horizontal = 10; vertical = 10; };
           outer = { left = 10; right = 10; top = 10; bottom = 10; };
         };
+
+        workspace-to-monitor-force-assignment = monitorAssignment;
 
         mode.main.binding =
           defaultKeybindings // workspaceBindings // cfg.keybindings.custom;
