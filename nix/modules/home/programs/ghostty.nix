@@ -27,6 +27,7 @@ with lib;
         shell-integration = "fish";
         window-decoration = false;
         confirm-close-surface = false;
+        macos-option-as-alt = true;
         # config-file = "~/.config/ghostty/conf";
         command = "/run/current-system/sw/bin/fish";
 

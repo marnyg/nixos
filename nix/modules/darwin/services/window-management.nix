@@ -1,18 +1,101 @@
 # Combined window management configuration module
-# Provides unified interface for yabai and skhd
+# Provides unified interface backed by home-manager's programs.aerospace
 { lib, config, ... }:
 
 let
   cfg = config.modules.darwin.windowManagement;
+
+  # Map layout names to AeroSpace equivalents
+  aerospaceLayout = {
+    "bsp" = "tiles";
+    "stack" = "accordion";
+    "float" = "tiles";
+  }.${cfg.layout};
+
+  # Generate workspace switching and move-to-workspace keybindings
+  workspaceBindings = lib.listToAttrs (
+    lib.concatMap
+      (ws: [
+        { name = "alt-${toString ws.number}"; value = "workspace ${ws.label}"; }
+        { name = "shift-alt-${toString ws.number}"; value = "move-node-to-workspace ${ws.label}"; }
+      ])
+      cfg.workspaces
+  );
+
+  # Generate app-to-workspace window rules
+  appWorkspaceRules = lib.concatMap
+    (ws:
+      map
+        (app: {
+          "if" = { app-name-regex-substring = app; };
+          run = "move-node-to-workspace ${ws.label}";
+        })
+        ws.apps)
+    cfg.workspaces;
+
+  # Generate floating window rules from rules config
+  floatingRules = map
+    (rule: {
+      "if" =
+        if rule.app != null then { app-name-regex-substring = rule.app; }
+        else if rule.title != null then { window-title-regex-substring = rule.title; }
+        else throw "Rule must have either app or title";
+      run = if rule.manage then "layout tiling" else "layout floating";
+    })
+    cfg.rules;
+
+  # Default keybindings (migrated from skhd)
+  defaultKeybindings = lib.optionalAttrs cfg.keybindings.enable {
+    # Reload config
+    "alt-r" = "reload-config";
+
+    # Open apps
+    "alt-enter" = "exec-and-forget open -na ${cfg.keybindings.terminal}";
+    "alt-f" = "exec-and-forget open -a ${cfg.keybindings.browser}";
+
+    # Window focus navigation (crosses monitor boundaries)
+    "alt-h" = "focus left";
+    "alt-j" = "focus down";
+    "alt-k" = "focus up";
+    "alt-l" = "focus right";
+
+    # Move windows (across monitors when at edge)
+    "shift-alt-h" = "move left";
+    "shift-alt-j" = "move down";
+    "shift-alt-k" = "move up";
+    "shift-alt-l" = "move right";
+
+    # Resize windows
+    "shift-cmd-h" = "resize width -50";
+    "shift-cmd-j" = "resize height +50";
+    "shift-cmd-k" = "resize height -50";
+    "shift-cmd-l" = "resize width +50";
+
+    # Layout management
+    "alt-d" = "layout tiles horizontal vertical";
+    "alt-t" = "layout floating tiling";
+    "alt-m" = "fullscreen";
+
+    # Focus monitor directly
+    "alt-comma" = "focus-monitor --wrap-around left";
+    "alt-period" = "focus-monitor --wrap-around right";
+
+    # Move window to monitor
+    "shift-alt-comma" = "move-node-to-monitor --wrap-around left";
+    "shift-alt-period" = "move-node-to-monitor --wrap-around right";
+
+    # Prevent macOS cmd-h window hiding
+    "cmd-h" = "focus left";
+  };
 in
 {
   options.modules.darwin.windowManagement = {
-    enable = lib.mkEnableOption "window management with yabai and skhd";
+    enable = lib.mkEnableOption "window management with AeroSpace";
 
     layout = lib.mkOption {
       type = lib.types.enum [ "bsp" "stack" "float" ];
       default = "bsp";
-      description = "Default window layout mode";
+      description = "Default window layout mode (bsp/stack map to AeroSpace tiles/accordion)";
     };
 
     workspaces = lib.mkOption {
@@ -20,11 +103,11 @@ in
         options = {
           number = lib.mkOption {
             type = lib.types.int;
-            description = "Workspace number";
+            description = "Workspace number (used for alt-N keybinding)";
           };
           label = lib.mkOption {
             type = lib.types.str;
-            description = "Workspace label";
+            description = "Workspace label (used as AeroSpace workspace name)";
           };
           apps = lib.mkOption {
             type = lib.types.listOf lib.types.str;
@@ -35,13 +118,6 @@ in
       });
       default = [ ];
       description = "Workspace configuration";
-      example = lib.literalExpression ''
-        [
-          { number = 1; label = "todo"; apps = [ "Reminder" "Mail" "Calendar" ]; }
-          { number = 2; label = "code"; apps = [ "Visual Studio Code" "IntelliJ IDEA" ]; }
-          { number = 3; label = "web"; apps = [ "Firefox" "Safari" "Arc" ]; }
-        ]
-      '';
     };
 
     keybindings = {
@@ -59,20 +135,20 @@ in
 
       terminal = lib.mkOption {
         type = lib.types.str;
-        default = "~/Applications/Home\\ Manager\\ Trampolines/Ghostty.app/";
+        default = "Ghostty";
         description = "Terminal application to open";
       };
 
       browser = lib.mkOption {
         type = lib.types.str;
-        default = "~/Applications/Home\\ Manager\\ Trampolines/Firefox.app/";
+        default = "Firefox";
         description = "Browser application to open";
       };
 
       custom = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
         default = { };
-        description = "Custom keybindings";
+        description = "Custom keybindings (AeroSpace format)";
       };
     };
 
@@ -82,17 +158,17 @@ in
           app = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
             default = null;
-            description = "App name pattern";
+            description = "App name pattern (regex)";
           };
           title = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
             default = null;
-            description = "Window title pattern";
+            description = "Window title pattern (regex)";
           };
           manage = lib.mkOption {
             type = lib.types.bool;
             default = true;
-            description = "Whether to manage this window";
+            description = "Whether to tile this window (false = floating)";
           };
         };
       });
@@ -102,43 +178,27 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # Enable yabai with our configuration
-    modules.darwin.services.yabai = {
+    home-manager.users.${config.system.primaryUser}.programs.aerospace = {
       enable = true;
-      layout = cfg.layout;
-      workspaces = lib.listToAttrs (map
-        (ws: {
-          name = toString ws.number;
-          value = {
-            label = ws.label;
-            apps = ws.apps;
-          };
-        })
-        cfg.workspaces);
-    };
+      launchd.enable = true;
+      settings = {
+        start-at-login = true;
+        enable-normalization-flatten-containers = true;
+        enable-normalization-opposite-orientation-for-nested-containers = true;
+        default-root-container-layout = aerospaceLayout;
+        default-root-container-orientation = "auto";
+        on-focused-monitor-changed = [ "move-mouse monitor-lazy-center" ];
 
-    # Enable skhd with our configuration
-    modules.darwin.services.skhd = {
-      enable = true;
-      defaultKeybindings = cfg.keybindings.enable;
-      keybindings = cfg.keybindings.custom;
-      # Note: terminal and browser keybindings are already in defaultKeybindings
-    };
+        gaps = {
+          inner = { horizontal = 10; vertical = 10; };
+          outer = { left = 10; right = 10; top = 10; bottom = 10; };
+        };
 
-    # Add custom rules to yabai config
-    services.yabai.extraConfig = lib.mkAfter (
-      lib.concatMapStringsSep "\n"
-        (rule:
-          let
-            selector =
-              if rule.app != null then "app=\"${rule.app}\""
-              else if rule.title != null then "title=\"${rule.title}\""
-              else throw "Rule must have either app or title";
-            manage = if rule.manage then "on" else "off";
-          in
-          "yabai -m rule --add ${selector} manage=${manage}"
-        )
-        cfg.rules
-    );
+        mode.main.binding =
+          defaultKeybindings // workspaceBindings // cfg.keybindings.custom;
+
+        on-window-detected = floatingRules ++ appWorkspaceRules;
+      };
+    };
   };
 }
