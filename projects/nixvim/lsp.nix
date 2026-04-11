@@ -5,8 +5,8 @@ with lib;
   config = {
     plugins = {
       lazydev.enable = true;
-      lsp = mkIf config.plugins.lsp.enable {
-        # enable = true;
+      lsp = {
+        enable = true;
         servers = {
           bashls.enable = true;
           lua_ls.enable = true;

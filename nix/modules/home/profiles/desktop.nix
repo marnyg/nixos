@@ -99,7 +99,7 @@
     signal-desktop
 
     # Development GUIs
-    #claude-code
+    claude-code
 
     # System utilities
     gnome-system-monitor

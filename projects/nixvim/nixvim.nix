@@ -226,24 +226,25 @@
               api_key = "OPENROUTER_API_KEY";
               end_point = "https://openrouter.ai/api/v1/chat/completions";
               #kodel = "xiaomi/mimo-v2-flash:free";
-              model = "moonshotai/kimi-k2.5";
+              model = "google/gemma-4-31b-it";
 
               name = "Openrouter";
               optional = {
                 max_tokens = 1000;
                 max_output_tokens = 1000;
-                top_p = 0.9;
-                provider = {
-                  #-- Prioritize throughput for faster completion
-                  sort = "latency";
-                };
+                #top_p = 0.9;
+                # provider = {
+                #   #-- Prioritize throughput for faster completion
+                #   sort = "latency";
+                # };
                 stream = true;
               };
             };
           };
           context_window = 16000 * 5;
+
           virtualtext = {
-            auto_trigger_ft = [ "markdown" "python" "lua" "md" ];
+            auto_trigger_ft = [ "*" ];
             keymap = {
               #TODO: change to not use alt
 
@@ -350,6 +351,65 @@
         };
         luaConfig.post = /*lua*/''
           vim.notify = require('mini.notify').make_notify()
+
+          -- Minuet status for mini.statusline
+          local minuet_status = { state = "idle", name = "", n_requests = 0, n_finished = 0, frame = 1 }
+          local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+          local spinner_timer = vim.uv.new_timer()
+          local done_timer = vim.uv.new_timer()
+
+          vim.api.nvim_create_autocmd('User', {
+            pattern = 'MinuetRequestStartedPre',
+            callback = function(ev)
+              done_timer:stop()
+              minuet_status.name = ev.data.name or ""
+              minuet_status.n_requests = ev.data.n_requests or 1
+              minuet_status.n_finished = 0
+              minuet_status.frame = 1
+              minuet_status.state = "pending"
+            end,
+          })
+          vim.api.nvim_create_autocmd('User', {
+            pattern = 'MinuetRequestStarted',
+            callback = function()
+              minuet_status.state = "running"
+              spinner_timer:start(0, 100, vim.schedule_wrap(function()
+                minuet_status.frame = minuet_status.frame % #spinner + 1
+                vim.cmd('redrawstatus')
+              end))
+            end,
+          })
+          vim.api.nvim_create_autocmd('User', {
+            pattern = 'MinuetRequestFinished',
+            callback = function()
+              minuet_status.n_finished = minuet_status.n_finished + 1
+              if minuet_status.n_finished >= minuet_status.n_requests then
+                spinner_timer:stop()
+                minuet_status.state = "done"
+                vim.cmd('redrawstatus')
+                done_timer:start(3000, 0, vim.schedule_wrap(function()
+                  minuet_status.state = "idle"
+                  vim.cmd('redrawstatus')
+                end))
+              end
+            end,
+          })
+
+          local orig_section_filename = MiniStatusline.section_filename
+          MiniStatusline.section_filename = function(args)
+            local base = orig_section_filename(args)
+            local st = minuet_status
+            if st.state == "running" then
+              local s = spinner[st.frame] .. ' ' .. st.name
+              if st.n_requests > 1 then
+                s = s .. ' (' .. st.n_finished .. '/' .. st.n_requests .. ')'
+              end
+              return base .. ' ' .. s
+            elseif st.state == "done" then
+              return base .. ' ✓ ' .. st.name
+            end
+            return base
+          end
         '';
       };
       none-ls = {

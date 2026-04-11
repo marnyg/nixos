@@ -87,6 +87,8 @@ with lib;
             (mkIf config.plugins.lsp.enable { name = "nvim_lsp_document_symbol"; })
             #(mkIf config.plugins.supermaven.enable { name = "supermaven"; })
             #{ name = "copilot"; }
+            { name = "minuet"; }
+            { name = "lazydev"; group_index = 0; }
             { name = "luasnip"; }
             { name = "treesitter"; }
             { name = "nvim_lua"; }
