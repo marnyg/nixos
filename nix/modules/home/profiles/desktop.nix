@@ -41,6 +41,8 @@
     spotify-player.enable = lib.mkDefault true;
     spotify-player.settings = {
       login_redirect_uri = "http://127.0.0.1:8988/login";
+      enable_media_control = true;
+      device.name = "marius-desktop-cli";
     };
   };
 

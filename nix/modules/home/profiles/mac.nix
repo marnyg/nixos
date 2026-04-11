@@ -12,7 +12,7 @@
     kitty.enable = lib.mkDefault false; # Disabled - build fails on Darwin, using Ghostty instead
     ghostty.enable = lib.mkDefault true;
     ghostty.fontsize = lib.mkDefault 14;
-    spotifyd.enable = lib.mkDefault true;
+    spotifyd.enable = lib.mkDefault false;
 
     # Development tools (with performance optimizations)
     direnv.enable = lib.mkDefault true; # nix-direnv caches flake evaluations
@@ -28,6 +28,8 @@
     spotify-player.enable = lib.mkDefault true;
     spotify-player.settings = {
       login_redirect_uri = "http://127.0.0.1:8988/login";
+      enable_media_control = true;
+      device.name = "marius-mac-cli";
     };
     htop.enable = lib.mkDefault true;
     htop.settings.show_program_path = lib.mkDefault true;
