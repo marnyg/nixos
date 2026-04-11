@@ -23,6 +23,33 @@
       { number = 5; label = "chat"; monitor = "secondary"; apps = [ "Slack" "Signal" "Messages" "Discord" "Microsoft Teams" "Microsoft Outlook" ]; }
     ];
 
+    # Key remapping
+    services.karabiner = {
+      enable = true;
+      rules =
+        let
+          # Terminal apps where Ctrl+C must stay as SIGINT
+          terminalApps = [
+            "^com\\.mitchellh\\.ghostty"
+            "^com\\.apple\\.Terminal"
+            "^com\\.googlecode\\.iterm2"
+          ];
+          # Remap Ctrl to Cmd for a key, excluding terminals
+          ctrlToCmd = key: {
+            type = "basic";
+            conditions = [{ type = "frontmost_application_unless"; bundle_identifiers = terminalApps; }];
+            from = { key_code = key; modifiers.mandatory = [ "control" ]; };
+            to = [{ key_code = key; modifiers = [ "command" ]; }];
+          };
+        in
+        [
+          {
+            description = "Ctrl+C/V/X/A/Z to Cmd+C/V/X/A/Z (except terminals)";
+            manipulators = map ctrlToCmd [ "c" "v" "x" "a" "z" "t" "w" "n" "f" "s" "l" "r" "p" ];
+          }
+        ];
+    };
+
     # Additional brew packages specific to this machine
     brew.casks = lib.mkAfter [
       "obsidian"

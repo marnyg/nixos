@@ -15,6 +15,7 @@
     profile-workstation = ./profiles/workstation.nix;
 
     # Service modules
+    service-karabiner = ./services/karabiner.nix;
     service-yabai = ./services/yabai.nix;
     service-skhd = ./services/skhd.nix;
     service-tailscale = ./services/tailscale.nix;
@@ -30,6 +31,7 @@
         ./core/nix-settings.nix
         ./core/fonts.nix
         ./core/brew.nix
+        ./services/karabiner.nix
         ./services/yabai.nix
         ./services/skhd.nix
         ./services/tailscale.nix
