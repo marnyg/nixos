@@ -24,7 +24,11 @@
 
   # macOS-specific programs
   programs = {
-    ncspot.enable = lib.mkDefault true;
+    ncspot.enable = lib.mkDefault false;
+    spotify-player.enable = lib.mkDefault true;
+    spotify-player.settings = {
+      login_redirect_uri = "http://127.0.0.1:8988/login";
+    };
     htop.enable = lib.mkDefault true;
     htop.settings.show_program_path = lib.mkDefault true;
     yazi.enable = lib.mkDefault true;

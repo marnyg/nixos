@@ -1,18 +1,18 @@
 { pkgs, lib, config, ... }:
 with lib;
 let
-  ncspot = pkgs.writeScript "ncspot" ''
+  spotify-player-popup = pkgs.writeScript "spotify-player-popup" ''
 
 #!/bin/bash
 
-# The name for our dedicated ncspot session
-SESSION_NAME="ncspot-music"
+# The name for our dedicated spotify-player session
+SESSION_NAME="spotify-music"
 
 # Check if the session already exists
 if ! tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
-    # If it doesn't exist, create it detached (-d) and run ncspot
-    echo "Creating new ncspot session..."
-    tmux new-session -d -s "$SESSION_NAME" "ncspot"
+    # If it doesn't exist, create it detached (-d) and run spotify_player
+    echo "Creating new spotify-player session..."
+    tmux new-session -d -s "$SESSION_NAME" "spotify_player"
 fi
 
 # Simply attach to the session - the popup will handle the toggle
@@ -130,8 +130,8 @@ in
         # `y` for yazi file manager
         bind-key y run-shell "tmux display-popup -w 90% -h 90% -d '#{pane_current_path}' -T 'Yazi' -E 'yazi'"
 
-        # `m` for music (ncspot Spotify client) - toggles popup
-        bind-key m if-shell -F '#{==:#{session_name},ncspot-music}' 'detach-client' "run-shell \"tmux display-popup -w 90% -h 90% -T 'ncspot' -E '${ncspot}'\""
+        # `m` for music (spotify-player) - toggles popup
+        bind-key m if-shell -F '#{==:#{session_name},spotify-music}' 'detach-client' "run-shell \"tmux display-popup -w 90% -h 90% -T 'Spotify' -E '${spotify-player-popup}'\""
 
         # `k` for keybingd
         bind-key k run-shell "tmux display-popup -w 90% -h 90% -d '#{pane_current_path}' -T 'Keybindings' -E 'tmux list-keys | fzf'"

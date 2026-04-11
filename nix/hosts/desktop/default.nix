@@ -86,8 +86,6 @@
 
     extraHomeModules = [
       {
-        programs.ncspot.enable = true;
-
         # Module overrides specific to this host
         modules.my.sharedDefaults.enable = true;
         modules.my.nixvim.enable = true;

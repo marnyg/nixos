@@ -37,7 +37,11 @@
     yazi.shellWrapperName = "y";
 
     # OPTIONAL: Nice to have but not essential
-    ncspot.enable = lib.mkDefault true;
+    ncspot.enable = lib.mkDefault false;
+    spotify-player.enable = lib.mkDefault true;
+    spotify-player.settings = {
+      login_redirect_uri = "http://127.0.0.1:8988/login";
+    };
   };
 
   # Desktop packages
