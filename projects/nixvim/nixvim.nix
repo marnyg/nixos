@@ -244,7 +244,7 @@
           context_window = 16000 * 5;
 
           virtualtext = {
-            auto_trigger_ft = [ "*" ];
+            auto_trigger_ft = [ ];
             keymap = {
               #TODO: change to not use alt
 
@@ -352,6 +352,12 @@
         luaConfig.post = /*lua*/''
           vim.notify = require('mini.notify').make_notify()
 
+          -- Toggle minuet on/off
+          vim.keymap.set('n', '<leader>cm', function()
+            require('minuet.virtualtext').action.toggle_auto_trigger()
+            vim.cmd('redrawstatus')
+          end, { desc = 'Toggle [C]ode [M]inuet' })
+
           -- Minuet status for mini.statusline
           local minuet_status = { state = "idle", name = "", n_requests = 0, n_finished = 0, frame = 1 }
           local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
@@ -398,6 +404,9 @@
           local orig_section_filename = MiniStatusline.section_filename
           MiniStatusline.section_filename = function(args)
             local base = orig_section_filename(args)
+            if not vim.b.minuet_virtual_text_auto_trigger then
+              return base .. ' 󱙺 off'
+            end
             local st = minuet_status
             if st.state == "running" then
               local s = spinner[st.frame] .. ' ' .. st.name
@@ -408,7 +417,7 @@
             elseif st.state == "done" then
               return base .. ' ✓ ' .. st.name
             end
-            return base
+            return base .. ' 󱙺'
           end
         '';
       };
