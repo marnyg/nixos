@@ -159,7 +159,7 @@ with lib;
       # Example windowrule v1
       # windowrule = float, ^(kitty)$
       # Example windowrule v2
-      # windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
+      # windowrule = float,class:^(kitty)$,title:^(kitty)$
       # See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
 
 
@@ -256,7 +256,7 @@ with lib;
       bindm = $mainMod, mouse:273, resizewindow
 
       # Media keys
-      bind=, , exec, vol --up
+
       bindle=, XF86AudioRaiseVolume, exec, vol --up
       bindle=, XF86AudioLowerVolume, exec, vol --down
       bindle=, XF86MonBrightnessUp, exec, bri --up
@@ -267,47 +267,49 @@ with lib;
       bindl=, XF86AudioNext, exec, playerctl next 
       bindl=, XF86AudioPrev, exec, playerctl previous
 
-      ## RULES 
+      ## RULES
       # Floating
-      windowrulev2 = float, class:^(blueberry\.py)$
-      windowrulev2 = float, class:^(steam)$
-      windowrulev2 = float, class:^(guifetch)$   # FlafyDev/guifetch
-      windowrulev2 = float, class:^(pavucontrol)$
-      windowrulev2 = size 45%, class:^(pavucontrol)$
-      windowrulev2 = center, class:^(pavucontrol)$
-      windowrulev2 = float, class:^(org.pulseaudio.pavucontrol)$
-      windowrulev2 = size 45%, class:^(org.pulseaudio.pavucontrol)$
-      windowrulev2 = center, class:^(org.pulseaudio.pavucontrol)$
-      windowrulev2 = float, class:^(nm-connection-editor)$
-      windowrulev2 = size 45%, class:^(nm-connection-editor)$
-      windowrulev2 = center, class:^(nm-connection-editor)$
+      windowrule = float on, match:class ^(blueberry\.py)$
+      windowrule = float on, match:class ^(\.?blueman-manager.*)$
+      windowrule = size 45%, match:class ^(\.?blueman-manager.*)$
+      windowrule = center on, match:class ^(\.?blueman-manager.*)$
+      windowrule = float on, match:class ^(steam)$
+      windowrule = float on, match:class ^(guifetch)$   # FlafyDev/guifetch
+      windowrule = float on, match:class ^(pavucontrol)$
+      windowrule = size 45%, match:class ^(pavucontrol)$
+      windowrule = center on, match:class ^(pavucontrol)$
+      windowrule = float on, match:class ^(org.pulseaudio.pavucontrol)$
+      windowrule = size 45%, match:class ^(org.pulseaudio.pavucontrol)$
+      windowrule = center on, match:class ^(org.pulseaudio.pavucontrol)$
+      windowrule = float on, match:class ^(nm-connection-editor)$
+      windowrule = size 45%, match:class ^(nm-connection-editor)$
+      windowrule = center on, match:class ^(nm-connection-editor)$
 
       # Tiling
-      windowrulev2 = tile, class:^dev\.warp\.Warp$
+      windowrule = tile on, match:class ^dev\.warp\.Warp$
 
       # Picture-in-Picture
-      windowrulev2 = float, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
-      windowrulev2 = keepaspectratio, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
-      windowrulev2 = move 73% 72%, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$ 
-      windowrulev2 = size 25%, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
-      windowrulev2 = float, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
-      windowrulev2 = pin, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
+      windowrule = float on, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
+      windowrule = keep_aspect_ratio on, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
+      windowrule = move 73% 72%, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
+      windowrule = size 25%, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
+      windowrule = pin on, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
 
       # Dialog windows – float+center these windows.
-      windowrulev2 = center, title:^(Open File)(.*)$
-      windowrulev2 = center, title:^(Select a File)(.*)$
-      windowrulev2 = center, title:^(Choose wallpaper)(.*)$
-      windowrulev2 = center, title:^(Open Folder)(.*)$
-      windowrulev2 = center, title:^(Save As)(.*)$
-      windowrulev2 = center, title:^(Library)(.*)$
-      windowrulev2 = center, title:^(File Upload)(.*)$
-      windowrulev2 = float, title:^(Open File)(.*)$
-      windowrulev2 = float, title:^(Select a File)(.*)$
-      windowrulev2 = float, title:^(Choose wallpaper)(.*)$
-      windowrulev2 = float, title:^(Open Folder)(.*)$
-      windowrulev2 = float, title:^(Save As)(.*)$
-      windowrulev2 = float, title:^(Library)(.*)$
-      windowrulev2 = float, title:^(File Upload)(.*)$
+      windowrule = center on, match:title ^(Open File)(.*)$
+      windowrule = center on, match:title ^(Select a File)(.*)$
+      windowrule = center on, match:title ^(Choose wallpaper)(.*)$
+      windowrule = center on, match:title ^(Open Folder)(.*)$
+      windowrule = center on, match:title ^(Save As)(.*)$
+      windowrule = center on, match:title ^(Library)(.*)$
+      windowrule = center on, match:title ^(File Upload)(.*)$
+      windowrule = float on, match:title ^(Open File)(.*)$
+      windowrule = float on, match:title ^(Select a File)(.*)$
+      windowrule = float on, match:title ^(Choose wallpaper)(.*)$
+      windowrule = float on, match:title ^(Open Folder)(.*)$
+      windowrule = float on, match:title ^(Save As)(.*)$
+      windowrule = float on, match:title ^(Library)(.*)$
+      windowrule = float on, match:title ^(File Upload)(.*)$
 
       #windowrule = float, file_progress
       #windowrule = float, confirm

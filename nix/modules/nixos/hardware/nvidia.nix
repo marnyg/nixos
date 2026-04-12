@@ -75,6 +75,8 @@ with lib;
       __GLX_VENDOR_LIBRARY_NAME = "nvidia";
       # For better Vulkan support
       VK_DRIVER_FILES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
+      # Ensure CUDA/OpenGL libs are found by programs that bypass ld.so.conf (e.g. Python venvs)
+      LD_LIBRARY_PATH = "/run/opengl-driver/lib";
     };
   };
 }

@@ -22,6 +22,7 @@ with lib;
 
           sidebery
           metamask
+          tampermonkey
           #pkgs.saka
           #pkgs.saka-key
         ]);

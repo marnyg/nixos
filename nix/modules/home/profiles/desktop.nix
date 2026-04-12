@@ -52,7 +52,7 @@
     xclip
     xsel
     wl-clipboard
-    flameshot
+    # flameshot - configured via services.flameshot below
     rofi
     dmenu
     feh
@@ -118,6 +118,11 @@
     # Linux/X11 specific
     bitwarden-cli
   ];
+
+  services.flameshot = {
+    enable = true;
+    settings.General.useGrimAdapter = true;
+  };
 
   # Desktop-specific configuration
   home.sessionVariables = {

@@ -21,7 +21,7 @@ with lib;
           "layer": "top",
           "modules-left": [ "hyprland/workspaces" ],
           "modules-center": ["hyprland/window"],
-          "modules-right": [ "tray", "cpu", "memory", "pulseaudio", "bluetooth", "network", "clock", "battery"],
+          "modules-right": [ "tray", "cpu", "memory", "pulseaudio", "bluetooth", "clock", "battery"],
           "hyprland/workspaces": {
             "format": "{name}: {icon}",
             "format-icons": {
@@ -53,7 +53,8 @@ with lib;
               "headphone": "",
               "default": ["", "", "󰕾", "󰕾", "󰕾", "", "", ""]
             },
-            "scroll-step": 1
+            "scroll-step": 1,
+            "on-click": "pavucontrol"
           },
           "bluetooth": {
             "format": "<span color='#b4befe'></span> {status}",
@@ -63,12 +64,12 @@ with lib;
             "tooltip-format-enumerate-connected": "{device_alias}   {device_address}"
           },
           "network": {
-            "interface": "wlp7s0",
             "format": "{ifname}",
-            "format-wifi": "<span color='#b4befe'> </span>{essid}",
-            "format-ethernet": "{ipaddr}/{cidr} ",
+            "format-wifi": "<span color='#b4befe'> </span>{essid}",
+            "format-ethernet": "{ipaddr}/{cidr} ",
             "format-disconnected": "<span color='#b4befe'>󰖪 </span>No Network",
-            "tooltip": false
+            "tooltip": false,
+            "on-click": "nm-connection-editor"
           },
           "battery": {
             "format": "<span color='#b4befe'>{icon}</span> {capacity}%",
