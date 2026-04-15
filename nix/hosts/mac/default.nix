@@ -26,6 +26,16 @@
     # Key remapping
     services.karabiner = {
       enable = true;
+
+      # Swap Cmd and Ctrl globally (equivalent to System Settings > Keyboard > Modifier Keys)
+      # Karabiner overrides the OS-level modifier swap, so we do it here instead
+      simpleModifications = [
+        { from = { key_code = "left_command"; }; to = [{ key_code = "left_control"; }]; }
+        { from = { key_code = "right_command"; }; to = [{ key_code = "right_control"; }]; }
+        { from = { key_code = "left_control"; }; to = [{ key_code = "left_command"; }]; }
+        { from = { key_code = "right_control"; }; to = [{ key_code = "right_command"; }]; }
+      ];
+
       rules =
         let
           # Terminal apps where Ctrl+C must stay as SIGINT

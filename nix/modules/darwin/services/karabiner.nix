@@ -9,6 +9,7 @@ let
     profiles = [{
       name = "Default";
       selected = true;
+      simple_modifications = cfg.simpleModifications;
       complex_modifications = {
         rules = cfg.rules;
       };
@@ -23,6 +24,18 @@ in
 {
   options.modules.darwin.services.karabiner = {
     enable = lib.mkEnableOption "Karabiner-Elements key remapping";
+
+    simpleModifications = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
+      default = [ ];
+      description = "Simple 1-to-1 key modifications (e.g. modifier swaps)";
+      example = lib.literalExpression ''
+        [
+          { from = { key_code = "left_command"; }; to = [{ key_code = "left_control"; }]; }
+          { from = { key_code = "left_control"; }; to = [{ key_code = "left_command"; }]; }
+        ]
+      '';
+    };
 
     rules = lib.mkOption {
       type = lib.types.listOf lib.types.attrs;
