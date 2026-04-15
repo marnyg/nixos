@@ -206,8 +206,8 @@ in
         on-focused-monitor-changed = [ "move-mouse monitor-lazy-center" ];
 
         gaps = {
-          inner = { horizontal = 10; vertical = 10; };
-          outer = { left = 10; right = 10; top = 10; bottom = 10; };
+          inner = { horizontal = 0; vertical = 0; };
+          outer = { left = 0; right = 0; top = 0; bottom = 0; };
         };
 
         workspace-to-monitor-force-assignment = monitorAssignment;
