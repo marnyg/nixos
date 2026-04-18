@@ -25,6 +25,7 @@
     ./flake-modules/devshells.nix
     ./flake-modules/packages.nix
     ./flake-modules/darwin-rebuild.nix
+    ./flake-modules/windows-vm.nix
 
     # Localized module registries
     ./modules/home/flake-module.nix

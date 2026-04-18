@@ -87,6 +87,15 @@
   # Security - essential for desktop
   security.polkit.enable = true;
 
+  # YubiKey FIDO2/U2F for sudo (touch fingerprint instead of password)
+  security.pam.u2f = {
+    enable = true;
+    control = "sufficient";
+    settings.cue = true;
+  };
+
+  services.udev.packages = [ pkgs.yubikey-personalization ];
+
   # Systemd service for polkit authentication
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
     description = "polkit-gnome-authentication-agent-1";
@@ -158,6 +167,7 @@
     firefox
     pavucontrol
     networkmanagerapplet
+    pam_u2f # for pamu2fcfg (YubiKey U2F registration)
   ] ++ lib.optionals (inputs ? agenix) [
     inputs.agenix.packages.x86_64-linux.default
   ];
