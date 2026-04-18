@@ -4,7 +4,6 @@
   imports = [
     # Active projects
     ./nixvim
-    ./agentic-dm
 
     # Note: experimental projects can be added here when ready:
     # ./experimental/radRePomodora

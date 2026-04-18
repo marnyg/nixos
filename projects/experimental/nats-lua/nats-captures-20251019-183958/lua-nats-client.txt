@@ -1,0 +1,20 @@
+warning: Git tree '/home/mar/git/nixos' is dirty
+Error detected while processing /nix/store/5g7li6dxvi8gd2m784i8cifc0sgg5i34-init.lua:
+E5113: Error while calling lua chunk: ...NeovimPackages/start/image.nvim/lua/image/utils/term.lua:34: Failed to get terminal size
+stack traceback:
+	[C]: in function 'assert'
+	...NeovimPackages/start/image.nvim/lua/image/utils/term.lua:34: in function 'update_size'
+	...NeovimPackages/start/image.nvim/lua/image/utils/term.lua:46: in main chunk
+	[C]: in function 'require'
+	...NeovimPackages/start/image.nvim/lua/image/utils/init.lua:8: in main chunk
+	[C]: in function 'require'
+	...ack/myNeovimPackages/start/image.nvim/lua/image/init.lua:1: in main chunk
+	[C]: in function 'require'
+	/nix/store/5g7li6dxvi8gd2m784i8cifc0sgg5i34-init.lua:497: in main chunk
+<<- INFO {"server_id":"NC6SXQURE472J7GUWEXHQUYV6HGIDAG555FJDI73EWQVM42FIAOYBY7N","server_name":"az-europewest-natscj1-3","version":"2.12.1","proto":1,"git_commit":"fab5f99","go":"go1.25.3","host":"20.224.12.45","port":4222,"headers":true,"auth_required":true,"tls_required":true,"max_payload":8388608,"jetstream":true,"client_id":31192,"client_ip":"80.212.252.110","nonce":"wx97g_bG02uJUmw","cluster":"ngsprod-az-europewest","domain":"ngs","connect_urls":["20.224.12.45:4222","20.229.178.151:4222","20.86.6.48:4222"],"api_lvl":2,"xkey":"XDGWAM2PDGD6BS3A52AJBDCNHHB3VD2P6XBNWF4YXLHLOQIXG6DBGXBD"} 
+E5113: Error while calling lua chunk: ...bqp9ci6-luajit-2.1.1741730670-env/share/lua/5.1/nats.lua:663: failed to load credentials: failed to open credentials file: /root/.config/nats/context/NGS-Default-CLI.creds: No such file or directory
+stack traceback:
+	[C]: in function 'error'
+	...bqp9ci6-luajit-2.1.1741730670-env/share/lua/5.1/nats.lua:606: in function 'error'
+	...bqp9ci6-luajit-2.1.1741730670-env/share/lua/5.1/nats.lua:663: in function 'connect'
+	nats-example.lua:17: in main chunk

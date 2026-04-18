@@ -32,6 +32,7 @@
 
     mcphub-nvim.url = "github:ravitemer/mcphub.nvim";
     mcphub.url = "github:ravitemer/mcp-hub";
+
   };
 
   outputs = inputs:

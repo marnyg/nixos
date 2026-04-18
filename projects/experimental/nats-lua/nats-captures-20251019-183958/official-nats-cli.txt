@@ -1,0 +1,1 @@
+nats: error: nats: open /root/.config/nats/context/NGS-Default-CLI.creds: no such file or directory
