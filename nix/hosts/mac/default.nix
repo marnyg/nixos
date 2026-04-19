@@ -55,8 +55,8 @@
 
     # Additional brew packages specific to this machine
     brew.casks = lib.mkAfter [
-      "obsidian"
-      "notion"
+      #"obsidian"
+      #"notion"
     ];
   };
 
