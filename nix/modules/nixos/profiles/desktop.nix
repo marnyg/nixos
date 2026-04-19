@@ -131,6 +131,7 @@
       enable = lib.mkDefault true;
       defaultNetwork.settings.dns_enabled = lib.mkDefault true;
     };
+    containers.containersConf.settings.engine.service_timeout = lib.mkDefault 0;
   };
 
   # Common programs - mix of essential and optional

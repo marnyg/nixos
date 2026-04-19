@@ -61,6 +61,7 @@
 
     # Languages and runtimes
     go
+    gcc # CGo support
     python3
 
     # Kubernetes

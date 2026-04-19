@@ -59,6 +59,9 @@
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", ATTRS{idProduct}=="0791", MODE:="0666"
   '';
 
+  # Delegate cgroup controllers for rootless containers (k3s, podman)
+  systemd.services."user@".serviceConfig.Delegate = "cpuset cpu io memory pids";
+
   # Docker configuration for Dagger support
   virtualisation.docker = {
     enable = true;
