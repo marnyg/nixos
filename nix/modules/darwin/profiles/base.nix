@@ -22,7 +22,11 @@
   system.stateVersion = lib.mkDefault 6;
 
   # Enable Touch ID for sudo by default
-  security.pam.services.sudo_local.touchIdAuth = lib.mkDefault true;
+  security.pam.services.sudo_local = {
+    touchIdAuth = lib.mkDefault true;
+    # pam_reattach so Touch ID works inside tmux/screen sessions
+    reattach = lib.mkDefault true;
+  };
 
   # Basic shell support
   programs.zsh.enable = true;

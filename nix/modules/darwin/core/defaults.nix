@@ -107,6 +107,10 @@ in
     };
 
     # TouchID for sudo
-    security.pam.services.sudo_local.touchIdAuth = lib.mkDefault true;
+    security.pam.services.sudo_local = {
+      touchIdAuth = lib.mkDefault true;
+      # pam_reattach so Touch ID works inside tmux/screen sessions
+      reattach = lib.mkDefault true;
+    };
   };
 }
