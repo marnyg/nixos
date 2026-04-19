@@ -41,6 +41,9 @@ with lib;
         gcm = ''
           git commit -m "$argv"
         '';
+        mkcd = ''
+          mkdir -p $argv[1]; and cd $argv[1]
+        '';
       };
       # Fish-specific aliases (shared ones are in sharedShellConfig)
       shellAliases = {
