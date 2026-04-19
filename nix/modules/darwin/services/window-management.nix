@@ -126,9 +126,14 @@ in
             description = "Apps to assign to this workspace";
           };
           monitor = lib.mkOption {
-            type = lib.types.nullOr lib.types.str;
+            type = lib.types.nullOr (lib.types.either lib.types.str (lib.types.listOf lib.types.str));
             default = null;
-            description = "Monitor to pin this workspace to (e.g. 'main', 'secondary', or monitor ID)";
+            description = ''
+              Monitor to pin this workspace to. Accepts a single pattern
+              ('main', 'secondary', or a case-insensitive regex substring of
+              the monitor name) or a list of patterns tried in order as a
+              fallback chain.
+            '';
           };
         };
       });

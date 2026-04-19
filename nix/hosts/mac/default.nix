@@ -15,12 +15,14 @@
   # Host-specific overrides
   modules.darwin = {
     # Custom workspace configuration for this machine
+    # Monitor patterns use fallback chains: first match wins, falls back to
+    # main/secondary when a specific display isn't connected (e.g. undocked).
     windowManagement.workspaces = [
-      { number = 1; label = "code"; monitor = "main"; apps = [ "Visual Studio Code" "Ghostty" "Xcode" ]; }
-      { number = 2; label = "web"; monitor = "main"; apps = [ "Arc" "Safari" "Firefox" ]; }
-      { number = 3; label = "todo"; monitor = "main"; apps = [ "Reminder" "Mail" "Calendar" ]; }
-      { number = 4; label = "utils"; monitor = "secondary"; apps = [ "Spotify" "Music" "Finder" ]; }
-      { number = 5; label = "chat"; monitor = "secondary"; apps = [ "Slack" "Signal" "Messages" "Discord" "Microsoft Teams" "Microsoft Outlook" ]; }
+      { number = 1; label = "code"; monitor = [ "Odyssey G70B" "main" ]; apps = [ "Visual Studio Code" "Ghostty" "Xcode" ]; }
+      { number = 2; label = "web"; monitor = [ "Odyssey G70B" "main" ]; apps = [ "Arc" "Safari" "Firefox" ]; }
+      { number = 3; label = "todo"; monitor = [ "Odyssey G70B" "main" ]; apps = [ "Reminder" "Mail" "Calendar" ]; }
+      { number = 4; label = "utils"; monitor = [ "VG272" "secondary" ]; apps = [ "Spotify" "Music" "Finder" ]; }
+      { number = 5; label = "chat"; monitor = [ "VG272" "secondary" ]; apps = [ "Slack" "Signal" "Messages" "Discord" "Microsoft Teams" "Microsoft Outlook" ]; }
     ];
 
     # Key remapping
