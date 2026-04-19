@@ -30,7 +30,7 @@ if [[ $# -eq 1 ]]; then
     selected=$1
 else
     # find folder with .git or .envrc in it
-    selected=$(( ${pkgs.findutils}/bin/find ~/git ~/disks -mindepth 1 -maxdepth 4 -name '.git' -exec dirname {} \; ; ${pkgs.findutils}/bin/find ~/git ~/disks -mindepth 1 -maxdepth 4 -type f -name '.envrc' -exec dirname {} \; ) | ${pkgs.coreutils}/bin/sort -u | ${pkgs.fzf}/bin/fzf)
+    selected=$(( ${pkgs.findutils}/bin/find ~/git ~/disks/*/git* ~/disks/*/archive ~/disks/*/etc/nixos -mindepth 1 -maxdepth 4 -name '.git' -exec dirname {} \; 2>/dev/null ; ${pkgs.findutils}/bin/find ~/git ~/disks/*/git* ~/disks/*/archive ~/disks/*/etc/nixos -mindepth 1 -maxdepth 4 -type f -name '.envrc' -exec dirname {} \; 2>/dev/null ) | ${pkgs.coreutils}/bin/sort -u | ${pkgs.fzf}/bin/fzf)
 fi
 
 if [[ -z $selected ]]; then

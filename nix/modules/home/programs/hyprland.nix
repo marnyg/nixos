@@ -168,7 +168,7 @@ with lib;
       bind = $mainMod, return, exec, ghostty
       # bind = $mainMod, return, exec, foot 
       bindr = $mainMod, Q, killactive, 
-      bind = $mainMod, M, exit, 
+      bind = CTRL ALT SHIFT, Q, exit,
       bind = $mainMod, V, togglefloating, 
       bind = $mainMod, F, fullscreen, 
       # bind = $mainMod, D, pseudo, # dwindle

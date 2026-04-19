@@ -35,7 +35,7 @@
   '';
 
   # Kernel modules needed for Docker/Dagger networking
-  boot.kernelModules = [ "iptable_nat" "iptable_mangle" "iptable_filter" ];
+  boot.kernelModules = [ "iptable_nat" "iptable_mangle" "iptable_filter" "amdgpu" ];
 
   # Kernel sysctl parameters for Firefox memory mapping limits
   boot.kernel.sysctl = {
@@ -52,6 +52,12 @@
 
   # Gaming support (desktop-specific)
   programs.steam.enable = true;
+
+  # ZSA keyboard DFU flashing
+  services.udev.extraRules = ''
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE:="0666"
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", ATTRS{idProduct}=="0791", MODE:="0666"
+  '';
 
   # Docker configuration for Dagger support
   virtualisation.docker = {

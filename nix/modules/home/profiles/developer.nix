@@ -59,6 +59,14 @@
     nodejs_24
     uv # Python package manager
 
+    # Languages and runtimes
+    go
+    python3
+
+    # Kubernetes
+    kubectl
+    k9s
+
     # Container tools
     docker-compose
     lazydocker
