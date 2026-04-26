@@ -795,7 +795,8 @@
       # }
       (
         pkgs.vimUtils.buildVimPlugin {
-          name = "carp-vim";
+          pname = "carp-vim";
+          version = "unstable";
           src = pkgs.fetchFromGitHub {
             owner = "hellerve";
             repo = "carp-vim";
@@ -821,7 +822,8 @@
         plugin =
 
           (pkgs.vimUtils.buildVimPlugin {
-            name = "jsonfly";
+            pname = "jsonfly";
+            version = "unstable";
             src = pkgs.fetchFromGitHub {
               owner = "Myzel394";
               repo = "jsonfly.nvim";
