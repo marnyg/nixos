@@ -78,6 +78,7 @@
     httpie
     natscli
     inetutils
+    netbird
 
     # File tools
     tree
@@ -101,6 +102,7 @@
     # Development environments
     devenv
     taskwarrior3
+    pi-coding-agent
   ];
 
   # Shell aliases for development
