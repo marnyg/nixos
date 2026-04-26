@@ -117,6 +117,8 @@
   # OPTIONAL: Common services that are helpful but not essential
   services.openssh.enable = lib.mkDefault true;
   services.tailscale.enable = lib.mkDefault true;
+  services.netbird.enable = true;
+  services.resolved.enable = true;
 
   # Locale settings - sensible defaults
   time.timeZone = lib.mkDefault "Europe/Oslo";
