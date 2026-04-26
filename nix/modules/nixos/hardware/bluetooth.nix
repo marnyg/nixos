@@ -41,6 +41,14 @@ with lib;
     # Bluetooth manager GUI
     services.blueman.enable = mkDefault true;
 
+    # Reset ExecStart so NixOS's user-units override does not duplicate
+    # the upstream blueman-applet ExecStart (systemd refuses duplicates
+    # on non-oneshot services).
+    systemd.user.services.blueman-applet.serviceConfig.ExecStart = [
+      ""
+      "${pkgs.blueman}/bin/blueman-applet"
+    ];
+
     # Optional: hsphfpd for better Bluetooth headset support
     services.pipewire.wireplumber.configPackages = mkIf config.hardware.profiles.bluetooth.hsphfpd [
       (pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/51-bluez-config.lua" ''
