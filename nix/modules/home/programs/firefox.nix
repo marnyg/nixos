@@ -84,7 +84,7 @@ with lib;
           "media.autoplay.enabled" = false;
           "extensions.pocket.enabled" = false;
           "identity.fxaccounts.enabled" = false;
-          "toolkit.zoomManager.zoomValues" = ".8,.95,1,1.1,1.2";
+          "toolkit.zoomManager.zoomValues" = ".5,.67,.8,.95,1,1.1,1.2,1.33,1.5,1.7,2,2.4,3";
         } // optionalAttrs pkgs.stdenv.isLinux {
           "layout.css.devPixelsPerPx" = 1;
         };
