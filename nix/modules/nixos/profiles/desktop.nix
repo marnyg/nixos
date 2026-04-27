@@ -119,6 +119,7 @@
   services.tailscale.enable = lib.mkDefault true;
   services.netbird.enable = true;
   services.resolved.enable = true;
+  networking.firewall.trustedInterfaces = [ "wt0" ];
 
   # Locale settings - sensible defaults
   time.timeZone = lib.mkDefault "Europe/Oslo";
