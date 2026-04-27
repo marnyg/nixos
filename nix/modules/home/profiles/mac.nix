@@ -1,11 +1,13 @@
 # Home-manager profile for macOS systems
 { pkgs, lib, ... }:
 {
+  imports = [ ./developer.nix ];
+
   # macOS-specific module configurations
   modules.my = {
     # Disable Linux-specific modules
     sharedDefaults.enable = false;
-    cloneDefaultRepos.enable = lib.mkDefault false;
+    cloneDefaultRepos.enable = false;
 
     # Enable macOS-compatible programs
     firefox.enable = lib.mkDefault true;

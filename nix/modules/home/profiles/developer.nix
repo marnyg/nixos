@@ -33,7 +33,7 @@
   };
 
   # Development packages
-  home.packages = with pkgs; [
+  home.packages = with pkgs;  [
     # CLI tools not available as programs
     ripgrep
     fd
@@ -77,7 +77,6 @@
     wget
     httpie
     natscli
-    inetutils
     netbird
 
     # File tools
@@ -103,6 +102,15 @@
     devenv
     taskwarrior3
     pi-coding-agent
+  ] ++ lib.optionals pkgs.stdenv.isLinux [
+    # GNU inetutils (ifconfig, traceroute, telnet, whois, ftp, …).
+    # Linux-only because on Darwin its `ifconfig` shadows macOS's
+    # native BSD `/sbin/ifconfig` on PATH and breaks tools that
+    # invoke `ifconfig` directly with BSD-only utun syntax — the
+    # netbird agent's wireguard interface setup is the canonical
+    # case (`ifconfig: invalid arguments` on `sudo netbird up`).
+    # macOS already ships BSD equivalents in /sbin and /usr/bin.
+    inetutils
   ];
 
   # Shell aliases for development
