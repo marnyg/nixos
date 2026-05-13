@@ -51,6 +51,9 @@
   # Tailscale VPN
   services.tailscale.enable = lib.mkDefault true;
 
+  # Netbird VPN daemon (creates /var/run/netbird/sock for `netbird up`)
+  services.netbird.enable = lib.mkDefault true;
+
   # Additional workstation packages
   environment.systemPackages = with pkgs; [
     terminal-notifier

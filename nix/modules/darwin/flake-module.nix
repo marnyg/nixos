@@ -19,6 +19,7 @@
     service-yabai = ./services/yabai.nix;
     service-skhd = ./services/skhd.nix;
     service-tailscale = ./services/tailscale.nix;
+    service-netbird = ./services/netbird.nix;
     service-window-management = ./services/window-management.nix;
 
     # Legacy compatibility (to be deprecated)
@@ -35,6 +36,7 @@
         ./services/yabai.nix
         ./services/skhd.nix
         ./services/tailscale.nix
+        ./services/netbird.nix
         ./services/window-management.nix
       ];
     };
