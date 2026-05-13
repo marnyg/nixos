@@ -93,7 +93,10 @@ in
     };
 
     programs.git = {
-      package = pkgs.gitFull;
+      package =
+        if pkgs.stdenv.isDarwin
+        then pkgs.gitFull.override { svnSupport = false; }
+        else pkgs.gitFull;
       enable = true;
       signing.format = null;
       ignores = [
