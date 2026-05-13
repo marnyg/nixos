@@ -12,6 +12,12 @@
 
       # Replace neovim with nixvim globally
       neovim = inputs.self.packages.${final.system}.nixvim or prev.neovim;
+
+      # direnv's shell test suite hangs in the Darwin nix-build sandbox.
+      direnv =
+        if prev.stdenv.isDarwin
+        then prev.direnv.overrideAttrs (_: { doCheck = false; })
+        else prev.direnv;
     };
 
     # NUR overlay
