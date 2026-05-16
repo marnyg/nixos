@@ -17,6 +17,7 @@ in
       inputs.nixvim.legacyPackages."${system}".makeNixvimWithModule {
         pkgs = import inputs.nixpkgs {
           inherit system;
+          config.allowUnfree = true;
           overlays = [
             (_: _: { mcphub-nvim = inputs.mcphub-nvim.packages.${system}.default; })
             (_: _: { mcphub = inputs.mcphub.packages.${system}.default; })

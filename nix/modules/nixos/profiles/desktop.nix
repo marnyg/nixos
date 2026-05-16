@@ -87,6 +87,10 @@
   # Security - essential for desktop
   security.polkit.enable = true;
 
+  # Auto-unlock gnome-keyring at greetd login using the login password
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
+
   # YubiKey FIDO2/U2F for sudo (touch fingerprint instead of password)
   security.pam.u2f = {
     enable = true;
