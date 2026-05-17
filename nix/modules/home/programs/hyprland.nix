@@ -138,7 +138,6 @@ with lib;
       }
 
       dwindle {
-          pseudotile = yes # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
           preserve_split = yes # you probably want this
           force_split = 1
       }
@@ -172,7 +171,7 @@ with lib;
       bind = $mainMod, V, togglefloating, 
       bind = $mainMod, F, fullscreen, 
       # bind = $mainMod, D, pseudo, # dwindle
-      bind = $mainMod, S, togglesplit, # dwindle
+      bind = $mainMod, S, layoutmsg, togglesplit # dwindle
 
       ## UTILITY KEYBINDINGS
       # Launcher (wofi)
@@ -271,18 +270,18 @@ with lib;
       # Floating
       windowrule = float on, match:class ^(blueberry\.py)$
       windowrule = float on, match:class ^(\.?blueman-manager.*)$
-      windowrule = size 45%, match:class ^(\.?blueman-manager.*)$
+      windowrule = size 45% 45%, match:class ^(\.?blueman-manager.*)$
       windowrule = center on, match:class ^(\.?blueman-manager.*)$
       windowrule = float on, match:class ^(steam)$
       windowrule = float on, match:class ^(guifetch)$   # FlafyDev/guifetch
       windowrule = float on, match:class ^(pavucontrol)$
-      windowrule = size 45%, match:class ^(pavucontrol)$
+      windowrule = size 45% 45%, match:class ^(pavucontrol)$
       windowrule = center on, match:class ^(pavucontrol)$
       windowrule = float on, match:class ^(org.pulseaudio.pavucontrol)$
-      windowrule = size 45%, match:class ^(org.pulseaudio.pavucontrol)$
+      windowrule = size 45% 45%, match:class ^(org.pulseaudio.pavucontrol)$
       windowrule = center on, match:class ^(org.pulseaudio.pavucontrol)$
       windowrule = float on, match:class ^(nm-connection-editor)$
-      windowrule = size 45%, match:class ^(nm-connection-editor)$
+      windowrule = size 45% 45%, match:class ^(nm-connection-editor)$
       windowrule = center on, match:class ^(nm-connection-editor)$
 
       # Tiling
@@ -292,7 +291,7 @@ with lib;
       windowrule = float on, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
       windowrule = keep_aspect_ratio on, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
       windowrule = move 73% 72%, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
-      windowrule = size 25%, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
+      windowrule = size 25% 25%, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
       windowrule = pin on, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
 
       # Dialog windows – float+center these windows.
