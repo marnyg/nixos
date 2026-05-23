@@ -2,10 +2,18 @@
 
 {
   # Development packages
-  packages = with pkgs; [ ];
+  packages = with pkgs; [ worktrunk ];
 
   # Shell hook
   enterShell = ''
+    # Worktrunk (`wt`) shell integration — devenv spawns bash, so the
+    # fish-side integration from the home-manager worktrunk module doesn't
+    # apply here. Without this, `wt remove` can't cd out of the doomed
+    # worktree before deletion, leaving the shell stranded.
+    if command -v wt >/dev/null 2>&1; then
+        eval "$(${pkgs.worktrunk}/bin/wt config shell init bash)"
+    fi
+
     echo "🚀 NixOS Development Environment (via devenv)"
     echo "Available hosts: wsl, desktop, laptop, mac"
     echo ""

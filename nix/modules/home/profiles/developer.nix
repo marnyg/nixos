@@ -8,6 +8,7 @@
     git.enable = true; # Version control is mandatory
     direnv.enable = true; # Project environment management
     tmux.enable = true; # Terminal multiplexing for productivity
+    worktrunk.enable = true; # `wt` config + tmux session cleanup on `wt remove`
     fzf.enable = true; # Fuzzy finding is essential for navigation
     myPackages.enable = true; # Core development packages
     pi-agent.enable = true; # pi-coding-agent settings + keybindings
@@ -47,6 +48,7 @@
     # Version control
     lazygit
     natscli
+    # worktrunk is now installed via modules.my.worktrunk (see worktrunk.nix)
 
     # Build tools
     gnumake
