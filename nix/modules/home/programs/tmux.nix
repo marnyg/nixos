@@ -30,7 +30,26 @@ if [[ $# -eq 1 ]]; then
     selected=$1
 else
     # find folder with .git or .envrc in it
-    selected=$(( ${pkgs.findutils}/bin/find ~/git ~/disks/*/git* ~/disks/*/archive ~/disks/*/etc/nixos -mindepth 1 -maxdepth 4 -name '.git' -exec dirname {} \; 2>/dev/null ; ${pkgs.findutils}/bin/find ~/git ~/disks/*/git* ~/disks/*/archive ~/disks/*/etc/nixos -mindepth 1 -maxdepth 4 -type f -name '.envrc' -exec dirname {} \; 2>/dev/null ) | ${pkgs.coreutils}/bin/sort -u | ${pkgs.fzf}/bin/fzf)
+    folders=$(( ${pkgs.findutils}/bin/find ~/git ~/disks/*/git* ~/disks/*/archive ~/disks/*/etc/nixos -mindepth 1 -maxdepth 4 -name '.git' -exec dirname {} \; 2>/dev/null ; ${pkgs.findutils}/bin/find ~/git ~/disks/*/git* ~/disks/*/archive ~/disks/*/etc/nixos -mindepth 1 -maxdepth 4 -type f -name '.envrc' -exec dirname {} \; 2>/dev/null ) | ${pkgs.coreutils}/bin/sort -u)
+
+    active_sessions=$(tmux list-sessions -F '#{session_name}' 2>/dev/null || true)
+
+    inactive_lines=""
+    active_lines=""
+    while IFS= read -r folder; do
+        [[ -z $folder ]] && continue
+        name=$(basename "$folder" | tr . _)
+        if printf '%s\n' "$active_sessions" | grep -qFx "$name"; then
+            # bold green + bullet, active sessions go first so they land near the fzf prompt
+            active_lines+=$'\e[1;32m● '"$folder"$'\e[0m\n'
+        else
+            inactive_lines+="  $folder"$'\n'
+        fi
+    done <<< "$folders"
+
+    selected=$(printf '%s%s' "$active_lines" "$inactive_lines" | ${pkgs.fzf}/bin/fzf --ansi --prompt='session> ' --header='● = active session')
+    # strip the active-session marker or inactive padding from the selection
+    selected=$(printf '%s' "$selected" | ${pkgs.gnused}/bin/sed -e 's/^● //' -e 's/^  //')
 fi
 
 if [[ -z $selected ]]; then
@@ -51,6 +70,70 @@ fi
 
 tmux switch-client -t $selected_name
 '';
+  tmux-worktree = pkgs.writeScript "tmux-worktree" ''
+
+#!/usr/bin/env bash
+# Create a new git worktree from the current repo and open it in a tmux
+# session with three panes: nvim (left), claude (top-right), shell (bottom-right).
+#
+# Invoked from the tmux keybinding as:
+#   tmux-worktree <pane_current_path> <branch>
+#
+# Worktree path follows worktrunk's default template:
+#   {{ repo_path }}/../{{ repo }}.{{ branch | sanitize }}
+# so `wt list` / `wt remove` from anywhere keep working.
+
+set -euo pipefail
+
+source_path="''${1:-}"
+branch="''${2:-}"
+
+if [[ -z $branch ]]; then
+    tmux display-message "tmux-worktree: branch name required"
+    exit 0
+fi
+
+cd "$source_path"
+
+if ! repo_root=$(${pkgs.git}/bin/git rev-parse --show-toplevel 2>/dev/null); then
+    tmux display-message "tmux-worktree: not in a git repository"
+    exit 0
+fi
+
+repo_name=$(${pkgs.coreutils}/bin/basename "$repo_root")
+sanitized=''${branch//\//-}
+worktree_path="$(${pkgs.coreutils}/bin/dirname "$repo_root")/''${repo_name}.''${sanitized}"
+
+if [[ ! -d $worktree_path ]]; then
+    if ! ${pkgs.git}/bin/git worktree add -b "$branch" "$worktree_path" 2> /tmp/tmux-worktree.err; then
+        tmux display-message "tmux-worktree: $(${pkgs.coreutils}/bin/cat /tmp/tmux-worktree.err)"
+        exit 0
+    fi
+fi
+
+session_name=$(${pkgs.coreutils}/bin/basename "$worktree_path" | ${pkgs.coreutils}/bin/tr . _)
+
+if ! tmux has-session -t="$session_name" 2>/dev/null; then
+    # Left pane: nvim
+    tmux new-session -ds "$session_name" -c "$worktree_path" -n editor
+    tmux send-keys -t "''${session_name}:editor" "nvim ." C-m
+
+    # Right column: claude on top, shell on bottom
+    tmux split-window -h -l 40% -t "''${session_name}:editor" -c "$worktree_path"
+    tmux send-keys -t "''${session_name}:editor.2" "claude" C-m
+
+    tmux split-window -v -l 30% -t "''${session_name}:editor.2" -c "$worktree_path"
+
+    tmux select-pane -t "''${session_name}:editor.1"
+fi
+
+if [[ -z ''${TMUX:-} ]]; then
+    tmux attach-session -t "$session_name"
+else
+    tmux switch-client -t "$session_name"
+fi
+'';
+
   toggle-side-notes = pkgs.writeScript "toggle-side-notes" ''
     #!/usr/bin/env bash
     P=$(tmux show -wqv @myspecialpane)                                            # get the special pane id
@@ -123,6 +206,9 @@ in
         # --- POPUP BINDINGS ---
         # `f` for find-session (sessionizer)
         bind-key f run-shell "tmux display-popup -w 90% -h 90% -E '${tmux-sessionizer}'"
+
+        # `W` for new worktree: prompt for branch, create worktree, open session
+        bind-key W command-prompt -p "new worktree branch:" "run-shell '${tmux-worktree} #{pane_current_path} %%'"
 
         # `g` for git 
         bind-key g run-shell "tmux display-popup -w 90% -h 90% -d '#{pane_current_path}' -T 'GitUi' -E 'gitui'"
