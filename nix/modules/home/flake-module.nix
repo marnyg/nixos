@@ -40,6 +40,7 @@
           ./programs/qutebrowser.nix
           ./programs/lf.nix
           ./programs/git.nix
+          ./programs/pi-agent.nix
           ./programs/bspwm/bspwm.nix
           ./programs/xmonad
           ./programs/polybar/polybar.nix

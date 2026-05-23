@@ -10,6 +10,7 @@
     tmux.enable = true; # Terminal multiplexing for productivity
     fzf.enable = true; # Fuzzy finding is essential for navigation
     myPackages.enable = true; # Core development packages
+    pi-agent.enable = true; # pi-coding-agent settings + keybindings
 
     # OPTIONAL: Sensible defaults but can be overridden
     nixvim.enable = lib.mkDefault true; # Default editor, but vim/emacs users may override

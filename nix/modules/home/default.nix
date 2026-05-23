@@ -30,6 +30,7 @@ let
 
     # Development tools
     git = ./programs/git.nix;
+    pi-agent = ./programs/pi-agent.nix;
 
     # Desktop environments - X11
     bspwm = ./programs/bspwm/bspwm.nix;
