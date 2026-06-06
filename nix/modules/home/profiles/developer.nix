@@ -105,7 +105,8 @@
     # Development environments
     devenv
     taskwarrior3
-    pi-coding-agent
+    # pi-coding-agent installed by modules.my.pi-agent (wrapped to set
+    # NPM_CONFIG_PREFIX away from the read-only /nix/store path).
   ] ++ lib.optionals pkgs.stdenv.isLinux [
     # GNU inetutils (ifconfig, traceroute, telnet, whois, ftp, …).
     # Linux-only because on Darwin its `ifconfig` shadows macOS's

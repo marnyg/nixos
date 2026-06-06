@@ -11,6 +11,21 @@
 let
   cfg = config.modules.my.pi-agent;
 
+  # pi runs `npm install -g <adapter>` at startup. With nix's nodejs the
+  # default global prefix points into /nix/store (read-only), so wrap pi
+  # with a writable per-user NPM_CONFIG_PREFIX. Use --run so $HOME is
+  # evaluated at runtime; --set would bake the build-sandbox HOME
+  # (/homeless-shelter) into the wrapper.
+  piWrapped = pkgs.symlinkJoin {
+    name = "pi-coding-agent-wrapped-${pkgs.pi-coding-agent.version}";
+    paths = [ pkgs.pi-coding-agent ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/pi \
+        --run 'export NPM_CONFIG_PREFIX="$HOME/.local/share/pi-agent/npm"'
+    '';
+  };
+
   settings = {
     lastChangelogVersion = "0.73.0";
     defaultProvider = "anthropic";
@@ -41,9 +56,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    home.packages = [ piWrapped ];
+
     home.activation.piAgentConfig =
       lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         run mkdir -p "$HOME/.pi/agent"
+        run mkdir -p "$HOME/.local/share/pi-agent/npm"
 
         # Seed settings.json on first run; pi will keep updating it
         # (e.g. lastChangelogVersion). On managed-source change we

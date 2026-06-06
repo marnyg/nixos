@@ -29,9 +29,12 @@
     prusa-slicer
   ];
 
-  # Disable power save on MT7921E WiFi to prevent rfkill soft-block loops
+  # Disable PCIe ASPM on MT7921E WiFi to prevent chip-reset loops and kernel
+  # oopses (mt7921e is the only parameter the driver actually accepts; the
+  # previous `power_save=0` was silently ignored — see kernel log
+  # "mt7921e: unknown parameter 'power_save' ignored").
   boot.extraModprobeConfig = ''
-    options mt7921e power_save=0
+    options mt7921e disable_aspm=1
   '';
 
   # Kernel modules needed for Docker/Dagger networking
