@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }: {
+{ pkgs, ... }: {
   options = { };
 
   imports = [ ./langs ./lsp.nix ./treesitter.nix ./cmp.nix ];
@@ -123,6 +123,7 @@
     langs.rust.enable = true;
     langs.terraform.enable = true;
     langs.gleam.enable = true;
+    langs.lean.enable = true;
 
     lsp.servers.ty = {
       enable = true;
