@@ -13,6 +13,10 @@
       # Replace neovim with nixvim globally
       neovim = inputs.self.packages.${final.system}.nixvim or prev.neovim;
 
+      # Newer pi-coding-agent than what's in the pinned nixpkgs
+      # (vendored from nixpkgs master: pkgs/by-name/pi/pi-coding-agent)
+      pi-coding-agent = final.callPackage ../overlays/pi-coding-agent/package.nix { };
+
       # direnv's shell test suite hangs in the Darwin nix-build sandbox.
       direnv =
         if prev.stdenv.isDarwin
@@ -37,6 +41,8 @@
           mcphub = inputs.mcphub.packages.${final.system}.default or null;
           # Replace neovim with nixvim globally
           neovim = inputs.self.packages.${final.system}.nixvim or prev.neovim;
+          # Newer pi-coding-agent than what's in the pinned nixpkgs
+          pi-coding-agent = final.callPackage ../overlays/pi-coding-agent/package.nix { };
         })
       ];
     };

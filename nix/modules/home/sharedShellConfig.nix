@@ -37,7 +37,38 @@ with lib;
       };
     };
 
-    programs.starship.enable = true;
+    programs.starship = {
+      enable = true;
+      settings = {
+        kubernetes = {
+          disabled = false;
+          format = "on [⛵ $context\($namespace\)]($style) ";
+          style = "dimmed green";
+          contexts = [
+            {
+              context_pattern = ".*-prd$";
+              style = "bold red";
+              symbol = "🚨 ";
+            }
+            {
+              context_pattern = ".*-dev$";
+              style = "bold yellow";
+              symbol = "🛠 ";
+            }
+            {
+              context_pattern = "^k3d-.*";
+              style = "bold blue";
+              symbol = "🐳 ";
+            }
+            {
+              context_pattern = "^cloud$";
+              style = "bold cyan";
+              symbol = "☁ ";
+            }
+          ];
+        };
+      };
+    };
     programs.zoxide.enable = true;
     programs.fzf.enable = true;
 

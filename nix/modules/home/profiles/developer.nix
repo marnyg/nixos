@@ -47,6 +47,7 @@
 
     # Version control
     lazygit
+    gh-markdown-preview # `gh markdown-preview` — render markdown like GitHub, locally
     natscli
     # worktrunk is now installed via modules.my.worktrunk (see worktrunk.nix)
 

@@ -67,6 +67,14 @@
     diagnostic.settings.virtual_text = true;
 
     extraConfigLua = /*lua*/''
+      -- Pre-warm ImageMagick: on Darwin, Defender scans the binary + dylibs on
+      -- first exec (~16s cold), blowing image.nvim's hard-coded 10s resize
+      -- timeout. Running it once in the background at startup pays that cost
+      -- before any diagram/image render needs it.
+      if vim.fn.has('mac') == 1 and vim.fn.executable('magick') == 1 then
+        vim.system({ 'magick', '-version' }, { timeout = 60000 }, function() end)
+      end
+
       local map = vim.keymap.set
       -- better indenting
       map("v", ">", ">gv", { noremap = true, silent = true })
@@ -111,6 +119,7 @@
       websocat
       #ollama
       imagemagick
+      # mermaid-cli # `mmdc` binary used by diagram.nvim to render mermaid blocks
       ty
     ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
       pngpaste
@@ -175,6 +184,31 @@
       };
 
       friendly-snippets.enable = true;
+
+      # Render mermaid/plantuml/d2 diagrams in markdown buffers (backend: image.nvim)
+      diagram = {
+        enable = false;
+        settings = {
+          integrations = [
+            { __raw = "require('diagram.integrations.markdown')"; }
+          ];
+          renderer_options = {
+            mermaid = {
+              theme = "forest";
+            } // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+              # nixpkgs can't ship chromium on darwin, so mmdc/puppeteer has no
+              # browser. Point it at the system Chrome via a puppeteer config.
+              cli_args = [
+                "-p"
+                (toString (pkgs.writeText "puppeteer-config.json" (builtins.toJSON {
+                  executablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+                })))
+              ];
+            };
+          };
+        };
+      };
+
       image.enable = true;
       image.settings = {
         max_height_window_percentage = 50;
