@@ -46,22 +46,22 @@ with lib;
           style = "dimmed green";
           contexts = [
             {
-              context_pattern = ".*-prd$";
+              context_pattern = ".*-prd";
               style = "bold red";
               symbol = "🚨 ";
             }
             {
-              context_pattern = ".*-dev$";
+              context_pattern = ".*-dev";
               style = "bold yellow";
               symbol = "🛠 ";
             }
             {
-              context_pattern = "^k3d-.*";
+              context_pattern = "k3d-.*";
               style = "bold blue";
               symbol = "🐳 ";
             }
             {
-              context_pattern = "^cloud$";
+              context_pattern = "cloud";
               style = "bold cyan";
               symbol = "☁ ";
             }
