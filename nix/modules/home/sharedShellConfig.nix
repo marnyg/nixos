@@ -42,7 +42,8 @@ with lib;
       settings = {
         kubernetes = {
           disabled = false;
-          format = "on [⛵ $context\($namespace\)]($style) ";
+          format = "on [$symbol$context(\($namespace\))( as $user)]($style) ";
+          symbol = "⛵ ";
           style = "dimmed green";
           contexts = [
             {
