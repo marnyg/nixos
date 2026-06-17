@@ -48,11 +48,15 @@ with lib;
           contexts = [
             {
               context_pattern = ".*-prd";
+              user_pattern = "clusterUser_.*";
+              user_alias = "";
               style = "bold red";
               symbol = "🚨 ";
             }
             {
               context_pattern = ".*-dev";
+              user_pattern = "clusterUser_.*";
+              user_alias = "";
               style = "bold yellow";
               symbol = "🛠 ";
             }
