@@ -12,6 +12,7 @@
     fzf.enable = true; # Fuzzy finding is essential for navigation
     myPackages.enable = true; # Core development packages
     pi-agent.enable = true; # pi-coding-agent settings + keybindings
+    taskwarrior.enable = true; # managed .taskrc with `refs` UDA
 
     # OPTIONAL: Sensible defaults but can be overridden
     nixvim.enable = lib.mkDefault true; # Default editor, but vim/emacs users may override
@@ -104,7 +105,7 @@
 
     # Development environments
     devenv
-    taskwarrior3
+    # taskwarrior3 installed by modules.my.taskwarrior (also manages .taskrc).
     # pi-coding-agent installed by modules.my.pi-agent (wrapped to set
     # NPM_CONFIG_PREFIX away from the read-only /nix/store path).
   ] ++ lib.optionals pkgs.stdenv.isLinux [
