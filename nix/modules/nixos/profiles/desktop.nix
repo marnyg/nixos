@@ -64,9 +64,8 @@
   # Display manager - essential for desktop
   services.greetd = {
     enable = true;
-    settings.default_session.command = lib.mkDefault ''
-      ${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd Hyprland
-    '';
+    settings.default_session.command = lib.mkDefault
+      "${pkgs.tuigreet}/bin/tuigreet --time --asterisks --user-menu --cmd Hyprland";
   };
 
   environment.etc."greetd/environments".text = lib.mkDefault ''
