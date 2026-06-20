@@ -48,6 +48,11 @@ with lib;
     };
 
     wayland.windowManager.hyprland.enable = true;
+    # Pin to the legacy hyprlang config format. Home Manager flipped the
+    # default to "lua" for stateVersion ≥ 26.05; switching would require
+    # rewriting the ~340-line `extraConfig` block below from hyprlang into
+    # Lua. Override per host if/when that migration happens.
+    wayland.windowManager.hyprland.configType = mkDefault "hyprlang";
     wayland.windowManager.hyprland.extraConfig = mkOrder 100 ''
       # See https://wiki.hyprland.org/Configuring/Keywords/ for more
       $mainMod = ALT

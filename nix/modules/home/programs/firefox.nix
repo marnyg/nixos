@@ -9,6 +9,14 @@ with lib;
     programs.firefox = {
       enable = true;
 
+      # Pin to the legacy non-XDG profile path. Home Manager flipped the
+      # default to `$XDG_CONFIG_HOME/mozilla/firefox` for stateVersion ≥ 26.05.
+      # Migrating means physically moving `~/.mozilla/firefox` on every host
+      # *and* re-registering native-messaging hosts (1Password, KeePassXC,
+      # browserpass, …), which HM does not move automatically. Not worth the
+      # risk right now — override per host when ready to migrate.
+      configPath = mkDefault ".mozilla/firefox";
+
       # Use default firefox package instead of overriding
       profiles.mar = {
         extensions.packages = (with pkgs.nur.repos.rycee.firefox-addons; [
