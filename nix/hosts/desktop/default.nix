@@ -37,6 +37,21 @@
     options mt7921e disable_aspm=1
   '';
 
+  # The module-level `disable_aspm=1` above was not enough: the MT7922 still
+  # wedged ~16h into uptime with "driver own failed" / "chip reset failed",
+  # leaving wlp12s0 stuck in NM state `unavailable`. Two extra mitigations:
+  #
+  # 1. Force ASPM off globally at the PCIe level. The per-module knob only
+  #    covers the radio's own link state; `pcie_aspm=off` keeps the whole
+  #    bus out of the low-power states that trigger the firmware wedge.
+  boot.kernelParams = [ "pcie_aspm=off" ];
+
+  # 2. Pin runtime power management "on" for the WiFi device so the kernel
+  #    never autosuspends it into the bad state. Matched by PCI vendor/device
+  #    (14c3:0616 = MediaTek MT7922) rather than bus address, which can shift.
+  #    The udev rule itself lives in the consolidated `services.udev.extraRules`
+  #    block below (NixOS only allows the attribute to be defined once).
+
   # Kernel modules needed for Docker/Dagger networking
   boot.kernelModules = [ "iptable_nat" "iptable_mangle" "iptable_filter" "amdgpu" ];
 
@@ -56,8 +71,12 @@
   # Gaming support (desktop-specific)
   programs.steam.enable = true;
 
-  # ZSA keyboard DFU flashing
   services.udev.extraRules = ''
+    # Keep the MT7922 WiFi (14c3:0616) out of PCI runtime suspend; see the
+    # mt7921e chip-reset mitigations near the top of this file.
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x14c3", ATTR{device}=="0x0616", ATTR{power/control}="on"
+
+    # ZSA keyboard DFU flashing
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE:="0666"
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="3297", ATTRS{idProduct}=="0791", MODE:="0666"
   '';
