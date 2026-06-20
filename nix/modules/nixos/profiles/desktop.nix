@@ -38,6 +38,12 @@
   # Boot configuration (UEFI is standard for modern desktops)
   boot.loader = {
     systemd-boot.enable = true;
+    # Cap the number of generations systemd-boot copies to the ESP. The /boot
+    # partition here is only ~512MiB, and each generation ships a kernel +
+    # initrd (~30-50 MiB combined). Without a limit, ~10 generations are
+    # enough to fill it and break the next rebuild with ENOSPC during
+    # bootloader install. Keep enough to roll back a few rebuilds, no more.
+    systemd-boot.configurationLimit = 10;
     efi.canTouchEfiVariables = true;
   };
 
