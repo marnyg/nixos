@@ -41,6 +41,7 @@
           ./programs/lf.nix
           ./programs/git.nix
           ./programs/pi-agent.nix
+          ./programs/taskwarrior.nix
           ./programs/worktrunk.nix
           ./programs/bspwm/bspwm.nix
           ./programs/xmonad
