@@ -27,11 +27,24 @@ let
   };
 
   settings = {
-    lastChangelogVersion = "0.73.0";
+    # Note: do not set `lastChangelogVersion` here. Pi writes that field
+    # itself on first run and bumps it on every upgrade. Managing it from
+    # nix means every `home-manager switch` clobbers pi's current value
+    # back to whatever we hardcoded, which then re-triggers the changelog
+    # popup on next pi launch.
     defaultProvider = "anthropic";
     defaultModel = "claude-opus-4-7";
     packages = [
-      "npm:pi-claude-oauth-adapter"
+      # Anthropic OAuth (Claude Pro/Max) compatibility shim.
+      # Replaces pi's verbose default preamble with a minimal neutral
+      # one and strips known Pi-specific paragraphs (identity/docs/filler)
+      # via anchor-based paragraph removal — without touching
+      # APPEND_SYSTEM.md content. Replaces the older
+      # `pi-claude-oauth-adapter`, which over-stripped because its
+      # docs-section extractor used a closed END_MARKERS list that ate
+      # everything between the Pi docs paragraph and `Current date:`,
+      # including our broken-windows + Taskwarrior preferences.
+      "npm:@gotgenes/pi-anthropic-auth"
       "npm:@burneikis/pi-vim"
       "git:github.com/marnyg/pi-ui"
       "git:github.com/marnyg/skills"
