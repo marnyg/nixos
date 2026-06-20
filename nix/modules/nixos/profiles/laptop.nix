@@ -32,7 +32,11 @@
     };
   };
 
-  # WiFi is essential for laptops
+  # WiFi is essential for laptops. Route NetworkManager through iwd instead
+  # of its default wpa_supplicant backend — setting `wifi.backend = "iwd"`
+  # both enables iwd and suppresses NM's automatic `networking.wireless.enable
+  # = true`, avoiding the "only one wireless daemon allowed" assertion.
+  networking.networkmanager.wifi.backend = "iwd";
   networking.wireless.iwd = {
     enable = true; # Laptops must have WiFi
     settings = {
