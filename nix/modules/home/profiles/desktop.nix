@@ -149,7 +149,9 @@
   # Qt theme configuration
   qt = {
     enable = true;
-    platformTheme.name = "gtk";
+    # "gtk" was deprecated upstream; "gtk3" selects the modern native Qt
+    # GTK3 plugin (use "gtk2" to keep the legacy qtstyleplugins behavior).
+    platformTheme.name = "gtk3";
     style.name = "adwaita-dark";
   };
 }
