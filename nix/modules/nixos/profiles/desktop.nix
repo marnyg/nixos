@@ -118,6 +118,14 @@
   # Network manager - essential for desktop GUI network management
   networking.networkmanager.enable = true;
 
+  # NetworkManager-wait-online blocks network-online.target on *all* managed
+  # connections coming up, which on a desktop with optional Ethernet ports
+  # (unplugged NICs, USB Ethernet dongles) routinely stalls boot for ~30s and
+  # then fails anyway. Nothing on this profile genuinely needs the network
+  # synchronously at boot — Docker/libvirt/Tailscale all start fine without it
+  # and (re)connect on their own. Disable to remove it from the critical path.
+  systemd.services.NetworkManager-wait-online.enable = false;
+
   # OPTIONAL: Common services that are helpful but not essential
   services.openssh.enable = lib.mkDefault true;
   services.tailscale.enable = lib.mkDefault true;
