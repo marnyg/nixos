@@ -9,26 +9,33 @@
 let
   cfg = config.modules.my.taskwarrior;
 
-  # Columns/labels for the `next` and `list` reports, extended to show
-  # the `refs` UDA so sketch-derived tasks are visible at a glance.
-  # Taken from Taskwarrior 3.x defaults with `refs` inserted before
-  # `urgency`.
+  # Columns/labels for the `next` and `list` reports, extended in two
+  # ways relative to Taskwarrior 3.x defaults:
+  #
+  #   - `uuid.short` column right after `id` so the 8-char UUID prefix
+  #     is always visible — this is what `refs:` values point at, and
+  #     short ids get renumbered as tasks complete, so the UUID prefix
+  #     is the only stable cross-task reference.
+  #   - `refs` UDA column before `urgency` so sketch-derived links are
+  #     visible at a glance.
+  #
+  # IMPORTANT: column and label counts must match exactly or Taskwarrior
+  # prints "different numbers of columns and labels" on every report
+  # invocation. Keep the two strings in lockstep when editing. The
+  # `list` report does not include `entry.age` (so no "Age" label),
+  # while `next` does.
   reportNextColumns =
-    "id,start.age,entry.age,depends.indicator,priority,project,tags,"
+    "id,uuid.short,start.age,entry.age,depends.indicator,priority,project,tags,"
     + "recur.indicator,scheduled.countdown,due.relative,until.remaining,"
     + "description,refs,urgency";
   reportNextLabels =
-    "ID,Active,Age,D,P,Project,Tag,R,S,Due,Until,Description,Refs,Urg";
+    "ID,UUID,Active,Age,D,P,Project,Tag,R,S,Due,Until,Description,Refs,Urg";
   reportListColumns =
-    "id,start.age,depends.indicator,priority,project,tags,"
+    "id,uuid.short,start.age,depends.indicator,priority,project,tags,"
     + "recur.indicator,wait.remaining,scheduled.countdown,due,"
     + "until.remaining,description,refs,urgency";
-  # Note: no "Age" label here — `list` (unlike `next`) doesn't include
-  # `entry.age` in its columns. Label and column counts must match or
-  # Taskwarrior emits "different numbers of columns and labels" on every
-  # report invocation.
   reportListLabels =
-    "ID,Active,D,P,Project,Tag,R,Wait,S,Due,Until,Description,Refs,Urg";
+    "ID,UUID,Active,D,P,Project,Tag,R,Wait,S,Due,Until,Description,Refs,Urg";
 
   baseRc = ''
     # Managed by Nix (nix/modules/home/programs/taskwarrior.nix).
