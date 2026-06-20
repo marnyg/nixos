@@ -15,6 +15,13 @@
     virtualisation.libvirtd.enable = true;
     programs.virt-manager.enable = true;
 
+    # Cache sudo authentication for 30 minutes, shared across all
+    # terminals/sessions for the same user (instead of the default per-tty).
+    security.sudo.extraConfig = ''
+      Defaults timestamp_type=global
+      Defaults timestamp_timeout=30
+    '';
+
     system.stateVersion = lib.mkDefault "23.11";
   };
 }
