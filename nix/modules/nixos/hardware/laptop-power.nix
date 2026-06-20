@@ -98,10 +98,8 @@ with lib;
     # ACPI support for laptop-specific features
     services.acpid.enable = mkDefault true;
 
-    # Enable backlight control
-    programs.light.enable = mkDefault true;
-
-    # Battery optimization for acpilight
+    # Backlight control via acpilight (replaces removed `programs.light`,
+    # which was dropped from nixpkgs after its upstream went unmaintained).
     hardware.acpilight.enable = mkDefault true;
 
     # Suspend and hibernation settings
