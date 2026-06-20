@@ -168,11 +168,15 @@ let
     - When a sketch crystallizes into actionable work, derive
       `+task`/`+goal` items and link them via the `refs` UDA:
       `task add "<description>" project:<...> +repo_<REPO_ID> +task +pi refs:<sketch-uuid-prefix>`.
-      Get the sketch UUID prefix with `task _get <sketch-id>.uuid | cut -c1-8`.
-      To list everything derived from a sketch later:
-      `task refs:<sketch-uuid> list`.
-      Use UUID prefixes (not short ids) because short ids get renumbered
-      when tasks complete.
+      The 8-char UUID prefix is visible in the `UUID` column of every
+      `task list` output. Use UUID prefixes (not short ids) because
+      short ids get renumbered when tasks complete.
+    - Three helpers exist for walking the refs graph:
+      - `task-refsto <id>` — incoming: which tasks reference this one.
+      - `task-refsfrom <id>` — outgoing: which tasks does this one
+        reference (resolves each refs entry to its actual task).
+      - `task refs` (parameterless) — overview of every task that has
+        any refs value set.
     - Close the sketch with `task <id> done` once derived.
 
     Progress on existing tasks:
