@@ -23,8 +23,12 @@ let
     "id,start.age,depends.indicator,priority,project,tags,"
     + "recur.indicator,wait.remaining,scheduled.countdown,due,"
     + "until.remaining,description,refs,urgency";
+  # Note: no "Age" label here — `list` (unlike `next`) doesn't include
+  # `entry.age` in its columns. Label and column counts must match or
+  # Taskwarrior emits "different numbers of columns and labels" on every
+  # report invocation.
   reportListLabels =
-    "ID,Active,Age,D,P,Project,Tag,R,Wait,S,Due,Until,Description,Refs,Urg";
+    "ID,Active,D,P,Project,Tag,R,Wait,S,Due,Until,Description,Refs,Urg";
 
   baseRc = ''
     # Managed by Nix (nix/modules/home/programs/taskwarrior.nix).
