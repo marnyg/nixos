@@ -15,9 +15,15 @@ with lib;
       # *and* re-registering native-messaging hosts (1Password, KeePassXC,
       # browserpass, …), which HM does not move automatically. Not worth the
       # risk right now — override per host when ready to migrate.
-      configPath = mkDefault ".mozilla/firefox";
+      # Linux-only: on Darwin, HM's default (`Library/Application Support/
+      # Firefox`) is where Firefox.app actually looks — don't override it.
+      configPath = mkIf pkgs.stdenv.isLinux (mkDefault ".mozilla/firefox");
 
-      # Use default firefox package instead of overriding
+      # On Darwin, Firefox is installed via brew cask (see darwin workstation
+      # profile); HM only manages the profile. On Linux, use the default
+      # pkgs.firefox.
+      package = mkIf pkgs.stdenv.isDarwin null;
+
       profiles.mar = {
         extensions.packages = (with pkgs.nur.repos.rycee.firefox-addons; [
           decentraleyes
@@ -99,7 +105,7 @@ with lib;
         search = {
           force = true;
           default = "Kagi";
-          order = [ "Kagi" "Youtube" "NixOS Options" "Nix Packages" "Home Manager" "GitHub" ];
+          order = [ "Kagi" "NixOS Options" "Nix Packages" "Home Manager" "GitHub" ];
 
 
           engines = {
@@ -109,7 +115,7 @@ with lib;
             "ddg".metaData.hidden = true;
             "amazonedotcom-us".metaData.hidden = true;
             "wikipedia".metaData.hidden = true;
-            "youtube".metaata.hidden = true;
+            "youtube".metaData.hidden = true;
             # "Kagi".metaData.hidden = true;
             # "Nix Packages".metaData.hidden = true;
             # "NixOS Options".metaData.hidden = true;
