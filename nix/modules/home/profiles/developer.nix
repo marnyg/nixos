@@ -72,6 +72,7 @@
     # Kubernetes
     kubectl
     k9s
+    kubelogin-oidc
 
     # Container tools
     docker-compose
