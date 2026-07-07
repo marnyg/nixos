@@ -106,6 +106,9 @@
     # Remote desktop
     tigervnc # VNC client (`vncviewer`)
 
+    # Game development
+    godot # Godot 4 (currently 4.6.3)
+
     # System utilities
     gnome-system-monitor
     baobab # Disk usage analyzer
