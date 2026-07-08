@@ -103,6 +103,9 @@
     # Development GUIs
     claude-code
 
+    # Remote desktop
+    tigervnc # VNC client (`vncviewer`)
+
     # System utilities
     gnome-system-monitor
     baobab # Disk usage analyzer
