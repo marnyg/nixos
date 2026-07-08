@@ -60,6 +60,14 @@
     ];
   };
 
+  # tigervnc-viewer: strict RFB client. macOS Screen Sharing.app does not
+  # complete a proper RFB handshake against wayvnc, so a real VNC viewer is
+  # required. Set directly on `homebrew.*` (like the karabiner module) rather
+  # than via `modules.darwin.brew.*` because that wrapper is gated on
+  # `modules.darwin.brew.enable` (currently false), while `homebrew` itself
+  # is already turned on transitively.
+  homebrew.casks = [ "tigervnc-viewer" ];
+
   # User shell preference (overrides profile default)
   users.users.mariusnygard.shell = pkgs.fish;
 }
