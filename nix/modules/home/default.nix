@@ -28,6 +28,7 @@ let
     lf = ./programs/lf.nix;
 
     # Development tools
+    caBundle = ./programs/ca-bundle.nix;
     git = ./programs/git.nix;
     pi-agent = ./programs/pi-agent.nix;
     taskwarrior = ./programs/taskwarrior.nix;

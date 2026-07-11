@@ -38,6 +38,7 @@
           ./programs/firefox.nix
           ./programs/qutebrowser.nix
           ./programs/lf.nix
+          ./programs/ca-bundle.nix
           ./programs/git.nix
           ./programs/pi-agent.nix
           ./programs/taskwarrior.nix

@@ -1,5 +1,5 @@
 # Home-manager profile for macOS systems
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 {
   imports = [ ./developer.nix ];
 
@@ -22,6 +22,15 @@
     tmux.enable = lib.mkDefault true;
     fish.enable = lib.mkDefault true;
     fzf.enable = lib.mkDefault true;
+
+    # Combined CA bundle so OpenSSL-based tools (nix-profile curl etc.)
+    # trust the grove mkcert root CA without --cacert.
+    caBundle = {
+      enable = lib.mkDefault true;
+      extraCertFiles = [
+        "${config.home.homeDirectory}/Library/Application Support/grove/ca/rootCA.pem"
+      ];
+    };
   };
 
   # macOS-specific programs
@@ -55,6 +64,7 @@
     fd
     bat
     eza
+    nss.tools # certutil — lets `grove dev trust` install the mkcert CA into Firefox's NSS store
 
     # Communication tools (if available on Darwin)
   ] ++ lib.optionals pkgs.stdenv.isDarwin [
