@@ -27,7 +27,6 @@
           # Programs
           ./programs/direnv.nix
           ./programs/fish.nix
-          ./programs/fzf.nix
           ./programs/nushell.nix
           ./programs/tmux.nix
           ./programs/zellij.nix
@@ -60,6 +59,7 @@
           ./services/mcphub.nix
           ./services/s3fs.nix
           ./services/spotifyd.nix
+          ./services/wayvnc.nix
         ];
       };
     };

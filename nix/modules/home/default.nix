@@ -7,7 +7,6 @@ let
     # Terminal & Shell
     direnv = ./programs/direnv.nix;
     fish = ./programs/fish.nix;
-    fzf = ./programs/fzf.nix;
     nushell = ./programs/nushell.nix;
     tmux = ./programs/tmux.nix;
     zellij = ./programs/zellij.nix;

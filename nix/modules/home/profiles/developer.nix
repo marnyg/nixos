@@ -9,7 +9,6 @@
     direnv.enable = true; # Project environment management
     tmux.enable = true; # Terminal multiplexing for productivity
     worktrunk.enable = true; # `wt` config + tmux session cleanup on `wt remove`
-    fzf.enable = true; # Fuzzy finding is essential for navigation
     myPackages.enable = true; # Core development packages
     pi-agent.enable = true; # pi-coding-agent settings + keybindings
     taskwarrior.enable = true; # managed .taskrc with `refs` UDA
