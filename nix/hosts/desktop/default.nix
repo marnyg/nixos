@@ -99,6 +99,10 @@
   networking.firewall = {
     allowedUDPPorts = [ 67 69 ]; # DHCP and TFTP
     allowedTCPPorts = [ 50084 8080 ]; # HTTP booter, config server
+
+    # Remote desktop (wayvnc) reachable only over the tailnet. The service
+    # binds 0.0.0.0, so this interface scoping is what keeps VNC off the LAN.
+    interfaces.tailscale0.allowedTCPPorts = [ 5900 ];
   };
 
   # Ollama with CUDA acceleration
@@ -131,6 +135,7 @@
         modules.my.bspwm.enable = true;
         modules.my.xmonad.enable = false;
         modules.my.hyprland.enable = true;
+        modules.my.wayvnc.enable = true;
         modules.my.dunst.enable = false;
         modules.my.polybar.enable = false;
         modules.my.kitty.enable = false;
