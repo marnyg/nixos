@@ -71,12 +71,21 @@ with lib;
       # For Wayland compatibility
       WLR_NO_HARDWARE_CURSORS = "1";
       LIBVA_DRIVER_NAME = "nvidia";
-      XDG_SESSION_TYPE = "wayland";
+      # NOTE: XDG_SESSION_TYPE is intentionally NOT set here. The compositor /
+      # display-manager sets it per session; hardcoding "wayland" mislabels X11 and
+      # XWayland sessions.
       __GLX_VENDOR_LIBRARY_NAME = "nvidia";
       # For better Vulkan support
       VK_DRIVER_FILES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
-      # Ensure CUDA/OpenGL libs are found by programs that bypass ld.so.conf (e.g. Python venvs)
-      LD_LIBRARY_PATH = "/run/opengl-driver/lib";
+      # Ensure CUDA/OpenGL libs are found by non-Nix binaries that bypass ld.so.conf
+      # (e.g. pip-installed CUDA wheels in Python venvs). Consumed only by the nix-ld
+      # stub loader (programs.nix-ld), so it does NOT leak into other runtimes such as
+      # Steam's bundled sniper/soldier runtime -- unlike a global LD_LIBRARY_PATH, which
+      # force-injected these libs into Steam and segfaulted it on startup.
+      # mkForce + explicit merge: the programs.nix-ld module also defines this var
+      # ("/run/current-system/sw/share/nix-ld/lib"), and sessionVariables strings do
+      # not auto-merge. Prepend the driver dir, keep nix-ld's own lib farm.
+      NIX_LD_LIBRARY_PATH = mkForce "/run/opengl-driver/lib:/run/current-system/sw/share/nix-ld/lib";
     };
   };
 }
