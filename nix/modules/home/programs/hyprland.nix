@@ -57,12 +57,29 @@ with lib;
       # See https://wiki.hyprland.org/Configuring/Keywords/ for more
       $mainMod = ALT
 
-      # Swee https://wiki.hyprland.org/Configuring/Monitors/
-      monitor=HDMI-A-2,3840x2160@120,1080x0,1.0
-      monitor=HDMI-A-3,1920x1080@60.00Hz,0x0,1, transform,3
-      monitor=HDMI-A-1,1920x1080@144,4920x0,1.0,transform,1
-      #monitor=HDMI-A-1,2560x1440@60,0x0,1.0
-      #monitor=HDMI-A-1,1920x1080@120,0x0,1.0
+      # See https://wiki.hyprland.org/Configuring/Monitors/
+      # Match by EDID description (make + model + serial) instead of DRM
+      # connector name so re-plugging between GPU/iGPU ports or HDMI<->DP
+      # doesn't require a config edit. Connector names (HDMI-A-1 etc.) are
+      # assigned by DRM enumeration order across cards and are not stable.
+      # G70B is capped at 4K@60 over HDMI: the monitor's HDMI port itself is
+      # HDMI 2.0 (Max TMDS Character Rate 600 MHz) and its EDID only advertises
+      # 4K@30 and 4K@60 -- no 4K@120 even with 4:2:0. Verified by direct-connect
+      # EDID capture (bypassing the TESmart HKS403-P23 KVM the chain normally
+      # goes through). To unlock 4K@120/144 you need DisplayPort (DP 1.4 + DSC
+      # gives 4K@144 10-bit RGB); the KVM has no DP inputs, so that means
+      # driving the monitor GPU-to-monitor directly and using the KVM only for
+      # USB.
+      monitor=desc:Samsung Electric Company Odyssey G70B H1AK500000,3840x2160@60,1080x0,1.0
+      monitor=desc:Samsung Electric Company S24F350 H4ZKA04779,1920x1080@60.00Hz,0x0,1,transform,3
+      monitor=desc:Acer Technologies VG272 S 0x11017B67,1920x1080@144,4920x0,1.0,transform,1
+
+      # Variable Refresh Rate: 2 = enable only for fullscreen apps. Panels
+      # that don't advertise VRR in their EDID (e.g. the S24F350) silently
+      # ignore this. G70B supports 48-144 Hz, VG272 S supports 48-165 Hz.
+      misc {
+          vrr = 2
+      }
 
       #bind = $mainMod CTRL, 2, exec,hyprctl keyword monitor "HDMI-A-1,2560x1440@60,0x0,1.0" && hyprctl keyword monitor "HDMI-A-1,2560x1440@120,0x0,1.0"
       #bind = $mainMod CTRL, 1, exec,hyprctl keyword monitor "HDMI-A-1,1920x1080@120,0x0,1.0" && hyprctl keyword monitor "HDMI-A-1,1920x1080@120,0x0,1.0"
