@@ -75,8 +75,15 @@ with lib;
       # display-manager sets it per session; hardcoding "wayland" mislabels X11 and
       # XWayland sessions.
       __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-      # For better Vulkan support
-      VK_DRIVER_FILES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json";
+      # NOTE: VK_DRIVER_FILES intentionally NOT set. It *replaces* the Vulkan
+      # loader's ICD search list rather than augmenting it, so a wrong or
+      # arch-specific path silently breaks every vkCreateInstance -- including
+      # inside Steam's pressure-vessel container and 32-bit apps/DXVK. NixOS's
+      # hardware.graphics.enable already exposes both 64- and 32-bit ICDs under
+      # /run/opengl-driver{,-32}/share/vulkan/icd.d/, which the loader
+      # auto-discovers. Previous value pointed at nvidia_icd.x86_64.json which
+      # doesn't exist -- NVIDIA ships nvidia_icd.json (no arch suffix; that's a
+      # Mesa convention).
       # Ensure CUDA/OpenGL libs are found by non-Nix binaries that bypass ld.so.conf
       # (e.g. pip-installed CUDA wheels in Python venvs). Consumed only by the nix-ld
       # stub loader (programs.nix-ld), so it does NOT leak into other runtimes such as
