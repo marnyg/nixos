@@ -48,325 +48,187 @@ with lib;
     };
 
     wayland.windowManager.hyprland.enable = true;
-    # Pin to the legacy hyprlang config format. Home Manager flipped the
-    # default to "lua" for stateVersion ≥ 26.05; switching would require
-    # rewriting the ~340-line `extraConfig` block below from hyprlang into
-    # Lua. Override per host if/when that migration happens.
-    wayland.windowManager.hyprland.configType = mkDefault "hyprlang";
-    wayland.windowManager.hyprland.extraConfig = mkOrder 100 ''
-      # See https://wiki.hyprland.org/Configuring/Keywords/ for more
-      $mainMod = ALT
+    # Native Lua config (Hyprland >= 0.51, hl.* API). Home Manager writes
+    # ~/.config/hypr/hyprland.lua from `extraConfig` below. See
+    # https://wiki.hypr.land/Configuring/Start/ and the shipped
+    # $out/share/hypr/stubs/hl.meta.lua for the full API surface.
+    wayland.windowManager.hyprland.configType = "lua";
+    wayland.windowManager.hyprland.extraConfig = ''
+      -- Main modifier
+      local mainMod = "ALT"
 
-      # See https://wiki.hyprland.org/Configuring/Monitors/
-      # Match by EDID description (make + model + serial) instead of DRM
-      # connector name so re-plugging between GPU/iGPU ports or HDMI<->DP
-      # doesn't require a config edit. Connector names (HDMI-A-1 etc.) are
-      # assigned by DRM enumeration order across cards and are not stable.
-      # G70B is capped at 4K@60 over HDMI: the monitor's HDMI port itself is
-      # HDMI 2.0 (Max TMDS Character Rate 600 MHz) and its EDID only advertises
-      # 4K@30 and 4K@60 -- no 4K@120 even with 4:2:0. Verified by direct-connect
-      # EDID capture (bypassing the TESmart HKS403-P23 KVM the chain normally
-      # goes through). To unlock 4K@120/144 you need DisplayPort (DP 1.4 + DSC
-      # gives 4K@144 10-bit RGB); the KVM has no DP inputs, so that means
-      # driving the monitor GPU-to-monitor directly and using the KVM only for
-      # USB.
-      monitor=desc:Samsung Electric Company Odyssey G70B H1AK500000,3840x2160@60,1080x0,1.0
-      monitor=desc:Samsung Electric Company S24F350 H4ZKA04779,1920x1080@60.00Hz,0x0,1,transform,3
-      monitor=desc:Acer Technologies VG272 S 0x11017B67,1920x1080@144,4920x0,1.0,transform,1
+      -- Cursor theme/size: kept as Lua locals so the XCURSOR_* env vars (for
+      -- children) and the `hyprctl setcursor` autostart (for Hyprland itself)
+      -- can't drift apart.
+      local cursorTheme = "Nordzy"
+      local cursorSize  = "14"
 
-      # Variable Refresh Rate: 2 = enable only for fullscreen apps. Panels
-      # that don't advertise VRR in their EDID (e.g. the S24F350) silently
-      # ignore this. G70B supports 48-144 Hz, VG272 S supports 48-165 Hz.
-      misc {
-          vrr = 2
+      -- Monitors, matched by EDID description (make + model + serial) instead
+      -- of DRM connector name so re-plugging between GPU/iGPU ports or
+      -- HDMI<->DP doesn't require a config edit. Connector names (HDMI-A-1
+      -- etc.) are assigned by DRM enumeration order across cards and are not
+      -- stable.
+      --
+      -- G70B is capped at 4K@60 over HDMI: the monitor's HDMI port is HDMI 2.0
+      -- and its EDID only advertises 4K@30/4K@60 -- no 4K@120 even with 4:2:0.
+      -- To unlock 4K@120/144 you need DisplayPort (DP 1.4 + DSC), driving the
+      -- monitor GPU-to-monitor directly (the KVM has no DP inputs).
+      hl.monitor({ output = "desc:Samsung Electric Company Odyssey G70B H1AK500000", mode = "3840x2160@60", position = "1080x0", scale = 1.0 })
+      hl.monitor({ output = "desc:Samsung Electric Company S24F350 H4ZKA04779", mode = "1920x1080@60", position = "0x0", scale = 1, transform = 3 })
+      hl.monitor({ output = "desc:Acer Technologies VG272 S 0x11017B67", mode = "1920x1080@144", position = "4920x0", scale = 1.0, transform = 1 })
+
+      -- Look, feel and input
+      hl.config({
+        -- Variable Refresh Rate: 2 = enable only for fullscreen apps. Panels
+        -- that don't advertise VRR in their EDID silently ignore this.
+        misc = { vrr = 2 },
+        input = {
+          kb_layout = "us",
+          kb_options = "caps:escape",
+          numlock_by_default = true,
+          follow_mouse = 0,
+          sensitivity = 0, -- -1.0 - 1.0, 0 means no modification.
+          touchpad = { natural_scroll = false },
+        },
+        -- NVIDIA + Wayland: software cursors avoid the hardware-cursor
+        -- corruption/flicker seen on the proprietary driver. Replaces the
+        -- legacy WLR_NO_HARDWARE_CURSORS=1 env.
+        cursor = { no_hardware_cursors = true },
+        general = {
+          gaps_in = 3,
+          gaps_out = 5,
+          border_size = 2,
+          col = {
+            active_border = { colors = { "rgb(5e81ac)", "rgb(5e81ac)" }, angle = 45 },
+            inactive_border = "rgba(595959aa)",
+          },
+          layout = "dwindle",
+        },
+        decoration = { rounding = 3 },
+        animations = { enabled = false },
+        dwindle = { preserve_split = true, force_split = 1 },
+      })
+
+      -- Environment variables passed to Hyprland's children.
+      -- LIBVA_DRIVER_NAME / __GLX_VENDOR_LIBRARY_NAME are set system-wide in
+      -- modules/nixos/hardware/nvidia.nix, so don't duplicate them here.
+      hl.env("XCURSOR_SIZE", cursorSize)
+      hl.env("XCURSOR_THEME", cursorTheme)
+      hl.env("CLUTTER_BACKEND", "wayland")
+      hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
+      hl.env("XDG_SESSION_TYPE", "wayland")
+      hl.env("XDG_SESSION_DESKTOP", "Hyprland")
+      hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+
+      -- Autostart
+      hl.on("hyprland.start", function()
+        hl.exec_cmd("hyprctl setcursor " .. cursorTheme .. " " .. cursorSize)
+      end)
+
+      -- Application / utility keybinds
+      hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("firefox"))
+      hl.bind(mainMod .. " + return", hl.dsp.exec_cmd("ghostty"))
+      hl.bind(mainMod .. " + Q", hl.dsp.window.close())
+      hl.bind("CTRL + ALT + SHIFT + Q", hl.dsp.exit())
+      hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+      hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
+      hl.bind(mainMod .. " + S", hl.dsp.layout("togglesplit"))
+      hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("wofi --show drun"))
+      hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("wofi --show run"))
+      -- Release-triggered so `pkill wofi` fires on key-up: avoids relaunching
+      -- wofi while mainMod+P is still physically held.
+      hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("pkill wofi || wofi --show drun -i -I"), { release = true })
+      -- Region select -> annotate in satty (flameshot gui replacement); Enter copies + saves, then exits
+      hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd([[mkdir -p ~/Pictures/Screenshots && grim -g "$(slurp)" - | satty --filename - --output-filename ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png --early-exit --copy-command wl-copy]]))
+      -- Whole desktop -> file
+      hl.bind("Print", hl.dsp.exec_cmd([[mkdir -p ~/Pictures/Screenshots && grim ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png]]))
+      -- Current monitor -> file
+      hl.bind("SHIFT + Print", hl.dsp.exec_cmd([[mkdir -p ~/Pictures/Screenshots && grim -o "$(hyprctl monitors -j | jq -r '.[] | select(.focused).name')" ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png]]))
+      -- Screenshot applet: wofi menu (region/window/monitor/full -> annotate/clipboard/file)
+      hl.bind("SUPER + Print", hl.dsp.exec_cmd("screenshot-menu"))
+      hl.bind("SUPER + SHIFT + V", hl.dsp.exec_cmd([[cliphist list | wofi --dmenu | cliphist decode | wl-copy]]))
+      hl.bind("SUPER + SHIFT + P", hl.dsp.exec_cmd([[echo -e "Lock\nLogout\nSuspend\nReboot\nShutdown" | wofi --dmenu --prompt "Power Menu" | xargs -I {} sh -c 'case {} in Lock) swaylock;; Logout) loginctl terminate-session "$XDG_SESSION_ID";; Suspend) systemctl suspend;; Reboot) systemctl reboot;; Shutdown) systemctl poweroff;; esac']]))
+      hl.bind("SUPER + SHIFT + C", hl.dsp.exec_cmd("hyprpicker -a"))
+
+      -- Focus / move / resize windows (arrow keys and hjkl share one table)
+      local dirs = {
+        { keys = { "left", "H" },  dir = "left",  x = -20, y = 0 },
+        { keys = { "right", "L" }, dir = "right", x = 20,  y = 0 },
+        { keys = { "up", "K" },    dir = "up",    x = 0,   y = -20 },
+        { keys = { "down", "J" },  dir = "down",  x = 0,   y = 20 },
       }
+      for _, d in ipairs(dirs) do
+        for _, k in ipairs(d.keys) do
+          hl.bind(mainMod .. " + " .. k,         hl.dsp.focus({ direction = d.dir }))
+          hl.bind(mainMod .. " + SHIFT + " .. k, hl.dsp.window.move({ direction = d.dir }))
+          hl.bind(mainMod .. " + CTRL + " .. k,  hl.dsp.window.resize({ x = d.x, y = d.y, relative = true }))
+        end
+      end
 
-      #bind = $mainMod CTRL, 2, exec,hyprctl keyword monitor "HDMI-A-1,2560x1440@60,0x0,1.0" && hyprctl keyword monitor "HDMI-A-1,2560x1440@120,0x0,1.0"
-      #bind = $mainMod CTRL, 1, exec,hyprctl keyword monitor "HDMI-A-1,1920x1080@120,0x0,1.0" && hyprctl keyword monitor "HDMI-A-1,1920x1080@120,0x0,1.0"
+      -- Switch to / move window to workspaces 1-9
+      for i = 1, 9 do
+        hl.bind(mainMod .. " + " .. i,         hl.dsp.focus({ workspace = i }))
+        hl.bind(mainMod .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = i, silent = true }))
+      end
 
-      #monitor=,preferred,auto,1.0
-      #monitor=DP-3,2560x1440@59.951,3840x0,1,transform,1
-      #exec-once = waybar & hyprpaper 
-      exec-once = hyprctl setcursor cursor_theme cursor_size
-      # Source a file (multi-file configs)
-      # source = ~/.config/hypr/myColors.conf
+      -- Scroll through workspaces
+      hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
+      hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 
-      # Some default env vars.
-      env = XCURSOR_SIZE,14
-      #env = GTK_THEME,Nordic
-      env = XCURSOR_THEME,Nordzy
-      #env = GDK_BACKEND=wayland,x11
-      env = CLUTTER_BACKEND=wayland
-      env = XDG_CURRENT_DESKTOP=Hyprland
-      env = XDG_SESSION_TYPE=wayland
-      env = XDG_SESSION_DESKTOP=Hyprland
-      env = QT_QPA_PLATFORM=wayland;xcb
-      env = LIBVA_DRIVER_NAME,nvidia
-      env = XDG_SESSION_TYPE,wayland
-      #env = GBM_BACKEND,nvidia-drm
-      env = __GLX_VENDOR_LIBRARY_NAME,nvidia
-      env = WLR_NO_HARDWARE_CURSORS,1
+      -- Move/resize windows with mainMod + LMB/RMB drag
+      hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
+      hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
-      input {
-          kb_layout = us
-          #kb_variant = intl
-          kb_model =
-          kb_options = caps:escape
-          kb_rules = 
-          numlock_by_default = true
-          follow_mouse = 0
+      -- Media keys
+      hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("vol --up"),   { locked = true, repeating = true })
+      hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("vol --down"), { locked = true, repeating = true })
+      hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("bri --up"),   { locked = true, repeating = true })
+      hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("bri --down"), { locked = true, repeating = true })
+      hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
+      hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
+      hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"),       { locked = true })
+      hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
 
-          touchpad {
-              natural_scroll = no
-          }
+      -- Window rules: apply a shared rule template to every pattern in a list,
+      -- keyed by either `class` or `title`. Shallow-copies the template per
+      -- call so hl.window_rule can't mutate the shared table.
+      local function apply_rules(matchKey, patterns, rule)
+        for _, p in ipairs(patterns) do
+          local r = { match = { [matchKey] = p } }
+          for k, v in pairs(rule) do r[k] = v end
+          hl.window_rule(r)
+        end
+      end
 
-          sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
-      }
+      -- Float + 45% size + center
+      apply_rules("class", {
+        [[^(\.?blueman-manager.*)$]],
+        [[^(pavucontrol)$]],
+        [[^(org.pulseaudio.pavucontrol)$]],
+        [[^(nm-connection-editor)$]],
+      }, { float = true, size = "45% 45%", center = true })
 
-      general {
+      -- Float only
+      apply_rules("class", {
+        [[^(blueberry\.py)$]],
+        [[^(steam)$]],
+        [[^(guifetch)$]],
+      }, { float = true })
 
-          gaps_in = 3
-          gaps_out = 5
-          border_size = 2
-          col.active_border = rgb(5e81ac) rgb(5e81ac) 45deg
-          col.inactive_border = rgba(595959aa)
+      -- Tiling
+      hl.window_rule({ match = { class = [[^dev\.warp\.Warp$]] }, tile = true })
 
-          layout = dwindle
-      }
+      -- Picture-in-Picture
+      hl.window_rule({
+        match = { title = [[^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$]] },
+        float = true, keep_aspect_ratio = true, move = "73% 72%", size = "25% 25%", pin = true,
+      })
 
-      decoration {
-          # See https://wiki.hyprland.org/Configuring/Variables/ for more
-
-          rounding = 3 
-
-          #drop_shadow = yes
-          #shadow_range = 4
-          #shadow_render_power = 3
-          #col.shadow = rgba(1a1a1aee)
-      }
-
-      animations {
-          enabled = no
-          #enabled = yes
-
-          bezier = myBezier, 0.05, 0.9, 0.1, 1.05
-
-          animation = windows, 1, 4, myBezier
-          animation = windowsOut, 1, 4, default, popin 80%
-          animation = border, 1, 10, default
-          animation = borderangle, 1, 8, default
-          animation = fade, 1, 7, default
-          animation = workspaces, 1, 2, default
-      }
-
-      dwindle {
-          preserve_split = yes # you probably want this
-          force_split = 1
-      }
-
-      master {
-          # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
-          #new_is_master = true
-      }
-
-      #gestures {
-      #    workspace_swipe = off
-      #}
-
-      #device:epic-mouse-v1 {
-      #    sensitivity = -0.5
-      #}
-
-      # Example windowrule v1
-      # windowrule = float, ^(kitty)$
-      # Example windowrule v2
-      # windowrule = float,class:^(kitty)$,title:^(kitty)$
-      # See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
-
-
-
-      bind = $mainMod, W, exec, firefox 
-      bind = $mainMod, return, exec, ghostty
-      # bind = $mainMod, return, exec, foot 
-      bindr = $mainMod, Q, killactive, 
-      bind = CTRL ALT SHIFT, Q, exit,
-      bind = $mainMod, V, togglefloating, 
-      bind = $mainMod, F, fullscreen, 
-      # bind = $mainMod, D, pseudo, # dwindle
-      bind = $mainMod, S, layoutmsg, togglesplit # dwindle
-
-      ## UTILITY KEYBINDINGS
-      # Launcher (wofi)
-      bind = $mainMod, D, exec, wofi --show drun
-      bind = $mainMod, R, exec, wofi --show run
-      
-      # Screenshot with flameshot
-      bind = SUPER SHIFT, S, exec, flameshot gui
-      bind = , Print, exec, flameshot full --path ~/Pictures/Screenshots
-      bind = SHIFT, Print, exec, flameshot screen --path ~/Pictures/Screenshots
-      
-      # Clipboard manager (using wofi with wl-clipboard)
-      bind = SUPER SHIFT, V, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy
-      
-      # Power menu
-      bind = SUPER SHIFT, P, exec, echo -e "Lock\nLogout\nSuspend\nReboot\nShutdown" | wofi --dmenu --prompt "Power Menu" | xargs -I {} sh -c 'case {} in Lock) swaylock;; Logout) hyprctl dispatch exit;; Suspend) systemctl suspend;; Reboot) systemctl reboot;; Shutdown) systemctl poweroff;; esac'
-      
-      # Color picker
-      bind = SUPER SHIFT, C, exec, hyprpicker -a
-
-      ## FOCUS WINDOW
-      bind = $mainMod, left, movefocus, l
-      bind = $mainMod, right, movefocus, r
-      bind = $mainMod, up, movefocus, u
-      bind = $mainMod, down, movefocus, d
-      bind = $mainMod, H, movefocus, l
-      bind = $mainMod, L, movefocus, r
-      bind = $mainMod, K, movefocus, u
-      bind = $mainMod, J, movefocus, d
-
-      ## MOVE WINDOW
-      bind = $mainMod SHIFT, left, movewindow, l
-      bind = $mainMod SHIFT, right, movewindow, r
-      bind = $mainMod SHIFT, up, movewindow, u
-      bind = $mainMod SHIFT, down, movewindow, d
-      bind = $mainMod SHIFT, H, movewindow, l
-      bind = $mainMod SHIFT, L, movewindow, r
-      bind = $mainMod SHIFT, K, movewindow, u
-      bind = $mainMod SHIFT, J, movewindow, d
-                
-      ## REZISE WINDOW 
-      bind = $mainMod CTRL, left, resizeactive, -20 0
-      bind = $mainMod CTRL, right, resizeactive, 20 0
-      bind = $mainMod CTRL, up, resizeactive, 0 -20
-      bind = $mainMod CTRL, down, resizeactive, 0 20
-      bind = $mainMod CTRL, H, resizeactive, -20 0
-      bind = $mainMod CTRL, L, resizeactive, 20 0
-      bind = $mainMod CTRL, K, resizeactive, 0 -20
-      bind = $mainMod CTRL, J, resizeactive, 0 20
-
-
-
-      # Switch workspaces with mainMod + [0-9]
-      bind = $mainMod, 1, workspace, 1
-      bind = $mainMod, 2, workspace, 2
-      bind = $mainMod, 3, workspace, 3
-      bind = $mainMod, 4, workspace, 4
-      bind = $mainMod, 5, workspace, 5
-      bind = $mainMod, 6, workspace, 6
-      bind = $mainMod, 7, workspace, 7
-      bind = $mainMod, 8, workspace, 8
-      bind = $mainMod, 9, workspace, 9
-
-      # Move active window to a workspace with mainMod + SHIFT + [0-9]
-      bind = $mainMod SHIFT, 1, movetoworkspacesilent, 1
-      bind = $mainMod SHIFT, 2, movetoworkspacesilent, 2
-      bind = $mainMod SHIFT, 3, movetoworkspacesilent, 3
-      bind = $mainMod SHIFT, 4, movetoworkspacesilent, 4
-      bind = $mainMod SHIFT, 5, movetoworkspacesilent, 5
-      bind = $mainMod SHIFT, 6, movetoworkspacesilent, 6
-      bind = $mainMod SHIFT, 7, movetoworkspacesilent, 7
-      bind = $mainMod SHIFT, 8, movetoworkspacesilent, 8
-      bind = $mainMod SHIFT, 9, movetoworkspacesilent, 9
-
-      # Scroll through existing workspaces with mainMod + scroll
-      bind = $mainMod, mouse_down, workspace, e+1
-      bind = $mainMod, mouse_up, workspace, e-1
-
-      # Move/resize windows with mainMod + LMB/RB and dragging
-      bindm = $mainMod, mouse:272, movewindow
-      bindm = $mainMod, mouse:273, resizewindow
-
-      # Media keys
-
-      bindle=, XF86AudioRaiseVolume, exec, vol --up
-      bindle=, XF86AudioLowerVolume, exec, vol --down
-      bindle=, XF86MonBrightnessUp, exec, bri --up
-      bindle=, XF86MonBrightnessDown, exec, bri --down
-      # bindl=, XF86AudioMute, exec, amixer set Master toggle
-      bindl=, XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-      bindl=, XF86AudioPlay, exec, playerctl play-pause # the stupid key is called play , but it toggles 
-      bindl=, XF86AudioNext, exec, playerctl next 
-      bindl=, XF86AudioPrev, exec, playerctl previous
-
-      ## RULES
-      # Floating
-      windowrule = float on, match:class ^(blueberry\.py)$
-      windowrule = float on, match:class ^(\.?blueman-manager.*)$
-      windowrule = size 45% 45%, match:class ^(\.?blueman-manager.*)$
-      windowrule = center on, match:class ^(\.?blueman-manager.*)$
-      windowrule = float on, match:class ^(steam)$
-      windowrule = float on, match:class ^(guifetch)$   # FlafyDev/guifetch
-      windowrule = float on, match:class ^(pavucontrol)$
-      windowrule = size 45% 45%, match:class ^(pavucontrol)$
-      windowrule = center on, match:class ^(pavucontrol)$
-      windowrule = float on, match:class ^(org.pulseaudio.pavucontrol)$
-      windowrule = size 45% 45%, match:class ^(org.pulseaudio.pavucontrol)$
-      windowrule = center on, match:class ^(org.pulseaudio.pavucontrol)$
-      windowrule = float on, match:class ^(nm-connection-editor)$
-      windowrule = size 45% 45%, match:class ^(nm-connection-editor)$
-      windowrule = center on, match:class ^(nm-connection-editor)$
-
-      # Tiling
-      windowrule = tile on, match:class ^dev\.warp\.Warp$
-
-      # Picture-in-Picture
-      windowrule = float on, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
-      windowrule = keep_aspect_ratio on, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
-      windowrule = move 73% 72%, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
-      windowrule = size 25% 25%, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
-      windowrule = pin on, match:title ^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
-
-      # Dialog windows – float+center these windows.
-      windowrule = center on, match:title ^(Open File)(.*)$
-      windowrule = center on, match:title ^(Select a File)(.*)$
-      windowrule = center on, match:title ^(Choose wallpaper)(.*)$
-      windowrule = center on, match:title ^(Open Folder)(.*)$
-      windowrule = center on, match:title ^(Save As)(.*)$
-      windowrule = center on, match:title ^(Library)(.*)$
-      windowrule = center on, match:title ^(File Upload)(.*)$
-      windowrule = float on, match:title ^(Open File)(.*)$
-      windowrule = float on, match:title ^(Select a File)(.*)$
-      windowrule = float on, match:title ^(Choose wallpaper)(.*)$
-      windowrule = float on, match:title ^(Open Folder)(.*)$
-      windowrule = float on, match:title ^(Save As)(.*)$
-      windowrule = float on, match:title ^(Library)(.*)$
-      windowrule = float on, match:title ^(File Upload)(.*)$
-
-      #windowrule = float, file_progress
-      #windowrule = float, confirm
-      #windowrule = float, dialog
-      #windowrule = float, download
-      #windowrule = float, notification
-      #windowrule = float, error
-      #windowrule = float, splash
-      #windowrule = float, confirmreset
-      #windowrule = float, title:Open File
-      #windowrule = float, title:branchdialog
-      #windowrule = float, Lxappearance
-      #windowrule = float, Rofi
-      #windowrule = animation none,Rofi
-      #windowrule = float,viewnior
-      #windowrule = float,feh
-      #windowrule = float, pavucontrol-qt
-      #windowrule = float, pavucontrol
-      #windowrule = float, file-roller
-      #windowrule = fullscreen, wlogout
-      #windowrule = float, title:wlogout
-      #windowrule = fullscreen, title:wlogout
-      #windowrule = idleinhibit focus, mpv
-      #windowrule = idleinhibit fullscreen, firefox
-      #windowrule = float, title:^(Media viewer)$
-      #windowrule = float, title:^(Volume Control)$
-      #windowrule = float, title:^(Picture-in-Picture)$
-      #windowrule = size 800 600, title:^(Volume Control)$
-      #windowrule = move 75 44%, title:^(Volume Control)$
-
-
-      # trigger when the switch is turning off
-      #bindl = , switch:off:Lid Switch,exec,hyprctl keyword monitor "eDP-1, 1920x1080, 0x0, 1"
-      # trigger when the switch is turning on
-      #bindl = , switch:on:Lid Switch,exec,hyprctl keyword monitor "eDP-1, disable"
-
+      -- Dialog windows: float + center
+      apply_rules("title", {
+        [[^(Open File)(.*)$]], [[^(Select a File)(.*)$]], [[^(Choose wallpaper)(.*)$]],
+        [[^(Open Folder)(.*)$]], [[^(Save As)(.*)$]], [[^(Library)(.*)$]], [[^(File Upload)(.*)$]],
+      }, { float = true, center = true })
     '';
   };
 }

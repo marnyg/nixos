@@ -222,15 +222,10 @@ with lib;
       '';
     };
 
-    # For Hyprland
-    wayland.windowManager.hyprland.extraConfig = mkIf config.wayland.windowManager.hyprland.enable (mkOrder 200 ''
-      bindr = $mainMod, P, exec, pkill wofi || wofi --show drun -i -I
-    '');
-
-    # For Sway (by gpt, IE: not real config)
-    #programs.sway.extraConfig = mkIf config.programs.sway.enable (mkOrder 200 ''
-    #  bindsym $mod+o exec pkill wofi || wofi --show drun -i -I
-    #'');
+    # Hyprland keybind for toggling wofi lives in the hyprland module
+    # (programs/hyprland.nix), alongside the other binds, so it can share the
+    # `mainMod` Lua local. Don't add hyprland.extraConfig here: it would be
+    # concatenated into hyprland.lua as raw text.
 
     # Install additional dependencies for better appearance
     home.packages = with pkgs; [
