@@ -18,8 +18,12 @@
     enable = true;
     driver = "stable";
     powerManagement = {
-      enable = false; # Can cause issues with desktop GPUs
-      finegrained = false; # Not needed for desktop
+      # Installs nvidia-suspend/resume units + NVreg_PreserveVideoMemoryAllocations=1
+      # so VRAM survives suspend. Without it the GPU context is lost on resume:
+      # Xid 13 graphics exception -> Hyprland SIGABRT in GL begin (crash 2026-07-18,
+      # hyprlandCrashReport37296.txt).
+      enable = true;
+      finegrained = false; # Laptop-only (RTD3); not applicable to desktop
     };
   };
 
