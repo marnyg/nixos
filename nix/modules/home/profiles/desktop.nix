@@ -1,6 +1,46 @@
 # Desktop profile - GUI applications and desktop environment configurations
 { lib, pkgs, ... }:
+let
+  # Flameshot-style screenshot "applet": a wofi menu offering region/window/
+  # monitor/full capture, routed through grim + satty (annotation editor).
+  # hyprctl is provided by the running Hyprland session's PATH.
+  screenshot-menu = pkgs.writeShellApplication {
+    name = "screenshot-menu";
+    runtimeInputs = with pkgs; [ grim slurp satty wl-clipboard jq wofi libnotify ];
+    text = ''
+      dir="$HOME/Pictures/Screenshots"
+      mkdir -p "$dir"
+      file="$dir/$(date +%Y-%m-%d_%H-%M-%S).png"
 
+      choice=$(printf '%s\n' \
+        "Region -> annotate" \
+        "Region -> clipboard" \
+        "Region -> file" \
+        "Window -> file" \
+        "Monitor -> file" \
+        "Full desktop -> file" \
+        | wofi --dmenu --prompt "Screenshot")
+
+      notify() { notify-send -t 2000 "Screenshot" "$1"; }
+
+      case "$choice" in
+        "Region -> annotate")
+          grim -g "$(slurp)" - | satty --filename - --output-filename "$file" --early-exit --copy-command wl-copy ;;
+        "Region -> clipboard")
+          grim -g "$(slurp)" - | wl-copy && notify "region copied to clipboard" ;;
+        "Region -> file")
+          grim -g "$(slurp)" "$file" && notify "saved $file" ;;
+        "Window -> file")
+          geom=$(hyprctl activewindow -j | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')
+          grim -g "$geom" "$file" && notify "saved $file" ;;
+        "Monitor -> file")
+          grim -o "$(hyprctl monitors -j | jq -r '.[] | select(.focused).name')" "$file" && notify "saved $file" ;;
+        "Full desktop -> file")
+          grim "$file" && notify "saved $file" ;;
+      esac
+    '';
+  };
+in
 {
   # Desktop modules
   modules.my = {
@@ -52,7 +92,6 @@
     xclip
     xsel
     wl-clipboard
-    # flameshot - configured via services.flameshot below
     rofi
     dmenu
     feh
@@ -64,6 +103,9 @@
     # Screenshot and clipboard utilities
     grim
     slurp
+    satty # annotation editor (flameshot-like)
+    jq # used by screenshot keybind to find focused monitor
+    screenshot-menu # wofi-based screenshot applet (see let-binding above)
     cliphist
     clipmenu
 
@@ -124,11 +166,6 @@
     # Linux/X11 specific
     bitwarden-cli
   ];
-
-  services.flameshot = {
-    enable = true;
-    settings.General.useGrimAdapter = true;
-  };
 
   # Desktop-specific configuration
   home.sessionVariables = {

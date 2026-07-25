@@ -21,7 +21,14 @@ with lib;
           "layer": "top",
           "modules-left": [ "hyprland/workspaces" ],
           "modules-center": ["hyprland/window"],
-          "modules-right": [ "tray", "cpu", "memory", "pulseaudio", "bluetooth", "clock", "battery"],
+          "modules-right": [ "custom/screenshot", "tray", "cpu", "memory", "pulseaudio", "bluetooth", "clock", "battery"],
+          "custom/screenshot": {
+            "format": "",
+            "tooltip": true,
+            "tooltip-format": "Left: region -> annotate (satty)   Right: full screen -> file",
+            "on-click": "mkdir -p ~/Pictures/Screenshots && grim -g \"$(slurp)\" - | satty --filename - --output-filename ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png --early-exit --copy-command wl-copy",
+            "on-click-right": "mkdir -p ~/Pictures/Screenshots && grim ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png"
+          },
           "hyprland/workspaces": {
             "format": "{name}: {icon}",
             "format-icons": {
