@@ -80,10 +80,8 @@ with lib;
       enableZshIntegration = true;
       enableFishIntegration = true;
       defaultOptions = [ "--bind" "'tab:toggle-up,btab:toggle-down'" ];
-      # Atuin owns Ctrl-R: this home-manager's fzf module uses mkOrder so the
-      # history manager (atuin), sourced later, takes precedence over fzf's
-      # Ctrl-R binding. On newer home-manager the explicit yield is
-      # `programs.fzf.historyWidget.command = "";` (add it after that update).
+      # Atuin owns Ctrl-R: explicitly yield fzf's history widget binding.
+      historyWidget.command = "";
     };
 
     # Shared environment variables
