@@ -11,7 +11,6 @@
     git.enable = false;
     direnv.enable = false;
     tmux.enable = false;
-    fzf.enable = false;
     myPackages.enable = false;
     cloneDefaultRepos.enable = false;
   };

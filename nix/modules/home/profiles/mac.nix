@@ -21,7 +21,6 @@
     git.enable = lib.mkDefault true;
     tmux.enable = lib.mkDefault true;
     fish.enable = lib.mkDefault true;
-    fzf.enable = lib.mkDefault true;
 
     # Combined CA bundle so OpenSSL-based tools (nix-profile curl etc.)
     # trust the grove mkcert root CA without --cacert.

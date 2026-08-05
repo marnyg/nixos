@@ -12,7 +12,6 @@
     git.enable = lib.mkDefault false;
     direnv.enable = lib.mkDefault false;
     tmux.enable = lib.mkDefault false;
-    fzf.enable = lib.mkDefault false;
     myPackages.enable = lib.mkDefault false;
     cloneDefaultRepos.enable = lib.mkDefault false;
   };
