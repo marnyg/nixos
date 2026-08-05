@@ -13,10 +13,6 @@
       # Replace neovim with nixvim globally
       neovim = inputs.self.packages.${final.system}.nixvim or prev.neovim;
 
-      # Newer pi-coding-agent than what's in the pinned nixpkgs
-      # (vendored from nixpkgs master: pkgs/by-name/pi/pi-coding-agent)
-      pi-coding-agent = final.callPackage ../overlays/pi-coding-agent/package.nix { };
-
       # Hyprland's Lua config mode (wayland.windowManager.hyprland.configType =
       # "lua" in modules/home/programs/hyprland.nix) makes the IPC `dispatch`
       # endpoint evaluate its argument as Lua, so waybar's hardcoded legacy
@@ -53,8 +49,6 @@
           mcphub = inputs.mcphub.packages.${final.system}.default or null;
           # Replace neovim with nixvim globally
           neovim = inputs.self.packages.${final.system}.nixvim or prev.neovim;
-          # Newer pi-coding-agent than what's in the pinned nixpkgs
-          pi-coding-agent = final.callPackage ../overlays/pi-coding-agent/package.nix { };
         })
       ];
     };
