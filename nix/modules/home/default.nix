@@ -30,6 +30,7 @@ let
     # Development tools
     caBundle = ./programs/ca-bundle.nix;
     git = ./programs/git.nix;
+    herdr = ./programs/herdr.nix;
     pi-agent = ./programs/pi-agent.nix;
     taskwarrior = ./programs/taskwarrior.nix;
     worktrunk = ./programs/worktrunk.nix;

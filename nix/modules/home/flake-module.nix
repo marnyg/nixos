@@ -40,6 +40,7 @@
           ./programs/lf.nix
           ./programs/ca-bundle.nix
           ./programs/git.nix
+          ./programs/herdr.nix
           ./programs/pi-agent.nix
           ./programs/taskwarrior.nix
           ./programs/worktrunk.nix

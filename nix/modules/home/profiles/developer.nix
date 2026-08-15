@@ -12,6 +12,7 @@
     myPackages.enable = true; # Core development packages
     pi-agent.enable = true; # pi-coding-agent settings + keybindings
     taskwarrior.enable = true; # managed .taskrc with `refs` UDA
+    herdr.enable = true; # agent multiplexer + sessionizer/remote plugins
 
     # OPTIONAL: Sensible defaults but can be overridden
     nixvim.enable = lib.mkDefault true; # Default editor, but vim/emacs users may override
