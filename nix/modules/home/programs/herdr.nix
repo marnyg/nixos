@@ -23,7 +23,8 @@ in
     plugins = mkOption {
       type = types.listOf types.str;
       default = [
-        "dcolinmorgan/herdr-remote" # menu bar / phone / Telegram agent dashboard
+        "AltanS/collie" # remote access to herdr sessions
+        "persiyanov/herdr-reviewr" # code review plugin
         "andrewchng/herdr-sessionizer" # tmux-sessionizer-style fuzzy workspace picker
       ];
       description = ''
