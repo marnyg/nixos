@@ -26,9 +26,16 @@ in
         "AltanS/collie" # remote access to herdr sessions
         "persiyanov/herdr-reviewr" # code review plugin
         "andrewchng/herdr-sessionizer" # tmux-sessionizer-style fuzzy workspace picker
+        # Browser split. Manifest requires herdr >= 0.8.0; on 0.7.5 it
+        # installs but reports "manifest unavailable" and exposes no
+        # actions, so no keybinding is defined for it yet.
+        "zenbu-labs/terminal-browser/herdr-plugin"
       ];
       description = ''
-        GitHub `owner/repo` plugin sources. Each is installed with
+        GitHub `owner/repo[/subdir]` plugin sources. The subdir is part of
+        the identity string `herdr plugin list` prints, so it must be
+        included here or the presence check below never matches and the
+        plugin is reinstalled on every activation. Each is installed with
         `herdr plugin install <src> --yes` on activation if not already
         present (checked against `herdr plugin list`). Removal is manual:
         `herdr plugin uninstall <id>`.
@@ -40,6 +47,9 @@ in
     programs.herdr = {
       enable = true;
       settings = {
+        # Drop the blank row between panes (borders stay on).
+        ui.pane_gaps = false;
+
         # Keybindings ported from the tmux setup (tmux.nix) so herdr
         # matches tmux muscle memory. herdr resolves conflicts in favor
         # of user bindings (defaults on taken keys are silently disabled),
@@ -100,6 +110,26 @@ in
               description = "open worktree workspace";
             }
             {
+              # code review plugin. plugin_id is manifest-declared, not
+              # derived from owner/repo (cf. AltanS/collie -> herdr.collie,
+              # andrewchng/herdr-sessionizer -> sessionizer); verified
+              # against `herdr plugin action list` on 0.7.5.
+              # Also available: .toggle, .close
+              key = "prefix+shift+v";
+              type = "plugin_action";
+              command = "persiyanov.reviewr.open";
+              description = "open code review";
+            }
+            {
+              # collie web bridge (remote access to herdr sessions).
+              # collie actions are workspace-context only; other actions
+              # (stop/restart/status/url) stay CLI-only for now.
+              key = "prefix+shift+c";
+              type = "plugin_action";
+              command = "herdr.collie.start";
+              description = "start collie web bridge";
+            }
+            {
               # tmux: prefix+g gitui popup
               key = "prefix+g";
               type = "popup";
@@ -145,6 +175,19 @@ in
     # Runtime deps for herdr-sessionizer (bun build+runtime, fzf pickers).
     # bat (richer README previews) is already enabled via programs.bat.
     home.packages = with pkgs; [ bun fzf ];
+
+    # herdr spawns plugin actions with a minimal environment (no login
+    # shell), so the Nix profile dir is NOT on their PATH and `bun` from
+    # home.packages above is invisible to them. collie's collie-ctl.sh
+    # resolve_bun() falls back to a fixed list of well-known locations --
+    # ~/.bun/bin, ~/.local/bin, /usr/local/bin, /opt/homebrew/bin,
+    # /usr/bin -- none of which is /etc/profiles/per-user/$USER/bin, so
+    # its web bridge died with "bun not found on PATH" and never bound
+    # $COLLIE_PORT. Planting bun in ~/.local/bin satisfies that fallback
+    # (and any other plugin making the same assumption) without touching
+    # BUN_INSTALL, which bun itself uses as its global-install prefix and
+    # which must stay writable.
+    home.file.".local/bin/bun".source = "${pkgs.bun}/bin/bun";
 
     # Sessionizer plugin config — mirrors the tmux-sessionizer script in
     # tmux.nix:
