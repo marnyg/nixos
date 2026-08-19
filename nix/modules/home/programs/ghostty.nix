@@ -29,6 +29,7 @@ with lib;
         confirm-close-surface = false;
         macos-option-as-alt = true;
         focus-follows-mouse = true;
+        clipboard-paste-protection = false;
         # config-file = "~/.config/ghostty/conf";
         command = "/run/current-system/sw/bin/fish";
 
