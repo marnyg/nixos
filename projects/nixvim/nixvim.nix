@@ -179,10 +179,6 @@
       #     yaml = true;
       #   };
       # };
-      markdown-preview = {
-        enable = true;
-      };
-
       friendly-snippets.enable = true;
 
       # Render mermaid/plantuml/d2 diagrams in markdown buffers (backend: image.nvim)
