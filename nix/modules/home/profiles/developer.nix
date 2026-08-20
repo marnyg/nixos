@@ -11,7 +11,7 @@
     worktrunk.enable = true; # `wt` config + tmux session cleanup on `wt remove`
     myPackages.enable = true; # Core development packages
     pi-agent.enable = true; # pi-coding-agent settings + keybindings
-    taskwarrior.enable = true; # managed .taskrc with `refs` UDA
+    taskwarrior.enable = true; # legacy task tracker — kept during beads transition
     herdr.enable = true; # agent multiplexer + sessionizer/remote plugins
 
     # OPTIONAL: Sensible defaults but can be overridden
@@ -102,6 +102,9 @@
     # Security
     gnupg
     bitwarden-cli
+
+    # Task tracking
+    beads # `bd` — repo-scoped issue tracker; primary agent task memory
 
     # Development environments
     devenv

@@ -64,9 +64,10 @@ let
     (builtins.toJSON keybindings);
 
   # Default append-system-prompt. Captures personal operating
-  # preferences: broken-window surfacing and Taskwarrior-based
-  # persistent task tracking. The `refs` UDA referenced below is
-  # defined by `modules.my.taskwarrior`.
+  # preferences: broken-window surfacing and beads-based persistent
+  # task tracking (`bd`, repo-scoped, installed via the developer
+  # profile). Taskwarrior remains installed only as the legacy system
+  # for lazy per-repo migration — see the migration subsection below.
   defaultAppendSystemPrompt = ''
     # Personal operating preferences
 
@@ -88,132 +89,123 @@ let
     - The user decides per item: fix now / file as task / ignore. Wait
       for that decision.
     - Do not re-surface the same item later in the session once handled.
-    - If the user defers, offer to file as `+debt`. If the user says
-      "ignore" with a reason, offer to record the reasoning as `+decision`.
+    - If the user defers, offer to file as a `debt`-labeled chore. If the
+      user says "ignore" with a reason, offer to record the reasoning as
+      a `decision` issue.
 
-    ## Persistent task tracking via Taskwarrior
+    ## Persistent task tracking via beads
 
-    Use the `task` CLI as persistent, queryable memory: goals, work items,
-    loose threads, deferred decisions, design sketches, and handover
-    notes. Across sessions this is the only state you can rely on
-    surviving. If `task` is not on PATH, skip this section and tell the
-    user once per session.
+    Use the `bd` CLI (beads) as persistent, queryable memory: goals,
+    work items, loose threads, deferred decisions, design sketches, and
+    handover notes. Beads is repo-scoped: issues live in `.beads/`
+    inside the repo and travel with git. There is no cross-repo or
+    host-wide task tracking — everything belongs to some repo. Across
+    sessions this is the only state you can rely on surviving. If `bd`
+    is not on PATH, skip this section and tell the user once per
+    session.
 
-    ### Repo identification
+    ### Database discovery
 
-    Compute once per session, before any task command:
+    Session start (first turn touching a repo):
+    1. Run `bd ready`. If it errors with "no beads database found",
+       ask the user before running `bd init` — never init silently.
+       If the user declines, skip the task integration for this repo.
+    2. If a database exists, skim `bd ready` and
+       `bd list --status in_progress,blocked`.
+    3. Surface any `handover`-labeled issues, in_progress/blocked items,
+       and any `spike` issues relevant to the user's request, so the
+       user can confirm direction.
+
+    ### Legacy Taskwarrior migration (lazy, per repo)
+
+    Taskwarrior (`task`) is the previous system; it stays installed
+    only so old tasks can be migrated. Once per repo, when a beads
+    database exists, check for leftovers:
 
         REPO_ID=$(git rev-list --max-parents=0 HEAD 2>/dev/null | tail -1 | cut -c1-8)
-        REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
-        REPO_NAME=$(basename "$REPO_ROOT")
+        task +repo_$REPO_ID status:pending count
 
-    If `REPO_ID` is empty (not a git repo, or no commits yet), skip the
-    task integration for this session and tell the user once.
+    If non-zero, offer to migrate (user confirms first): one
+    `bd create` per pending task — map tags to the vocabulary below,
+    carry annotations into `--notes`, skip `+meta` registry tasks.
+    Then in taskwarrior: `task <id> annotate "migrated to beads <bd-id>"`
+    and `task <id> done`. If the user declines, do not offer again this
+    session.
 
-    `+repo_<REPO_ID>` is the **identity** tag — stable across renames,
-    moves, and reclones because it's tied to the root commit. Use it on
-    every task related to the repo. `project:<REPO_NAME>` (with optional
-    dot-separated subprojects) is the readability label, not the source
-    of truth.
+    ### Vocabulary (built-in types/statuses; closed label set)
 
-    ### Repo registry
+    Types (`bd create -t <type>`, exactly one per issue):
+    - `task`      concrete unit of work (default)
+    - `bug`       observed broken behavior
+    - `feature`   new user-visible capability
+    - `chore`     maintenance / cleanup (broken windows → label `debt`)
+    - `epic`      longer-term outcome / direction (was `+goal`)
+    - `spike`     iterative design/investigation work (was `+sketch`);
+                  thinking accumulates as notes on the spike itself
+    - `decision`  recorded decision / lightweight ADR; close immediately
+                  after creation so it stays out of ready views but is
+                  queryable via `bd list -t decision --status closed`
 
-    First time you encounter a repo in a session:
+    Labels (closed set — do not invent new labels):
+    - `pi`        always add this on issues you create
+    - `debt`      broken-window / refactor / cleanup
+    - `thread`    loose end / open question to revisit
+    - `idea`      speculative; not committed work
+    - `handover`  end-of-session context for the next session
 
-        task +repo_<REPO_ID> +meta list
+    Posture maps to native status/priority, not labels:
+    - blocked          → `bd update <id> --status blocked` + a note why
+    - intentionally deferred → `bd update <id> --status deferred`
+    - pick up next session   → priority 1
+    - nice-to-have           → priority 3 (or 4 for backlog)
+    Priorities: 0 critical … 4 backlog; default 2.
 
-    If empty, create one silently (registry creation is the one allowed
-    unannounced mutation):
-
-        task add "repo: <REPO_NAME>" project:<REPO_NAME> +repo_<REPO_ID> +meta +pi
-        task <new_id> annotate "path: <REPO_ROOT>"
-        task <new_id> annotate "name: <REPO_NAME>"
-
-    ### Tag vocabulary (closed set — do not invent new tags)
-
-    Kind (exactly one per task):
-    - `+goal`      longer-term outcome / direction
-    - `+task`      concrete unit of work
-    - `+bug`       observed broken behavior
-    - `+debt`      broken-window / refactor / cleanup
-    - `+thread`    loose end / open question to revisit
-    - `+sketch`    iterative design work; thinking accumulates as
-                   annotations on the sketch task itself
-    - `+decision`  recorded decision (lightweight ADR); close with
-                   `task <id> done` immediately so it stays out of
-                   pending views but is queryable via
-                   `status:any +decision`
-    - `+handover`  end-of-session context for the next session
-    - `+idea`      speculative; not committed work
-    - `+meta`      about the task DB itself (registry, etc.)
-
-    Posture (optional, at most one):
-    - `+next`      pick up in the next session
-    - `+blocked`   waiting on something — annotate why
-    - `+later`     intentionally deferred
-    - `+nice`      nice-to-have, low priority
-
-    Origin:
-    - `+pi`        always add this on tasks you create.
-
-    If you feel a new tag is genuinely needed, ask the user first; do not
-    add it silently.
+    If you feel a new label or custom type is genuinely needed, ask the
+    user first; do not add it silently.
 
     ### Workflow
 
-    Session start (first turn touching a repo):
-    1. Compute REPO_ID / REPO_ROOT / REPO_NAME.
-    2. Ensure registry exists.
-    3. `task +repo_<REPO_ID> status:pending list` — skim.
-    4. Surface any `+handover`, `+next`, or `+blocked` items, plus any
-       `+sketch` items relevant to the user's request, so the user can
-       confirm direction.
-
     Noticing / agreeing to defer something:
     1. Echo the exact command before running it, e.g.
-       `task add "Cap systemd-boot configurationLimit on laptop too" \
-        project:nixos.laptop +repo_<REPO_ID> +debt +pi`
-    2. After running, report the new task id.
+       `bd create "Cap systemd-boot configurationLimit on laptop too" \
+        -t chore -l pi,debt`
+    2. After running, report the new issue id.
 
-    Sketch workflow:
-    - Description is the title; iterations accumulate as annotations,
-      one terse thought per annotation.
-    - When a sketch crystallizes into actionable work, derive
-      `+task`/`+goal` items and link them via the `refs` UDA:
-      `task add "<description>" project:<...> +repo_<REPO_ID> +task +pi refs:<sketch-uuid-prefix>`.
-      The 8-char UUID prefix is visible in the `UUID` column of every
-      `task list` output. Use UUID prefixes (not short ids) because
-      short ids get renumbered when tasks complete.
-    - Three helpers exist for walking the refs graph:
-      - `task-refsto <id>` — incoming: which tasks reference this one.
-      - `task-refsfrom <id>` — outgoing: which tasks does this one
-        reference (resolves each refs entry to its actual task).
-      - `task refs` (parameterless) — overview of every task that has
-        any refs value set.
-    - Close the sketch with `task <id> done` once derived.
+    Spike workflow:
+    - Title is the question/design under investigation; iterations
+      accumulate via `bd note <id> "<terse thought>"`, one thought per
+      note.
+    - When a spike crystallizes into actionable work, derive task/epic
+      issues linked back to it:
+      `bd create "<title>" -t task -l pi --deps discovered-from:<spike-id>`.
+    - Walk the graph with `bd dep tree <id>`; `bd dep list <id>` shows
+      direct dependencies/dependents.
+    - Close the spike (`bd close <spike-id>`) once derived.
 
-    Progress on existing tasks:
-    - `task <id> annotate "<terse milestone>"`. Milestones only; do not
-      annotate every small step.
+    Progress on existing issues:
+    - `bd update <id> --status in_progress` when starting work.
+    - `bd note <id> "<terse milestone>"`. Milestones only; do not
+      note every small step.
 
     End of session with work remaining:
-    - Add `+handover +pi` task (or annotate the parent) in the form:
-      `Last did: X. Next: Y. Watch: Z.` Three lines max.
+    - `bd create "Last did: X. Next: Y. Watch: Z." -t task -l pi,handover`
+      (or note the parent issue). Three lines max. Close any handover
+      issue you surfaced at session start once its context is absorbed.
 
     Completion:
-    - `task <id> done` only after the user confirms, except `+decision`
-      items which are closed at creation.
+    - `bd close <id>` only after the user confirms, except `decision`
+      issues which are closed at creation.
 
     ### Discipline
 
-    - Read before write: query existing tasks before adding, to avoid
-      duplicates.
+    - Read before write: `bd search <text>` / `bd list` before creating,
+      to avoid duplicates (`bd` also detects similar issues on create).
     - Echo every mutation command before running, or list what was
-      changed after — except registry creation (allowed silent).
-    - Never auto-close pending tasks; closure is the user's signal,
-      with the `+decision` exception above.
-    - Taskwarrior contexts (`task context define ...`) exist as user UX;
-      do not manage them from the agent side.
+      changed after.
+    - Never auto-close open issues; closure is the user's signal, with
+      the `decision` exception above.
+    - Leave `.beads/` internals alone: no manual edits to its files, no
+      git operations on its behalf beyond what `bd` itself does.
   '';
 in
 {
@@ -241,12 +233,12 @@ in
       type = lib.types.lines;
       default = defaultAppendSystemPrompt;
       defaultText = lib.literalMD
-        "broken-windows + Taskwarrior conventions (see module source)";
+        "broken-windows + beads conventions (see module source)";
       description = ''
         Text appended to pi's built-in system prompt. Written to
         ~/.pi/agent/APPEND_SYSTEM.md when non-empty. Defaults to the
         personal operating preferences (broken-windows surfacing,
-        Taskwarrior-based task tracking with the `refs` UDA). Set to
+        beads-based repo-scoped task tracking via `bd`). Set to
         `""` to disable, or override entirely to replace.
       '';
     };

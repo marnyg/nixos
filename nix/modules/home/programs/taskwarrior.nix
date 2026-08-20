@@ -1,9 +1,12 @@
 # Taskwarrior user configuration.
 #
 # Manages ~/.taskrc with our conventions on top of the defaults that
-# Taskwarrior would otherwise auto-generate on first run. The agent
-# system prompt (`modules.my.pi-agent.appendSystemPrompt`) relies on
-# the `refs` UDA defined here for sketch/task cross-references.
+# Taskwarrior would otherwise auto-generate on first run.
+#
+# LEGACY: task tracking has moved to beads (`bd`, repo-scoped .beads/
+# databases — see the developer profile and the pi-agent prompt).
+# Taskwarrior stays installed only so pending tasks can be lazily
+# migrated per repo; remove this module once migration is complete.
 { config, lib, pkgs, ... }:
 
 let
