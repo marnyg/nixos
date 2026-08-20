@@ -46,7 +46,6 @@ let
       # including our broken-windows + Taskwarrior preferences.
       "npm:@gotgenes/pi-anthropic-auth"
       "npm:@burneikis/pi-vim"
-      "git:github.com/marnyg/pi-ui"
       "git:github.com/marnyg/skills"
     ];
     defaultThinkingLevel = "high";
