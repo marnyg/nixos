@@ -50,6 +50,12 @@ in
         # Drop the blank row between panes (borders stay on).
         ui.pane_gaps = false;
 
+        # Kitty graphics passthrough, required by terminal-browser to
+        # draw pages into a pane. terminal-browser tries to write this
+        # flag into config.toml itself, but the file is a read-only nix
+        # store symlink, so it must be set here.
+        experimental.kitty_graphics = true;
+
         # Keybindings ported from the tmux setup (tmux.nix) so herdr
         # matches tmux muscle memory. herdr resolves conflicts in favor
         # of user bindings (defaults on taken keys are silently disabled),

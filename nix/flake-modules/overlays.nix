@@ -25,6 +25,28 @@
         patches = (old.patches or [ ]) ++ [ ../overlays/waybar/hyprland-lua-dispatch.patch ];
       });
 
+      # herdr 0.8.2: terminal-browser >= 0.5.7 passes `--right-click pane`
+      # to `herdr pane split`, which nixpkgs' herdr 0.8.0 doesn't know
+      # (browser split fails to open). cargoDeps is overridden explicitly
+      # because this nixpkgs pin's buildRustPackage doesn't recompute the
+      # vendor hash from an overridden cargoHash. zigDeps (libghostty-vt)
+      # is unchanged between 0.8.0 and 0.8.2, so it follows finalAttrs.src
+      # with the original hash. Drop this once nixpkgs ships >= 0.8.2.
+      herdr = prev.herdr.overrideAttrs (_: rec {
+        version = "0.8.2";
+        src = prev.fetchFromGitHub {
+          owner = "herdrdev";
+          repo = "herdr";
+          tag = "v${version}";
+          hash = "sha256-sEGIN3dLZasaHob3EHscWBCIQHflMQVchYmzgsETDk4=";
+        };
+        cargoDeps = prev.rustPlatform.fetchCargoVendor {
+          inherit src;
+          name = "herdr-${version}-vendor";
+          hash = "sha256-4VThqPwYYEsGvaOKjBeL6XAC5bnNWB6oUMWP/uXc/UQ=";
+        };
+      });
+
       # direnv's shell test suite hangs in the Darwin nix-build sandbox.
       direnv =
         if prev.stdenv.isDarwin
