@@ -136,12 +136,13 @@
         modules.my.firefox.enable = true;
         modules.my.qutebrowser.enable = true;
         modules.my.autorandr.enable = false;
-        modules.my.bspwm.enable = true;
+        modules.my.bspwm.enable = false;
         modules.my.xmonad.enable = false;
         modules.my.hyprland.enable = true;
         modules.my.wayvnc.enable = true;
         modules.my.dunst.enable = false;
-        modules.my.polybar.enable = false;
+        modules.my.waybar.enable = false;
+        modules.my.quickshell.enable = true;
         modules.my.kitty.enable = false;
         modules.my.ghostty.enable = true;
         modules.my.newsboat.enable = false;

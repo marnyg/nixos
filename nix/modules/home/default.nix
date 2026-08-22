@@ -38,13 +38,13 @@ let
     # Desktop environments - X11
     bspwm = ./programs/bspwm/bspwm.nix;
     xmonad = ./programs/xmonad;
-    polybar = ./programs/polybar/polybar.nix;
     dunst = ./programs/dunst/dunst.nix;
     autorandr = ./programs/autorandr/desktop.nix;
 
     # Desktop environments - Wayland
     hyprland = ./programs/hyprland.nix;
     waybar = ./programs/waybar.nix;
+    quickshell = ./programs/quickshell/quickshell.nix;
     wofi = ./programs/wofi.nix;
 
     # Other programs

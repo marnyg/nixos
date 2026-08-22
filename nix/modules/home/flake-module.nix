@@ -46,11 +46,11 @@
           ./programs/worktrunk.nix
           ./programs/bspwm/bspwm.nix
           ./programs/xmonad
-          ./programs/polybar/polybar.nix
           ./programs/dunst/dunst.nix
           ./programs/autorandr/desktop.nix
           ./programs/hyprland.nix
           ./programs/waybar.nix
+          ./programs/quickshell/quickshell.nix
           ./programs/wofi.nix
           ./programs/rofi.nix
           ./programs/newsboat.nix

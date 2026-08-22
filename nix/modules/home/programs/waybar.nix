@@ -11,10 +11,6 @@ with lib;
 
     services.blueman-applet.enable = true;
     services.network-manager-applet.enable = true;
-    services.gammastep.enable = true;
-    services.gammastep.longitude = 10.25;
-    services.gammastep.latitude = 63.25;
-    services.gammastep.tray = true;
     programs.waybar.settings = builtins.fromJSON /* JSON */ ''
       {
         "mainBar": {

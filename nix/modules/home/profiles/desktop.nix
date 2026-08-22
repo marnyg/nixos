@@ -59,8 +59,8 @@ in
 
     # Desktop utilities (helpful but not essential)
     dunst.enable = lib.mkDefault false;
-    polybar.enable = lib.mkDefault false;
     waybar.enable = lib.mkDefault true; # Pairs with hyprland default
+    quickshell.enable = lib.mkDefault false; # Alternative bar to waybar
     wofi.enable = lib.mkDefault true; # Pairs with hyprland default
     rofi.enable = lib.mkDefault false; # Alternative to wofi
 
@@ -144,6 +144,7 @@ in
 
     # Development GUIs
     claude-code
+    terminal-browser # browser in the terminal (kitty graphics protocol)
 
     # Remote desktop
     tigervnc # VNC client (`vncviewer`)

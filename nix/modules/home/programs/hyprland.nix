@@ -14,8 +14,8 @@ with lib;
 
 
     modules.my.wofi.enable = true;
-    modules.my.waybar.enable = true;
-    programs.waybar.systemd.enable = true;
+    modules.my.waybar.enable = mkDefault true;
+    programs.waybar.systemd.enable = mkDefault true;
     home.packages = [ pkgs.wl-clipboard ];
     services.mako = {
       enable = true; # notification daemon
