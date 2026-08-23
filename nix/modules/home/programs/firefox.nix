@@ -24,6 +24,10 @@ with lib;
       # pkgs.firefox.
       package = mkIf pkgs.stdenv.isDarwin null;
 
+      profiles.dev = {
+        id = 1;
+      };
+
       profiles.mar = {
         extensions.packages = (with pkgs.nur.repos.rycee.firefox-addons; [
           decentraleyes
