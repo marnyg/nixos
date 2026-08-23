@@ -166,6 +166,37 @@ ShellRoot {
         }
     }
 
+    // Floating dropdown anchored under a pill. Click-away closes it via a
+    // Hyprland focus grab. Content items land in the inner ColumnLayout.
+    component BarPopup: PopupWindow {
+        id: popup
+        default property alias content: col.data
+
+        anchor.edges: Edges.Bottom
+        anchor.gravity: Edges.Bottom
+        implicitWidth: col.implicitWidth + 24
+        implicitHeight: col.implicitHeight + 24
+        color: "transparent"
+
+        HyprlandFocusGrab {
+            active: popup.visible
+            windows: [popup]
+            onCleared: popup.visible = false
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            radius: 10
+            color: root.pillBg
+
+            ColumnLayout {
+                id: col
+                anchors.centerIn: parent
+                spacing: 8
+            }
+        }
+    }
+
     // Shared "label | progress bar | value [extra]" row used by the usage pills
     component Meter: RowLayout {
         id: meter
@@ -309,18 +340,32 @@ ShellRoot {
                     Repeater {
                         model: SystemTray.items
                         IconImage {
+                            id: trayIcon
                             required property var modelData
                             source: modelData.icon
                             implicitSize: 18
 
+                            // Native SNI/DBus menu (blueman, nm-applet, …)
+                            QsMenuAnchor {
+                                id: trayMenu
+                                menu: trayIcon.modelData.menu
+                                anchor.item: trayIcon
+                                anchor.edges: Edges.Bottom
+                                anchor.gravity: Edges.Bottom
+                            }
+
                             MouseArea {
                                 anchors.fill: parent
-                                acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+                                acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
                                 onClicked: mouse => {
-                                    if (mouse.button === Qt.LeftButton)
-                                        modelData.activate();
-                                    else
-                                        modelData.secondaryActivate();
+                                    if (mouse.button === Qt.RightButton || trayIcon.modelData.onlyMenu) {
+                                        if (trayIcon.modelData.hasMenu)
+                                            trayMenu.open();
+                                    } else if (mouse.button === Qt.LeftButton) {
+                                        trayIcon.modelData.activate();
+                                    } else {
+                                        trayIcon.modelData.secondaryActivate();
+                                    }
                                 }
                             }
                         }
@@ -328,9 +373,45 @@ ShellRoot {
                 }
 
                 Pill {
+                    id: orPill
                     visible: root.orUsage !== null
                     clickable: true
-                    onPillClicked: orUsageProc.running = true
+                    onPillClicked: orPopup.visible = !orPopup.visible
+
+                    BarPopup {
+                        id: orPopup
+                        anchor.item: orPill
+                        // opening doubles as refresh
+                        onVisibleChanged: if (visible) orUsageProc.running = true
+
+                        PillText {
+                            text: "OpenRouter"
+                            font.bold: true
+                            color: root.accent
+                        }
+                        PillText {
+                            text: root.orUsage ? "Balance:   $" + root.orUsage.remaining.toFixed(2) : ""
+                        }
+                        PillText {
+                            text: root.orUsage ? "Today:     $" + root.orUsage.day.toFixed(2) : ""
+                        }
+                        PillText {
+                            text: root.orUsage ? "Last 7d:   $" + root.orUsage.week.toFixed(2) + "  (budget $" + root.orWeeklyBudget + ")" : ""
+                        }
+                        PillText {
+                            text: "openrouter.ai/activity ↗"
+                            color: "#7b88a1"
+                            font.pixelSize: 12
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    Quickshell.execDetached(["xdg-open", "https://openrouter.ai/activity"]);
+                                    orPopup.visible = false;
+                                }
+                            }
+                        }
+                    }
 
                     PillText {
                         text: "🛰"
@@ -363,9 +444,47 @@ ShellRoot {
                 }
 
                 Pill {
+                    id: aiPill
                     visible: root.aiLimits.length > 0
                     clickable: true
-                    onPillClicked: aiUsageProc.running = true
+                    onPillClicked: aiPopup.visible = !aiPopup.visible
+
+                    BarPopup {
+                        id: aiPopup
+                        anchor.item: aiPill
+                        // opening doubles as refresh
+                        onVisibleChanged: if (visible) aiUsageProc.running = true
+
+                        PillText {
+                            text: "Claude usage"
+                            font.bold: true
+                            color: root.accent
+                        }
+                        Repeater {
+                            model: root.aiLimits
+                            Meter {
+                                required property var modelData
+                                label: modelData.label
+                                frac: modelData.pct / 100
+                                value: Math.round(modelData.pct) + "%"
+                                extra: "resets " + Qt.formatDateTime(new Date(modelData.resets), "ddd HH:mm")
+                                barColor: root.usageColor(modelData.pct)
+                            }
+                        }
+                        PillText {
+                            text: "claude.ai/settings/usage ↗"
+                            color: "#7b88a1"
+                            font.pixelSize: 12
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    Quickshell.execDetached(["xdg-open", "https://claude.ai/settings/usage"]);
+                                    aiPopup.visible = false;
+                                }
+                            }
+                        }
+                    }
 
                     Repeater {
                         model: root.aiLimits
@@ -383,6 +502,9 @@ ShellRoot {
                 }
 
                 Pill {
+                    id: cpuPill
+                    clickable: true
+                    onPillClicked: cpuPopup.visible = !cpuPopup.visible
                     PillText {
                         text: "🎞️"
                         color: root.accent
@@ -390,9 +512,36 @@ ShellRoot {
                     PillText {
                         text: root.cpuUsage + "%"
                     }
+
+                    BarPopup {
+                        id: cpuPopup
+                        anchor.item: cpuPill
+                        property string procs: "…"
+                        onVisibleChanged: if (visible) cpuTop.running = true
+
+                        Process {
+                            id: cpuTop
+                            command: ["sh", "-c", "ps axch -o comm:24,pcpu --sort=-pcpu | head -8"]
+                            stdout: StdioCollector {
+                                onStreamFinished: cpuPopup.procs = this.text.trimEnd()
+                            }
+                        }
+
+                        PillText {
+                            text: "Top CPU"
+                            font.bold: true
+                            color: root.accent
+                        }
+                        PillText {
+                            text: cpuPopup.procs
+                        }
+                    }
                 }
 
                 Pill {
+                    id: memPill
+                    clickable: true
+                    onPillClicked: memPopup.visible = !memPopup.visible
                     PillText {
                         text: "🖥"
                         color: root.accent
@@ -400,11 +549,42 @@ ShellRoot {
                     PillText {
                         text: root.memUsage + "GiB"
                     }
+
+                    BarPopup {
+                        id: memPopup
+                        anchor.item: memPill
+                        property string procs: "…"
+                        onVisibleChanged: if (visible) memTop.running = true
+
+                        Process {
+                            id: memTop
+                            command: ["sh", "-c", "ps axch -o comm:24,pmem --sort=-pmem | head -8"]
+                            stdout: StdioCollector {
+                                onStreamFinished: memPopup.procs = this.text.trimEnd()
+                            }
+                        }
+
+                        PillText {
+                            text: "Top memory"
+                            font.bold: true
+                            color: root.accent
+                        }
+                        PillText {
+                            text: memPopup.procs
+                        }
+                    }
                 }
 
                 Pill {
+                    id: volumePill
                     clickable: true
-                    onPillClicked: Quickshell.execDetached(["pavucontrol"])
+                    // Left: inline volume popup. Right: full mixer.
+                    onPillClicked: mouse => {
+                        if (mouse.button === Qt.RightButton)
+                            Quickshell.execDetached(["pavucontrol"]);
+                        else
+                            volumePopup.visible = !volumePopup.visible;
+                    }
                     PillText {
                         text: (Pipewire.defaultAudioSink?.audio.muted ?? false) ? "" : "󰕾"
                         color: root.accent
@@ -412,9 +592,83 @@ ShellRoot {
                     PillText {
                         text: Pipewire.defaultAudioSink?.audio ? Math.round(Pipewire.defaultAudioSink.audio.volume * 100) + "%" : "–"
                     }
+
+                    BarPopup {
+                        id: volumePopup
+                        anchor.item: volumePill
+
+                        RowLayout {
+                            spacing: 10
+
+                            PillText {
+                                text: (Pipewire.defaultAudioSink?.audio.muted ?? false) ? "" : "󰕾"
+                                color: root.accent
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        const a = Pipewire.defaultAudioSink?.audio;
+                                        if (a)
+                                            a.muted = !a.muted;
+                                    }
+                                }
+                            }
+
+                            Item {
+                                id: volSlider
+                                implicitWidth: 180
+                                implicitHeight: 20
+                                property real vol: Pipewire.defaultAudioSink?.audio.volume ?? 0
+
+                                Rectangle {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: parent.width
+                                    height: 6
+                                    radius: 3
+                                    color: "#434c5e"
+                                }
+                                Rectangle {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: parent.width * Math.min(1, volSlider.vol)
+                                    height: 6
+                                    radius: 3
+                                    color: root.accent
+                                }
+                                Rectangle {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    x: Math.max(0, parent.width * Math.min(1, volSlider.vol) - width / 2)
+                                    width: 12
+                                    height: 12
+                                    radius: 6
+                                    color: root.fg
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    function setVol(x) {
+                                        const a = Pipewire.defaultAudioSink?.audio;
+                                        if (a)
+                                            a.volume = Math.max(0, Math.min(1, x / volSlider.width));
+                                    }
+                                    onPressed: mouse => setVol(mouse.x)
+                                    onPositionChanged: mouse => {
+                                        if (pressed)
+                                            setVol(mouse.x);
+                                    }
+                                }
+                            }
+
+                            PillText {
+                                text: Math.round((Pipewire.defaultAudioSink?.audio.volume ?? 0) * 100) + "%"
+                            }
+                        }
+                    }
                 }
 
                 Pill {
+                    id: clockPill
+                    clickable: true
+                    onPillClicked: calendarPopup.visible = !calendarPopup.visible
                     PillText {
                         text: ""
                         color: root.accent
@@ -422,16 +676,148 @@ ShellRoot {
                     PillText {
                         text: Qt.formatDateTime(clock.date, "dd:MM:yy  HH:mm")
                     }
+
+                    BarPopup {
+                        id: calendarPopup
+                        anchor.item: clockPill
+
+                        property date today: new Date()
+                        property date shownMonth: new Date()
+                        onVisibleChanged: if (visible) {
+                            today = new Date();
+                            shownMonth = new Date();
+                        }
+
+                        function addMonths(d) {
+                            shownMonth = new Date(shownMonth.getFullYear(), shownMonth.getMonth() + d, 1);
+                        }
+                        function sameDay(a, b) {
+                            return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+                        }
+                        // 6 fixed weeks, Monday-first, spilling into adjacent months
+                        function monthCells() {
+                            const y = shownMonth.getFullYear(), m = shownMonth.getMonth();
+                            const lead = (new Date(y, m, 1).getDay() + 6) % 7;
+                            const cells = [];
+                            for (let i = 0; i < 42; i++)
+                                cells.push(new Date(y, m, 1 - lead + i));
+                            return cells;
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
+
+                            PillText {
+                                text: "‹"
+                                leftPadding: 6
+                                rightPadding: 6
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: calendarPopup.addMonths(-1)
+                                }
+                            }
+                            PillText {
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignHCenter
+                                font.bold: true
+                                text: Qt.formatDate(calendarPopup.shownMonth, "MMMM yyyy")
+                            }
+                            PillText {
+                                text: "›"
+                                leftPadding: 6
+                                rightPadding: 6
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: calendarPopup.addMonths(1)
+                                }
+                            }
+                        }
+
+                        Grid {
+                            columns: 7
+                            Repeater {
+                                model: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+                                Text {
+                                    required property string modelData
+                                    width: 30
+                                    height: 22
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.family: root.fontFamily
+                                    font.pixelSize: 13
+                                    font.bold: true
+                                    color: "#7b88a1"
+                                    text: modelData
+                                }
+                            }
+                        }
+
+                        Grid {
+                            columns: 7
+                            Repeater {
+                                model: calendarPopup.monthCells()
+                                Text {
+                                    required property var modelData
+                                    width: 30
+                                    height: 24
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.family: root.fontFamily
+                                    font.pixelSize: 14
+                                    font.bold: calendarPopup.sameDay(modelData, calendarPopup.today)
+                                    color: calendarPopup.sameDay(modelData, calendarPopup.today) ? root.accent : modelData.getMonth() === calendarPopup.shownMonth.getMonth() ? root.fg : "#616e88"
+                                    text: modelData.getDate()
+                                }
+                            }
+                        }
+                    }
                 }
 
                 Pill {
+                    id: batteryPill
                     visible: UPower.displayDevice?.isLaptopBattery ?? false
+                    clickable: true
+                    onPillClicked: batteryPopup.visible = !batteryPopup.visible
                     PillText {
                         text: "🔋"
                         color: root.accent
                     }
                     PillText {
                         text: UPower.displayDevice ? Math.round(UPower.displayDevice.percentage * 100) + "%" : ""
+                    }
+
+                    BarPopup {
+                        id: batteryPopup
+                        anchor.item: batteryPill
+
+                        function fmtTime(s) {
+                            return Math.floor(s / 3600) + "h " + Math.round((s % 3600) / 60) + "m";
+                        }
+
+                        PillText {
+                            text: "Battery"
+                            font.bold: true
+                            color: root.accent
+                        }
+                        PillText {
+                            text: {
+                                const d = UPower.displayDevice;
+                                return d ? Math.round(d.percentage * 100) + "%  ·  " + d.energyRate.toFixed(1) + " W" : "";
+                            }
+                        }
+                        PillText {
+                            visible: text !== ""
+                            text: {
+                                const d = UPower.displayDevice;
+                                if (!d)
+                                    return "";
+                                if (d.timeToEmpty > 0)
+                                    return "Empty in " + batteryPopup.fmtTime(d.timeToEmpty);
+                                if (d.timeToFull > 0)
+                                    return "Full in " + batteryPopup.fmtTime(d.timeToFull);
+                                return "";
+                            }
+                        }
                     }
                 }
             }
