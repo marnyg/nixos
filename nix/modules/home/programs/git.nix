@@ -100,6 +100,13 @@ in
       enable = true;
       signing.format = null;
       ignores = [
+        # Beads keeps its state in a Dolt DB that travels in the git
+        # remote's refs/dolt/data, not in the worktree. Nothing under
+        # .beads/ needs to be tracked; `bd bootstrap` reconstructs
+        # config, hooks and the local DB from the remote on a fresh
+        # clone. Note this shadows beads' own .beads/.gitignore, since
+        # git never descends into an ignored directory.
+        ".beads/"
         "**/.envrc"
         "**/scratch"
         ".envrc.local"

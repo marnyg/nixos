@@ -96,8 +96,10 @@ let
 
     Use the `bd` CLI (beads) as persistent, queryable memory: goals,
     work items, loose threads, deferred decisions, design sketches, and
-    handover notes. Beads is repo-scoped: issues live in `.beads/`
-    inside the repo and travel with git. There is no cross-repo or
+    handover notes. Beads is repo-scoped: the local database lives in
+    `.beads/`, which is globally gitignored here, and the shared state
+    travels in the git remote's `refs/dolt/data` ref rather than in the
+    worktree. There is no cross-repo or
     host-wide task tracking — everything belongs to some repo. Across
     sessions this is the only state you can rely on surviving. If `bd`
     is not on PATH, skip this section and tell the user once per
@@ -107,8 +109,21 @@ let
 
     Session start (first turn touching a repo):
     1. Run `bd ready`. If it errors with "no beads database found",
-       ask the user before running `bd init` — never init silently.
-       If the user declines, skip the task integration for this repo.
+       first check whether the repo already has beads data elsewhere —
+       run `bd bootstrap --dry-run` (it detects a Dolt DB on the git
+       remote via `refs/dolt/data`, a configured `sync.remote`, or a
+       tracked `.beads/issues.jsonl`). If it finds existing data, ask
+       the user before running `bd bootstrap`; only fall back to
+       `bd init` when there is genuinely nothing to adopt. Never init
+       or bootstrap silently — `bd init` on a repo whose remote already
+       carries a Dolt DB creates a divergent, empty history. If the
+       user declines, skip the task integration for this repo.
+       Because `.beads/` is gitignored, a fresh clone has no tracked
+       `config.yaml`, so `bd bootstrap` may need a remote spelled out:
+       `bd dolt remote add origin git+<clone-url>`. Check
+       `bd dolt remote list` before concluding there is no data, and
+       run `bd hooks install` after bootstrapping so Dolt push/pull
+       stays wired to git.
     2. If a database exists, skim `bd ready` and
        `bd list --status in_progress,blocked`.
     3. Surface any `handover`-labeled issues, in_progress/blocked items,
