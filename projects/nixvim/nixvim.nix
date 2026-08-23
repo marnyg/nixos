@@ -133,6 +133,8 @@
     langs.terraform.enable = true;
     langs.gleam.enable = true;
     langs.lean.enable = true;
+    langs.quint.enable = true;
+    langs.nickel.enable = true;
 
     lsp.servers.ty = {
       enable = true;
