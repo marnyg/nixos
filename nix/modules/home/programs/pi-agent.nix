@@ -33,7 +33,7 @@ let
     # back to whatever we hardcoded, which then re-triggers the changelog
     # popup on next pi launch.
     defaultProvider = "anthropic";
-    defaultModel = "claude-opus-4-7";
+    #defaultModel = "claude-opus-4-7";
     packages = [
       # Anthropic OAuth (Claude Pro/Max) compatibility shim.
       # Replaces pi's verbose default preamble with a minimal neutral
