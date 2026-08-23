@@ -10,6 +10,9 @@
       mcphub-nvim = inputs.mcphub-nvim.packages.${final.system}.default or null;
       mcphub = inputs.mcphub.packages.${final.system}.default or null;
 
+      # Browser inside the terminal (prebuilt upstream release, see overlay dir)
+      terminal-browser = final.callPackage ../overlays/terminal-browser { };
+
       # Replace neovim with nixvim globally
       neovim = inputs.self.packages.${final.system}.nixvim or prev.neovim;
 
