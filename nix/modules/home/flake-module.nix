@@ -51,6 +51,7 @@
           ./programs/hyprland.nix
           ./programs/waybar.nix
           ./programs/quickshell/quickshell.nix
+          ./programs/swiftbar.nix
           ./programs/wofi.nix
           ./programs/rofi.nix
           ./programs/newsboat.nix

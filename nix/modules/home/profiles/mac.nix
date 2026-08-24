@@ -14,6 +14,7 @@
     kitty.enable = lib.mkDefault false; # Disabled - build fails on Darwin, using Ghostty instead
     ghostty.enable = lib.mkDefault true;
     ghostty.fontsize = lib.mkDefault 14;
+    swiftbar.enable = lib.mkDefault true; # Menu bar widgets (Claude usage)
     spotifyd.enable = lib.mkDefault false;
 
     # Development tools (with performance optimizations)

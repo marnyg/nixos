@@ -45,6 +45,7 @@ let
     hyprland = ./programs/hyprland.nix;
     waybar = ./programs/waybar.nix;
     quickshell = ./programs/quickshell/quickshell.nix;
+    swiftbar = ./programs/swiftbar.nix;
     wofi = ./programs/wofi.nix;
 
     # Other programs
