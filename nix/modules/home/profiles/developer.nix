@@ -111,7 +111,7 @@
     # taskwarrior3 installed by modules.my.taskwarrior (also manages .taskrc).
     # pi-coding-agent installed by modules.my.pi-agent (wrapped to set
     # NPM_CONFIG_PREFIX away from the read-only /nix/store path).
-  ] ++ lib.optionals pkgs.stdenv.isLinux [
+  ] ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
     # GNU inetutils (ifconfig, traceroute, telnet, whois, ftp, …).
     # Linux-only because on Darwin its `ifconfig` shadows macOS's
     # native BSD `/sbin/ifconfig` on PATH and breaks tools that

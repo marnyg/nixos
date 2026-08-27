@@ -7,14 +7,14 @@
     # Default overlay with custom packages
     default = final: prev: {
       # Custom packages from inputs
-      mcphub-nvim = inputs.mcphub-nvim.packages.${final.system}.default or null;
-      mcphub = inputs.mcphub.packages.${final.system}.default or null;
+      mcphub-nvim = inputs.mcphub-nvim.packages.${final.stdenv.hostPlatform.system}.default or null;
+      mcphub = inputs.mcphub.packages.${final.stdenv.hostPlatform.system}.default or null;
 
       # Browser inside the terminal (prebuilt upstream release, see overlay dir)
       terminal-browser = final.callPackage ../overlays/terminal-browser { };
 
       # Replace neovim with nixvim globally
-      neovim = inputs.self.packages.${final.system}.nixvim or prev.neovim;
+      neovim = inputs.self.packages.${final.stdenv.hostPlatform.system}.nixvim or prev.neovim;
 
       # Hyprland's Lua config mode (wayland.windowManager.hyprland.configType =
       # "lua" in modules/home/programs/hyprland.nix) makes the IPC `dispatch`
@@ -52,7 +52,7 @@
 
       # direnv's shell test suite hangs in the Darwin nix-build sandbox.
       direnv =
-        if prev.stdenv.isDarwin
+        if prev.stdenv.hostPlatform.isDarwin
         then prev.direnv.overrideAttrs (_: { doCheck = false; })
         else prev.direnv;
     };
@@ -70,10 +70,10 @@
       overlays = [
         inputs.nur.overlays.default
         (final: prev: {
-          mcphub-nvim = inputs.mcphub-nvim.packages.${final.system}.default or null;
-          mcphub = inputs.mcphub.packages.${final.system}.default or null;
+          mcphub-nvim = inputs.mcphub-nvim.packages.${final.stdenv.hostPlatform.system}.default or null;
+          mcphub = inputs.mcphub.packages.${final.stdenv.hostPlatform.system}.default or null;
           # Replace neovim with nixvim globally
-          neovim = inputs.self.packages.${final.system}.nixvim or prev.neovim;
+          neovim = inputs.self.packages.${final.stdenv.hostPlatform.system}.nixvim or prev.neovim;
         })
       ];
     };

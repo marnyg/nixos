@@ -17,12 +17,12 @@ with lib;
       # risk right now — override per host when ready to migrate.
       # Linux-only: on Darwin, HM's default (`Library/Application Support/
       # Firefox`) is where Firefox.app actually looks — don't override it.
-      configPath = mkIf pkgs.stdenv.isLinux (mkDefault ".mozilla/firefox");
+      configPath = mkIf pkgs.stdenv.hostPlatform.isLinux (mkDefault ".mozilla/firefox");
 
       # On Darwin, Firefox is installed via brew cask (see darwin workstation
       # profile); HM only manages the profile. On Linux, use the default
       # pkgs.firefox.
-      package = mkIf pkgs.stdenv.isDarwin null;
+      package = mkIf pkgs.stdenv.hostPlatform.isDarwin null;
 
       profiles.dev = {
         id = 1;
@@ -103,7 +103,7 @@ with lib;
           "extensions.pocket.enabled" = false;
           "identity.fxaccounts.enabled" = false;
           "toolkit.zoomManager.zoomValues" = ".5,.67,.8,.95,1,1.1,1.2,1.33,1.5,1.7,2,2.4,3";
-        } // optionalAttrs pkgs.stdenv.isLinux {
+        } // optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
           "layout.css.devPixelsPerPx" = 1;
         };
         search = {

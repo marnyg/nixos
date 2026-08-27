@@ -8,44 +8,55 @@
     and session paths
   '';
 
-  config = lib.mkIf config.modules.my.sharedDefaults.enable {
-    programs.home-manager.enable = true;
-    programs.bash.enable = true;
+  config = lib.mkMerge [
+    {
+      # Unconditional: skip building the HM manual manpages. Their
+      # options.json doc build (nixpkgs make-options-doc) discards store-path
+      # context via unsafeDiscardStringContext, which newer Nix flags with
+      # "Using 'builtins.derivation' ... without a proper context" on every
+      # evaluation. Nobody reads `man home-configuration.nix` here anyway.
+      manual.manpages.enable = lib.mkDefault false;
+    }
 
-    # GitHub CLI with useful extensions
-    programs.gh.enable = true;
-    programs.gh.extensions = [
-      #pkgs.gh-copilot
-      pkgs.gh-poi
-      pkgs.gh-cal
-      pkgs.gh-dash
-    ];
+    (lib.mkIf config.modules.my.sharedDefaults.enable {
+      programs.home-manager.enable = true;
+      programs.bash.enable = true;
 
-    services.gpg-agent = {
-      enable = true;
-      enableSshSupport = true;
-      enableZshIntegration = true;
-      enableFishIntegration = true;
-    };
-
-    home = {
-      stateVersion = "23.11";
-
-      sessionVariables = {
-        EDITOR = "nvim";
-      };
-      file.".config/nixpkgs/config.nix".text = ''
-        {
-          allowUnfree = true;
-        }
-      '';
-
-
-      sessionPath = [
-        "$HOME/go/bin"
-        "$HOME/.local/bin"
-        "$HOME/bin"
+      # GitHub CLI with useful extensions
+      programs.gh.enable = true;
+      programs.gh.extensions = [
+        #pkgs.gh-copilot
+        pkgs.gh-poi
+        pkgs.gh-cal
+        pkgs.gh-dash
       ];
-    };
-  };
+
+      services.gpg-agent = {
+        enable = true;
+        enableSshSupport = true;
+        enableZshIntegration = true;
+        enableFishIntegration = true;
+      };
+
+      home = {
+        stateVersion = "23.11";
+
+        sessionVariables = {
+          EDITOR = "nvim";
+        };
+        file.".config/nixpkgs/config.nix".text = ''
+          {
+            allowUnfree = true;
+          }
+        '';
+
+
+        sessionPath = [
+          "$HOME/go/bin"
+          "$HOME/.local/bin"
+          "$HOME/bin"
+        ];
+      };
+    })
+  ];
 }

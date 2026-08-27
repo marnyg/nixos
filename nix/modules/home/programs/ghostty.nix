@@ -15,7 +15,7 @@ with lib;
       enable = true;
       installBatSyntax = false;
       clearDefaultKeybinds = true;
-      package = if pkgs.stdenv.isLinux then pkgs.ghostty else pkgs.ghostty-bin;
+      package = if pkgs.stdenv.hostPlatform.isLinux then pkgs.ghostty else pkgs.ghostty-bin;
 
 
 

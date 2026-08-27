@@ -2,7 +2,7 @@
 { lib, pkgs, ... }:
 {
   # Shell aliases for common Nix operations with performance flags
-  programs.fish.shellAliases = lib.mkIf pkgs.stdenv.isDarwin {
+  programs.fish.shellAliases = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     # Always use fallback on Darwin
     nix-build = "nix-build --fallback";
     nix-shell = "nix-shell --fallback";
@@ -22,7 +22,7 @@
   };
 
   # Environment variables for better Nix performance
-  home.sessionVariables = lib.mkIf pkgs.stdenv.isDarwin {
+  home.sessionVariables = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     # Use parallel downloads
     NIX_CURL_FLAGS = "-C - --parallel --parallel-max 10";
 
@@ -31,7 +31,7 @@
   };
 
   # Direnv optimization for Nix
-  programs.direnv = lib.mkIf pkgs.stdenv.isDarwin {
+  programs.direnv = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     enable = lib.mkDefault true;
     nix-direnv.enable = lib.mkDefault true;
 

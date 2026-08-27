@@ -22,7 +22,7 @@ with lib;
     programs.fish = {
       enable = true;
       interactiveShellInit = ''
-        ${lib.optionalString pkgs.stdenv.isDarwin ''
+        ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
           # Darwin-specific: Ensure home-manager managed packages are in PATH
           fish_add_path --prepend /etc/profiles/per-user/$USER/bin
         ''}
@@ -48,7 +48,7 @@ with lib;
       # Fish-specific aliases (shared ones are in sharedShellConfig)
       shellAliases = {
         gi = "gitui";
-      } // lib.optionalAttrs pkgs.stdenv.isDarwin {
+      } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
         # macOS-specific: Podman Desktop installs to /opt/podman
         podman = "/opt/podman/bin/podman";
       };

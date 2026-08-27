@@ -94,7 +94,7 @@ in
 
     programs.git = {
       package =
-        if pkgs.stdenv.isDarwin
+        if pkgs.stdenv.hostPlatform.isDarwin
         then pkgs.gitFull.override { svnSupport = false; }
         else pkgs.gitFull;
       enable = true;

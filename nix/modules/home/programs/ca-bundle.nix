@@ -62,7 +62,7 @@ in
       };
     }
 
-    (mkIf pkgs.stdenv.isDarwin {
+    (mkIf pkgs.stdenv.hostPlatform.isDarwin {
       # Rebuild the bundle whenever a watched CA file (or its directory)
       # changes, e.g. after `mkcert -install` regenerates the root CA.
       launchd.agents.ca-bundle = {

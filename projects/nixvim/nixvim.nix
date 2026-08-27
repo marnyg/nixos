@@ -121,7 +121,7 @@
       imagemagick
       # mermaid-cli # `mmdc` binary used by diagram.nvim to render mermaid blocks
       ty
-    ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+    ] ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
       pngpaste
     ];
 
@@ -193,7 +193,7 @@
           renderer_options = {
             mermaid = {
               theme = "forest";
-            } // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+            } // pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
               # nixpkgs can't ship chromium on darwin, so mmdc/puppeteer has no
               # browser. Point it at the system Chrome via a puppeteer config.
               cli_args = [

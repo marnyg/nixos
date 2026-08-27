@@ -67,10 +67,10 @@
     nss.tools # certutil — lets `grove dev trust` install the mkcert CA into Firefox's NSS store
 
     # Communication tools (if available on Darwin)
-  ] ++ lib.optionals pkgs.stdenv.isDarwin [
+  ] ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
     # Darwin-only packages
     mas # Mac App Store CLI
-  ] ++ lib.optionals (pkgs.stdenv.isLinux) [
+  ] ++ lib.optionals (pkgs.stdenv.hostPlatform.isLinux) [
     # Linux-only packages (won't be included on Darwin)
     slack
     teams-for-linux

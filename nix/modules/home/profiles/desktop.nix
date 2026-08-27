@@ -163,7 +163,7 @@ in
     source-code-pro
     roboto
     liberation_ttf
-  ] ++ lib.optionals (pkgs.stdenv.isLinux && !pkgs.stdenv.isAarch64) [
+  ] ++ lib.optionals (pkgs.stdenv.hostPlatform.isLinux && !pkgs.stdenv.hostPlatform.isAarch64) [
     # Linux/X11 specific
     bitwarden-cli
   ];
