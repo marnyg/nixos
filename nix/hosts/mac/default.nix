@@ -1,7 +1,7 @@
 # Mac host-specific configuration
 # This file contains only host-specific settings
 # Common Darwin settings are in the profile modules
-{ pkgs, lib, self, ... }:
+{ pkgs, self, ... }:
 {
   # Use the workstation profile
   imports = [ self.darwinModules.profile-workstation ];
@@ -52,21 +52,17 @@
           }
         ];
     };
-
-    # Additional brew packages specific to this machine
-    brew.casks = lib.mkAfter [
-      #"obsidian"
-      #"notion"
-    ];
   };
 
+  # Casks for this machine. `homebrew.enable` is turned on transitively by
+  # the karabiner module.
   # tigervnc-viewer: strict RFB client. macOS Screen Sharing.app does not
   # complete a proper RFB handshake against wayvnc, so a real VNC viewer is
-  # required. Set directly on `homebrew.*` (like the karabiner module) rather
-  # than via `modules.darwin.brew.*` because that wrapper is gated on
-  # `modules.darwin.brew.enable` (currently false), while `homebrew` itself
-  # is already turned on transitively.
-  homebrew.casks = [ "tigervnc-viewer" ];
+  # required.
+  homebrew.casks = [
+    "tigervnc-viewer"
+    "spotify"
+  ];
 
   # User shell preference (overrides profile default)
   users.users.mariusnygard.shell = pkgs.fish;

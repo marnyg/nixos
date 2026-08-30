@@ -6,7 +6,6 @@
     core-defaults = ./core/defaults.nix;
     core-nix-settings = ./core/nix-settings.nix;
     core-fonts = ./core/fonts.nix;
-    core-brew = ./core/brew.nix;
 
     # Profile modules - composable configurations
     profile-base = ./profiles/base.nix;
@@ -31,7 +30,6 @@
         ./core/defaults.nix
         ./core/nix-settings.nix
         ./core/fonts.nix
-        ./core/brew.nix
         ./services/karabiner.nix
         ./services/yabai.nix
         ./services/skhd.nix

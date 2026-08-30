@@ -28,24 +28,6 @@
       ];
     };
 
-    # Additional brew packages for workstation (only if Homebrew is installed)
-    brew = {
-      enable = lib.mkDefault false; # Enable manually if Homebrew is installed
-      casks = lib.mkDefault [
-        "arc"
-        "firefox"
-        "slack"
-        "spotify"
-        "rectangle" # Window management fallback
-        "raycast" # Spotlight replacement
-        "iterm2" # Terminal alternative
-      ];
-
-      masApps = lib.mkDefault {
-        "1Password for Safari" = 1569813296;
-        "Amphetamine" = 937984704; # Keep Mac awake
-      };
-    };
   };
 
   # Tailscale VPN

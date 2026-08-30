@@ -6,23 +6,6 @@
 
   # Developer-focused modules
   modules.darwin = {
-    brew = {
-      enable = lib.mkDefault false; # Disabled by default, enable if Homebrew is installed
-      taps = lib.mkDefault [
-        "homebrew/services"
-      ];
-      brews = lib.mkDefault [
-        "gh" # GitHub CLI
-        "jq" # JSON processor
-        "yq" # YAML processor
-        "watchman" # File watching service
-      ];
-      casks = lib.mkDefault [
-        "docker"
-        "visual-studio-code"
-      ];
-    };
-
     # Optimize Nix for development
     nixSettings = {
       experimentalFeatures = [ "nix-command" "flakes" ];
