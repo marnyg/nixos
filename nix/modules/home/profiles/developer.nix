@@ -68,6 +68,9 @@
     gcc # CGo support
     python3
 
+    # Azure
+    (azure-cli.withExtensions [ azure-cli.extensions.azure-devops ])
+
     # Kubernetes
     kubectl
     k9s
