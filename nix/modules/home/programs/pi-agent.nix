@@ -11,6 +11,33 @@
 let
   cfg = config.modules.my.pi-agent;
 
+  # Anthropic's API rejects Claude Code OAuth requests for newer models
+  # (e.g. Fable 5.1) when the client advertises an outdated Claude Code
+  # version: "Claude Code 2.1.75 does not support this model; version
+  # 2.1.251 or newer is required". pi bundles a hardcoded
+  # claudeCodeVersion used in its `user-agent: claude-cli/<ver>` header,
+  # so we patch it to a recent version. Drop this override once nixpkgs'
+  # pi-coding-agent ships claudeCodeVersion >= 2.1.251.
+  # See https://github.com/earendil-works/pi/issues/8983
+  claudeCodeSpoofVersion = "2.1.258";
+
+  piPatched = pkgs.pi-coding-agent.overrideAttrs (old: {
+    postFixup = (old.postFixup or "") + ''
+      for f in \
+        "$out"/lib/node_modules/pi-monorepo/dist/bundle/chunks/anthropic-messages-*.js \
+        "$out"/lib/node_modules/pi-monorepo/node_modules/@earendil-works/pi-ai/dist/api/anthropic-messages.js
+      do
+        if ! grep -q 'claudeCodeVersion' "$f"; then
+          echo "claudeCodeVersion not found in $f; spoof patch needs updating" >&2
+          exit 1
+        fi
+        sed -i -E \
+          's/claudeCodeVersion( ?= ?)"[0-9.]+"/claudeCodeVersion\1"${claudeCodeSpoofVersion}"/' \
+          "$f"
+      done
+    '';
+  });
+
   # pi runs `npm install -g <adapter>` at startup. With nix's nodejs the
   # default global prefix points into /nix/store (read-only), so wrap pi
   # with a writable per-user NPM_CONFIG_PREFIX. Use --run so $HOME is
@@ -18,7 +45,7 @@ let
   # (/homeless-shelter) into the wrapper.
   piWrapped = pkgs.symlinkJoin {
     name = "pi-coding-agent-wrapped-${pkgs.pi-coding-agent.version}";
-    paths = [ pkgs.pi-coding-agent ];
+    paths = [ piPatched ];
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/pi \
