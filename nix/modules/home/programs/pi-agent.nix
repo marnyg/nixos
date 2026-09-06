@@ -60,7 +60,7 @@ let
     # back to whatever we hardcoded, which then re-triggers the changelog
     # popup on next pi launch.
     defaultProvider = "anthropic";
-    #defaultModel = "claude-opus-4-7";
+    defaultModel = "claude-fable-5-1";
     packages = [
       # Anthropic OAuth (Claude Pro/Max) compatibility shim.
       # Replaces pi's verbose default preamble with a minimal neutral
@@ -90,9 +90,11 @@ let
     (builtins.toJSON keybindings);
 
   # Default append-system-prompt. Captures personal operating
-  # preferences: broken-window surfacing and beads-based persistent
+  # preferences: broken-window surfacing, beads-based persistent
   # task tracking (`bd`, repo-scoped, installed via the developer
-  # profile). Taskwarrior remains installed only as the legacy system
+  # profile), and swarm sessions (herdr as agent runtime, discovered
+  # via `herdr --skill`, with beads as the shared task board).
+  # Taskwarrior remains installed only as the legacy system
   # for lazy per-repo migration — see the migration subsection below.
   defaultAppendSystemPrompt = ''
     # Personal operating preferences
@@ -247,6 +249,32 @@ let
       the `decision` exception above.
     - Leave `.beads/` internals alone: no manual edits to its files, no
       git operations on its behalf beyond what `bd` itself does.
+
+    ## Swarm work sessions (herdr + beads)
+
+    A "swarm" session is one where you orchestrate several agents in
+    parallel (the user asks for a swarm, to fan work out, or to run
+    sub-agents side by side). herdr (agent multiplexer) is the runtime;
+    beads is the shared task board. In a swarm session:
+
+    - Before touching herdr, run `herdr --skill` and follow the returned
+      instructions verbatim — it is the authoritative, version-matched
+      guide to the CLI (workspaces, tabs, panes, `agent start`, lifecycle
+      states, waiting on agents). Do not guess herdr command syntax from
+      memory; discover it via `herdr --help` and the command groups as
+      the skill directs. Only control herdr when `HERDR_ENV=1`, as the
+      skill requires.
+    - Use beads as the single source of truth for orchestration: break the
+      job into `bd` issues (an `epic` for the overall outcome, one `task`
+      per unit of parallel work, with `--deps` expressing ordering), and
+      hand each worker agent an issue id rather than a prose brief.
+      Workers claim with `bd update <id> --claim`, report progress via
+      `bd note`, and set `--status blocked` with a reason when stuck.
+      The orchestrator polls `bd ready` / `bd list --status in_progress,blocked`
+      to decide what to dispatch next, never a private todo list.
+    - Keep the vocabulary and discipline rules above (label `pi`, echo
+      mutations, no auto-closing others' issues). Close worker issues
+      only after verifying the work or on the user's confirmation.
   '';
 in
 {
