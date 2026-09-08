@@ -111,8 +111,18 @@ stdenv.mkDerivation {
 
     # Upstream launcher resolves its root from its own real path, so wrap
     # (not symlink) it into $out/bin.
+    #
+    # The bundled ANGLE libEGL.so dlopens the vendor-neutral "libEGL.so.1"
+    # (libglvnd). A dlopen from a shared library searches that library's own
+    # DT_RUNPATH, LD_LIBRARY_PATH and the ldconfig cache -- never the
+    # executable's RUNPATH -- so listing libglvnd in runtimeDependencies
+    # (which autoPatchelf writes onto the `electron` binary) does not help,
+    # and NixOS' /run/opengl-driver/lib carries only vendor ICDs
+    # (libEGL_mesa.so.0 etc.), not the dispatch lib. Without this the GPU
+    # process dies during init and no page is ever created.
     makeWrapper $out/share/terminal-browser/bin/terminal-browser \
-      $out/bin/terminal-browser
+      $out/bin/terminal-browser \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libglvnd ]}:/run/opengl-driver/lib"
 
     runHook postInstall
   '';
