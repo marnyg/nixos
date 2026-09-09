@@ -255,26 +255,22 @@ let
     A "swarm" session is one where you orchestrate several agents in
     parallel (the user asks for a swarm, to fan work out, or to run
     sub-agents side by side). herdr (agent multiplexer) is the runtime;
-    beads is the shared task board. In a swarm session:
+    beads is the shared task board. The recipe is three skills: load
+    `swarm-prep` to groom beads into a plan + per-worker briefs (research
+    once, cheap model OK), `swarm-run` to orchestrate, and workers load
+    `swarm-worker`. Non-negotiables even without the skills:
 
-    - Before touching herdr, run `herdr --skill` and follow the returned
-      instructions verbatim — it is the authoritative, version-matched
-      guide to the CLI (workspaces, tabs, panes, `agent start`, lifecycle
-      states, waiting on agents). Do not guess herdr command syntax from
-      memory; discover it via `herdr --help` and the command groups as
-      the skill directs. Only control herdr when `HERDR_ENV=1`, as the
-      skill requires.
-    - Use beads as the single source of truth for orchestration: break the
-      job into `bd` issues (an `epic` for the overall outcome, one `task`
-      per unit of parallel work, with `--deps` expressing ordering), and
-      hand each worker agent an issue id rather than a prose brief.
-      Workers claim with `bd update <id> --claim`, report progress via
-      `bd note`, and set `--status blocked` with a reason when stuck.
-      The orchestrator polls `bd ready` / `bd list --status in_progress,blocked`
-      to decide what to dispatch next, never a private todo list.
-    - Keep the vocabulary and discipline rules above (label `pi`, echo
-      mutations, no auto-closing others' issues). Close worker issues
-      only after verifying the work or on the user's confirmation.
+    - Only control herdr when `HERDR_ENV=1`. Run `herdr --skill` first
+      and discover CLI syntax from it; never from memory.
+    - One fresh agent session per task, retired at DONE. Never hand a
+      worker a second task: context is resent every turn, so a reused
+      session's token cost grows super-linearly.
+    - Each worker gets its own worktree + `swarm/<name>` branch + a
+      written brief file that names its bead id. Workers claim with
+      `bd update <id> --claim --actor <name>`; only the orchestrator
+      merges to main and closes beads (after user confirmation).
+    - Present the wave plan and get a go before creating anything; ask
+      before removing herdr workspaces/worktrees you did not create.
   '';
 in
 {
