@@ -25,6 +25,15 @@
       { number = 5; label = "chat"; monitor = [ "VG272" "secondary" ]; apps = [ "Slack" "Signal" "Messages" "Discord" "Microsoft Teams" "Microsoft Outlook" ]; }
     ];
 
+    # Second NetBird daemon so the work mesh and the home mesh (default
+    # daemon, api.vpn.marnyg.xyz) are up simultaneously. Driven with
+    # `netbird-swone up|down|status`.
+    services.netbird.instances.swone = {
+      managementUrl = "https://vpn.swonefinops.com";
+      interfaceName = "utun101";
+      wireguardPort = 51821;
+    };
+
     # Key remapping
     services.karabiner = {
       enable = true;
