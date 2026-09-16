@@ -153,8 +153,13 @@ in
         let
           ifaces = mapAttrsToList (_: i: i.interfaceName) cfg.instances;
           ports = mapAttrsToList (_: i: i.wireguardPort) cfg.instances;
+          unnamed = filterAttrs (_: i: i.interfaceName == null) cfg.instances;
         in
         [
+          {
+            assertion = unnamed == { };
+            message = ''modules.darwin.services.netbird.instances: interfaceName is required on darwin (e.g. "utun101") for: ${concatStringsSep ", " (attrNames unnamed)}.'';
+          }
           {
             assertion = !(elem "utun100" ifaces) && unique ifaces == ifaces;
             message = "modules.darwin.services.netbird.instances: interfaceName must be unique and not utun100 (used by the default daemon).";

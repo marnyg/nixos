@@ -14,6 +14,7 @@
       self.nixosModules.profile-desktop
       self.nixosModules.service-tailscale
       self.nixosModules.service-syncthing
+      self.nixosModules.service-netbird
 
       # External inputs
       inputs.agenix.nixosModules.age

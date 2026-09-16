@@ -117,6 +117,14 @@
     host = "0.0.0.0"; # Listen on all interfaces for Tailnet access
   };
 
+  # Second NetBird client so the work mesh and the home mesh (default
+  # client, wt0) are up simultaneously. Driven with
+  # `netbird-swone up|down|status`; needs one interactive SSO login.
+  modules.nixos.services.netbird.instances.swone = {
+    managementUrl = "https://vpn.swonefinops.com";
+    wireguardPort = 51821;
+  };
+
   # User configuration
   my.users.mar = {
     enable = true;

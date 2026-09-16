@@ -21,6 +21,7 @@
     hardware-nvidia = ./hardware/nvidia.nix;
 
     # Service modules
+    service-netbird = ./services/netbird.nix;
     service-syncthing = ./services/syncthing.nix;
     service-tailscale = ./services/tailscale.nix;
   };
