@@ -33,6 +33,11 @@
     mcphub-nvim.url = "github:ravitemer/mcphub.nvim";
     mcphub.url = "github:ravitemer/mcp-hub";
 
+    # Mesh v3 desktop daemon (irohup) for the mac. Own nixpkgs on purpose:
+    # it builds iroh-ffi (Rust) and needs buildGo126Module; its pin is the
+    # one known to build.
+    talos-config.url = "github:marnyg/talos-config";
+
   };
 
   outputs = inputs:

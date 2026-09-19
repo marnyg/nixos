@@ -1,7 +1,7 @@
 # Mac host-specific configuration
 # This file contains only host-specific settings
 # Common Darwin settings are in the profile modules
-{ pkgs, self, ... }:
+{ pkgs, self, inputs, ... }:
 {
   # Use the workstation profile
   imports = [ self.darwinModules.profile-workstation ];
@@ -32,6 +32,13 @@
       managementUrl = "https://vpn.swonefinops.com";
       interfaceName = "utun101";
       wireguardPort = 51821;
+    };
+
+    # Mesh v3 desktop presentation: utun + 198.18/15 + split DNS for
+    # *.mesh.internal, so talosctl/kubectl reach cp1 by name over iroh.
+    services.talos-mesh = {
+      enable = true;
+      package = inputs.talos-config.packages.${pkgs.stdenv.hostPlatform.system}.config-server-bin;
     };
 
     # Key remapping
