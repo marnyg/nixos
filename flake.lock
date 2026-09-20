@@ -1870,11 +1870,11 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1789844740,
-        "narHash": "sha256-TFOcvgDewfOBAyLlhqXrNw7kV/e4eAQUk9VbVVQ6wJ0=",
+        "lastModified": 1789863021,
+        "narHash": "sha256-q0H8NfBt4jn7llx5vcal5IKKBAdyrJTLQgS7lxy948A=",
         "owner": "marnyg",
         "repo": "talos-config",
-        "rev": "ba0a9af477cb4ef90fef148aabe2cc8ea69a8fc2",
+        "rev": "2155da74a707f20f973d9b5ec67c005e03021fc4",
         "type": "github"
       },
       "original": {
