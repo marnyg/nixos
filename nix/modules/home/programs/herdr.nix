@@ -2,6 +2,28 @@
 with lib;
 let
   cfg = config.modules.my.herdr;
+
+  # Floating beads console: a popup opened in the focused pane's cwd that
+  # prints the repo's work board, then drops into an interactive shell for
+  # ad-hoc `bd` commands. Exiting the shell closes the popup. There is no
+  # beads TUI in nixpkgs (bv/lazybeads/perles), hence a CLI console.
+  beadsPopup = pkgs.writeShellApplication {
+    name = "herdr-beads-popup";
+    runtimeInputs = [ pkgs.beads ];
+    text = ''
+      clear || true
+      if bd ready; then
+        echo
+        bd list --status in_progress,blocked
+      else
+        echo
+        echo "(no beads database here: try 'bd bootstrap --dry-run')"
+      fi
+      echo
+      echo "beads console in $PWD; exit (ctrl+d) to close"
+      exec "''${SHELL:-${pkgs.zsh}/bin/zsh}" -i
+    '';
+  };
 in
 {
   options.modules.my.herdr = {
@@ -141,6 +163,16 @@ in
               type = "popup";
               command = "gitui";
               description = "gitui";
+              width = "90%";
+              height = "90%";
+            }
+            {
+              # beads board + `bd` shell in the focused pane's repo.
+              # prefix+b is herdr's default toggle_sidebar, hence shift.
+              key = "prefix+shift+b";
+              type = "popup";
+              command = getExe beadsPopup;
+              description = "beads (bd) console";
               width = "90%";
               height = "90%";
             }
