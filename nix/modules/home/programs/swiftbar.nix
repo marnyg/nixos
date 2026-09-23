@@ -71,6 +71,9 @@ with lib;
           || { printf '✳ !\n---\nUsage fetch failed\n'; exit 0; }
 
         # kind <tab> label <tab> pct <tab> local reset time <tab> eta
+        # resets_at is null for a limit with no active window (e.g. the 5h
+        # session before any request has been made), so reset/eta are
+        # optional and left empty in that case.
         limits=$(printf '%s' "$usage" | $jq -r '
           def lbl:
             if .kind == "session" then "5h"
@@ -83,10 +86,13 @@ with lib;
             elif $m >= 60 then "\($m / 60 | floor)h \($m % 60)m"
             else "\($m)m" end;
           .limits[] |
-          (.resets_at | sub("\\.[0-9]+"; "") | sub("\\+00:00"; "Z")
-            | fromdateiso8601) as $rst |
-          [.kind, lbl, (.percent | round),
-           ($rst | strflocaltime("%a %H:%M")), ($rst | eta)] | @tsv') \
+          (.resets_at // null
+            | if . == null then null
+              else sub("\\.[0-9]+"; "") | sub("\\+00:00"; "Z") | fromdateiso8601
+              end) as $rst |
+          [.kind, lbl, ((.percent // 0) | round),
+           (if $rst == null then "" else ($rst | strflocaltime("%a %H:%M")) end),
+           (if $rst == null then "" else ($rst | eta) end)] | @tsv') \
           || { printf '✳ !\n---\nUsage parse failed\n'; exit 0; }
 
         # Nord palette, matching quickshell's usageColor()
@@ -157,7 +163,11 @@ with lib;
 
         echo "---"
         while IFS=$'\t' read -r _ label pct reset eta; do
-          line="$label: $pct% — resets $reset''${eta:+ (in $eta)}"
+          if [ -n "$reset" ]; then
+            line="$label: $pct% — resets $reset''${eta:+ (in $eta)}"
+          else
+            line="$label: $pct% — no active window"
+          fi
           if [ "$pct" -ge 50 ]; then
             echo "$line | color=$(usage_color "$pct")"
           else
