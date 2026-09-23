@@ -121,6 +121,27 @@ let
       user says "ignore" with a reason, offer to record the reasoning as
       a `decision` issue.
 
+    ## Keep the prompt cache warm (no long blocking calls)
+
+    The provider's prompt cache expires 5 minutes after the last
+    request. A single tool call that blocks longer than that (long
+    build, test suite, `sleep`, waiting on a remote job) busts the
+    cache and the next turn re-pays the full context. Rules:
+    - Never run a tool call that blocks for more than ~60 seconds.
+      Never `sleep` longer than 60s. Set `timeout` on bash calls to
+      60 or less.
+    - For anything that may take longer, run it in the background
+      with output redirected to a file, then poll:
+      `cmd > /tmp/<name>.log 2>&1 & echo $!`, followed by repeated
+      `sleep 45; tail -n 20 /tmp/<name>.log` (or `kill -0 <pid>`)
+      until it finishes. Each poll is a short turn that refreshes
+      the cache.
+    - Prefer tools' own non-blocking/async modes when available
+      (e.g. `nix build` with `--log-format` to a file, CI job
+      status commands) over waiting on the process.
+    - If a wait is unavoidable and clearly > 5 minutes, tell the user
+      once so they can choose to accept the cache miss.
+
     ## Persistent task tracking via beads
 
     Use the `bd` CLI (beads) as persistent, queryable memory: goals,
