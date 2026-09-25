@@ -257,8 +257,9 @@ let
       issue you surfaced at session start once its context is absorbed.
 
     Completion:
-    - `bd close <id>` only after the user confirms, except `decision`
-      issues which are closed at creation.
+    - `bd close <id>`, ask the user for confirms if you feel they need to
+      be in the loop. This is excepmt for `decision` issues which are
+      closed at creation.
 
     ### Discipline
 
