@@ -36,9 +36,9 @@ in
         "AltanS/collie" # remote access to herdr sessions
         "persiyanov/herdr-reviewr" # code review plugin
         "andrewchng/herdr-sessionizer" # tmux-sessionizer-style fuzzy workspace picker
-        # Browser split. Manifest requires herdr >= 0.8.0; on 0.7.5 it
-        # installs but reports "manifest unavailable" and exposes no
-        # actions, so no keybinding is defined for it yet.
+        # Browser split. Manifest requires herdr >= 0.8.2 (met: nixpkgs
+        # ships 0.9.1). Exposes one action,
+        # zenbu-labs.terminal-browser.open-split, not bound to a key yet.
         "zenbu-labs/terminal-browser/herdr-plugin"
       ];
       description = ''
@@ -129,7 +129,8 @@ in
               # code review plugin. plugin_id is manifest-declared, not
               # derived from owner/repo (cf. AltanS/collie -> herdr.collie,
               # andrewchng/herdr-sessionizer -> sessionizer); verified
-              # against `herdr plugin action list` on 0.7.5.
+              # against installed plugin manifests and upstream
+              # herdr-plugin.toml with herdr 0.9.1.
               # Also available: .toggle, .close
               key = "prefix+shift+v";
               type = "plugin_action";
