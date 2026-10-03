@@ -1,5 +1,20 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
+let
+  # beads (`bd`) git hooks, declared here instead of via `bd hooks install`.
+  # `bd hooks install` sets core.hooksPath=.beads/hooks and copies the
+  # pre-commit-generated scripts there, which hardcodes store paths that
+  # break on the next nixpkgs bump and blocks git-hooks.nix from
+  # reinstalling. Keeping git-hooks.nix as the single hook owner avoids that.
+  beadsHook = stage: {
+    enable = true;
+    name = "beads ${stage}";
+    entry = "${pkgs.beads}/bin/bd hooks run ${stage}";
+    stages = [ stage ];
+    pass_filenames = false;
+    always_run = true;
+  };
+in
 {
   # Development packages
   packages = with pkgs; [ worktrunk ];
@@ -37,7 +52,9 @@
     };
     commitizen.enable = true;
     yamlfmt.enable = true;
-  };
+  } // lib.listToAttrs (map
+    (stage: lib.nameValuePair "beads-${stage}" (beadsHook stage))
+    [ "pre-commit" "prepare-commit-msg" "post-checkout" "post-merge" "pre-push" ]);
 
   # Languages support (add as needed for specific project development)
   languages = {
