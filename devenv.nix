@@ -45,6 +45,9 @@ in
     nixpkgs-fmt.enable = true;
     deadnix.enable = true;
     nil.enable = true;
+    # Manual-only: nixvim keymap descriptions use which-key bracket style
+    # ("[D]efinition", "[S]earch"), which typos tokenises as misspellings.
+    # Run on demand: pre-commit run typos --all-files --hook-stage manual
     typos = {
       enable = true;
       settings.ignored-words = [ "noice" ];
