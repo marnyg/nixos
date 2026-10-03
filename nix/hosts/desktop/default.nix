@@ -1,5 +1,5 @@
 # Desktop host configuration
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   imports = [
@@ -123,6 +123,14 @@
   modules.nixos.services.netbird.instances.swone = {
     managementUrl = "https://vpn.swonefinops.com";
     wireguardPort = 51821;
+  };
+
+  # Mesh v3 desktop presentation: tun + 198.18/15 + split DNS for
+  # *.mesh.internal, so talosctl/kubectl/`nix run .#apply` reach cp1
+  # and the hub by name over iroh. Enroll once: `talos-mesh-enroll`.
+  modules.nixos.services.talos-mesh = {
+    enable = true;
+    package = inputs.talos-config.packages.${pkgs.stdenv.hostPlatform.system}.config-server-bin;
   };
 
   # User configuration

@@ -15,6 +15,7 @@
       self.nixosModules.service-tailscale
       self.nixosModules.service-syncthing
       self.nixosModules.service-netbird
+      self.nixosModules.service-talos-mesh
 
       # External inputs
       inputs.agenix.nixosModules.age

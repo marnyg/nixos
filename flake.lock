@@ -1809,11 +1809,11 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1790846419,
-        "narHash": "sha256-AlOQgCA/foRJLjtpJIRqsqB7ihw54N2eqdIWDG2MY84=",
+        "lastModified": 1791044724,
+        "narHash": "sha256-4xl7+6dDvR29RqVUzXiJr8BcTo5zlyq2L13EvMVaTr8=",
         "owner": "marnyg",
         "repo": "talos-config",
-        "rev": "fcc891a531248fb19de9f724aa01801c4ad90a73",
+        "rev": "38882a96767bd956a9204693e04d2f6c71489e87",
         "type": "github"
       },
       "original": {
