@@ -1619,11 +1619,11 @@
         "nixpkgs": "nixpkgs_11"
       },
       "locked": {
-        "lastModified": 1791037713,
-        "narHash": "sha256-1kQAV2hFIV8yuxyNYEiMWGDhRqJr1lh3KgtGhB/iBz0=",
+        "lastModified": 1791099519,
+        "narHash": "sha256-mrR422B/qnvrpGh9zxO2NE9GiLvX6Vg7ucmjTJH4N4Q=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "a744c5b441dd5046971f72f409641ab102286dc1",
+        "rev": "38614e5ba1931960e9b29953de7fa405e2d10acb",
         "type": "github"
       },
       "original": {
@@ -1809,11 +1809,11 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1791044724,
-        "narHash": "sha256-4xl7+6dDvR29RqVUzXiJr8BcTo5zlyq2L13EvMVaTr8=",
+        "lastModified": 1791066223,
+        "narHash": "sha256-VmGH+f7iVJgwUs5CqNO6m0siyvlzVQ2bya7sROaYIrU=",
         "owner": "marnyg",
         "repo": "talos-config",
-        "rev": "38882a96767bd956a9204693e04d2f6c71489e87",
+        "rev": "576dedfd940dbdc9168f48813340f8acb76933a7",
         "type": "github"
       },
       "original": {
