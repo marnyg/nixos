@@ -72,11 +72,11 @@
 
   # Casks for this machine. `homebrew.enable` is turned on transitively by
   # the karabiner module.
-  # tigervnc-viewer: strict RFB client. macOS Screen Sharing.app does not
+  # tigervnc: strict RFB client. macOS Screen Sharing.app does not
   # complete a proper RFB handshake against wayvnc, so a real VNC viewer is
-  # required.
+  # required. (Cask was renamed from tigervnc-viewer.)
   homebrew.casks = [
-    "tigervnc-viewer"
+    "tigervnc"
     "spotify"
   ];
 
