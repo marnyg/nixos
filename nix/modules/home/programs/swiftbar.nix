@@ -65,16 +65,40 @@ with lib;
           exit 0
         fi
 
-        usage=$($curl -sf --max-time 10 https://api.anthropic.com/api/oauth/usage \
+        # Fetch keeping the HTTP status so failures are diagnosable (a 429
+        # rate limit used to collapse into an indistinguishable "fetch
+        # failed"). -sS keeps curl quiet on success but prints network
+        # errors to stderr; -o/-w split the body from the status code.
+        tmp=$(mktemp -d) || { printf '✳ !\n---\nUsage fetch failed (no tmpdir)\n'; exit 0; }
+        trap 'rm -rf "$tmp"' EXIT
+
+        http=$($curl -sS -o "$tmp/body.json" -w '%{http_code}' --max-time 10 \
+          https://api.anthropic.com/api/oauth/usage \
           -H "Authorization: Bearer $token" \
-          -H "anthropic-beta: oauth-2025-04-20") \
-          || { printf '✳ !\n---\nUsage fetch failed\n'; exit 0; }
+          -H "anthropic-beta: oauth-2025-04-20" 2>"$tmp/curl.err") || http=000
+
+        if [ "$http" != "200" ]; then
+          printf '✳ !\n---\n'
+          if [ "$http" = "000" ]; then
+            printf 'Usage fetch failed (network error)\n'
+            cat "$tmp/curl.err"
+          else
+            etype=$($jq -r '.error.type // empty' "$tmp/body.json" 2>/dev/null)
+            emsg=$($jq -r '.error.message // empty' "$tmp/body.json" 2>/dev/null)
+            printf 'Usage fetch failed (HTTP %s%s)\n' "$http" "''${etype:+ · $etype}"
+            [ -n "$emsg" ] && printf '%s\n' "$emsg"
+          fi
+          printf 'Refresh | refresh=true\n'
+          exit 0
+        fi
+
+        usage=$(cat "$tmp/body.json")
 
         # kind <tab> label <tab> pct <tab> local reset time <tab> eta
         # resets_at is null for a limit with no active window (e.g. the 5h
         # session before any request has been made), so reset/eta are
         # optional and left empty in that case.
-        limits=$(printf '%s' "$usage" | $jq -r '
+        if ! limits=$(printf '%s' "$usage" | $jq -r '
           def lbl:
             if .kind == "session" then "5h"
             elif .kind == "weekly_all" then "7d"
@@ -92,8 +116,12 @@ with lib;
               end) as $rst |
           [.kind, lbl, ((.percent // 0) | round),
            (if $rst == null then "" else ($rst | strflocaltime("%a %H:%M")) end),
-           (if $rst == null then "" else ($rst | eta) end)] | @tsv') \
-          || { printf '✳ !\n---\nUsage parse failed\n'; exit 0; }
+           (if $rst == null then "" else ($rst | eta) end)] | @tsv' 2>"$tmp/jq.err"); then
+          printf '✳ ?\n---\nUsage parse failed\n'
+          cat "$tmp/jq.err"
+          printf 'Refresh | refresh=true\n'
+          exit 0
+        fi
 
         # Nord palette, matching quickshell's usageColor()
         usage_color() {
