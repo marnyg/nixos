@@ -3,7 +3,7 @@
 # Not in nixpkgs (only the `quint` CLI is), but it lives in the same repo as
 # the CLI, so we build it from `pkgs.quint.src` to stay version-aligned with
 # whatever nixpkgs pins.
-{ lib, buildNpmPackage, quint }:
+{ lib, buildNpmPackage, importNpmLock, quint }:
 
 buildNpmPackage {
   pname = "quint-language-server";
@@ -14,7 +14,13 @@ buildNpmPackage {
   src = quint.src;
   sourceRoot = "${quint.src.name}/vscode/quint-vscode/server";
 
-  npmDepsHash = "sha256-Y0p5mYc8JsjnsBz0MQCEZl41NoDQeq/zAwxNJBRA4fI=";
+  # Deps come from the server's own package-lock.json, each fetched by the
+  # integrity hash npm recorded there: no npmDepsHash to re-pin by hand
+  # every time nixpkgs bumps quint.
+  npmDeps = importNpmLock {
+    npmRoot = "${quint.src}/vscode/quint-vscode/server";
+  };
+  npmConfigHook = importNpmLock.npmConfigHook;
 
   npmBuildScript = "compile";
 
