@@ -28,6 +28,13 @@ with lib;
 
     programs.atuin = {
       enable = true;
+      # atuin 18.23.0's test suite does not survive the Darwin Nix sandbox:
+      # PTY e2e tests time out, and atuin-pty-proxy unit tests fail with
+      # "path must be shorter than SUN_LEN" (long sandbox $TMPDIR for unix sockets).
+      # Skip tests entirely rather than chasing each flaky suite.
+      package = pkgs.atuin.overrideAttrs (_: {
+        doCheck = false;
+      });
       enableZshIntegration = true;
       enableFishIntegration = true;
       flags = [ "--disable-up-arrow" ];
