@@ -1826,11 +1826,11 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1792161614,
-        "narHash": "sha256-Erq6PNHZbFaRzhKxYOYiSWeIH0N2NCRh7I2rNMQTJg0=",
+        "lastModified": 1792167262,
+        "narHash": "sha256-wOllokftWIVasDggH8+hOjPqFSGRSvYdJOJTYAY+pao=",
         "owner": "marnyg",
         "repo": "talos-config",
-        "rev": "2a1c11101384f864110d57e83ab0e0da95797181",
+        "rev": "f80ebd16605eff8298fcddc78bdebb0e318f6f74",
         "type": "github"
       },
       "original": {
