@@ -34,6 +34,7 @@ let
   stateDir = "${cfg.stateRoot}/${cfg.name}.iroh";
   irohup = "${cfg.package}/bin/irohup";
   common = "-name ${escapeShellArg cfg.name} -hub ${escapeShellArg cfg.hub} -state ${escapeShellArg stateDir}";
+  forwards = concatStringsSep " " (mapAttrsToList (f: t: "-forward ${escapeShellArg "${f}=${t}"}") cfg.forward);
 
   enroll = pkgs.writeShellScriptBin "talos-mesh-enroll" ''
     set -euo pipefail
@@ -80,6 +81,20 @@ in
       description = "Service user the daemon drops to after the tun is up.";
     };
 
+    forward = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      example = { ssh = "127.0.0.1:22"; };
+      description = ''
+        Facets this device SERVES (talos-config ADR-0038): facet →
+        loopback target, each an `irohup -forward` flag. Makes the
+        member a receiver of kind device; `ssh nixos.mesh.internal`
+        from an admin device then reaches the local sshd. The mesh
+        grant (`{facet: ssh, group: admins}` in the recipe) is the
+        first gate, sshd's own authentication the second.
+      '';
+    };
+
     stateRoot = mkOption {
       type = types.str;
       default = "/var/lib/talos-mesh";
@@ -112,7 +127,7 @@ in
       # ip(8) for the tun/route, resolvectl for the zone.
       path = [ pkgs.iproute2 config.systemd.package ];
       serviceConfig = {
-        ExecStart = "${irohup} -tun ${common} -user ${cfg.user}";
+        ExecStart = "${irohup} -tun ${common} -user ${cfg.user} ${forwards}";
         # Starts as root by design (fgr): the tun, the route and the
         # resolved zone are its only privileged acts, then it setuids.
         User = "root";

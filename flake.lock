@@ -1299,6 +1299,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-pi": {
+      "locked": {
+        "lastModified": 1791456040,
+        "narHash": "sha256-H83yz/do+hjOO0uujHyH8RgtIQP2v7Mw+cLwcZK/xKc=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "e7439b6b14ad3cc35d05608ebca9bce01a25f5f8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-src": {
       "flake": false,
       "locked": {
@@ -1806,14 +1822,15 @@
         "flake-parts": "flake-parts_11",
         "nix2container": "nix2container_2",
         "nixpkgs": "nixpkgs_16",
+        "nixpkgs-pi": "nixpkgs-pi",
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1791297914,
-        "narHash": "sha256-NZms/pjSs1U7jJ5NIh4AMM1OyfJestmNfFhvIQyconM=",
+        "lastModified": 1792161614,
+        "narHash": "sha256-Erq6PNHZbFaRzhKxYOYiSWeIH0N2NCRh7I2rNMQTJg0=",
         "owner": "marnyg",
         "repo": "talos-config",
-        "rev": "62d23a2bfbe4b482ced816a5b142a5f1b8c39c75",
+        "rev": "2a1c11101384f864110d57e83ab0e0da95797181",
         "type": "github"
       },
       "original": {

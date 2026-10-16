@@ -131,6 +131,9 @@
   modules.nixos.services.talos-mesh = {
     enable = true;
     package = inputs.talos-config.packages.${pkgs.stdenv.hostPlatform.system}.config-server-bin;
+    # Serve the local sshd as the ssh facet (talos-config ADR-0038):
+    # `ssh nixos.mesh.internal` from an admin device.
+    forward.ssh = "127.0.0.1:22";
   };
 
   # User configuration

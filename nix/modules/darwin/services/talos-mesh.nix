@@ -32,6 +32,7 @@ let
   stateDir = "${cfg.stateRoot}/${cfg.name}.iroh";
   irohup = "${cfg.package}/bin/irohup";
   common = "-name ${escapeShellArg cfg.name} -hub ${escapeShellArg cfg.hub} -state ${escapeShellArg stateDir}";
+  forwards = concatStringsSep " " (mapAttrsToList (f: t: "-forward ${escapeShellArg "${f}=${t}"}") cfg.forward);
 
   enroll = pkgs.writeShellScriptBin "talos-mesh-enroll" ''
     set -euo pipefail
@@ -83,6 +84,20 @@ in
       description = "uid/gid of the service user (nix-darwin needs it explicit; must be unused).";
     };
 
+    forward = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      example = { ssh = "127.0.0.1:22"; };
+      description = ''
+        Facets this device SERVES (talos-config ADR-0038): facet →
+        loopback target, each an `irohup -forward` flag. Makes the
+        member a receiver of kind device; `ssh nixos.mesh.internal`
+        from an admin device then reaches the local sshd. The mesh
+        grant (`{facet: ssh, group: admins}` in the recipe) is the
+        first gate, sshd's own authentication the second.
+      '';
+    };
+
     stateRoot = mkOption {
       type = types.str;
       default = "/var/lib/talos-mesh";
@@ -120,6 +135,7 @@ in
 
     launchd.daemons.talos-mesh = {
       command = "${irohup} -tun ${common} -user ${cfg.user}"
+        + optionalString (forwards != "") " ${forwards}"
         + optionalString (cfg.dnsUpstream != "") " -dns-upstream ${escapeShellArg cfg.dnsUpstream}";
       serviceConfig = {
         KeepAlive.PathState."${stateDir}/kit.json" = true;
