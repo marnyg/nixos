@@ -85,4 +85,12 @@
 
   # User shell preference (overrides profile default)
   users.users.mariusnygard.shell = pkgs.fish;
+
+  # Who may log in over ssh (sshd's gate; the mesh's is the ssh facet
+  # grant, talos-config ADR-0038): mar@nixos, via
+  # `ssh mariusnygard@marius-mac.mesh.internal`. Rendered to
+  # /etc/ssh/nix_authorized_keys.d/mariusnygard (AuthorizedKeysCommand).
+  users.users.mariusnygard.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBQT5jLp3sX+tWW3OkxhOoKErVaDMfh/fuP+snI9L7Zz mar@nixos"
+  ];
 }
