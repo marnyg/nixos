@@ -14,7 +14,7 @@ buildNpmPackage {
   src = quint.src;
   sourceRoot = "${quint.src.name}/vscode/quint-vscode/server";
 
-  npmDepsHash = "sha256-BT5KN9E5aRUIJQR0zGlT00tDmRpS2oFF/yOdQOPIGgQ=";
+  npmDepsHash = "sha256-Y0p5mYc8JsjnsBz0MQCEZl41NoDQeq/zAwxNJBRA4fI=";
 
   npmBuildScript = "compile";
 
