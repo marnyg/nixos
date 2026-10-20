@@ -148,6 +148,17 @@ in
         #   "cache --timeout 72000"
         # ];
         credential.credentialStore = "cache";
+        # Forgejo (git.gw.mesh.internal) is the source of truth for the
+        # owner's repos, GitHub a push-mirror replica (talos-config
+        # decision z15k). Its SSH is off, so pushes are HTTP with a
+        # per-host access token of user `mar`, kept in the OS keyring.
+        # One-time per machine, token from
+        #   forgejo admin user generate-access-token --username mar \
+        #     --token-name <host> --scopes write:repository,write:issue,read:user --raw
+        #   printf 'protocol=http\nhost=git.gw.mesh.internal\nusername=mar\npassword=<token>\n\n' | git credential approve
+        # Both helpers ship with gitFull (libexec on darwin, bin on linux).
+        credential."http://git.gw.mesh.internal".helper =
+          if pkgs.stdenv.hostPlatform.isDarwin then "osxkeychain" else "libsecret";
         push.autoSetupRemote = true;
         core.editor = "nvim";
         pull.rebase = true;
