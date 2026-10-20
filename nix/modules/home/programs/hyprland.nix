@@ -1,6 +1,16 @@
 # Hyprland Wayland compositor configuration
 { pkgs, lib, config, ... }:
 with lib;
+let
+  # HITMAN 3 has no quicksave/quickload hotkeys; this drives the pause menu
+  # with synthetic keys (Hyprland send_key_state) and pixel-checks each step.
+  # Bound to F6/F7 below; passes the key through when HITMAN isn't focused.
+  hitman-quick = pkgs.writeShellApplication {
+    name = "hitman-quick";
+    runtimeInputs = with pkgs; [ grim jq libnotify ];
+    text = builtins.readFile ./hitman-quick.sh;
+  };
+in
 {
   options.modules.my.hyprland = {
     enable = mkOption {
@@ -16,7 +26,7 @@ with lib;
     modules.my.wofi.enable = true;
     modules.my.waybar.enable = mkDefault true;
     programs.waybar.systemd.enable = mkDefault true;
-    home.packages = [ pkgs.wl-clipboard ];
+    home.packages = [ pkgs.wl-clipboard hitman-quick ];
     services.mako = {
       enable = true; # notification daemon
       settings = {
@@ -149,6 +159,11 @@ with lib;
       hl.bind("SUPER + SHIFT + V", hl.dsp.exec_cmd([[cliphist list | wofi --dmenu | cliphist decode | wl-copy]]))
       hl.bind("SUPER + SHIFT + P", hl.dsp.exec_cmd([[echo -e "Lock\nLogout\nSuspend\nReboot\nShutdown" | wofi --dmenu --prompt "Power Menu" | xargs -I {} sh -c 'case {} in Lock) swaylock;; Logout) loginctl terminate-session "$XDG_SESSION_ID";; Suspend) systemctl suspend;; Reboot) systemctl reboot;; Shutdown) systemctl poweroff;; esac']]))
       hl.bind("SUPER + SHIFT + C", hl.dsp.exec_cmd("hyprpicker -a"))
+
+      -- HITMAN 3 quicksave / quickload (see hitman-quick let-binding above).
+      -- Unmodified F-keys: the script forwards them when HITMAN isn't focused.
+      hl.bind("F6", hl.dsp.exec_cmd("hitman-quick save"))
+      hl.bind("F7", hl.dsp.exec_cmd("hitman-quick load"))
 
       -- Focus / move / resize windows (arrow keys and hjkl share one table)
       local dirs = {
