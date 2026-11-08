@@ -11,6 +11,18 @@
     worktrunk.enable = true; # `wt` config + tmux session cleanup on `wt remove`
     myPackages.enable = true; # Core development packages
     pi-agent.enable = true; # pi-coding-agent settings + keybindings
+    # JetKVM on the LAN (static lease `jetkvm` in the openwrt config, device
+    # in noPassword mode). Lets pi see/drive the attached box below the OS:
+    # screenshots, HID, virtual media, ATX power. The server only connects
+    # on first tool call, so listing it is cheap off-LAN.
+    pi-agent.mcpServers.jetkvm = {
+      command = lib.getExe pkgs.jetkvm-mcp;
+      env = {
+        JETKVM_URL = "http://10.0.0.120";
+        JETKVM_VERIFY_TLS = "false";
+        JETKVM_KEYBOARD_LAYOUT = "us";
+      };
+    };
     taskwarrior.enable = true; # legacy task tracker — kept during beads transition
     herdr.enable = true; # agent multiplexer + sessionizer/remote plugins
 

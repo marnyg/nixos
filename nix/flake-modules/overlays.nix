@@ -13,6 +13,9 @@
       # Browser inside the terminal (prebuilt upstream release, see overlay dir)
       terminal-browser = final.callPackage ../overlays/terminal-browser { };
 
+      # MCP server for driving a PC through a JetKVM (see overlay dir)
+      jetkvm-mcp = final.callPackage ../overlays/jetkvm-mcp { };
+
       # Replace neovim with nixvim globally
       neovim = inputs.self.packages.${final.stdenv.hostPlatform.system}.nixvim or prev.neovim;
 

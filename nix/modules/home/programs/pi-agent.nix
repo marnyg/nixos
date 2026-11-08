@@ -1,6 +1,6 @@
 # pi-coding-agent user configuration
 #
-# Manages ~/.pi/agent/{settings,keybindings}.json. We can't use plain
+# Manages ~/.pi/agent/{settings,keybindings,mcp}.json. We can't use plain
 # `home.file` here because pi writes back to settings.json at runtime
 # (e.g. `lastChangelogVersion`), which would fail against a read-only
 # Nix-store symlink. Instead we write the files via an activation
@@ -88,6 +88,12 @@ let
     (builtins.toJSON settings);
   keybindingsJson = pkgs.writeText "pi-agent-keybindings.json"
     (builtins.toJSON keybindings);
+
+  # Same shape `pi mcp add` writes: { mcpServers.<name> = { command, args,
+  # env } | { url, headers } }. Pi's built-in MCP reads this at session
+  # start and starts every listed stdio server.
+  mcpJson = pkgs.writeText "pi-agent-mcp.json"
+    (builtins.toJSON { mcpServers = cfg.mcpServers; });
 
   # Default append-system-prompt. Captures personal operating
   # preferences: broken-window surfacing, beads-based persistent
@@ -329,6 +335,26 @@ in
         `""` to disable, or override entirely to replace.
       '';
     };
+
+    mcpServers = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.attrsOf lib.types.anything);
+      default = { };
+      example = lib.literalExpression ''
+        {
+          jetkvm = {
+            command = "''${pkgs.jetkvm-mcp}/bin/jetkvm-mcp";
+            env.JETKVM_URL = "http://10.0.0.120";
+          };
+        }
+      '';
+      description = ''
+        MCP servers for pi's built-in MCP support, written to
+        ~/.pi/agent/mcp.json (the same file `pi mcp add` manages; since
+        it is nix-managed here, use this option instead of `pi mcp add`).
+        Each value is a stdio ({ command, args?, env? }) or HTTP
+        ({ url, headers? }) server entry. Check with `pi mcp list`.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -355,6 +381,9 @@ in
         # overwrite, but the file stays user-writable.
         run install -m 0644 ${settingsJson} "$HOME/.pi/agent/settings.json"
         run install -m 0644 ${keybindingsJson} "$HOME/.pi/agent/keybindings.json"
+        # mcp.json: `pi mcp add/remove` edit this file in place, so keep it
+        # writable like settings.json; nix re-seeds it on managed change.
+        run install -m 0644 ${mcpJson} "$HOME/.pi/agent/mcp.json"
       '';
   };
 }
