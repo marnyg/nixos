@@ -34,6 +34,15 @@
     device = "/dev/disk/by-uuid/05beb860-0998-4dcc-9145-a7379368dac4";
     fsType = "ext4";
   };
+  # The desktop's Syncthing replica (talos-config ADR-0046): the whole
+  # 960G Kingston that was the pre-NVMe root, reformatted 2026-11-07.
+  # Folders live as /home/mar/sync/<folder>; the cluster peer holds the
+  # other copy.
+  fileSystems."/home/mar/sync" = {
+    device = "/dev/disk/by-uuid/5ca06c24-de25-4d9d-90e4-d07f66cd201c";
+    fsType = "ext4";
+    options = [ "nofail" ];
+  };
   fileSystems."/home/mar/disks/256GB" = {
     device = "/dev/disk/by-uuid/d2929f64-39bd-44a9-a697-aa13ea0279f1";
     fsType = "ext4";

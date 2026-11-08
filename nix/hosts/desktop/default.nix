@@ -11,6 +11,10 @@
   # Enable enhanced network timeout settings
   modules.my.nixNetworkSettings.enable = true;
 
+  # Syncthing against the cluster peer over the mesh (ADR-0046); the
+  # folders live on the dedicated disk at /home/mar/sync (hardware.nix).
+  modules.my.syncthing.enable = true;
+
   system.stateVersion = "23.11";
 
   # Desktop-specific: Enable NVIDIA GPU
@@ -31,7 +35,36 @@
   environment.systemPackages = with pkgs; [
     slack
     prusa-slicer
+    cifs-utils # mount.cifs for the nas1 share below
   ];
+
+  # nas1's `transfer` SMB share (talos-config k8s/apps/files: the samba
+  # pod with hostPort 445 on nas1, user `mar`). Mounted alongside the
+  # local disks; an automount so a down nas1 never blocks boot — the
+  # mount happens on first access and drops after 10 min idle.
+  # Credentials live outside the store and the repo:
+  #   /etc/nixos/smb-transfer.cred  (root:root 0600)
+  #     username=mar
+  #     password=<ACCOUNT_mar from the files/samba-users secret>
+  fileSystems."/home/mar/disks/nas1-transfer" = {
+    device = "//10.0.0.74/transfer";
+    fsType = "cifs";
+    options = [
+      "credentials=/etc/nixos/smb-transfer.cred"
+      "vers=3.1.1"
+      "uid=1000"
+      "gid=100"
+      "file_mode=0664"
+      "dir_mode=0775"
+      "noauto"
+      "x-systemd.automount"
+      "x-systemd.idle-timeout=600"
+      "x-systemd.device-timeout=5s"
+      "x-systemd.mount-timeout=10s"
+      "_netdev"
+      "nofail"
+    ];
+  };
 
   # Disable PCIe ASPM on MT7921E WiFi to prevent chip-reset loops and kernel
   # oopses (mt7921e is the only parameter the driver actually accepts; the
@@ -134,6 +167,9 @@
     # Serve the local sshd as the ssh facet (talos-config ADR-0038):
     # `ssh nixos.mesh.internal` from an admin device.
     forward.ssh = "127.0.0.1:22";
+    # The daemon's device root (ADR-0033), copied out of
+    # /var/lib/talos-mesh/nixos.iroh/tls/ca.crt: https://*.gw.mesh.internal.
+    caCert = ./talos-mesh-ca.crt;
   };
 
   # User configuration
@@ -153,6 +189,8 @@
         modules.my.zellij.enable = false;
         modules.my.tmux.enable = true;
         modules.my.firefox.enable = true;
+        # Firefox keeps its own NSS store; trust the mesh device root there.
+        programs.firefox.policies.Certificates.Install = [ "${./talos-mesh-ca.crt}" ];
         modules.my.qutebrowser.enable = true;
         modules.my.autorandr.enable = false;
         modules.my.bspwm.enable = false;
