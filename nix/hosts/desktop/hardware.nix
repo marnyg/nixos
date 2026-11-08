@@ -26,9 +26,24 @@
       device = "/dev/disk/by-uuid/3244d334-63d6-490c-85c5-739006eaf971";
       fsType = "ext4";
     };
+  # Scratch disks, emptied 2026-11-08 after the old-disk migration
+  # (talos-config ADR-0046: the preserved set lives in /home/mar/sync,
+  # git went to Forgejo). By label so a reformat does not break boot;
+  # nofail so a missing disk never does either.
   fileSystems."/home/mar/disks/1TB-old" = {
-    device = "/dev/disk/by-uuid/e70a18c8-b639-433b-b3f9-55a5b90b5329";
+    device = "/dev/disk/by-label/scratch-1tb";
     fsType = "ext4";
+    options = [ "nofail" ];
+  };
+  fileSystems."/home/mar/disks/256GB" = {
+    device = "/dev/disk/by-label/scratch-256";
+    fsType = "ext4";
+    options = [ "nofail" ];
+  };
+  fileSystems."/home/mar/disks/128GB" = {
+    device = "/dev/disk/by-label/scratch-128";
+    fsType = "ext4";
+    options = [ "nofail" ];
   };
   fileSystems."/home/mar/disks/1TB-2024" = {
     device = "/dev/disk/by-uuid/05beb860-0998-4dcc-9145-a7379368dac4";
@@ -42,14 +57,6 @@
     device = "/dev/disk/by-uuid/5ca06c24-de25-4d9d-90e4-d07f66cd201c";
     fsType = "ext4";
     options = [ "nofail" ];
-  };
-  fileSystems."/home/mar/disks/256GB" = {
-    device = "/dev/disk/by-uuid/d2929f64-39bd-44a9-a697-aa13ea0279f1";
-    fsType = "ext4";
-  };
-  fileSystems."/home/mar/disks/128GB" = {
-    device = "/dev/disk/by-uuid/8816b838-6024-4dfc-9559-eabc9665760e";
-    fsType = "ext4";
   };
 
   fileSystems."/boot" =
