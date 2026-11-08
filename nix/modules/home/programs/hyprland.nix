@@ -17,6 +17,8 @@ let
   # desktop and the swaylock background identical without a wallpaper daemon.
   wallpaperIndex = 0;
   wallpaper = "${config.wayland.windowManager.hyprland.package}/share/hypr/wall${toString wallpaperIndex}.png";
+  # `hyprctl dispatch` in Hyprland 0.56 Lua form (see hypridle below).
+  dpms = state: "hyprctl dispatch 'hl.dsp.dpms(\"${state}\")'";
 in
 {
   options.modules.my.hyprland = {
@@ -83,7 +85,12 @@ in
         general = {
           lock_cmd = "pidof swaylock || swaylock -f";
           before_sleep_cmd = "loginctl lock-session";
-          after_sleep_cmd = "hyprctl dispatch dpms on";
+          # Hyprland 0.56 parses `hyprctl dispatch` as Lua: the old
+          # `dpms on` fails ("')' expected near 'on'"), so after an idle
+          # dpms-off the screens never came back (2026-11-08: black
+          # screen, unlock typed blind, TTY switch). hl.dsp.dpms("on")
+          # is the 0.56 form (stubs/hl.meta.lua: `dpms fun(...)`).
+          after_sleep_cmd = dpms "on";
           ignore_dbus_inhibit = false; # respect video/game idle inhibitors
         };
         listener = [
@@ -93,8 +100,8 @@ in
           }
           {
             timeout = (config.modules.my.hyprland.idleLockMinutes + 10) * 60;
-            on-timeout = "hyprctl dispatch dpms off";
-            on-resume = "hyprctl dispatch dpms on";
+            on-timeout = dpms "off";
+            on-resume = dpms "on";
           }
         ];
       };
