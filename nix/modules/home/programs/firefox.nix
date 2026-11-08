@@ -66,11 +66,14 @@ with lib;
           # Disable unnecessary process features
           "browser.tabs.remote.separatePrivilegedContentProcess" = false;
 
-          # "media.peerconnection.enabled" = false;
-          # "media.peerconnection.turn.disable" = true;
-          # "media.peerconnection.use_document_iceservers" = false;
-          # "media.peerconnection.video.enabled" = false;
-          # "media.peerconnection.identity.timeout" = 1;
+          # WebRTC must stay on: the JetKVM web UI streams video + HID over an
+          # RTCPeerConnection. Declared explicitly (not just left at default)
+          # because an earlier hardening pass set these to false and Firefox
+          # persisted them in prefs.js; user.js must override to re-enable.
+          "media.peerconnection.enabled" = true;
+          "media.peerconnection.video.enabled" = true;
+          "media.peerconnection.turn.disable" = false;
+          "media.peerconnection.use_document_iceservers" = true;
           "privacy.resistFingerprinting" = true;
           "privacy.trackingprotection.fingerprinting.enabled" = true;
           "privacy.trackingprotection.cryptomining.enabled" = true;
