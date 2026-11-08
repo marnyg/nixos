@@ -148,7 +148,14 @@ in
       hl.config({
         -- Variable Refresh Rate: 2 = enable only for fullscreen apps. Panels
         -- that don't advertise VRR in their EDID silently ignore this.
-        misc = { vrr = 2, force_default_wallpaper = ${toString wallpaperIndex} },
+        misc = {
+          vrr = 2,
+          force_default_wallpaper = ${toString wallpaperIndex},
+          -- If the locker dies (2026-11-08: swaylock gone, Hyprland on its
+          -- dead-lock screen refusing a new one: "Failed to lock session"),
+          -- let a fresh `swaylock` take the lock over from another TTY.
+          allow_session_lock_restore = true,
+        },
         input = {
           kb_layout = "us",
           kb_options = "caps:escape",
