@@ -33,6 +33,43 @@
     };
   };
 
+
+  # Syncthing against the cluster peer over the mesh (talos-config
+  # ADR-0046): the gateway's `syncthing` facet at
+  # tcp://syncthing.gw.mesh.internal:22000 on this device's utun
+  # (services.talos-mesh). Static peer — no discovery, relays or NAT.
+  # Folders by temperature: `notes` + `docs` here; `media` stays on the
+  # desktop + cluster. Declarative: this file is the truth for devices
+  # and folders (override*), the GUI at 127.0.0.1:8384 is for status.
+  # The cluster side names this device by its ID
+  # (`syncthing --device-id`, state in ~/Library/Application Support/
+  # Syncthing). The linux twin is modules.my.syncthing (nixos).
+  services.syncthing = {
+    enable = true;
+    overrideDevices = true;
+    overrideFolders = true;
+    settings = {
+      devices.cluster = {
+        id = "MH66KIH-ITKUVDR-YUBLROU-P7PCVQP-JSNJFLC-TJ72XPP-HILWDZO-XSVMRQC";
+        addresses = [ "tcp://syncthing.gw.mesh.internal:22000" ];
+      };
+      folders = {
+        notes = { path = "${config.home.homeDirectory}/Sync/notes"; devices = [ "cluster" ]; };
+        docs = { path = "${config.home.homeDirectory}/Sync/docs"; devices = [ "cluster" ]; };
+      };
+      options = {
+        globalAnnounceEnabled = false;
+        relaysEnabled = false;
+        natEnabled = false;
+        localAnnounceEnabled = true;
+        urAccepted = -1;
+        crashReportingEnabled = false;
+        listenAddresses = [ "tcp://0.0.0.0:22000" ];
+      };
+      gui.address = "127.0.0.1:8384";
+    };
+  };
+
   # macOS-specific programs
   programs = {
     ncspot.enable = lib.mkDefault false;
