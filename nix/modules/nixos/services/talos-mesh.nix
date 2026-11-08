@@ -100,6 +100,19 @@ in
       default = "/var/lib/talos-mesh";
       description = "Owned by the service user; holds <name>.iroh/ (member key, certs).";
     };
+
+    caCert = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        This device's HTTPS root (talos-config ADR-0033): a copy of
+        <stateRoot>/<name>.iroh/tls/ca.crt, minted by the daemon on
+        first start and name-constrained to mesh.internal. Added to the
+        system trust store (curl, Go, OpenSSL); browsers with their own
+        NSS store (Firefox) need it separately. Deleting tls/ re-mints
+        the root, so this copy must be refreshed then.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -135,6 +148,8 @@ in
         RestartSec = "5s";
       };
     };
+
+    security.pki.certificateFiles = mkIf (cfg.caCert != null) [ cfg.caCert ];
 
     environment.systemPackages = [ enroll ];
   };

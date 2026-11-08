@@ -8,6 +8,8 @@ with lib;
   config = mkIf config.modules.my.bspwm.enable {
     # Enable rofi with custom theme
     modules.my.rofi.enable = true;
+    # X11 locker used by the sxhkdrc power menu
+    home.packages = [ pkgs.i3lock ];
     # home.file.".config/bspwm/bspwmrc" = {
     #   text = (builtins.readFile ./bspwmrc);
     # };

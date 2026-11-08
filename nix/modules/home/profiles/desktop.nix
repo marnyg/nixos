@@ -113,9 +113,8 @@ in
     hyprpicker
     gpick
 
-    # Lock screens
+    # Lock screen (Wayland; i3lock lives in the bspwm module)
     swaylock
-    i3lock
 
     # File management
     nautilus

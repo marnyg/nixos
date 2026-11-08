@@ -10,6 +10,13 @@ let
     runtimeInputs = with pkgs; [ grim jq libnotify ];
     text = builtins.readFile ./hitman-quick.sh;
   };
+
+  # Desktop background = one of Hyprland's bundled defaults
+  # (share/hypr/wall{0,1,2}.png). Hyprland normally picks one at random on
+  # each start; pinning the index via misc.force_default_wallpaper keeps the
+  # desktop and the swaylock background identical without a wallpaper daemon.
+  wallpaperIndex = 0;
+  wallpaper = "${config.wayland.windowManager.hyprland.package}/share/hypr/wall${toString wallpaperIndex}.png";
 in
 {
   options.modules.my.hyprland = {
@@ -17,6 +24,11 @@ in
       type = types.bool;
       default = false;
       description = "Enable Hyprland Wayland compositor with custom configuration";
+    };
+    idleLockMinutes = mkOption {
+      type = types.int;
+      default = 90;
+      description = "Minutes of inactivity before hypridle locks the session with swaylock. Displays are turned off 10 minutes after the lock.";
     };
   };
 
@@ -47,6 +59,44 @@ in
         "urgency=high".default-timeout = 0;
         "app-name=lightcord".border-color = "#88c0d0";
         "summary~=\"log-.*\"".border-color = "#a3be8c";
+      };
+    };
+
+    # Lock screen shows the same image as the desktop (see `wallpaper` above).
+    programs.swaylock = {
+      enable = true;
+      settings = {
+        image = wallpaper;
+        scaling = "fill";
+        indicator-caps-lock = true;
+        show-failed-attempts = true;
+      };
+    };
+
+    # Lock the session after a long idle period. swaylock is reused here
+    # because the power-menu bind below already depends on it (PAM entry
+    # comes from the NixOS `programs.sway` module). `pidof` guards against
+    # stacking multiple lockers when both the timeout and a sleep fire.
+    services.hypridle = {
+      enable = true;
+      settings = {
+        general = {
+          lock_cmd = "pidof swaylock || swaylock -f";
+          before_sleep_cmd = "loginctl lock-session";
+          after_sleep_cmd = "hyprctl dispatch dpms on";
+          ignore_dbus_inhibit = false; # respect video/game idle inhibitors
+        };
+        listener = [
+          {
+            timeout = config.modules.my.hyprland.idleLockMinutes * 60;
+            on-timeout = "loginctl lock-session";
+          }
+          {
+            timeout = (config.modules.my.hyprland.idleLockMinutes + 10) * 60;
+            on-timeout = "hyprctl dispatch dpms off";
+            on-resume = "hyprctl dispatch dpms on";
+          }
+        ];
       };
     };
 
@@ -91,7 +141,7 @@ in
       hl.config({
         -- Variable Refresh Rate: 2 = enable only for fullscreen apps. Panels
         -- that don't advertise VRR in their EDID silently ignore this.
-        misc = { vrr = 2 },
+        misc = { vrr = 2, force_default_wallpaper = ${toString wallpaperIndex} },
         input = {
           kb_layout = "us",
           kb_options = "caps:escape",
@@ -157,7 +207,7 @@ in
       -- Screenshot applet: wofi menu (region/window/monitor/full -> annotate/clipboard/file)
       hl.bind("SUPER + Print", hl.dsp.exec_cmd("screenshot-menu"))
       hl.bind("SUPER + SHIFT + V", hl.dsp.exec_cmd([[cliphist list | wofi --dmenu | cliphist decode | wl-copy]]))
-      hl.bind("SUPER + SHIFT + P", hl.dsp.exec_cmd([[echo -e "Lock\nLogout\nSuspend\nReboot\nShutdown" | wofi --dmenu --prompt "Power Menu" | xargs -I {} sh -c 'case {} in Lock) swaylock;; Logout) loginctl terminate-session "$XDG_SESSION_ID";; Suspend) systemctl suspend;; Reboot) systemctl reboot;; Shutdown) systemctl poweroff;; esac']]))
+      hl.bind("SUPER + SHIFT + P", hl.dsp.exec_cmd([[echo -e "Lock\nLogout\nSuspend\nReboot\nShutdown" | wofi --dmenu --prompt "Power Menu" | xargs -I {} sh -c 'case {} in Lock) loginctl lock-session;; Logout) loginctl terminate-session "$XDG_SESSION_ID";; Suspend) systemctl suspend;; Reboot) systemctl reboot;; Shutdown) systemctl poweroff;; esac']]))
       hl.bind("SUPER + SHIFT + C", hl.dsp.exec_cmd("hyprpicker -a"))
 
       -- HITMAN 3 quicksave / quickload (see hitman-quick let-binding above).
