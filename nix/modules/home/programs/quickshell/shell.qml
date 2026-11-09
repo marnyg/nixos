@@ -390,7 +390,8 @@ ShellRoot {
                         id: orPopup
                         anchor.item: orPill
                         // opening doubles as refresh
-                        onVisibleChanged: if (visible) orUsageProc.running = true
+                        onVisibleChanged: if (visible)
+                            orUsageProc.running = true
 
                         PillText {
                             text: "OpenRouter"
@@ -461,7 +462,8 @@ ShellRoot {
                         id: aiPopup
                         anchor.item: aiPill
                         // opening doubles as refresh
-                        onVisibleChanged: if (visible) aiUsageProc.running = true
+                        onVisibleChanged: if (visible)
+                            aiUsageProc.running = true
 
                         PillText {
                             text: "Claude usage"
@@ -838,14 +840,17 @@ ShellRoot {
                         PillText {
                             text: {
                                 const d = UPower.displayDevice;
-                                return d ? Math.round(d.percentage * 100) + "%  ·  " + d.energyRate.toFixed(1) + " W" : "";
+                                // displayDevice exists on desktops too, with most fields undefined
+                                if (!d || !d.isLaptopBattery)
+                                    return "";
+                                return Math.round(d.percentage * 100) + "%  ·  " + (d.energyRate ?? 0).toFixed(1) + " W";
                             }
                         }
                         PillText {
                             visible: text !== ""
                             text: {
                                 const d = UPower.displayDevice;
-                                if (!d)
+                                if (!d || !d.isLaptopBattery)
                                     return "";
                                 if (d.timeToEmpty > 0)
                                     return "Empty in " + batteryPopup.fmtTime(d.timeToEmpty);
