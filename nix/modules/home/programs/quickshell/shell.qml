@@ -338,7 +338,7 @@ ShellRoot {
                             Quickshell.execDetached(["sh", "-c", "mkdir -p ~/Pictures/Screenshots && grim ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png"]);
                     }
                     PillText {
-                        text: ""
+                        text: "\uf030" // nf-fa-camera
                         color: root.accent
                     }
                 }
@@ -624,7 +624,7 @@ ShellRoot {
                             volumePopup.visible = !volumePopup.visible;
                     }
                     PillText {
-                        text: (Pipewire.defaultAudioSink?.audio.muted ?? false) ? "" : "󰕾"
+                        text: (Pipewire.defaultAudioSink?.audio.muted ?? false) ? "\uf026" : "󰕾"
                         color: root.accent
                     }
                     PillText {
@@ -639,7 +639,7 @@ ShellRoot {
                             spacing: 10
 
                             PillText {
-                                text: (Pipewire.defaultAudioSink?.audio.muted ?? false) ? "" : "󰕾"
+                                text: (Pipewire.defaultAudioSink?.audio.muted ?? false) ? "\uf026" : "󰕾"
                                 color: root.accent
 
                                 MouseArea {
@@ -708,7 +708,7 @@ ShellRoot {
                     clickable: true
                     onPillClicked: calendarPopup.visible = !calendarPopup.visible
                     PillText {
-                        text: ""
+                        text: "\uf017" // nf-fa-clock_o
                         color: root.accent
                     }
                     PillText {
