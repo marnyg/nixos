@@ -1,3 +1,6 @@
+//@ pragma UseQApplication
+// Required for QsMenuAnchor (native tray menus: nm-applet, blueman, steam …).
+
 // Quickshell bar — replaces waybar/polybar. Nord-ish pill styling to match
 // the previous waybar theme. One bar per monitor via Variants.
 import QtQuick
