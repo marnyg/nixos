@@ -531,14 +531,14 @@ ShellRoot {
                             id: cpuTop
                             command: ["sh", "-c", "ps axch -o comm:24,pcpu --sort=-pcpu | head -8"]
                             stdout: StdioCollector {
-                                onStreamFinished: sysPopup.cpuProcs = this.text.trimEnd()
+                                onStreamFinished: sysPopup.cpuProcs = this.text.trim()
                             }
                         }
                         Process {
                             id: memTop
                             command: ["sh", "-c", "ps axch -o comm:24,pmem --sort=-pmem | head -8"]
                             stdout: StdioCollector {
-                                onStreamFinished: sysPopup.memProcs = this.text.trimEnd()
+                                onStreamFinished: sysPopup.memProcs = this.text.trim()
                             }
                         }
 
