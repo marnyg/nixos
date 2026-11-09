@@ -20,8 +20,11 @@ ShellRoot {
     readonly property color accent: "#b4befe"
     readonly property string fontFamily: "Fira Code"
 
-    property string cpuUsage: "…"
-    property string memUsage: "…"
+    // System load, polled every 3s. memTotal/memUsed in GiB.
+    property real cpuPct: 0
+    property real memUsed: 0
+    property real memTotal: 0
+    readonly property real memPct: memTotal > 0 ? memUsed / memTotal * 100 : 0
 
     // Anthropic subscription limits: [{label, pct, resets}]
     property var aiLimits: []
@@ -81,7 +84,7 @@ ShellRoot {
         id: cpuProc
         command: ["sh", "-c", "c1=$(grep '^cpu ' /proc/stat); sleep 1; c2=$(grep '^cpu ' /proc/stat); printf '%s\\n%s\\n' \"$c1\" \"$c2\" | awk 'NR==1{u1=$2+$3+$4;t1=u1+$5} NR==2{u2=$2+$3+$4;t2=u2+$5; if(t2>t1) printf \"%d\", (u2-u1)*100/(t2-t1); else printf \"0\"}'"]
         stdout: StdioCollector {
-            onStreamFinished: root.cpuUsage = this.text.trim()
+            onStreamFinished: root.cpuPct = parseFloat(this.text) || 0
         }
     }
 
@@ -129,9 +132,14 @@ ShellRoot {
 
     Process {
         id: memProc
-        command: ["sh", "-c", "awk '/MemTotal/{t=$2} /MemAvailable/{a=$2} END{printf \"%.1f\", (t-a)/1048576}' /proc/meminfo"]
+        // Emits "<used> <total>" in GiB
+        command: ["sh", "-c", "awk '/MemTotal/{t=$2} /MemAvailable/{a=$2} END{printf \"%.2f %.2f\", (t-a)/1048576, t/1048576}' /proc/meminfo"]
         stdout: StdioCollector {
-            onStreamFinished: root.memUsage = this.text.trim()
+            onStreamFinished: {
+                const p = this.text.trim().split(" ");
+                root.memUsed = parseFloat(p[0]) || 0;
+                root.memTotal = parseFloat(p[1]) || 0;
+            }
         }
     }
 
@@ -501,77 +509,105 @@ ShellRoot {
                     }
                 }
 
+                // System: cpu + memory meters, same look as the usage pills.
                 Pill {
-                    id: cpuPill
+                    id: sysPill
                     clickable: true
-                    onPillClicked: cpuPopup.visible = !cpuPopup.visible
-                    PillText {
-                        text: "🎞️"
-                        color: root.accent
-                    }
-                    PillText {
-                        text: root.cpuUsage + "%"
-                    }
+                    onPillClicked: sysPopup.visible = !sysPopup.visible
 
                     BarPopup {
-                        id: cpuPopup
-                        anchor.item: cpuPill
-                        property string procs: "…"
-                        onVisibleChanged: if (visible) cpuTop.running = true
+                        id: sysPopup
+                        anchor.item: sysPill
+                        property string cpuProcs: "…"
+                        property string memProcs: "…"
+                        onVisibleChanged: if (visible) {
+                            cpuTop.running = true;
+                            memTop.running = true;
+                        }
 
                         Process {
                             id: cpuTop
                             command: ["sh", "-c", "ps axch -o comm:24,pcpu --sort=-pcpu | head -8"]
                             stdout: StdioCollector {
-                                onStreamFinished: cpuPopup.procs = this.text.trimEnd()
+                                onStreamFinished: sysPopup.cpuProcs = this.text.trimEnd()
                             }
                         }
-
-                        PillText {
-                            text: "Top CPU"
-                            font.bold: true
-                            color: root.accent
-                        }
-                        PillText {
-                            text: cpuPopup.procs
-                        }
-                    }
-                }
-
-                Pill {
-                    id: memPill
-                    clickable: true
-                    onPillClicked: memPopup.visible = !memPopup.visible
-                    PillText {
-                        text: "🖥"
-                        color: root.accent
-                    }
-                    PillText {
-                        text: root.memUsage + "GiB"
-                    }
-
-                    BarPopup {
-                        id: memPopup
-                        anchor.item: memPill
-                        property string procs: "…"
-                        onVisibleChanged: if (visible) memTop.running = true
-
                         Process {
                             id: memTop
                             command: ["sh", "-c", "ps axch -o comm:24,pmem --sort=-pmem | head -8"]
                             stdout: StdioCollector {
-                                onStreamFinished: memPopup.procs = this.text.trimEnd()
+                                onStreamFinished: sysPopup.memProcs = this.text.trimEnd()
                             }
                         }
 
                         PillText {
-                            text: "Top memory"
+                            text: "System"
                             font.bold: true
                             color: root.accent
                         }
-                        PillText {
-                            text: memPopup.procs
+                        Meter {
+                            label: "cpu"
+                            frac: root.cpuPct / 100
+                            value: Math.round(root.cpuPct) + "%"
+                            barColor: root.usageColor(root.cpuPct)
                         }
+                        Meter {
+                            label: "mem"
+                            frac: root.memPct / 100
+                            value: Math.round(root.memPct) + "%"
+                            extra: root.memUsed.toFixed(1) + " / " + root.memTotal.toFixed(1) + " GiB"
+                            barColor: root.usageColor(root.memPct)
+                        }
+
+                        RowLayout {
+                            spacing: 16
+                            Layout.topMargin: 4
+
+                            ColumnLayout {
+                                spacing: 4
+                                Layout.alignment: Qt.AlignTop
+                                PillText {
+                                    text: "Top CPU"
+                                    font.bold: true
+                                    color: root.accent
+                                    font.pixelSize: 13
+                                }
+                                PillText {
+                                    text: sysPopup.cpuProcs
+                                    font.pixelSize: 13
+                                }
+                            }
+                            ColumnLayout {
+                                spacing: 4
+                                Layout.alignment: Qt.AlignTop
+                                PillText {
+                                    text: "Top memory"
+                                    font.bold: true
+                                    color: root.accent
+                                    font.pixelSize: 13
+                                }
+                                PillText {
+                                    text: sysPopup.memProcs
+                                    font.pixelSize: 13
+                                }
+                            }
+                        }
+                    }
+
+                    Meter {
+                        label: "cpu"
+                        frac: root.cpuPct / 100
+                        value: Math.round(root.cpuPct) + "%"
+                        barColor: root.usageColor(root.cpuPct)
+                    }
+
+                    Meter {
+                        sep: true
+                        label: "mem"
+                        frac: root.memPct / 100
+                        value: root.memUsed.toFixed(1) + "G"
+                        extra: Math.round(root.memPct) + "%"
+                        barColor: root.usageColor(root.memPct)
                     }
                 }
 
