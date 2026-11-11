@@ -151,6 +151,12 @@ in
     # Game development
     godot # Godot 4 (currently 4.6.3)
 
+    # Gaming (indie/Windows titles on the nas1 share; launchers in ~/Games)
+    nwjs # HTML5 engine (RPG Maker MV, TyranoBuilder, ...)
+    lutris # GUI manager for Windows games via Wine/Proton
+    wineWow64Packages.staging # 64-bit Wine, for the Windows-native titles
+    winetricks # per-prefix tweaks (vcrun, dotnet, ...)
+
     # System utilities
     gnome-system-monitor
     baobab # Disk usage analyzer

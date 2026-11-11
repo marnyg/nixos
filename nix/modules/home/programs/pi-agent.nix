@@ -60,7 +60,7 @@ let
     # back to whatever we hardcoded, which then re-triggers the changelog
     # popup on next pi launch.
     defaultProvider = "anthropic";
-    defaultModel = "claude-fable-5-1";
+    defaultModel = "claude-fable-5-2";
     packages = [
       # Anthropic OAuth (Claude Pro/Max) compatibility shim.
       # Replaces pi's verbose default preamble with a minimal neutral
@@ -84,10 +84,69 @@ let
     "app.model.cycleBackward" = [ ];
   };
 
+  # Models not yet in pi's bundled/pi.dev catalog. `models.json` entries
+  # under a built-in provider are *appended* to that provider's list
+  # (see applyModelsJson), so this does not replace the anthropic models.
+  # pi only inherits `api`/`baseUrl` from sibling models; everything
+  # else must be spelled out, so each entry mirrors the latest catalog
+  # sibling. Remove an entry once `pi update --models` ships it.
+  fableCommon = {
+    api = "anthropic-messages";
+    baseUrl = "https://api.anthropic.com";
+    reasoning = true;
+    input = [ "text" "image" ];
+    contextWindow = 1000000;
+    maxTokens = 128000;
+    compat = {
+      supportsMidConvoEffort = true;
+      supportsMidConvoSystemMessages = true;
+      supportsMidConvoToolChanges = true;
+      forceAdaptiveThinking = true;
+      supportsStrictTools = true;
+    };
+    thinkingLevelMap = {
+      off = null;
+      xhigh = "xhigh";
+      max = "max";
+    };
+    promptCache = { short = 300; long = 3600; };
+    inputLimits = {
+      maxRequestBytes = 33554432;
+      images = {
+        maxPerRequest = 600;
+        resize = {
+          maxWidth = 2000;
+          maxHeight = 2000;
+          maxBytes = 4718592;
+          jpegQuality = 80;
+        };
+      };
+    };
+  };
+
+  models = {
+    providers.anthropic.models = [
+      (fableCommon // {
+        id = "claude-fable-5-2";
+        name = "Claude Fable 5.2";
+        # Copied from Fable 5.1 (USD per 1M tokens); verify against
+        # Anthropic's pricing page once published.
+        cost = {
+          input = 10;
+          output = 50;
+          cacheRead = 0.25;
+          cacheWrite = 12.5;
+        };
+      })
+    ];
+  };
+
   settingsJson = pkgs.writeText "pi-agent-settings.json"
     (builtins.toJSON settings);
   keybindingsJson = pkgs.writeText "pi-agent-keybindings.json"
     (builtins.toJSON keybindings);
+  modelsJson = pkgs.writeText "pi-agent-models.json"
+    (builtins.toJSON models);
 
   # Same shape `pi mcp add` writes: { mcpServers.<name> = { command, args,
   # env } | { url, headers } }. Pi's built-in MCP reads this at session
@@ -381,6 +440,9 @@ in
         # overwrite, but the file stays user-writable.
         run install -m 0644 ${settingsJson} "$HOME/.pi/agent/settings.json"
         run install -m 0644 ${keybindingsJson} "$HOME/.pi/agent/keybindings.json"
+        # models.json: extra models not yet in pi's catalog. Pi reloads it
+        # when /model is opened.
+        run install -m 0644 ${modelsJson} "$HOME/.pi/agent/models.json"
         # mcp.json: `pi mcp add/remove` edit this file in place, so keep it
         # writable like settings.json; nix re-seeds it on managed change.
         run install -m 0644 ${mcpJson} "$HOME/.pi/agent/mcp.json"

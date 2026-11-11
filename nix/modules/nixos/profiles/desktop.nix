@@ -163,7 +163,13 @@
     dconf.enable = true; # Essential for GTK apps
     nix-ld = {
       enable = lib.mkDefault true;
-      libraries = lib.mkDefault (with pkgs; [ ]);
+      # libglvnd provides libGL.so.1, which the bundled Linux launchers of
+      # the Ren'Py games on the nas1 share link against. Without it nix-ld
+      # cannot resolve libGL when running those unpatched binaries.
+      # NB: must be normal priority, not mkDefault — mergeDefinitions/filterOverrides
+      # keeps only the lowest-priority definitions, so mkDefault would be dropped
+      # in favour of the nix-ld module's own (priority-100) library list.
+      libraries = with pkgs; [ libglvnd ];
     };
   };
 
