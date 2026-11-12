@@ -90,7 +90,7 @@ let
       "${janestreetSkills}/socratic-tutor"
     ];
     defaultThinkingLevel = "high";
-    hideThinkingBlock = true;
+    hideThinkingBlock = false;
   };
 
   keybindings = {
