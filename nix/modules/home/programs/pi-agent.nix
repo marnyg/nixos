@@ -53,6 +53,17 @@ let
     '';
   };
 
+  # Third-party skills repo (MIT). It has no `skills/` dir or `pi`
+  # manifest, so pi's package discovery finds nothing if it is listed
+  # under `packages`; pin it and point `settings.skills` at the
+  # individual skill directories instead. Bump rev + hash to update.
+  janestreetSkills = pkgs.fetchFromGitHub {
+    owner = "janestreet";
+    repo = "agent_skills";
+    rev = "7c6715c29548a3b39d4a9545c698ee4fd17a7213";
+    hash = "sha256-bKGKDaK2pSJsp5uVMUQDcj8J+N9nX2fDdeU1DXM2qLw=";
+  };
+
   settings = {
     # Note: do not set `lastChangelogVersion` here. Pi writes that field
     # itself on first run and bumps it on every upgrade. Managing it from
@@ -74,6 +85,9 @@ let
       "npm:@gotgenes/pi-anthropic-auth"
       "npm:@burneikis/pi-vim"
       "git:github.com/marnyg/skills"
+    ];
+    skills = [
+      "${janestreetSkills}/socratic-tutor"
     ];
     defaultThinkingLevel = "high";
     hideThinkingBlock = true;
