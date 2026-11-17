@@ -1,8 +1,8 @@
 # Beelink mini PC (Ryzen 7 255 / Radeon 780M) — a desktop-like host.
 # Mirrors hosts/desktop minus the hardware-specific parts (NVIDIA, MT7922
 # WiFi workarounds, scratch/nas1 mounts, PXE firewall ports) and minus
-# Steam, Syncthing and talos-mesh.
-{ pkgs, ... }:
+# Steam and Syncthing.
+{ inputs, pkgs, ... }:
 
 {
   imports = [
@@ -59,6 +59,20 @@
   modules.nixos.services.netbird.instances.swone = {
     managementUrl = "https://vpn.swonefinops.com";
     wireguardPort = 51821;
+  };
+
+  # Mesh v3 desktop presentation: tun + 198.18/15 + split DNS for
+  # *.mesh.internal (the forge at git.gw.mesh.internal, the cache, cp1).
+  # Enroll once: `talos-mesh-enroll`, then `sudo systemctl start talos-mesh`.
+  modules.nixos.services.talos-mesh = {
+    enable = true;
+    package = inputs.talos-config.packages.${pkgs.stdenv.hostPlatform.system}.config-server-bin;
+    # Serve the local sshd as the ssh facet (talos-config ADR-0038):
+    # `ssh beelink.mesh.internal` from an admin device.
+    forward.ssh = "127.0.0.1:22";
+    # caCert: set once the daemon has minted this device's root — copy
+    # /var/lib/talos-mesh/beelink.iroh/tls/ca.crt next to this file
+    # (needed for https://*.gw.mesh.internal).
   };
 
   # Admin access from the desktop (mar@nixos), in addition to the keys in
