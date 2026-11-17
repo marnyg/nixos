@@ -69,13 +69,18 @@ let
 
   # Build system user configuration
   # This function reads the user's system.nix file and merges it with any
-  # extra configuration specified at the host level
+  # extra configuration specified at the host level. `extraGroups` is
+  # additive (a host adds groups, it never drops the user's own, e.g.
+  # `wheel`); every other attribute is a plain override.
   buildSystemUser = name: userCfg:
     let
       user = users.${name};
       systemConfig = import user.systemConfig { inherit pkgs config lib inputs; };
+      extra = userCfg.extraSystemConfig;
     in
-    systemConfig // userCfg.extraSystemConfig;
+    systemConfig // extra // {
+      extraGroups = lib.unique ((systemConfig.extraGroups or [ ]) ++ (extra.extraGroups or [ ]));
+    };
 
   # Build home-manager configuration
   # This function creates a home-manager configuration by:

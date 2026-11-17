@@ -4,7 +4,6 @@
     system = "x86_64-linux";
     modules = [
       ./default.nix
-      ./hardware.nix
 
       # Import shared modules from flake outputs
       self.nixosModules.core-defaults
