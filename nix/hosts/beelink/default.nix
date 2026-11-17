@@ -103,9 +103,9 @@
     # Serve the local sshd as the ssh facet (talos-config ADR-0038):
     # `ssh beelink.mesh.internal` from an admin device.
     forward.ssh = "127.0.0.1:22";
-    # caCert: set once the daemon has minted this device's root — copy
-    # /var/lib/talos-mesh/beelink.iroh/tls/ca.crt next to this file
-    # (needed for https://*.gw.mesh.internal).
+    # The daemon's device root (ADR-0033), copied out of
+    # /var/lib/talos-mesh/beelink.iroh/tls/ca.crt: https://*.gw.mesh.internal.
+    caCert = ./talos-mesh-ca.crt;
   };
 
   # Admin access from the desktop (mar@nixos), in addition to the keys in
@@ -131,6 +131,8 @@
         modules.my.zellij.enable = false;
         modules.my.tmux.enable = true;
         modules.my.firefox.enable = true;
+        # Firefox keeps its own NSS store; trust the mesh device root there.
+        programs.firefox.policies.Certificates.Install = [ "${./talos-mesh-ca.crt}" ];
         modules.my.qutebrowser.enable = true;
         modules.my.autorandr.enable = false;
         modules.my.bspwm.enable = false;
