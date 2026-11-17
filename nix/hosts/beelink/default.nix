@@ -1,6 +1,6 @@
 # Beelink mini PC (Ryzen 7 255 / Radeon 780M) — a desktop-like host.
 # Mirrors hosts/desktop minus the hardware-specific parts (NVIDIA, MT7922
-# WiFi workarounds, scratch/nas1 mounts, PXE firewall ports) and minus
+# WiFi workarounds, scratch-disk mounts, PXE firewall ports) and minus
 # Steam and Syncthing.
 { inputs, pkgs, ... }:
 
@@ -21,7 +21,40 @@
   environment.systemPackages = with pkgs; [
     slack
     prusa-slicer
+    cifs-utils # mount.cifs for the nas1 share below
   ];
+
+  # nas1's `transfer` SMB share, same as on the desktop host (talos-config
+  # k8s/apps/files: the samba pod with hostPort 445 on nas1, user `mar`).
+  # An automount so a down nas1 never blocks boot — the mount happens on
+  # first access and drops after 10 min idle.
+  # Credentials live outside the store and the repo:
+  #   /etc/nixos/smb-transfer.cred  (root:root 0600)
+  #     username=mar
+  #     password=<ACCOUNT_mar from the files/samba-users secret>
+  fileSystems."/home/mar/disks/nas1-transfer" = {
+    device = "//10.0.0.74/transfer";
+    fsType = "cifs";
+    options = [
+      "credentials=/etc/nixos/smb-transfer.cred"
+      "vers=3.1.1"
+      "uid=1000"
+      "gid=100"
+      "file_mode=0664"
+      "dir_mode=0775"
+      "noauto"
+      "x-systemd.automount"
+      "x-systemd.idle-timeout=600"
+      "x-systemd.device-timeout=5s"
+      "x-systemd.mount-timeout=10s"
+      "_netdev"
+      "nofail"
+    ];
+  };
+
+  # Keep ~/disks owned by mar; otherwise systemd creates the automount's
+  # parent directory as root.
+  systemd.tmpfiles.rules = [ "d /home/mar/disks 0755 mar users -" ];
 
   # Kernel modules needed for Docker/Dagger networking
   boot.kernelModules = [ "iptable_nat" "iptable_mangle" "iptable_filter" ];
