@@ -36,6 +36,7 @@
     # Host configurations with localized imports
     ./hosts/desktop/flake-module.nix
     ./hosts/laptop/flake-module.nix
+    ./hosts/beelink/flake-module.nix
     ./hosts/wsl/flake-module.nix
     ./hosts/mac/flake-module.nix
   ];
