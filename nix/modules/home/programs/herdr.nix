@@ -12,6 +12,34 @@ let
     runtimeInputs = with pkgs; [ beads fzf jq less coreutils ];
     text = builtins.readFile ./herdr-beads.sh;
   };
+
+  # Ovis mesh proxy (see options.modules.my.herdr.ovisMeshProxy).
+  mp = cfg.ovisMeshProxy;
+  ovisPort = 7317; # Ovis's default PORT
+  # The file the Ovis server reads its settings from: KEY=value lines,
+  # which is also what systemd's EnvironmentFile takes.
+  ovisEnvFile = "${config.xdg.configHome}/herdr/plugins/config/devswha.ovis/env";
+  # One site per mesh name, matched on Host. Any other Host (a local
+  # name, a name rebound to 127.0.0.1) gets an empty answer, never the
+  # token. `admin off`: Caddy's admin API would otherwise listen on
+  # 127.0.0.1:2019, which an any-port mesh forward serves too.
+  ovisCaddyfileText = pkgs.writeText "ovis-mesh-proxy.Caddyfile" ''
+    {
+    	admin off
+    	persist_config off
+    }
+    ${concatMapStringsSep ", " (h: "http://${h}:${toString mp.port}") mp.hostNames} {
+    	bind 127.0.0.1
+    	reverse_proxy 127.0.0.1:${toString ovisPort} {
+    		header_up Authorization "Bearer {env.OVIS_TOKEN}"
+    		header_up -Tailscale-User-Login
+    	}
+    }
+  '';
+  ovisCaddyfile = pkgs.runCommand "ovis-mesh-proxy.Caddyfile" { nativeBuildInputs = [ pkgs.caddy ]; } ''
+    HOME=$TMPDIR caddy validate --adapter caddyfile --config ${ovisCaddyfileText}
+    cp ${ovisCaddyfileText} $out
+  '';
 in
 {
   options.modules.my.herdr = {
@@ -49,6 +77,7 @@ in
         # Settings are KEY=value lines in `env` under
         # `herdr plugin config-dir devswha.ovis`; phone access
         # (`tailscale serve`) and device pairing stay imperative.
+        # Access over the talos mesh without pairing: ovisMeshProxy.
         # A machine that ran upstream's install.sh has the plugin linked
         # locally instead, and herdr refuses to install over a link:
         # `herdr plugin unlink devswha.ovis` first.
@@ -64,9 +93,100 @@ in
         `herdr plugin uninstall <id>`.
       '';
     };
+
+    ovisMeshProxy = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Let the talos mesh be the sign-in for Ovis: a caller the mesh
+          admitted opens `http://<hostName>:<port>` and is in, with no
+          pairing code.
+
+          Ovis cannot see who the mesh admitted (the device `tcp` facet
+          is a raw splice to loopback), and the hook it offers a proxy
+          that already signed its callers in is the shared token. So
+          this (1) generates `OVIS_TOKEN` once per machine into the
+          plugin's `env` file, mode 600, never in the nix store, and
+          (2) runs Caddy as a user service on 127.0.0.1:<port> that adds
+          `Authorization: Bearer <token>` to requests named for a mesh
+          host name and passes them to Ovis.
+
+          Consequences:
+          - Reaching 127.0.0.1:<port> under a mesh name IS the
+            credential, and Ovis is a shell as this user. Enable it only
+            where that port is reachable by nothing but the mesh's
+            any-port forward (`tcp=127.0.0.1:*`, admins only) and this
+            machine itself.
+          - With a token set, every other way in asks for it once per
+            browser: this machine at 127.0.0.1:${toString ovisPort},
+            `tailscale serve`. Devices already paired keep working.
+            Read it with `grep OVIS_TOKEN` on the `env` file.
+          - Ovis sees every mesh caller as the token: no per-device
+            entry or Revoke. Revocation is the mesh's.
+          - A running Ovis reads the token at start: after the first
+            activation, `ovis stop && ovis start` (or restart herdr).
+        '';
+      };
+
+      hostNames = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "nixos.mesh.internal" ];
+        description = ''
+          Names this machine is opened under through the mesh. Only
+          requests whose Host is one of these get the token.
+        '';
+      };
+
+      port = mkOption {
+        type = types.port;
+        default = 7318;
+        description = "Loopback port the proxy listens on.";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
+    assertions = mkIf mp.enable [
+      {
+        assertion = elem "devswha/ovis" cfg.plugins;
+        message = "modules.my.herdr.ovisMeshProxy needs the devswha/ovis plugin in modules.my.herdr.plugins.";
+      }
+      {
+        assertion = mp.hostNames != [ ];
+        message = "modules.my.herdr.ovisMeshProxy.hostNames is empty: the proxy would serve nothing.";
+      }
+      {
+        assertion = pkgs.stdenv.hostPlatform.isLinux;
+        message = "modules.my.herdr.ovisMeshProxy is a systemd user service; no launchd agent is written yet.";
+      }
+    ];
+
+    # The token is per machine and nobody has to know it but Ovis and the
+    # proxy, so it is generated here instead of kept in agenix. Appended,
+    # so settings already in the file stay.
+    home.activation.ovisToken = mkIf mp.enable (lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      _ovis_env=${escapeShellArg ovisEnvFile}
+      if ! ${pkgs.gnugrep}/bin/grep -qs '^OVIS_TOKEN=.' "$_ovis_env"; then
+        run mkdir -p "$(dirname "$_ovis_env")"
+        run ${pkgs.bash}/bin/sh -c 'umask 077; t=$(${pkgs.openssl}/bin/openssl rand -hex 32) && [ -n "$t" ] && printf "OVIS_TOKEN=%s\n" "$t" >> "$1"' sh "$_ovis_env"
+      fi
+      run chmod 600 "$_ovis_env"
+    '');
+
+    systemd.user.services.ovis-mesh-proxy = mkIf mp.enable {
+      Unit.Description = "Ovis mesh proxy: hands Ovis its token for callers the talos mesh admitted";
+      Service = {
+        # No leading `-`: without the token file the proxy must not run.
+        EnvironmentFile = ovisEnvFile;
+        ExecStart = "${pkgs.caddy}/bin/caddy run --adapter caddyfile --config ${ovisCaddyfile}";
+        Restart = "on-failure";
+        RestartSec = 5;
+      };
+      Install.WantedBy = [ "default.target" ];
+    };
+
     programs.herdr = {
       enable = true;
       settings = {

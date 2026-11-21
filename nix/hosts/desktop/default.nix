@@ -1,5 +1,5 @@
 # Desktop host configuration
-{ inputs, pkgs, ... }:
+{ inputs, pkgs, config, ... }:
 
 {
   imports = [
@@ -196,6 +196,13 @@
         modules.my.zellij.enable = false;
         modules.my.tmux.enable = true;
         modules.my.rex.enable = true;
+        # Ovis over the mesh without a pairing code: mesh membership
+        # (admins, via forward.tcp above) is the sign-in. Opened as
+        # http://nixos.mesh.internal:7318 from another admins device.
+        modules.my.herdr.ovisMeshProxy = {
+          enable = true;
+          hostNames = [ "${config.modules.nixos.services.talos-mesh.name}.mesh.internal" ];
+        };
         modules.my.firefox.enable = true;
         # Firefox keeps its own NSS store; trust the mesh device root there.
         programs.firefox.policies.Certificates.Install = [ "${./talos-mesh-ca.crt}" ];
