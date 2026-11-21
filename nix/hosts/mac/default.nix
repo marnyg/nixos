@@ -1,11 +1,16 @@
 # Mac host-specific configuration
 # This file contains only host-specific settings
 # Common Darwin settings are in the profile modules
-{ pkgs, self, inputs, ... }:
+{ pkgs, lib, self, inputs, ... }:
 {
   # Use the workstation profile
   imports = [ self.darwinModules.profile-workstation ];
   nix.enable = false;
+
+  # Tailscale off on this machine: the talos mesh (services.talos-mesh
+  # below) is this host's remote-access path. The workstation profile
+  # enables tailscale with mkDefault, hence the force.
+  services.tailscale.enable = lib.mkForce false;
 
   # Host identification
   networking.hostName = "marius-mac";
