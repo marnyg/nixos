@@ -40,6 +40,30 @@ let
     HOME=$TMPDIR caddy validate --adapter caddyfile --config ${ovisCaddyfileText}
     cp ${ovisCaddyfileText} $out
   '';
+
+  # launchd has no EnvironmentFile (unlike systemd), so read the token from
+  # the plugin's env file into caddy's process environment, where the
+  # Caddyfile's `{env.OVIS_TOKEN}` placeholder resolves. Reading it at start
+  # keeps the token out of the nix store.
+  ovisProxyWrapper = pkgs.writeShellScript "ovis-mesh-proxy" ''
+    set -eu
+    _ovis_env=${escapeShellArg ovisEnvFile}
+    # The activation that mints the token is ordered before setupLaunchAgents,
+    # but stay forgiving if the agent is started some other way.
+    _i=0
+    while [ "$_i" -lt 60 ] && ! ${pkgs.gnugrep}/bin/grep -qs '^OVIS_TOKEN=.' "$_ovis_env"; do
+      ${pkgs.coreutils}/bin/sleep 1
+      _i=$((_i + 1))
+    done
+    if ! ${pkgs.gnugrep}/bin/grep -qs '^OVIS_TOKEN=.' "$_ovis_env"; then
+      echo "ovis-mesh-proxy: no OVIS_TOKEN in $_ovis_env" >&2
+      exit 1
+    fi
+    set -a
+    . "$_ovis_env"
+    set +a
+    exec ${lib.getExe pkgs.caddy} run --adapter caddyfile --config ${ovisCaddyfile}
+  '';
 in
 {
   options.modules.my.herdr = {
@@ -125,7 +149,13 @@ in
           - Ovis sees every mesh caller as the token: no per-device
             entry or Revoke. Revocation is the mesh's.
           - A running Ovis reads the token at start: after the first
-            activation, `ovis stop && ovis start` (or restart herdr).
+            activation, restart it with `herdr plugin action invoke stop
+            --plugin devswha.ovis` then `herdr plugin action invoke start
+            --plugin devswha.ovis` (the action id is positional and comes
+            before `--plugin`), or restart herdr, whose startup hook
+            starts Ovis again. There is no `ovis` command: the Ovis CLI
+            and server are only installed by upstream's install.sh, not
+            by this module.
         '';
       };
 
@@ -158,15 +188,18 @@ in
         message = "modules.my.herdr.ovisMeshProxy.hostNames is empty: the proxy would serve nothing.";
       }
       {
-        assertion = pkgs.stdenv.hostPlatform.isLinux;
-        message = "modules.my.herdr.ovisMeshProxy is a systemd user service; no launchd agent is written yet.";
+        assertion = pkgs.stdenv.hostPlatform.isLinux || pkgs.stdenv.hostPlatform.isDarwin;
+        message = "modules.my.herdr.ovisMeshProxy supports Linux (systemd user service) and macOS (launchd agent) only.";
       }
     ];
 
     # The token is per machine and nobody has to know it but Ovis and the
     # proxy, so it is generated here instead of kept in agenix. Appended,
     # so settings already in the file stay.
-    home.activation.ovisToken = mkIf mp.enable (lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    # Ordered before setupLaunchAgents so the token exists by the time the
+    # launchd agent (and its caddy) is bootstrapped. On Linux setupLaunchAgents
+    # is not a known entry and the edge is simply ignored.
+    home.activation.ovisToken = mkIf mp.enable (lib.hm.dag.entryBetween [ "setupLaunchAgents" ] [ "writeBoundary" ] ''
       _ovis_env=${escapeShellArg ovisEnvFile}
       if ! ${pkgs.gnugrep}/bin/grep -qs '^OVIS_TOKEN=.' "$_ovis_env"; then
         run mkdir -p "$(dirname "$_ovis_env")"
@@ -175,16 +208,33 @@ in
       run chmod 600 "$_ovis_env"
     '');
 
-    systemd.user.services.ovis-mesh-proxy = mkIf mp.enable {
+    systemd.user.services.ovis-mesh-proxy = mkIf (mp.enable && pkgs.stdenv.hostPlatform.isLinux) {
       Unit.Description = "Ovis mesh proxy: hands Ovis its token for callers the talos mesh admitted";
       Service = {
         # No leading `-`: without the token file the proxy must not run.
         EnvironmentFile = ovisEnvFile;
-        ExecStart = "${pkgs.caddy}/bin/caddy run --adapter caddyfile --config ${ovisCaddyfile}";
+        ExecStart = "${lib.getExe pkgs.caddy} run --adapter caddyfile --config ${ovisCaddyfile}";
         Restart = "on-failure";
         RestartSec = 5;
       };
       Install.WantedBy = [ "default.target" ];
+    };
+
+    # macOS has no systemd: home-manager's launchd helper installs the plist
+    # into ~/Library/LaunchAgents and bootstraps it. The wrapper supplies the
+    # token, which a plist has no EnvironmentFile equivalent for.
+    launchd.agents.ovis-mesh-proxy = mkIf (mp.enable && pkgs.stdenv.hostPlatform.isDarwin) {
+      enable = true;
+      config = {
+        ProgramArguments = [ "${ovisProxyWrapper}" ];
+        KeepAlive = {
+          Crashed = true;
+          SuccessfulExit = false;
+        };
+        ProcessType = "Background";
+        StandardOutPath = "${config.home.homeDirectory}/Library/Logs/ovis-mesh-proxy.log";
+        StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/ovis-mesh-proxy.log";
+      };
     };
 
     programs.herdr = {

@@ -18,7 +18,14 @@
   # Host-specific overrides (if any)
   # These override the profile defaults
   modules.my = {
-    # Example: Enable work repos on this specific machine
-    # cloneWorkRepos.enable = true;
+    # Ovis over the mesh without a pairing code: mesh membership (admins, via
+    # this Mac's services.talos-mesh forward.tcp = "127.0.0.1:*") is the
+    # sign-in. Opened as http://marius-mac.mesh.internal:7318 from another
+    # admin device; 7317 stays the token-gated server itself. macOS uses a
+    # launchd agent where the desktop uses a systemd user service.
+    herdr.ovisMeshProxy = {
+      enable = true;
+      hostNames = [ "marius-mac.mesh.internal" ];
+    };
   };
 }
