@@ -42,6 +42,11 @@
       # Serve the local sshd (Remote Login) as the ssh facet (talos-config
       # ADR-0038): `ssh marius-mac.mesh.internal` from an admin device.
       forward.ssh = "127.0.0.1:22";
+      # Every TCP port on this machine's loopback (talos-config ADR-0050):
+      # `marius-mac.mesh.internal:<port>` from any admins device. That
+      # includes services that listen on 127.0.0.1 alone and trust local
+      # callers; the mesh grant is their only gate.
+      forward.tcp = "127.0.0.1:*";
     };
 
     # Key remapping
