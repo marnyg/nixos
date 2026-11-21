@@ -75,7 +75,7 @@ in
   };
 
   config = mkIf config.modules.my.git.enable {
-    home.packages = [ git-bare-clone ];
+    home.packages = [ git-bare-clone pkgs.git-credential-manager ];
 
     # programs.git-credential-oauth.enable = true;
     programs.gh = {
@@ -143,22 +143,39 @@ in
         init = {
           defaultBranch = "main";
         };
-        # credential.helper = [
-        #   "${pkgs.git-credential-manager}/bin/git-credential-manager"
-        #   "cache --timeout 72000"
-        # ];
-        credential.credentialStore = "cache";
-        # Forgejo (git.gw.mesh.internal) is the source of truth for the
-        # owner's repos, GitHub a push-mirror replica (talos-config
-        # decision z15k). Its SSH is off, so pushes are HTTP with a
-        # per-host access token of user `mar`, kept in the OS keyring.
-        # One-time per machine, token from
-        #   forgejo admin user generate-access-token --username mar \
-        #     --token-name <host> --scopes write:repository,write:issue,read:user --raw
-        #   printf 'protocol=http\nhost=git.gw.mesh.internal\nusername=mar\npassword=<token>\n\n' | git credential approve
-        # Both helpers ship with gitFull (libexec on darwin, bin on linux).
-        credential."http://git.gw.mesh.internal".helper =
-          if pkgs.stdenv.hostPlatform.isDarwin then "osxkeychain" else "libsecret";
+        credential = {
+          # Git Credential Manager is the fallback helper for any host not
+          # claimed below (Azure DevOps, Bitbucket, GitLab, ...). Git runs
+          # helpers in config order and the global one comes first, so the
+          # per-host entries start with "" to reset the list and keep GCM
+          # out of the way for hosts that already have a dedicated helper.
+          helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
+          credentialStore = "cache";
+          cacheOptions = "--timeout 72000"; # cache store default is 900s
+          # Azure DevOps puts the org in the URL path, so credentials must
+          # be keyed on the path too or orgs collide. `gcm configure` sets
+          # this itself; we bypass that so set it here.
+          "https://dev.azure.com".useHttpPath = true;
+          # Forgejo (git.gw.mesh.internal) is the source of truth for the
+          # owner's repos, GitHub a push-mirror replica (talos-config
+          # decision z15k). Its SSH is off, so pushes are HTTP with a
+          # per-host access token of user `mar`, kept in the OS keyring.
+          # One-time per machine, token from
+          #   forgejo admin user generate-access-token --username mar \
+          #     --token-name <host> --scopes write:repository,write:issue,read:user --raw
+          #   printf 'protocol=http\nhost=git.gw.mesh.internal\nusername=mar\npassword=<token>\n\n' | git credential approve
+          # Both helpers ship with gitFull (libexec on darwin, bin on linux).
+          "http://git.gw.mesh.internal".helper = [
+            ""
+            (if pkgs.stdenv.hostPlatform.isDarwin then "osxkeychain" else "libsecret")
+          ];
+        } // listToAttrs (map
+          # GitHub stays exclusively on `gh auth git-credential`; override the
+          # entries programs.gh generates so they reset the helper list first.
+          (host: nameValuePair host {
+            helper = mkForce [ "" "${config.programs.gh.package}/bin/gh auth git-credential" ];
+          })
+          config.programs.gh.gitCredentialHelper.hosts);
         push.autoSetupRemote = true;
         core.editor = "nvim";
         pull.rebase = true;
