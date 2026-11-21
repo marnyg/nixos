@@ -188,6 +188,7 @@
         modules.my.direnv.enable = true;
         modules.my.zellij.enable = false;
         modules.my.tmux.enable = true;
+        modules.my.rex.enable = true;
         modules.my.firefox.enable = true;
         # Firefox keeps its own NSS store; trust the mesh device root there.
         programs.firefox.policies.Certificates.Install = [ "${./talos-mesh-ca.crt}" ];

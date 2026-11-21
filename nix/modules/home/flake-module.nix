@@ -41,6 +41,7 @@
           ./programs/ca-bundle.nix
           ./programs/git.nix
           ./programs/herdr.nix
+          ./programs/rex.nix
           ./programs/pi-agent.nix
           ./programs/taskwarrior.nix
           ./programs/worktrunk.nix

@@ -38,6 +38,13 @@
     # one known to build.
     talos-config.url = "github:marnyg/talos-config";
 
+    # Rex (superlogical's multiplexer): prebuilt, unfree binary flake. Preview
+    # channel because no stable release exists yet (stable.tar.gz is a 404).
+    # flake.lock pins the immutable per-release URL; `nix flake update rex`
+    # moves to the newest preview.
+    rex.url = "https://pkgs.superlogical.com/rex/nix/preview.tar.gz";
+    rex.inputs.nixpkgs.follows = "nixpkgs";
+
   };
 
   outputs = inputs:
