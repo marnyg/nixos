@@ -167,6 +167,13 @@
     # Serve the local sshd as the ssh facet (talos-config ADR-0038):
     # `ssh nixos.mesh.internal` from an admin device.
     forward.ssh = "127.0.0.1:22";
+    # Every TCP port on this machine's loopback (talos-config ADR-0050):
+    # `nixos.mesh.internal:<port>` from any admins device. That includes
+    # services that listen on 127.0.0.1 alone and trust local callers
+    # (ComfyUI :8188, NATS :4222, the Syncthing GUI :8384, CUPS :631);
+    # the mesh grant is their only gate. "198.18.0.1:*" (the tun's own
+    # address) offers just what listens on all interfaces instead.
+    forward.tcp = "127.0.0.1:*";
     # The daemon's device root (ADR-0033), copied out of
     # /var/lib/talos-mesh/nixos.iroh/tls/ca.crt: https://*.gw.mesh.internal.
     caCert = ./talos-mesh-ca.crt;

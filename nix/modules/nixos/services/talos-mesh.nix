@@ -92,6 +92,12 @@ in
         from an admin device then reaches the local sshd. The mesh
         grant (`{facet: ssh, group: admins}` in the recipe) is the
         first gate, sshd's own authentication the second.
+
+        A target of `<host>:*` serves every TCP port on that host
+        (ADR-0050; the facet is `tcp`): `<name>.mesh.internal:<port>`
+        from an admins device. There is no second gate unless the
+        service brings one, and with 127.0.0.1 that covers
+        loopback-only services too.
       '';
     };
 
