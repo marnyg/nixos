@@ -1,5 +1,5 @@
 # Desktop host configuration
-{ inputs, pkgs, config, ... }:
+{ inputs, pkgs, lib, config, ... }:
 
 {
   imports = [
@@ -7,6 +7,12 @@
     ../../modules/nixos/profiles/desktop.nix
     ../../modules/nixos/core/nix-network-settings.nix
   ];
+
+  # Tailscale off on this machine: the talos mesh
+  # (modules.nixos.services.talos-mesh below) is this host's remote-access
+  # path. The desktop profile enables tailscale with mkDefault, hence the
+  # force.
+  services.tailscale.enable = lib.mkForce false;
 
   # Enable enhanced network timeout settings
   modules.my.nixNetworkSettings.enable = true;
