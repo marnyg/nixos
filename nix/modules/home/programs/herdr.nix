@@ -85,7 +85,6 @@ in
     plugins = mkOption {
       type = types.listOf types.str;
       default = [
-        "AltanS/collie" # remote access to herdr sessions
         "persiyanov/herdr-reviewr" # code review plugin
         "andrewchng/herdr-sessionizer" # tmux-sessionizer-style fuzzy workspace picker
         # Browser split. Manifest requires herdr >= 0.8.2 (met: nixpkgs
@@ -310,8 +309,8 @@ in
             }
             {
               # code review plugin. plugin_id is manifest-declared, not
-              # derived from owner/repo (cf. AltanS/collie -> herdr.collie,
-              # andrewchng/herdr-sessionizer -> sessionizer); verified
+              # derived from owner/repo (cf. andrewchng/herdr-sessionizer
+              # -> sessionizer, devswha/ovis -> devswha.ovis); verified
               # against installed plugin manifests and upstream
               # herdr-plugin.toml with herdr 0.9.1.
               # Also available: .toggle, .close
@@ -319,15 +318,6 @@ in
               type = "plugin_action";
               command = "persiyanov.reviewr.open";
               description = "open code review";
-            }
-            {
-              # collie web bridge (remote access to herdr sessions).
-              # collie actions are workspace-context only; other actions
-              # (stop/restart/status/url) stay CLI-only for now.
-              key = "prefix+shift+c";
-              type = "plugin_action";
-              command = "herdr.collie.start";
-              description = "start collie web bridge";
             }
             {
               # tmux: prefix+g gitui popup
@@ -386,17 +376,15 @@ in
     # bat (richer README previews) is already enabled via programs.bat.
     home.packages = with pkgs; [ bun fzf ];
 
-    # herdr spawns plugin actions with a minimal environment (no login
-    # shell), so the Nix profile dir is NOT on their PATH and `bun` from
-    # home.packages above is invisible to them. collie's collie-ctl.sh
-    # resolve_bun() falls back to a fixed list of well-known locations --
-    # ~/.bun/bin, ~/.local/bin, /usr/local/bin, /opt/homebrew/bin,
-    # /usr/bin -- none of which is /etc/profiles/per-user/$USER/bin, so
-    # its web bridge died with "bun not found on PATH" and never bound
-    # $COLLIE_PORT. Planting bun in ~/.local/bin satisfies that fallback
-    # (and any other plugin making the same assumption) without touching
-    # BUN_INSTALL, which bun itself uses as its global-install prefix and
-    # which must stay writable.
+    # herdr runs plugin commands with the environment herdr itself was
+    # started with -- under a GUI app that can be a bare PATH with no
+    # login shell, so the Nix profile dir is NOT on it and `bun` from
+    # home.packages above is invisible to plugin actions. Plugins that
+    # need bun probe the usual install places (~/.bun/bin, ~/.local/bin,
+    # mise shims, Homebrew, /usr/local/bin); ovis's scripts/with-bun.sh
+    # is one. Planting bun in ~/.local/bin satisfies that lookup without
+    # touching BUN_INSTALL, which bun itself uses as its global-install
+    # prefix and which must stay writable.
     home.file.".local/bin/bun".source = "${pkgs.bun}/bin/bun";
 
     # Sessionizer plugin config — mirrors the tmux-sessionizer script in
