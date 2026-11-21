@@ -40,6 +40,19 @@ in
         # ships 0.9.1). Exposes one action,
         # zenbu-labs.terminal-browser.open-split, not bound to a key yet.
         "zenbu-labs/terminal-browser/herdr-plugin"
+        # Ovis: browser/phone client for herdr sessions (plugin id
+        # devswha.ovis). Its startup hook brings up a web server on
+        # 127.0.0.1:7317 whenever herdr starts. The plugin build needs
+        # bun >= 1.4 and downloads upstream's signed prebuilt server, a
+        # dynamically linked generic-linux ELF, so on NixOS it only runs
+        # with programs.nix-ld (on via the desktop and wsl profiles).
+        # Settings are KEY=value lines in `env` under
+        # `herdr plugin config-dir devswha.ovis`; phone access
+        # (`tailscale serve`) and device pairing stay imperative.
+        # A machine that ran upstream's install.sh has the plugin linked
+        # locally instead, and herdr refuses to install over a link:
+        # `herdr plugin unlink devswha.ovis` first.
+        "devswha/ovis"
       ];
       description = ''
         GitHub `owner/repo[/subdir]` plugin sources. The subdir is part of
@@ -249,8 +262,13 @@ in
 
     # Idempotent plugin install. Network failures are non-fatal — the
     # install is retried on the next activation.
+    # Activation runs with home-manager's bare PATH, so everything a
+    # plugin's build step spawns has to be added here: bun for
+    # sessionizer and ovis, tar + gzip for ovis, whose build unpacks the
+    # release's client bundle with `tar -xzf` and otherwise fails with
+    # `Executable not found in $PATH: "tar"`.
     home.activation.herdrPlugins = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      export PATH="${lib.makeBinPath [ pkgs.git pkgs.bun ]}''${PATH:+:$PATH}"
+      export PATH="${lib.makeBinPath [ pkgs.git pkgs.bun pkgs.gnutar pkgs.gzip ]}''${PATH:+:$PATH}"
       _herdr=${lib.getExe pkgs.herdr}
       _installed="$("$_herdr" plugin list 2>/dev/null || true)"
       for _src in ${escapeShellArgs cfg.plugins}; do
