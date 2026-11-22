@@ -47,13 +47,16 @@ in
         # catppuccin.enable = true;
         actions = true;
         anchor = "top-right";
-        borderRadius = 8;
-        borderSize = 1;
-        defaultTimeout = 10000;
+        # Keys are written to mako's config verbatim, so they must be
+        # mako's own kebab-case names (mako(5)); camelCase ones make it
+        # exit with "Failed to parse option" and notifications die.
+        border-radius = 8;
+        border-size = 1;
+        default-timeout = 10000;
 
         icons = true;
         layer = "overlay";
-        maxVisible = 3;
+        max-visible = 3;
         padding = "10";
         width = 300;
         "urgency=normal".border-color = "#d08770";
