@@ -18,7 +18,11 @@ let
   wallpaperIndex = 0;
   wallpaper = "${config.wayland.windowManager.hyprland.package}/share/hypr/wall${toString wallpaperIndex}.png";
   # `hyprctl dispatch` in Hyprland 0.56 Lua form (see hypridle below).
-  dpms = state: "hyprctl dispatch 'hl.dsp.dpms(\"${state}\")'";
+  # The action MUST be a table. A bare string -- hl.dsp.dpms("on") -- is
+  # accepted, returns "ok" and silently means *toggle* (0.56.2
+  # LuaBindingsInternal.cpp tableToggleAction: non-table => TOGGLE), so
+  # "on" switched a lit display off.
+  dpms = state: "hyprctl dispatch 'hl.dsp.dpms({ action = \"${state}\" })'";
 in
 {
   options.modules.my.hyprland = {
@@ -91,8 +95,11 @@ in
           # Hyprland 0.56 parses `hyprctl dispatch` as Lua: the old
           # `dpms on` fails ("')' expected near 'on'"), so after an idle
           # dpms-off the screens never came back (2026-11-08: black
-          # screen, unlock typed blind, TTY switch). hl.dsp.dpms("on")
-          # is the 0.56 form (stubs/hl.meta.lua: `dpms fun(...)`).
+          # screen, unlock typed blind, TTY switch). The 0.56 form is
+          # hl.dsp.dpms({ action = "on" }) -- see `dpms` above for why
+          # the table matters (2026-11-22: resume from suspend ran the
+          # string form, which toggled the output *off*; the KVM then
+          # had no signal to show and the monitor went to sleep).
           after_sleep_cmd = dpms "on";
           ignore_dbus_inhibit = false; # respect video/game idle inhibitors
         };
@@ -158,6 +165,12 @@ in
           -- dead-lock screen refusing a new one: "Failed to lock session"),
           -- let a fresh `swaylock` take the lock over from another TTY.
           allow_session_lock_restore = true,
+          -- Safety net behind hypridle's dpms "on": if an output is ever
+          -- left off (missed resume hook, hypridle dead), the first key
+          -- press or mouse move turns it back on. Matters behind the KVM,
+          -- where a dark output means the monitor sleeps on "no signal".
+          key_press_enables_dpms = true,
+          mouse_move_enables_dpms = true,
         },
         input = {
           kb_layout = "us",
